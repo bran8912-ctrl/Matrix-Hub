@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Matrix Hub</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        font-family: "Courier New", monospace;
+        color: #00ff41;
+        overflow-x: hidden;
+    }
+
+    /* Matrix Code Rain Background */
+    canvas#matrix {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+    h1 {
+        text-align: center;
+        padding-top: 35px;
+        font-size: 2.4em;
+        color: #00ff41;
+        text-shadow: 0 0 12px #00ff41;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .panel {
+        margin: 25px 0;
+        background: rgba(0, 0, 0, 0.55);
+        border: 1px solid #00ff41;
+        border-radius: 12px;
+        padding: 15px;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 0 16px #00ff41;
+        cursor: pointer;
+        transition: 0.3s;
+        text-align: center;
+        font-size: 1.3em;
+    }
+
+    .panel:hover {
+        box-shadow: 0 0 30px #00ff41;
+    }
+
+    .links {
+        display: none;
+        margin-top: 15px;
+        text-align: left;
+        font-size: 1.1em;
+    }
+
+    .links a {
+        display: block;
+        color: #00ff41;
+        margin: 6px 0;
+        text-decoration: none;
+    }
+
+    .links a:hover {
+        text-shadow: 0 0 10px #00ff41;
+    }
+
+    .paypal {
+        margin-top: 50px;
+        text-align: center;
+    }
+
+    .donate-btn {
+        display: inline-block;
+        color: black;
+        background: #00ff41;
+        padding: 15px 25px;
+        border-radius: 10px;
+        font-weight: bold;
+        text-decoration: none;
+        box-shadow: 0 0 15px #00ff41;
+        font-size: 1.2em;
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<h1>THE MATRIX HUB</h1>
+
+<div class="container">
+
+    <!-- CRYPTO -->
+    <div class="panel" onclick="toggle('crypto')">ENTER CRYPTO</div>
+    <div id="crypto" class="links">
+        <a href="#">Coinbase — YOUR LINK</a>
+        <a href="#">Binance — YOUR LINK</a>
+        <a href="#">Crypto.com — YOUR LINK</a>
+        <a href="#">Ledger Wallet — YOUR LINK</a>
+        <a href="#">Trezor — YOUR LINK</a>
+        <a href="#">KuCoin — YOUR LINK</a>
+        <a href="#">Kraken — YOUR LINK</a>
+        <a href="#">OKX — YOUR LINK</a>
+    </div>
+
+    <!-- DIGITAL PRODUCTS -->
+    <div class="panel" onclick="toggle('digital')">ENTER DIGITAL PRODUCTS</div>
+    <div id="digital" class="links">
+        <a href="#">ClickBank Marketplace</a>
+        <a href="#">Digistore24 Marketplace</a>
+        <a href="#">WarriorPlus</a>
+        <a href="#">JVZoo</a>
+        <a href="#">Fiverr Affiliates</a>
+        <a href="#">Udemy</a>
+        <a href="#">Skillshare</a>
+        <a href="#">Etsy Digital Products</a>
+    </div>
+
+    <!-- AI -->
+    <div class="panel" onclick="toggle('ai')">ENTER AI & AUTOMATION</div>
+    <div id="ai" class="links">
+        <a href="#">Jasper AI</a>
+        <a href="#">Copy.ai</a>
+        <a href="#">Pictory (AI Video)</a>
+        <a href="#">Writesonic</a>
+        <a href="#">Surfer SEO</a>
+        <a href="#">Grammarly</a>
+        <a href="#">Rytr</a>
+        <a href="#">Midjourney Prompt Packs</a>
+    </div>
+
+    <!-- FINANCE -->
+    <div class="panel" onclick="toggle('finance')">ENTER FINANCE</div>
+    <div id="finance" class="links">
+        <a href="#">Webull Free Stocks</a>
+        <a href="#">Robinhood Referral</a>
+        <a href="#">Acorns</a>
+        <a href="#">Stash Invest</a>
+        <a href="#">M1 Finance</a>
+        <a href="#">Chime</a>
+        <a href="#">SoFi</a>
+        <a href="#">Credit Karma</a>
+    </div>
+
+    <!-- SURVIVAL -->
+    <div class="panel" onclick="toggle('survival')">ENTER SURVIVAL & PREPPING</div>
+    <div id="survival" class="links">
+        <a href="#">My Patriot Supply</a>
+        <a href="#">Survival Frog</a>
+        <a href="#">4Patriots</a>
+        <a href="#">EcoFlow Power</a>
+        <a href="#">Jackery Solar</a>
+        <a href="#">Off-Grid Water Systems</a>
+        <a href="#">Tactical Gear</a>
+        <a href="#">Emergency Food Supplies</a>
+    </div>
+
+    <!-- HEALTH -->
+    <div class="panel" onclick="toggle('health')">ENTER HEALTH & FITNESS</div>
+    <div id="health" class="links">
+        <a href="#">Alpilean</a>
+        <a href="#">JavaBurn</a>
+        <a href="#">Ikaria Juice</a>
+        <a href="#">Prostadine</a>
+        <a href="#">BioFit</a>
+        <a href="#">LeanBiome</a>
+        <a href="#">Testosterone Boosters</a>
+        <a href="#">Supplement Deals</a>
+    </div>
+
+    <!-- HOSTING & SOFTWARE -->
+    <div class="panel" onclick="toggle('hosting')">ENTER HOSTING & SOFTWARE</div>
+    <div id="hosting" class="links">
+        <a href="#">Bluehost</a>
+        <a href="#">HostGator</a>
+        <a href="#">SiteGround</a>
+        <a href="#">Namecheap Domains</a>
+        <a href="#">NordVPN</a>
+        <a href="#">Surfshark VPN</a>
+        <a href="#">TubeBuddy (YouTube)</a>
+        <a href="#">VidIQ (YouTube)</a>
+    </div>
+
+</div>
+
+<!-- PAYPAL -->
+<div class="paypal">
+    <a class="donate-btn" href="https://www.paypal.me/bletourneau692" target="_blank">
+        Donate via PayPal
+    </a>
+</div>
+
+<script>
+/* TOGGLE SECTIONS */
+function toggle(id) {
+    const section = document.getElementById(id);
+    section.style.display = section.style.display === "block" ? "none" : "block";
+}
+
+/* MATRIX CODE ANIMATION */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const letters = "01";
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+const drops = [];
+
+for (let x = 0; x < columns; x++) drops[x] = 1;
+
+function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00ff41";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+            drops[i] = 0;
+
+        drops[i]++;
+    }
+}
+
+setInterval(draw, 33);
+</script>
+
+</body>
+</html>
