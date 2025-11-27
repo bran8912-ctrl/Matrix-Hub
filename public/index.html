@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Matrix Hub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: #0ff;
+      text-shadow: 0 0 7px #0f0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Matrix Rain Canvas */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 20px;
+      font-size: 2.8rem;
+    }
+
+    .container {
+      display: grid;
+      gap: 20px;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .panel {
+      border: 2px solid #0f0;
+      padding: 20px;
+      border-radius: 10px;
+      background: rgba(0, 20, 0, 0.7);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+    }
+
+    .panel-text {
+      padding: 10px 0;
+      font-size: 1.1rem;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #001a00;
+      color: #0f0;
+      border: 1px solid #0f0;
+      border-radius: 6px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background: #003300;
+    }
+
+    /* Amazon Section */
+    .amazon-section {
+      margin-top: 40px;
+      padding: 25px;
+      border: 2px solid #0f0;
+      border-radius: 10px;
+      background: rgba(0, 30, 0, 0.75);
+    }
+
+    .amazon-section h2 {
+      text-align: center;
+      margin-top: 0;
+      font-size: 1.8rem;
+    }
+
+    .amazon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Matrix Rain Background -->
+<canvas id="matrix-canvas"></canvas>
+
+<h1>THE MATRIX HUB</h1>
+
+<div class="container">
+
+  <!-- Crypto Panel -->
+  <div class="panel">
+    <h2>Crypto & Security</h2>
+    <p class="panel-text">
+      Step inside the vault. Secure the tools that protect your crypto stack.
+      Hardware wallets, trusted exchanges, and rock-solid platforms — all in one place.
+      Build your digital fortress and grow your assets with confidence.
+    </p>
+    <a href="https://shop.ledger.com/?r=5b26c17b2e98" class="btn">Ledger Wallets</a>
+    <a href="https://www.binance.us/universal_JHHGDSKDJ/auth/registration?ref=614205735" class="btn">Binance US</a>
+  </div>
+
+  <!-- Investing Panel -->
+  <div class="panel">
+    <h2>Investing & Finance</h2>
+    <p class="panel-text">
+      Your gateway to simple wealth building.
+      Whether you're investing spare change or trading full-time, these platforms
+      make it easy to start growing your money today.
+      Low effort. High potential.
+    </p>
+    <a href="https://acorns.com/share/?shareable_code=CQ1T7GA&first_name=Brandon&friend_reward=5" class="btn">Acorns – Free $5</a>
+    <a href="https://join.robinhood.com/brandol-06d7e3" class="btn">Robinhood – Free Stock</a>
+  </div>
+
+  <!-- AI Tools Panel -->
+  <div class="panel">
+    <h2>AI Tools</h2>
+    <p class="panel-text">
+      Turn AI into income.
+      Automate your content, speed up your workflow, and unlock tools that pay recurring commissions.
+      This is the future of online earnings — plug in and profit.
+    </p>
+  </div>
+
+  <!-- Digital Products Panel -->
+  <div class="panel">
+    <h2>Digital Products</h2>
+    <p class="panel-text">
+      High-ticket digital products with huge payouts.
+      No inventory. No shipping.
+      Promote once → earn again and again.
+      A true passive income path.
+    </p>
+  </div>
+
+  <!-- Survival Panel -->
+  <div class="panel">
+    <h2>Survival & Outdoors</h2>
+    <p class="panel-text">
+      The prepping industry is exploding — and it pays.
+      Emergency food, gear, tools — this niche sells itself.
+    </p>
+  </div>
+
+  <!-- Hosting Panel -->
+  <div class="panel">
+    <h2>Hosting, Tech & Websites</h2>
+    <p class="panel-text">
+      Every business needs a website — and these programs pay big.
+      One referral can pay for your whole month.
+    </p>
+  </div>
+
+  <!-- Health and Fitness Panel -->
+  <div class="panel">
+    <h2>Health and Fitness</h2>
+    <p class="panel-text">
+      I love Redcon1! Shop through my link to get a reward.
+    </p>
+    <a href="http://rwrd.io/nr6geao?s" class="btn">Redcon1</a>
+  </div>
+
+</div>
+
+<!-- AMAZON SECTION -->
+<div class="amazon-section">
+  <h2>Amazon Best Sellers (My Top 13 Picks)</h2>
+  <p style="text-align:center;">Hand-picked deals that convert fast. Huge traffic + trusted brand = easy commissions.</p>
+
+  <div class="amazon-grid">
+    <a class="btn" href="https://amzn.to/4pzCx7R">Prime for Young Adults</a>
+    <a class="btn" href="https://amzn.to/48AEXgW">Prime</a>
+    <a class="btn" href="https://amzn.to/4rmVdcX">Prime Access</a>
+    <a class="btn" href="https://amzn.to/3XkW404">Prime Video</a>
+    <a class="btn" href="https://amzn.to/44p4Mhw">Audible Premium Plus</a>
+    <a class="btn" href="https://amzn.to/3XhTl7x">Kindle Unlimited</a>
+    <a class="btn" href="https://amzn.to/4rtHuBg">Amazon Music Unlimited</a>
+    <a class="btn" href="https://amzn.to/3K8Hx4x">Audible Premium Plus</a>
+    <a class="btn" href="https://amzn.to/4oE71oJ">Kindle Unlimited</a>
+    <a class="btn" href="https://amzn.to/4oopQM9">Amazon Music Unlimited</a>
+    <a class="btn" href="https://amzn.to/3KcYGKo">Amazon Kids+</a>
+    <a class="btn" href="https://amzn.to/4p7VU8q">Amazon Business</a>
+    <a class="btn" href="https://amzn.to/4rp4EZk">Amazon Access (SNAP/EBT)</a>
+  </div>
+</div>
+
+<!-- Matrix Rain Animation Script -->
+<script>
+  const canvas = document.getElementById('matrix-canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Set canvas size to full window
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // Matrix characters (Katakana, numbers, and some Latin letters)
+  const matrixChars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const chars = matrixChars.split('');
+
+  const fontSize = 16;
+  const columns = Math.floor(canvas.width / fontSize);
+
+  // Array to track the y position of each column's drop
+  const drops = [];
+  for (let i = 0; i < columns; i++) {
+    drops[i] = Math.random() * -100; // Start above the screen at random heights
+  }
+
+  function drawMatrix() {
+    // Semi-transparent black to create fade effect
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#0f0'; // Green text
+    ctx.font = fontSize + 'px monospace';
+
+    for (let i = 0; i < drops.length; i++) {
+      // Random character
+      const char = chars[Math.floor(Math.random() * chars.length)];
+
+      // Draw the character
+      ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+      // Reset drop to top with random delay when it goes off screen
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+
+      drops[i]++;
+    }
+  }
+
+  // Run animation
+  setInterval(drawMatrix, 50);
+</script>
+
+</body>
+</html>
