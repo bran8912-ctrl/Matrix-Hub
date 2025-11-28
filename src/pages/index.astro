@@ -4,6 +4,7 @@ import Alert from "../components/Alert.astro";
 import Guide from "../components/Guide.astro";
 import Layout from "../components/Layout.astro";
 import TableRow from "../components/TableRow.astro";
+import TemuSection from "../components/TemuSection.astro";
 import { supabase } from "../utils/database";
 
 export const prerender = false;
@@ -27,6 +28,7 @@ const fetchDataGuide = await getEntry("guides", "guide-fetch-data");
 ---
 
 <Layout title="Web Frameworks">
+  <TemuSection />
   {
     supabase ? (
       frameworks ? (
