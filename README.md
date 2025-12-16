@@ -2,15 +2,13 @@
 
 ![Astro Supabase Starter Preview](astro-supabase-starter-preview.png)
 
-**View demo:** [https://astro-supabase-starter.netlify.app/](https://astro-supabase-starter.netlify.app/)
+The Astro Supabase starter demonstrates how to integrate **Supabase** into an Astro project.
 
-The Astro Supabase starter demonstrates how to integrate **Supabase** into an Astro project deployed on Netlify.
+## Deployment
 
-## Deploying to Netlify
+This starter can be deployed to any Node-compatible hosting provider that supports static + server output (for example: Vercel, Render, or self-hosted Node servers). If you previously used Netlify-specific features (image proxy, Netlify extensions), these have been removed in favor of a generic Node setup.
 
-If you click "Deploy to Netlify" button, it will create a new repo for you that looks exactly like this one, and sets that repo up immediately for deployment on Netlify.
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/astro-supabase-starter&fullConfiguration=true)
+If you want a one-click deploy experience, add your hosting provider's deploy button or instructions here.
 
 ## Astro Commands
 
@@ -31,8 +29,6 @@ All commands are run from the root of the project, from a terminal:
 | :--------------------------------------------------------------------------- |
 | [Node.js](https://nodejs.org/) v18.14+                                       |
 | (optional) [nvm](https://github.com/nvm-sh/nvm) for Node version management  |
-| [Netlify account](https://netlify.com/)                                      |
-| [Netlify CLI](https://docs.netlify.com/cli/get-started/).                    |
 | [Supabase account](https://supabase.com/)                                    |
 
 ### Set up the database
@@ -49,25 +45,13 @@ To use this template, you’ll need to set up and seed a new Supabase database.
 
 1. Clone this repository, then run `npm install` in its root directory.
 
-2. For the starter to have full functionality locally, please ensure you have an up-to-date version of Netlify CLI. Run:
+2. For local development, run the Astro dev server:
 
 ```
-npm install netlify-cli@latest -g
+npm run dev
 ```
 
-3. Link your local repository to the deployed Netlify site. This will ensure you're using the same runtime version for both local development and your deployed site.
-
-```
-netlify link
-```
-
-4. Then, run the Astro.js development server via Netlify CLI:
-
-```
-netlify dev --target-port 4321
-```
-
-If your browser doesn't navigate to the site automatically, visit [localhost:8888](http://localhost:8888).
+If you prefer to emulate a production-like environment locally, use your host's recommended tooling (for example, Vercel CLI or Render's local runner).
 
 ## Support
 
