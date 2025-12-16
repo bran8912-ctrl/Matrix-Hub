@@ -24,7 +24,7 @@ pnpm-debug.log*
 .idea/
 
 # Local Netlify folder
-# (removed - no longer used)
+.netlify
 
 # Supabase
 supabase/.temp
