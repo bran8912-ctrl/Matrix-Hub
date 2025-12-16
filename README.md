@@ -6,7 +6,7 @@ The Astro Supabase starter demonstrates how to integrate **Supabase** into an As
 
 ## Deployment
 
-This starter can be deployed to any Node-compatible hosting provider that supports static + server output (for example: Vercel, Render, or self-hosted Node servers). If you previously used Netlify-specific features (image proxy, Netlify extensions), these have been removed in favor of a generic Node setup.
+This starter can be deployed to any Node-compatible hosting provider that supports static + server output (for example: Vercel, Render, or self-hosted Node servers). If you previously used hosting-specific features (image proxy, provider extensions), these have been removed in favor of a generic Node setup.
 
 If you want a one-click deploy experience, add your hosting provider's deploy button or instructions here.
 
@@ -39,7 +39,7 @@ To use this template, you’ll need to set up and seed a new Supabase database.
 2. Run the SQL commands found in the `supabase/migrations` directory in the Supabase UI.
 3. To seed the database with data, you can import the contents of the `supabase/seed.csv` file in the Supabase UI.
 
-ℹ️ _Note: This template was created to be used with the Supabase extension for Netlify. If you don’t wish to use the Netlify Supabase extension, you will need to set the `SUPABASE_DATABASE_URL` and `SUPABASE_ANON_KEY` environment variables in the `.env` file._
+ℹ️ _Note: If you don’t use a Supabase hosting integration, set the `SUPABASE_DATABASE_URL` and `SUPABASE_ANON_KEY` environment variables in the `.env` file or in your host's environment settings._
 
 ### Install and run locally
 
@@ -55,4 +55,4 @@ If you prefer to emulate a production-like environment locally, use your host's 
 
 ## Support
 
-If you get stuck along the way, get help in our [support forums](https://answers.netlify.com/).
+If you get stuck along the way, check the Astro docs: https://docs.astro.build/ or Supabase docs: https://supabase.com/docs
