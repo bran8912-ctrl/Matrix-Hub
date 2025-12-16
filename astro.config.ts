@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+import netlify from '@astrojs/netlify';
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
@@ -12,5 +12,5 @@ export default defineConfig({
     plugins: [tailwindcss()]
   }
   ,
-  adapter: node({ mode: 'standalone' })
+  adapter: netlify()
 });
