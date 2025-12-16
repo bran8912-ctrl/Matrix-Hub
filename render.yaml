@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: matrix-hub
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node ./dist/server/entry.mjs
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 10000
