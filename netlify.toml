@@ -1,6 +1,0 @@
-[build]
-  publish = "dist"
-  command = "npm run build"
-
-[template]
-  required-extensions = ["supabase"]
