@@ -9,7 +9,7 @@ title: Set up Supabase database
 
 Once the database is provisioned, we can create the **frameworks** table. From your project dashboard, open the SQL editor.
 
-![Create the frameworks table](/images/guides/supabase-netlify-sql-editor.png)
+![Create the frameworks table](/images/guides/supabase-sql-editor.png)
 
 Run the following commands in the SQL editor to create the **frameworks** table.
 
@@ -29,7 +29,7 @@ CREATE TABLE frameworks (
 
 Next, let’s add some starter data to the **frameworks** table. From the Table Editor in Supabase (1), choose the **frameworks** table from the list (2) and then select **Insert > Import** data from CSV (3).
 
-![Create the frameworks table](/images/guides/supabase-netlify-import-csv.png)
+![Create the frameworks table](/images/guides/supabase-import-csv.png)
 
 Paste the following data:
 
@@ -46,22 +46,21 @@ Svelte,https://svelte.dev/,svelte.svg,0,"Svelte is a UI framework that uses a co
 
 This will give you a preview of the data that will be inserted into the database. Click **Import data** to add the data to the database.
 
-## Configure the Supabase Netlify extension
+## Configure Supabase access
 
-The [Supabase Netlify extension](https://app.netlify.com/extensions/supabase) should already be installed. Visit your site's configuration page and scroll to the Supabase section. Click **Connect** to connect your Netlify site to your Supabase account using OAuth.
+To let this site read from your Supabase project in development and production, set the required environment variables:
 
-![Configure the Supabase extension](/images/guides/supabase-netlify-connect-oauth.png)
+- `SUPABASE_DATABASE_URL` (or `SUPABASE_URL` depending on your Supabase setup)
+- `SUPABASE_ANON_KEY`
 
-Once you’ve completed this process, return to the Supabase section of your site configuration, and choose the project you just created in Supabase. And make sure to choose Astro for the framework since the template is built with Astro.
+For local development, create a `.env` file in the project root and add these values. For deployments, configure the environment variables in your hosting provider's dashboard.
 
-![Supabase Netlify extension configuration](/images/guides/supabase-netlify-extension-configuration.png)
+![Configure Supabase access](/images/guides/supabase-connect-oauth.png)
 
-## Deploy the site again
+## Deploy the site
 
-Now that the extension is configured, we can deploy the site again. Got to **Deploys** (1) and click the **Deploy site** (2) button to deploy the site. 
+Deploy the site using your hosting provider's deploy flow. After the deployment finishes, visit your production URL to confirm the frameworks you added are visible.
 
-![Supabase Netlify extension configuration](/images/guides/deploy-button.png)
-
-Once the build is complete, navigate to your production URL and you should see the **frameworks** that we just added to the database.
+![Deploy template](/images/guides/deploy-button.png)
 
 ![Template with data](/images/guides/web-frameworks.png)
