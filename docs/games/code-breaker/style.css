@@ -1,0 +1,174 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #000;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    touch-action: none;
+}
+
+.game-container {
+    text-align: center;
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+}
+
+h1 {
+    color: #0f0;
+    text-shadow: 0 0 10px #0f0;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    letter-spacing: 3px;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    color: #0f0;
+    font-size: 1.2rem;
+    text-shadow: 0 0 5px #0f0;
+}
+
+.stat span {
+    color: #0ff;
+}
+
+#gameCanvas {
+    border: 2px solid #0f0;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    background: #000;
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.controls {
+    margin-top: 15px;
+}
+
+#codeInput {
+    width: 80%;
+    max-width: 600px;
+    padding: 12px;
+    font-size: 1.2rem;
+    font-family: 'Courier New', monospace;
+    background: #000;
+    border: 2px solid #0f0;
+    color: #0f0;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    text-shadow: 0 0 5px #0f0;
+}
+
+#codeInput:focus {
+    outline: none;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+.instructions {
+    margin-top: 15px;
+    color: #0a0;
+    font-size: 0.9rem;
+}
+
+.instructions p {
+    margin: 5px 0;
+}
+
+.game-over {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    border: 3px solid #0f0;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    z-index: 1000;
+}
+
+.game-over.hidden {
+    display: none;
+}
+
+.game-over h2 {
+    color: #f00;
+    text-shadow: 0 0 10px #f00;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.game-over p {
+    color: #0f0;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+}
+
+#restartBtn {
+    background: #000;
+    border: 2px solid #0f0;
+    color: #0f0;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+#restartBtn:hover {
+    background: #0f0;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+    }
+
+    .stats {
+        gap: 15px;
+    }
+
+    .stat {
+        font-size: 1rem;
+    }
+
+    #codeInput {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .instructions {
+        font-size: 0.8rem;
+    }
+
+    .game-over {
+        padding: 30px 20px;
+        width: 90%;
+    }
+
+    .game-over h2 {
+        font-size: 1.4rem;
+    }
+
+    .game-over p {
+        font-size: 1.1rem;
+    }
+}

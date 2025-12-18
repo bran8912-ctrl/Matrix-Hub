@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cyber Snake</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>CYBER SNAKE</h1>
+        <div class="stats">
+            <div class="stat">Score: <span id="score">0</span></div>
+            <div class="stat">High Score: <span id="highScore">0</span></div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <div class="controls">
+            <p>Desktop: Arrow Keys or WASD</p>
+            <p>Mobile: Swipe to change direction</p>
+        </div>
+        <div class="mobile-controls">
+            <button class="arrow-btn" data-dir="up">▲</button>
+            <div class="arrow-row">
+                <button class="arrow-btn" data-dir="left">◄</button>
+                <button class="arrow-btn" data-dir="down">▼</button>
+                <button class="arrow-btn" data-dir="right">►</button>
+            </div>
+        </div>
+        <div id="gameOver" class="game-over hidden">
+            <h2>GAME OVER</h2>
+            <p>Score: <span id="finalScore">0</span></p>
+            <button id="restartBtn">PLAY AGAIN</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
