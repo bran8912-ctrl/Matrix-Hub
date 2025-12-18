@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    font-family: 'Courier New', monospace;
+    color: #0f0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #000 0%, #001a00 50%, #000 100%);
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px #0f0;
+    letter-spacing: 4px;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #0f0;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.stat-item .label {
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+.stat-item span:last-child {
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #0f0;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #0f0;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
+}
+
+.card {
+    aspect-ratio: 1;
+    background: #000;
+    border: 2px solid #0f0;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.4s, box-shadow 0.3s;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+.card:hover:not(.flipped):not(.matched) {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    transform: scale(1.05);
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card.matched {
+    border-color: #00ff00;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+    animation: pulse 1s;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.card-front {
+    background: #000;
+    border: 1px solid #0f0;
+}
+
+.card-back {
+    background: #0f0;
+    color: #000;
+    font-size: 48px;
+    font-weight: bold;
+    transform: rotateY(180deg);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.matrix-pattern {
+    width: 80%;
+    height: 80%;
+    background: linear-gradient(45deg, transparent 30%, #0f0 30%, #0f0 70%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, #0f0 30%, #0f0 70%, transparent 70%);
+    opacity: 0.3;
+    animation: matrix-flow 3s linear infinite;
+}
+
+@keyframes matrix-flow {
+    0% { background-position: 0 0; }
+    100% { background-position: 20px 20px; }
+}
+
+.controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 15px 30px;
+    background: #000;
+    color: #0f0;
+    border: 2px solid #0f0;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    background: #0f0;
+    color: #000;
+    box-shadow: 0 0 20px #0f0;
+    transform: translateY(-2px);
+}
+
+.overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    border: 3px solid #0f0;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    z-index: 1000;
+    box-shadow: 0 0 50px rgba(0, 255, 0, 0.6);
+    min-width: 400px;
+}
+
+.overlay h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px #0f0;
+    letter-spacing: 3px;
+}
+
+.win-stats {
+    font-size: 18px;
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 20px;
+        letter-spacing: 2px;
+    }
+    
+    .stats {
+        gap: 15px;
+        padding: 10px;
+    }
+    
+    .stat-item span:last-child {
+        font-size: 16px;
+    }
+    
+    .game-board {
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .card-back {
+        font-size: 36px;
+    }
+    
+    button {
+        padding: 12px 20px;
+        font-size: 12px;
+    }
+    
+    .overlay {
+        min-width: auto;
+        max-width: 90%;
+        padding: 30px 20px;
+    }
+    
+    .overlay h2 {
+        font-size: 24px;
+    }
+    
+    .win-stats {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-board {
+        gap: 8px;
+        padding: 10px;
+    }
+    
+    .card-back {
+        font-size: 28px;
+    }
+}
