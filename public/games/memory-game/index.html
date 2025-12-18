@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Memory Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MATRIX MEMORY PROTOCOL</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="label">MOVES:</span>
+                    <span id="moves">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="label">MATCHES:</span>
+                    <span id="matches">0/8</span>
+                </div>
+                <div class="stat-item">
+                    <span class="label">TIME:</span>
+                    <span id="timer">00:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-board" class="game-board"></div>
+
+        <div class="controls">
+            <button id="new-game-btn">NEW SEQUENCE</button>
+            <button id="difficulty-btn">DIFFICULTY: MEDIUM</button>
+        </div>
+
+        <div id="win-screen" class="overlay hidden">
+            <h2>SEQUENCE COMPLETE</h2>
+            <p class="win-stats">
+                <span>Moves: <span id="final-moves">0</span></span><br>
+                <span>Time: <span id="final-time">00:00</span></span>
+            </p>
+            <button id="play-again-btn">INITIALIZE NEW SEQUENCE</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

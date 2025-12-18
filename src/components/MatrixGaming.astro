@@ -1,0 +1,213 @@
+---
+---
+
+<section class="matrix-gaming-section mb-12">
+  <div class="mb-6">
+    <h2 class="text-3xl font-bold text-green-400 mb-2">
+      <span class="text-green-500">🎮</span> Matrix Gaming
+    </h2>
+    <p class="text-neutral-300">
+      Enter the digital realm with our Matrix-themed games. Choose your experience below.
+    </p>
+  </div>
+
+  <div class="game-tabs">
+    <div class="tab-buttons">
+      <button class="tab-btn active" data-game="matrix-rain">
+        🌧️ Digital Rain
+      </button>
+      <button class="tab-btn" data-game="hacking-simulator">
+        💻 Hacking Simulator
+      </button>
+      <button class="tab-btn" data-game="bullet-dodge">
+        🎯 Bullet Time
+      </button>
+      <button class="tab-btn" data-game="memory-game">
+        🧩 Memory Protocol
+      </button>
+    </div>
+
+    <div class="game-container">
+      <div class="game-frame active" data-game="matrix-rain">
+        <iframe 
+          src="/games/matrix-rain/" 
+          title="Matrix Digital Rain"
+          class="game-iframe"
+          loading="lazy"
+        ></iframe>
+      </div>
+      <div class="game-frame" data-game="hacking-simulator">
+        <iframe 
+          src="/games/hacking-simulator/" 
+          title="Matrix Hacking Simulator"
+          class="game-iframe"
+          loading="lazy"
+        ></iframe>
+      </div>
+      <div class="game-frame" data-game="bullet-dodge">
+        <iframe 
+          src="/games/bullet-dodge/" 
+          title="Matrix Bullet Dodge"
+          class="game-iframe"
+          loading="lazy"
+        ></iframe>
+      </div>
+      <div class="game-frame" data-game="memory-game">
+        <iframe 
+          src="/games/memory-game/" 
+          title="Matrix Memory Game"
+          class="game-iframe"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+
+    <div class="game-info">
+      <p class="text-sm text-neutral-400 text-center">
+        Click fullscreen button to play in full screen mode
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .matrix-gaming-section {
+    background: linear-gradient(135deg, rgba(0, 26, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%);
+    border: 2px solid rgb(34, 197, 94);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+  }
+
+  .game-tabs {
+    width: 100%;
+  }
+
+  .tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: rgb(34, 197, 94);
+    border: 2px solid rgb(34, 197, 94);
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover {
+    background: rgba(34, 197, 94, 0.1);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .tab-btn.active {
+    background: rgb(34, 197, 94);
+    color: #000;
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+  }
+
+  .game-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background: #000;
+    border: 2px solid rgb(34, 197, 94);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+  }
+
+  .game-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+
+  .game-frame.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .game-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .game-info {
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .matrix-gaming-section {
+      padding: 1rem;
+    }
+
+    .tab-buttons {
+      gap: 0.5rem;
+    }
+
+    .tab-btn {
+      min-width: auto;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+    }
+
+    .game-container {
+      height: 500px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tab-btn {
+      flex: 1 1 45%;
+      font-size: 0.7rem;
+      padding: 0.5rem;
+    }
+
+    .game-container {
+      height: 400px;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const gameFrames = document.querySelectorAll('.game-frame');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const gameName = button.dataset.game;
+
+        // Remove active class from all buttons and frames
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        gameFrames.forEach(frame => frame.classList.remove('active'));
+
+        // Add active class to clicked button and corresponding frame
+        button.classList.add('active');
+        const activeFrame = document.querySelector(`.game-frame[data-game="${gameName}"]`);
+        if (activeFrame) {
+          activeFrame.classList.add('active');
+        }
+      });
+    });
+  });
+</script>
