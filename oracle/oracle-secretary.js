@@ -290,7 +290,7 @@ async function handleLocalIntent(apps, rawText) {
   if (!t) return { handled: true, reply: "Say it plainly." };
 
   if (t === "/apps" || t === "apps") {
-    return { handled: true, reply: "Open the Apps panel above, or ask: "open daily drops", "run deal scanner", "play music"." };
+    return { handled: true, reply: "Open the Apps panel above, or ask: 'open daily drops', 'run deal scanner', 'play music'." };
   }
 
   if (t === "/tasks" || t === "tasks") {
@@ -452,7 +452,7 @@ function init() {
     const open = botWin.style.display !== "flex";
     setWindowOpen(open);
     if (open && conversation.length === 0) {
-      const greet = "The door is already open.\\n\\nTry: "run deal scanner", "refresh daily drops", "play music", or "/tasks".";
+      const greet = "The door is already open.\\n\\nTry: 'run deal scanner', 'refresh daily drops', 'play music', or '/tasks'.";
       conversation.push({ role: "assistant", content: greet });
       messages.appendChild(createMessageEl("assistant", greet));
       messages.scrollTop = messages.scrollHeight;

@@ -1,6 +1,7 @@
 ---
 import { getEntry } from "astro:content";
 import Alert from "../components/Alert.astro";
+import DailyDrops from "../components/DailyDrops.astro";
 import Guide from "../components/Guide.astro";
 import Layout from "../components/Layout.astro";
 import TableRow from "../components/TableRow.astro";
@@ -69,5 +70,6 @@ const fetchDataGuide = await getEntry("guides", "guide-fetch-data");
       </>
     )
   }
+  <DailyDrops />
   <TemuSection />
 </Layout>

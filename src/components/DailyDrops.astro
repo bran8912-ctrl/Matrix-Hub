@@ -1,0 +1,240 @@
+---
+---
+
+<div class="daily-drops-section p-8 mt-8 border rounded-sm border-green-900 bg-green-950/20">
+  <div class="daily-drops-header flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold text-green-200">
+      <span class="text-green-500">&#10022;</span> Daily Drops Bot
+    </h2>
+    <div class="bot-status flex items-center gap-2 bg-green-950/50 px-3 py-1 rounded-full border border-green-700">
+      <span class="status-dot w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+      <span class="text-green-400 text-sm">LIVE</span>
+    </div>
+  </div>
+  <p class="text-green-300 text-sm mb-6 opacity-80">Fresh deals dropped automatically every day</p>
+
+  <div id="daily-drops-content" class="min-h-[200px]">
+    <div class="drops-loading flex flex-col items-center justify-center py-12 gap-4">
+      <div class="loading-spinner w-10 h-10 border-2 border-green-700 border-t-green-500 rounded-full animate-spin"></div>
+      <span class="text-green-400 text-sm">Scanning for today's best deals...</span>
+    </div>
+  </div>
+
+  <div class="drops-footer flex justify-between items-center mt-6 pt-4 border-t border-green-900">
+    <span id="last-updated" class="text-green-600 text-xs">Last updated: --</span>
+    <button id="refresh-drops" class="px-4 py-2 bg-neutral-700 text-green-400 border border-green-700 rounded hover:bg-neutral-600 transition-colors text-sm font-medium">
+      REFRESH DROPS
+    </button>
+  </div>
+</div>
+
+<style>
+  .drops-category {
+    margin-bottom: 1.5rem;
+  }
+
+  .drops-category-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.75rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: #00ff00;
+    text-transform: uppercase;
+  }
+
+  .drops-category-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #00ff00, transparent);
+  }
+
+  .drops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .drop-card {
+    background: rgba(0, 30, 0, 0.3);
+    border: 1px solid #004d00;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+
+  .drop-card:hover {
+    border-color: #00ff00;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 0, 0.2);
+  }
+
+  .drop-card-tag {
+    display: inline-block;
+    background: #00ff00;
+    color: #000;
+    font-size: 0.625rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .drop-card-title {
+    color: #00ffff;
+    font-weight: bold;
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .drop-card-desc {
+    color: #00cc00;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+
+  .drop-card-code {
+    margin-top: 0.5rem;
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px dashed #00ff00;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: #00ff00;
+  }
+</style>
+
+<script>
+  const dailyDropsContent = document.getElementById('daily-drops-content');
+  const lastUpdatedEl = document.getElementById('last-updated');
+  const refreshBtn = document.getElementById('refresh-drops');
+
+  interface Drop {
+    category: string;
+    title: string;
+    description: string;
+    url: string;
+    code?: string;
+  }
+
+  interface DailyDropsData {
+    timestamp: string;
+    featuredAffiliate?: Drop[];
+    featuredDiscounts?: Drop[];
+    featuredDigital?: Drop[];
+    featuredCrypto?: Drop[];
+  }
+
+  async function loadDailyDrops() {
+    if (!dailyDropsContent || !lastUpdatedEl) return;
+    
+    dailyDropsContent.innerHTML = `
+      <div class="drops-loading flex flex-col items-center justify-center py-12 gap-4">
+        <div class="loading-spinner w-10 h-10 border-2 border-green-700 border-t-green-500 rounded-full animate-spin"></div>
+        <span class="text-green-400 text-sm">Scanning for today's best deals...</span>
+      </div>
+    `;
+
+    try {
+      const response = await fetch('/api/daily-drops');
+      const data: DailyDropsData = await response.json();
+
+      renderDrops(data);
+      lastUpdatedEl.textContent = `Last updated: ${new Date(data.timestamp).toLocaleTimeString()}`;
+    } catch (error) {
+      console.error('Failed to load daily drops:', error);
+      dailyDropsContent.innerHTML = `
+        <div class="drops-loading flex flex-col items-center justify-center py-12">
+          <span class="text-red-400 text-sm">Failed to load deals. Click refresh to try again.</span>
+        </div>
+      `;
+    }
+  }
+
+  function renderDrops(data: DailyDropsData) {
+    if (!dailyDropsContent) return;
+    
+    let html = '';
+
+    // Affiliate Deals
+    if (data.featuredAffiliate?.length) {
+      html += `
+        <div class="drops-category">
+          <div class="drops-category-title">New Affiliate Deals</div>
+          <div class="drops-grid">
+            ${data.featuredAffiliate.map(deal => createDropCard(deal)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Discount Codes
+    if (data.featuredDiscounts?.length) {
+      html += `
+        <div class="drops-category">
+          <div class="drops-category-title">Discount Codes</div>
+          <div class="drops-grid">
+            ${data.featuredDiscounts.map(deal => createDropCard(deal, true)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Digital Products
+    if (data.featuredDigital?.length) {
+      html += `
+        <div class="drops-category">
+          <div class="drops-category-title">Digital Product Promos</div>
+          <div class="drops-grid">
+            ${data.featuredDigital.map(deal => createDropCard(deal)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Crypto & Hosting
+    if (data.featuredCrypto?.length) {
+      html += `
+        <div class="drops-category">
+          <div class="drops-category-title">Crypto & Trading Deals</div>
+          <div class="drops-grid">
+            ${data.featuredCrypto.map(deal => createDropCard(deal)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    dailyDropsContent.innerHTML = html;
+  }
+
+  function createDropCard(deal: Drop, showCode = false): string {
+    const codeHtml = (showCode && deal.code) ? `<div class="drop-card-code">CODE: ${deal.code}</div>` : '';
+    return `
+      <a href="${deal.url}" target="_blank" rel="noopener" class="drop-card">
+        <span class="drop-card-tag">${deal.category}</span>
+        <div class="drop-card-title">${deal.title}</div>
+        <div class="drop-card-desc">${deal.description}</div>
+        ${codeHtml}
+      </a>
+    `;
+  }
+
+  // Load on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadDailyDrops);
+  } else {
+    loadDailyDrops();
+  }
+
+  // Refresh button
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', loadDailyDrops);
+  }
+</script>
