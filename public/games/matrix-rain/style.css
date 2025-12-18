@@ -8,6 +8,9 @@ body {
     background: #000;
     overflow: hidden;
     font-family: 'Courier New', monospace;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 #matrix-canvas {
@@ -15,6 +18,7 @@ body {
     width: 100vw;
     height: 100vh;
     cursor: crosshair;
+    touch-action: none;
 }
 
 .controls {
@@ -81,11 +85,26 @@ button.active {
         right: 10px;
         left: 10px;
         max-width: none;
-        padding: 15px;
+        padding: 12px;
+    }
+    
+    .controls h2 {
+        font-size: 16px;
+    }
+    
+    .controls p {
+        font-size: 11px;
+        margin-bottom: 10px;
+    }
+    
+    .button-group {
+        gap: 5px;
+        margin-bottom: 8px;
     }
     
     button {
-        font-size: 10px;
+        font-size: 9px;
         padding: 6px 8px;
+        min-width: 50px;
     }
 }

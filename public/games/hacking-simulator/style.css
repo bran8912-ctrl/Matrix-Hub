@@ -189,17 +189,39 @@ button:disabled {
     }
     
     .header h1 {
-        font-size: 20px;
+        font-size: 18px;
         letter-spacing: 1px;
     }
     
     .stats {
-        font-size: 12px;
+        font-size: 11px;
+        gap: 5px;
+    }
+    
+    .stats span {
+        padding: 4px 8px;
     }
     
     .terminal {
+        padding: 10px;
+        min-height: 250px;
+        max-height: 400px;
+    }
+    
+    #terminal-input {
+        font-size: 14px;
+    }
+    
+    .info {
         padding: 15px;
-        min-height: 300px;
+    }
+    
+    .info h3 {
+        font-size: 16px;
+    }
+    
+    .info p {
+        font-size: 14px;
     }
     
     button {

@@ -37,6 +37,27 @@ canvas.addEventListener('mousemove', (e) => {
     }
 });
 
+// Touch interaction for mobile
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (isInteractive && e.touches.length > 0) {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+    }
+}, { passive: false });
+
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    // Create explosion effect at touch point
+    if (e.touches.length > 0) {
+        const col = Math.floor(e.touches[0].clientX / fontSize);
+        for (let i = Math.max(0, col - 5); i < Math.min(columns, col + 5); i++) {
+            drops[i] = 0;
+            speeds[i] = Math.random() * 2 + 1;
+        }
+    }
+}, { passive: false });
+
 canvas.addEventListener('click', (e) => {
     // Create explosion effect at click point
     const col = Math.floor(e.clientX / fontSize);

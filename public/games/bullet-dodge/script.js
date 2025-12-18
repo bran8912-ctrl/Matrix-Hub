@@ -1,8 +1,14 @@
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = 600;
-canvas.height = 600;
+// Make canvas responsive
+function resizeCanvas() {
+    const size = Math.min(window.innerWidth - 40, window.innerHeight - 200, 600);
+    canvas.width = size;
+    canvas.height = size;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
 // Game state
 let gameRunning = false;
@@ -29,6 +35,60 @@ document.addEventListener('keydown', (e) => {
 });
 document.addEventListener('keyup', (e) => {
     keys[e.key.toLowerCase()] = false;
+});
+
+// Touch controls for mobile
+let touchControls = { left: false, right: false, up: false, down: false };
+let touchStartX = 0;
+let touchStartY = 0;
+let isTouching = false;
+
+// Prevent scrolling on touch
+document.body.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+}, { passive: false });
+
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    touchStartX = touch.clientX - rect.left;
+    touchStartY = touch.clientY - rect.top;
+    isTouching = true;
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!isTouching) return;
+    
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const touchX = touch.clientX - rect.left;
+    const touchY = touch.clientY - rect.top;
+    
+    const deltaX = touchX - touchStartX;
+    const deltaY = touchY - touchStartY;
+    
+    // Reset all
+    touchControls = { left: false, right: false, up: false, down: false };
+    
+    // Determine direction based on largest delta
+    const threshold = 5;
+    if (Math.abs(deltaX) > threshold || Math.abs(deltaY) > threshold) {
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            touchControls.right = deltaX > 0;
+            touchControls.left = deltaX < 0;
+        } else {
+            touchControls.down = deltaY > 0;
+            touchControls.up = deltaY < 0;
+        }
+    }
+});
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    isTouching = false;
+    touchControls = { left: false, right: false, up: false, down: false };
 });
 
 // UI Elements
@@ -160,11 +220,11 @@ function spawnBullets() {
 }
 
 function updatePlayer() {
-    // Movement
-    if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
-    if (keys['arrowright'] || keys['d']) player.x += player.speed;
-    if (keys['arrowup'] || keys['w']) player.y -= player.speed;
-    if (keys['arrowdown'] || keys['s']) player.y += player.speed;
+    // Movement (keyboard + touch)
+    if (keys['arrowleft'] || keys['a'] || touchControls.left) player.x -= player.speed;
+    if (keys['arrowright'] || keys['d'] || touchControls.right) player.x += player.speed;
+    if (keys['arrowup'] || keys['w'] || touchControls.up) player.y -= player.speed;
+    if (keys['arrowdown'] || keys['s'] || touchControls.down) player.y += player.speed;
     
     // Boundary
     player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));

@@ -13,6 +13,9 @@ body {
     min-height: 100vh;
     overflow: hidden;
     background: radial-gradient(circle, #001a00 0%, #000 100%);
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .game-container {
@@ -75,6 +78,9 @@ body {
     background: #000;
     box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
     cursor: none;
+    touch-action: none;
+    max-width: 100%;
+    height: auto;
 }
 
 .overlay {

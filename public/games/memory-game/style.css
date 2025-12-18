@@ -14,6 +14,9 @@ body {
     align-items: center;
     padding: 20px;
     background: linear-gradient(135deg, #000 0%, #001a00 50%, #000 100%);
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .container {
@@ -85,6 +88,7 @@ body {
     transform-style: preserve-3d;
     transition: transform 0.4s, box-shadow 0.3s;
     box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+    touch-action: manipulation;
 }
 
 .card:hover:not(.flipped):not(.matched) {
@@ -209,14 +213,23 @@ button:hover {
 
 /* Responsive design */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
     .header h1 {
-        font-size: 20px;
+        font-size: 18px;
         letter-spacing: 2px;
+        margin-bottom: 15px;
     }
     
     .stats {
-        gap: 15px;
+        gap: 10px;
         padding: 10px;
+    }
+    
+    .stat-item .label {
+        font-size: 10px;
     }
     
     .stat-item span:last-child {
@@ -224,12 +237,12 @@ button:hover {
     }
     
     .game-board {
-        gap: 10px;
-        padding: 15px;
+        gap: 8px;
+        padding: 12px;
     }
     
     .card-back {
-        font-size: 36px;
+        font-size: 32px;
     }
     
     button {
@@ -244,21 +257,39 @@ button:hover {
     }
     
     .overlay h2 {
-        font-size: 24px;
+        font-size: 22px;
     }
     
     .win-stats {
-        font-size: 16px;
+        font-size: 15px;
     }
 }
 
 @media (max-width: 480px) {
+    .header h1 {
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+    
     .game-board {
-        gap: 8px;
+        gap: 6px;
         padding: 10px;
     }
     
+    .card {
+        border-width: 1px;
+    }
+    
     .card-back {
-        font-size: 28px;
+        font-size: 24px;
+    }
+    
+    button {
+        padding: 10px 16px;
+        font-size: 11px;
+    }
+    
+    .overlay h2 {
+        font-size: 20px;
     }
 }
