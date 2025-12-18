@@ -7,6 +7,8 @@ const finalScoreDisplay = document.getElementById('finalScore');
 const restartBtn = document.getElementById('restartBtn');
 
 // Responsive canvas
+let gridSize = 20;
+
 function resizeCanvas() {
     const maxWidth = Math.min(600, window.innerWidth - 40);
     const maxHeight = Math.min(600, window.innerHeight - 300);
@@ -19,7 +21,6 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-let gridSize;
 let snake = [];
 let direction = { x: 1, y: 0 };
 let nextDirection = { x: 1, y: 0 };
