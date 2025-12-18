@@ -2696,8 +2696,35 @@
         <p style="text-align: center; color: var(--theme-text); opacity: 0.6; font-size: 0.85rem; margin-top: 10px;">
           All games optimized for desktop & mobile • Swipe/Touch enabled
         </p>
+        <button id="show-leaderboards-btn" style="margin: 15px auto; display: block; padding: 10px 20px; background: #000; border: 2px solid var(--theme-primary); color: var(--theme-primary); cursor: pointer; font-family: 'Courier New', monospace; border-radius: 5px;">
+          📊 VIEW LEADERBOARDS
+        </button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Leaderboards Modal -->
+<div id="leaderboards-modal" class="matrix-game-modal" style="display: none;">
+  <div class="matrix-game-modal-content">
+    <button class="modal-close-btn" id="close-leaderboards">×</button>
+    <h2 style="text-align: center; color: var(--theme-primary); margin-bottom: 20px;">🏆 MATRIX LEADERBOARDS 🏆</h2>
+    
+    <div class="leaderboard-tabs">
+      <button class="lb-tab active" data-game="bullet-dodge">🎯 Bullet Time</button>
+      <button class="lb-tab" data-game="memory-game">🧩 Memory</button>
+      <button class="lb-tab" data-game="cyber-snake">🐍 Snake</button>
+      <button class="lb-tab" data-game="code-breaker">⌨️ Code Breaker</button>
+      <button class="lb-tab" data-game="neos-training">⚡ Neo's Training</button>
+    </div>
+    
+    <div id="leaderboard-content" style="margin-top: 20px; min-height: 300px;">
+      <div id="leaderboard-display"></div>
+    </div>
+    
+    <p style="text-align: center; color: var(--theme-text); opacity: 0.6; font-size: 0.85rem; margin-top: 15px;">
+      Play games to see your scores here! Leaderboards saved locally.
+    </p>
   </div>
 </div>
 
@@ -2808,6 +2835,160 @@
       height: 450px;
     }
   }
+
+  /* Leaderboard Modal Styles */
+  .matrix-game-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .matrix-game-modal-content {
+    background: var(--theme-bg-dark);
+    border: 3px solid var(--theme-primary);
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 40px var(--theme-glow);
+    position: relative;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--theme-primary);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+  }
+
+  .modal-close-btn:hover {
+    color: #f00;
+    text-shadow: 0 0 10px #f00;
+  }
+
+  .leaderboard-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .lb-tab {
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--theme-primary);
+    color: var(--theme-primary);
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+
+  .lb-tab:hover {
+    background: rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 10px var(--theme-glow);
+  }
+
+  .lb-tab.active {
+    background: var(--theme-primary);
+    color: #000;
+    box-shadow: 0 0 15px var(--theme-glow);
+  }
+
+  .leaderboard-entry {
+    display: grid;
+    grid-template-columns: 50px 1fr 100px 120px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    background: rgba(0, 20, 0, 0.3);
+    margin-bottom: 8px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
+  }
+
+  .leaderboard-entry:hover {
+    background: rgba(0, 40, 0, 0.5);
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+  }
+
+  .leaderboard-entry.top-three {
+    border-width: 2px;
+    background: rgba(0, 30, 0, 0.5);
+  }
+
+  .leaderboard-entry .rank {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .leaderboard-entry .player-name {
+    color: var(--theme-primary);
+    text-shadow: 0 0 5px var(--theme-glow);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .leaderboard-entry .score {
+    color: #0ff;
+    text-align: right;
+    font-weight: bold;
+    text-shadow: 0 0 5px #0ff;
+  }
+
+  .leaderboard-entry .date {
+    color: #0a0;
+    text-align: right;
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 600px) {
+    .matrix-game-modal-content {
+      padding: 20px;
+    }
+
+    .lb-tab {
+      font-size: 0.7rem;
+      padding: 6px 10px;
+    }
+
+    .leaderboard-entry {
+      grid-template-columns: 40px 1fr 80px;
+      font-size: 0.85rem;
+    }
+
+    .leaderboard-entry .date {
+      display: none;
+    }
+  }
 </style>
 
 <script>
@@ -2832,6 +3013,105 @@
       });
     });
   });
+
+  // Leaderboard System
+  const leaderboardModal = document.getElementById('leaderboards-modal');
+  const showLeaderboardsBtn = document.getElementById('show-leaderboards-btn');
+  const closeLeaderboardsBtn = document.getElementById('close-leaderboards');
+  const lbTabs = document.querySelectorAll('.lb-tab');
+  const leaderboardDisplay = document.getElementById('leaderboard-display');
+
+  let currentLeaderboardGame = 'bullet-dodge';
+
+  function getLeaderboard(gameName) {
+    const stored = localStorage.getItem(`matrix_leaderboard_${gameName}`);
+    return stored ? JSON.parse(stored) : [];
+  }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  function getRankIcon(rank) {
+    if (rank === 1) return '🥇';
+    if (rank === 2) return '🥈';
+    if (rank === 3) return '🥉';
+    return `#${rank}`;
+  }
+
+  function renderLeaderboard(gameName) {
+    const scores = getLeaderboard(gameName);
+    
+    if (scores.length === 0) {
+      leaderboardDisplay.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: var(--theme-text); opacity: 0.6;">
+          <p style="font-size: 1.2rem; margin-bottom: 10px;">No scores yet</p>
+          <p style="font-size: 0.9rem;">Be the first to set a record!</p>
+        </div>
+      `;
+      return;
+    }
+
+    leaderboardDisplay.innerHTML = scores.map((entry, index) => `
+      <div class="leaderboard-entry ${index < 3 ? 'top-three' : ''}">
+        <span class="rank">${getRankIcon(index + 1)}</span>
+        <span class="player-name">${escapeHtml(entry.name || 'Anonymous')}</span>
+        <span class="score">${(entry.score || 0).toLocaleString()}</span>
+        <span class="date">${formatDate(entry.date)}</span>
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  showLeaderboardsBtn.addEventListener('click', () => {
+    leaderboardModal.style.display = 'flex';
+    renderLeaderboard(currentLeaderboardGame);
+  });
+
+  closeLeaderboardsBtn.addEventListener('click', () => {
+    leaderboardModal.style.display = 'none';
+  });
+
+  leaderboardModal.addEventListener('click', (e) => {
+    if (e.target === leaderboardModal) {
+      leaderboardModal.style.display = 'none';
+    }
+  });
+
+  lbTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      lbTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentLeaderboardGame = tab.dataset.game;
+      renderLeaderboard(currentLeaderboardGame);
+    });
+  });
+
+  // Listen for score updates from games via postMessage
+  window.addEventListener('message', (event) => {
+    if (event.data.type === 'gameScore') {
+      const { game, name, score } = event.data;
+      addScore(game, name, score);
+    }
+  });
+
+  function addScore(gameName, playerName, score) {
+    const scores = getLeaderboard(gameName);
+    scores.push({
+      name: playerName,
+      score: score,
+      date: new Date().toISOString()
+    });
+    scores.sort((a, b) => b.score - a.score);
+    const topScores = scores.slice(0, 10);
+    localStorage.setItem(`matrix_leaderboard_${gameName}`, JSON.stringify(topScores));
+  }
 </script>
 
 <!-- Deal Scanner Section -->
