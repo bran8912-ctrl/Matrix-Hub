@@ -1,4 +1,4 @@
-const CHAT_ENDPOINT = "/api/chat";
+const CHAT_ENDPOINT = null; // Static site - no API
 const CHAT_PROMPT = "secretary";
 
 const STORAGE_KEY = "matrixHubOracleSecretary.v1";
@@ -266,6 +266,38 @@ function createMessageEl(role, text) {
 }
 
 async function callOracle(conversation) {
+  // Static site fallback - provide helpful local responses
+  if (!CHAT_ENDPOINT) {
+    const lastMsg = conversation[conversation.length - 1]?.content?.toLowerCase() || "";
+    
+    const responses = {
+      help: "I can help you navigate Matrix Hub:\n\n• Run deal scanner\n• Refresh daily drops\n• Play/pause music\n• Generate art\n• Manage tasks with /tasks\n\nJust ask!",
+      greeting: "Welcome to Matrix Hub. I am here to assist you.\n\nTry commands like:\n- 'run deal scanner'\n- 'refresh daily drops'\n- 'play music'\n- '/tasks' to manage your list",
+      deals: "To access deals:\n• Say 'refresh daily drops' for latest offers\n• Say 'run deal scanner' to scan for deals\n• Check the Deal Scanner section on the page",
+      music: "Music Player controls:\n• 'play music' - Start playback\n• 'pause music' - Pause\n• 'next track' - Skip forward\n• 'previous track' - Go back",
+      art: "To generate art:\n• Scroll to the Art Generator section\n• Say 'open art generator'\n• Or say 'generate art' to create",
+      telegram: "Join our Telegram channel @matrixhuborg for:\n• Exclusive deals\n• Community updates\n• Real-time notifications\n\nScroll down to the Telegram section!",
+      default: "I understand. Try these commands:\n• 'help' for assistance\n• 'refresh daily drops'\n• 'run deal scanner'\n• 'play music'\n• '/tasks' to manage tasks"
+    };
+    
+    if (/\b(hi|hello|hey|greetings)\b/i.test(lastMsg)) {
+      return responses.greeting;
+    } else if (/\b(help|what can you do|commands)\b/i.test(lastMsg)) {
+      return responses.help;
+    } else if (/\b(deal|discount|offer|drop)\b/i.test(lastMsg)) {
+      return responses.deals;
+    } else if (/\b(music|song|play|track)\b/i.test(lastMsg)) {
+      return responses.music;
+    } else if (/\b(art|image|picture|generate)\b/i.test(lastMsg)) {
+      return responses.art;
+    } else if (/\b(telegram|channel|community)\b/i.test(lastMsg)) {
+      return responses.telegram;
+    } else {
+      return responses.default;
+    }
+  }
+  
+  // Original API call (not used in static deployment)
   const resp = await fetch(CHAT_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

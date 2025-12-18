@@ -190,8 +190,8 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const tabButtons = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
-    const gameFrames = document.querySelectorAll<HTMLDivElement>('.game-frame');
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const gameFrames = document.querySelectorAll('.game-frame');
 
     tabButtons.forEach(button => {
       button.addEventListener('click', () => {
@@ -203,7 +203,7 @@
 
         // Add active class to clicked button and corresponding frame
         button.classList.add('active');
-        const activeFrame = document.querySelector<HTMLDivElement>(`.game-frame[data-game="${gameName}"]`);
+        const activeFrame = document.querySelector(`.game-frame[data-game="${gameName}"]`);
         if (activeFrame) {
           activeFrame.classList.add('active');
         }
