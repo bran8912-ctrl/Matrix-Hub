@@ -1,9 +1,9 @@
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  output: 'server',
+  output: 'static',
+  site: 'https://matrix-hub.org',
   markdown: {
     shikiConfig: {
       theme: 'github-light-high-contrast',
@@ -11,6 +11,5 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()]
-  },
-  adapter: node({ mode: 'standalone' })
+  }
 });

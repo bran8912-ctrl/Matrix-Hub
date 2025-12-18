@@ -1,4 +1,4 @@
-export const prerender = false;
+export const prerender = true;
 
 interface Drop {
   category: string;
