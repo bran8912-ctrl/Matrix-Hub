@@ -29,6 +29,7 @@ let score = 0;
 let highScore = localStorage.getItem('cyberSnakeHighScore') || 0;
 let gameActive = false;
 let gameSpeed = 100;
+let playerName = '';
 
 highScoreDisplay.textContent = highScore;
 
@@ -189,6 +190,16 @@ function endGame() {
     gameActive = false;
     finalScoreDisplay.textContent = score;
     gameOverScreen.classList.remove('hidden');
+    
+    // Submit score to leaderboard
+    if (playerName && score > 0 && window.parent) {
+        window.parent.postMessage({
+            type: 'gameScore',
+            game: 'cyber-snake',
+            name: playerName,
+            score: score
+        }, '*');
+    }
 }
 
 function changeDirection(newDir) {
@@ -297,6 +308,18 @@ document.body.addEventListener('touchmove', (e) => {
     e.preventDefault();
 }, { passive: false });
 
-// Start game
-initGame();
-gameLoop();
+// Prompt for player name and start
+function startGame() {
+    playerName = localStorage.getItem('matrix_player_name');
+    if (!playerName) {
+        const name = prompt('Enter your name to join the Matrix:');
+        if (name && name.trim()) {
+            playerName = name.trim().substring(0, 20);
+            localStorage.setItem('matrix_player_name', playerName);
+        }
+    }
+    initGame();
+    gameLoop();
+}
+
+startGame();

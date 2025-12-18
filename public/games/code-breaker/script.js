@@ -23,10 +23,12 @@ resizeCanvas();
 let score = 0;
 let level = 1;
 let lives = 3;
-let gameActive = true;
+let gameActive = false;
 let fallingCodes = [];
 let lastSpawnTime = 0;
 let spawnInterval = 2000;
+let playerName = '';
+let gameStarted = false;
 
 // Matrix characters
 const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
@@ -172,6 +174,16 @@ function endGame() {
     gameActive = false;
     finalScoreDisplay.textContent = score;
     gameOverScreen.classList.remove('hidden');
+    
+    // Submit score to leaderboard
+    if (playerName && score > 0 && window.parent) {
+        window.parent.postMessage({
+            type: 'gameScore',
+            game: 'code-breaker',
+            name: playerName,
+            score: score
+        }, '*');
+    }
 }
 
 function restartGame() {
@@ -215,5 +227,27 @@ document.body.addEventListener('touchmove', (e) => {
     e.preventDefault();
 }, { passive: false });
 
-// Start game
-requestAnimationFrame(updateGame);
+// Prompt for player name before starting
+function startGame() {
+    if (!playerName) {
+        playerName = localStorage.getItem('matrix_player_name');
+    }
+    
+    if (!playerName) {
+        const name = prompt('Enter your name to join the Matrix:');
+        if (name && name.trim()) {
+            playerName = name.trim().substring(0, 20);
+            localStorage.setItem('matrix_player_name', playerName);
+            gameStarted = true;
+            gameActive = true;
+            requestAnimationFrame(updateGame);
+        }
+    } else {
+        gameStarted = true;
+        gameActive = true;
+        requestAnimationFrame(updateGame);
+    }
+}
+
+// Start game on load
+setTimeout(startGame, 500);

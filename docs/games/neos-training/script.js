@@ -17,6 +17,7 @@ let waiting = false;
 let reactionTimes = [];
 let bestTime = Infinity;
 let timeoutId = null;
+let playerName = '';
 
 function startRound() {
     if (round >= maxRounds) {
@@ -146,6 +147,17 @@ function endGame() {
     
     ratingDisplay.textContent = rating;
     resultsScreen.classList.remove('hidden');
+    
+    // Submit score to leaderboard (use best time as score, lower is better so invert it)
+    if (playerName && bestTime < Infinity && window.parent) {
+        const score = Math.max(0, 1000 - bestTime); // Convert to higher-is-better score
+        window.parent.postMessage({
+            type: 'gameScore',
+            game: 'neos-training',
+            name: playerName,
+            score: score
+        }, '*');
+    }
 }
 
 function resetGame() {
@@ -209,7 +221,16 @@ document.body.addEventListener('touchmove', (e) => {
     e.preventDefault();
 }, { passive: false });
 
-// Start first round
+// Prompt for player name and start first round
+playerName = localStorage.getItem('matrix_player_name');
+if (!playerName) {
+    const name = prompt('Enter your name to begin training:');
+    if (name && name.trim()) {
+        playerName = name.trim().substring(0, 20);
+        localStorage.setItem('matrix_player_name', playerName);
+    }
+}
+
 setTimeout(() => {
     startRound();
 }, 1500);
