@@ -195,7 +195,7 @@
 
     tabButtons.forEach(button => {
       button.addEventListener('click', () => {
-        const gameName = button.dataset.game;
+        const gameName = (button as HTMLButtonElement).dataset.game;
 
         // Remove active class from all buttons and frames
         tabButtons.forEach(btn => btn.classList.remove('active'));

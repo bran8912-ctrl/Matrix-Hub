@@ -39,6 +39,62 @@ function normalize(text) {
   return (text || "").toLowerCase().replace(/\s+/g, " ").trim();
 }
 
+const MTX_INFO = `⚡ MTX SYSTEM FLOW — HOW IT POWERS SITE GROWTH
+
+1. ENTRY (FREE → MTX)
+• Site is usable without MTX
+• MTX unlocks deeper layers
+• No hard paywalls — only progression
+Result: Low friction, high retention
+
+2. ACTION → REWARD
+Users earn MTX by:
+• Creating accounts
+• Using tools
+• Testing beta features
+• Reporting issues (GitHub → MTX rewards)
+Result: Activity becomes growth fuel
+
+3. MTX AS FUEL (NOT STORAGE)
+MTX is consumed by:
+• Advanced tools
+• Compute-heavy actions
+• Priority queues
+• Experimental modules
+Result: Constant circulation, no hoarding
+
+4. FEEDBACK LOOP
+USE → EARN → UNLOCK → BUILD → REPEAT
+• Usage increases value
+• Value attracts contributors
+• Contributors build modules
+• Modules increase usage
+Result: Self-reinforcing ecosystem
+
+5. GITHUB INTEGRATION
+Tie MTX to GitHub actions:
+• PR merged → MTX reward
+• Bug labeled 'confirmed' → MTX reward
+• Feature accepted → MTX grant
+Result: Developers are directly incentivized
+
+6. FUTURE EXPANSION PATH
+MTX later enables:
+• Plugin marketplace
+• App-to-app payments
+• Partner integrations
+• DAO-lite governance
+Only after real usage exists.
+
+🧠 DESIGN RULES
+• MTX never required for basic access
+• MTX never marketed as profit
+• MTX only unlocks real function
+• Growth follows usage, not hype
+
+SYSTEM GROWS BY USE.
+MTX FLOWS WHERE SIGNAL EXISTS.`;
+
 function scrollToSelector(selector) {
   const el = document.querySelector(selector);
   if (!el) return false;
@@ -184,6 +240,7 @@ function buildQuickChips(container, onClick) {
     { label: "Show Daily Drops", value: "show daily drops" },
     { label: "Run Deal Scanner", value: "run deal scanner" },
     { label: "Play Music", value: "play music" },
+    { label: "About MTX Coin", value: "what is mtx" },
     { label: "Open Video Generator", value: "open video generator" }
   ];
 
@@ -367,6 +424,11 @@ async function handleLocalIntent(apps, rawText) {
     if (/\bimage\b/.test(t)) app?.actions?.find((a) => a.id === "i2v")?.run?.();
     if (/\btext\b/.test(t)) app?.actions?.find((a) => a.id === "t2v")?.run?.();
     return { handled: true, reply: "Video generator opened. Choose your tab and begin." };
+  }
+
+  // MTX cryptocurrency info
+  if (/\b(mtx|matrix-hubcoin|matrixhubcoin|coin|crypto|currency|token|earn|reward)\b/.test(t)) {
+    return { handled: true, reply: MTX_INFO };
   }
 
   if (wantsOpen) {

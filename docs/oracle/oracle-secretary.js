@@ -184,6 +184,7 @@ function buildQuickChips(container, onClick) {
     { label: "Show Daily Drops", value: "show daily drops" },
     { label: "Run Deal Scanner", value: "run deal scanner" },
     { label: "Play Music", value: "play music" },
+    { label: "About MTX Coin", value: "what is mtx" },
     { label: "Open Video Generator", value: "open video generator" }
   ];
 
@@ -277,6 +278,7 @@ async function callOracle(conversation) {
       music: "Music Player controls:\n• 'play music' - Start playback\n• 'pause music' - Pause\n• 'next track' - Skip forward\n• 'previous track' - Go back",
       art: "To generate art:\n• Scroll to the Art Generator section\n• Say 'open art generator'\n• Or say 'generate art' to create",
       telegram: "Join our Telegram channel @matrixhuborg for:\n• Exclusive deals\n• Community updates\n• Real-time notifications\n\nScroll down to the Telegram section!",
+      mtx: "⚡ MTX SYSTEM FLOW — HOW IT POWERS SITE GROWTH\n\n1. ENTRY (FREE → MTX)\n• Site is usable without MTX\n• MTX unlocks deeper layers\n• No hard paywalls — only progression\nResult: Low friction, high retention\n\n2. ACTION → REWARD\nUsers earn MTX by:\n• Creating accounts\n• Using tools\n• Testing beta features\n• Reporting issues (GitHub → MTX rewards)\nResult: Activity becomes growth fuel\n\n3. MTX AS FUEL (NOT STORAGE)\nMTX is consumed by:\n• Advanced tools\n• Compute-heavy actions\n• Priority queues\n• Experimental modules\nResult: Constant circulation, no hoarding\n\n4. FEEDBACK LOOP\nUSE → EARN → UNLOCK → BUILD → REPEAT\n• Usage increases value\n• Value attracts contributors\n• Contributors build modules\n• Modules increase usage\nResult: Self-reinforcing ecosystem\n\n5. GITHUB INTEGRATION\nTie MTX to GitHub actions:\n• PR merged → MTX reward\n• Bug labeled 'confirmed' → MTX reward\n• Feature accepted → MTX grant\nResult: Developers are directly incentivized\n\n6. FUTURE EXPANSION PATH\nMTX later enables:\n• Plugin marketplace\n• App-to-app payments\n• Partner integrations\n• DAO-lite governance\nOnly after real usage exists.\n\n🧠 DESIGN RULES\n• MTX never required for basic access\n• MTX never marketed as profit\n• MTX only unlocks real function\n• Growth follows usage, not hype\n\nSYSTEM GROWS BY USE.\nMTX FLOWS WHERE SIGNAL EXISTS.",
       default: "I understand. Try these commands:\n• 'help' for assistance\n• 'refresh daily drops'\n• 'run deal scanner'\n• 'play music'\n• '/tasks' to manage tasks"
     };
     
@@ -292,6 +294,8 @@ async function callOracle(conversation) {
       return responses.art;
     } else if (/\b(telegram|channel|community)\b/i.test(lastMsg)) {
       return responses.telegram;
+    } else if (/\b(mtx|matrix-hubcoin|matrixhubcoin|coin|crypto|currency|token|earn|reward)\b/i.test(lastMsg)) {
+      return responses.mtx;
     } else {
       return responses.default;
     }

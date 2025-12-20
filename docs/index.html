@@ -405,7 +405,24 @@
 
 </head>
 <body>
-<!-- DONATE SECTION - Support the Matrix -->
+<!-- MTX ECOSYSTEM SECTION -->
+<div id="mtx-ecosystem" class="panel" style="margin: 30px auto; max-width: 900px; border: 2px solid var(--theme-border); background: var(--theme-bg-panel); box-shadow: 0 0 24px var(--theme-glow);">
+  <h2 style="color:var(--theme-primary); text-shadow: 0 0 10px var(--theme-glow); font-family: 'Courier New', monospace; letter-spacing: 2px; margin-bottom: 12px;">MTX Ecosystem</h2>
+  <div class="panel-text" style="font-size: 1.15rem; color: var(--theme-text); margin-bottom: 18px;">
+    <strong>MTX</strong> is the key token powering Matrix-Hub.<br>
+    Earn, spend, burn, and lock MTX to unlock features, access premium tools, and participate in the Casino.
+  </div>
+  <ul style="margin: 18px 0 0 20px; font-size: 1.08rem;">
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Earn MTX:</span> Usage milestones, bug reports, GitHub actions, community testing</li>
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Spend MTX:</span> Premium tools, priority execution, experimental modules, Casino games</li>
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Burn MTX:</span> A % of premium spending is burned to keep supply healthy</li>
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Lock MTX:</span> Stake MTX for tier access, unlock after a set period</li>
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Casino:</span> Play slots, blackjack, roulette to win or spend MTX</li>
+  </ul>
+  <div class="panel-text" style="margin-top: 18px; color:var(--theme-secondary); font-size: 1.08rem;">
+    MTX is useful, accessible, and designed for sustainable growth—no hype cycles required.
+  </div>
+</div>
 <style>
 #donate-banner {
     margin: 0 auto 20px auto;
@@ -3024,13 +3041,25 @@
   let currentLeaderboardGame = 'bullet-dodge';
 
   function getLeaderboard(gameName) {
-    const stored = localStorage.getItem(`matrix_leaderboard_${gameName}`);
-    return stored ? JSON.parse(stored) : [];
+    try {
+      const stored = localStorage.getItem(`matrix_leaderboard_${gameName}`);
+      if (!stored) return [];
+      const parsed = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.error('Error loading leaderboard:', error);
+      return [];
+    }
   }
 
   function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'N/A';
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    } catch (error) {
+      return 'N/A';
+    }
   }
 
   function getRankIcon(rank) {
@@ -3040,77 +3069,139 @@
     return `#${rank}`;
   }
 
+  function escapeHtml(text) {
+    try {
+      const div = document.createElement('div');
+      div.textContent = String(text || '');
+      return div.innerHTML;
+    } catch (error) {
+      return String(text || 'Anonymous');
+    }
+  }
+
   function renderLeaderboard(gameName) {
+    if (!leaderboardDisplay) {
+      console.error('Leaderboard display element not found');
+      return;
+    }
+
     const scores = getLeaderboard(gameName);
     
-    if (scores.length === 0) {
+    if (!scores || scores.length === 0) {
       leaderboardDisplay.innerHTML = `
         <div style="text-align: center; padding: 40px; color: var(--theme-text); opacity: 0.6;">
           <p style="font-size: 1.2rem; margin-bottom: 10px;">No scores yet</p>
           <p style="font-size: 0.9rem;">Be the first to set a record!</p>
+          <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.8;">Play games to see leaderboards here</p>
         </div>
       `;
       return;
     }
 
-    leaderboardDisplay.innerHTML = scores.map((entry, index) => `
-      <div class="leaderboard-entry ${index < 3 ? 'top-three' : ''}">
-        <span class="rank">${getRankIcon(index + 1)}</span>
-        <span class="player-name">${escapeHtml(entry.name || 'Anonymous')}</span>
-        <span class="score">${(entry.score || 0).toLocaleString()}</span>
-        <span class="date">${formatDate(entry.date)}</span>
-      </div>
-    `).join('');
-  }
-
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
-  showLeaderboardsBtn.addEventListener('click', () => {
-    leaderboardModal.style.display = 'flex';
-    renderLeaderboard(currentLeaderboardGame);
-  });
-
-  closeLeaderboardsBtn.addEventListener('click', () => {
-    leaderboardModal.style.display = 'none';
-  });
-
-  leaderboardModal.addEventListener('click', (e) => {
-    if (e.target === leaderboardModal) {
-      leaderboardModal.style.display = 'none';
+    try {
+      leaderboardDisplay.innerHTML = scores.map((entry, index) => {
+        const rank = index + 1;
+        const name = escapeHtml(entry.name || 'Anonymous');
+        const score = Number(entry.score) || 0;
+        const date = formatDate(entry.date);
+        
+        return `
+          <div class="leaderboard-entry ${index < 3 ? 'top-three' : ''}">
+            <span class="rank">${getRankIcon(rank)}</span>
+            <span class="player-name">${name}</span>
+            <span class="score">${score.toLocaleString()}</span>
+            <span class="date">${date}</span>
+          </div>
+        `;
+      }).join('');
+    } catch (error) {
+      console.error('Error rendering leaderboard:', error);
+      leaderboardDisplay.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #f00;">
+          <p>Error loading leaderboard</p>
+        </div>
+      `;
     }
-  });
+  }
 
-  lbTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      lbTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentLeaderboardGame = tab.dataset.game;
-      renderLeaderboard(currentLeaderboardGame);
+  // Initialize event listeners
+  if (showLeaderboardsBtn) {
+    showLeaderboardsBtn.addEventListener('click', () => {
+      if (leaderboardModal) {
+        leaderboardModal.style.display = 'flex';
+        renderLeaderboard(currentLeaderboardGame);
+      }
     });
-  });
+  }
+
+  if (closeLeaderboardsBtn) {
+    closeLeaderboardsBtn.addEventListener('click', () => {
+      if (leaderboardModal) {
+        leaderboardModal.style.display = 'none';
+      }
+    });
+  }
+
+  if (leaderboardModal) {
+    leaderboardModal.addEventListener('click', (e) => {
+      if (e.target === leaderboardModal) {
+        leaderboardModal.style.display = 'none';
+      }
+    });
+  }
+
+  if (lbTabs) {
+    lbTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        lbTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const gameName = tab.dataset.game;
+        if (gameName) {
+          currentLeaderboardGame = gameName;
+          renderLeaderboard(currentLeaderboardGame);
+        }
+      });
+    });
+  }
 
   // Listen for score updates from games via postMessage
   window.addEventListener('message', (event) => {
-    if (event.data.type === 'gameScore') {
-      const { game, name, score } = event.data;
-      addScore(game, name, score);
+    try {
+      if (event.data && event.data.type === 'gameScore') {
+        const { game, name, score } = event.data;
+        if (game && name && typeof score === 'number') {
+          addScore(game, name, score);
+        }
+      }
+    } catch (error) {
+      console.error('Error processing game score message:', error);
     }
   });
 
   function addScore(gameName, playerName, score) {
-    const scores = getLeaderboard(gameName);
-    scores.push({
-      name: playerName,
-      score: score,
-      date: new Date().toISOString()
-    });
-    scores.sort((a, b) => b.score - a.score);
-    const topScores = scores.slice(0, 10);
-    localStorage.setItem(`matrix_leaderboard_${gameName}`, JSON.stringify(topScores));
+    try {
+      const scores = getLeaderboard(gameName);
+      scores.push({
+        name: String(playerName).substring(0, 20),
+        score: Number(score) || 0,
+        date: new Date().toISOString()
+      });
+      scores.sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+      const topScores = scores.slice(0, 10);
+      localStorage.setItem(`matrix_leaderboard_${gameName}`, JSON.stringify(topScores));
+      
+      // Refresh the display if this game's leaderboard is currently showing
+      if (currentLeaderboardGame === gameName && leaderboardModal && leaderboardModal.style.display === 'flex') {
+        renderLeaderboard(gameName);
+      }
+    } catch (error) {
+      console.error('Error saving score:', error);
+    }
+  }
+
+  // Initialize the first leaderboard on page load
+  if (leaderboardDisplay) {
+    renderLeaderboard(currentLeaderboardGame);
   }
 </script>
 
