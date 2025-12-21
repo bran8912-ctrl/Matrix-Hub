@@ -33,6 +33,7 @@ function loadState() {
   return {
     voiceEnabled: false,
     lastGreetAt: 0,
+    selectedVoice: null,
     ...safeJsonParse(raw, {})
   };
 }
@@ -154,6 +155,11 @@ function oracleToast(title, body, ttlMs = 4200) {
 
 function getSpeechVoice() {
   const voices = window.speechSynthesis?.getVoices?.() || [];
+  const state = loadState();
+  if (state.selectedVoice) {
+    const match = voices.find(v => v.voiceURI === state.selectedVoice);
+    if (match) return match;
+  }
   // Prefer older, human-like, wise, or classic male/female voices
   const preferred = voices.find((v) => /en/i.test(v.lang) &&
     /(old|grandpa|grandma|wise|male|alex|fred|ralph|paul|george|albert|bruce|daniel|frank|otto|moira|karen|lee|mike|edward|arthur|oliver|hugh|james|john|sam|steven|thomas|william)/i.test(v.name))
@@ -490,6 +496,35 @@ async function handleLocalIntent(apps, rawText) {
 }
 
 function init() {
+    // --- Voice Selection Dropdown ---
+    const voiceSelect = document.createElement('select');
+    voiceSelect.id = 'oracleVoiceSelect';
+    voiceSelect.style.margin = '0 0 0 10px';
+    voiceSelect.title = 'Choose Oracle Voice';
+    voiceBtn.parentNode.insertBefore(voiceSelect, voiceBtn.nextSibling);
+
+    function populateVoiceOptions() {
+      const voices = window.speechSynthesis?.getVoices?.() || [];
+      voiceSelect.innerHTML = '';
+      voices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.voiceURI;
+        opt.textContent = `${v.name} (${v.lang})`;
+        voiceSelect.appendChild(opt);
+      });
+      // Set current selection
+      const state = loadState();
+      if (state.selectedVoice) voiceSelect.value = state.selectedVoice;
+    }
+    window.speechSynthesis?.addEventListener?.('voiceschanged', populateVoiceOptions);
+    populateVoiceOptions();
+
+    voiceSelect.addEventListener('change', () => {
+      const state = loadState();
+      state.selectedVoice = voiceSelect.value;
+      saveState(state);
+      oracleToast('VOICE', 'Oracle voice changed.');
+    });
   const botBtn = document.getElementById("matrixBotButton");
   const botWin = document.getElementById("matrixBotWindow");
   const sendBtn = document.getElementById("matrixBotSend");
