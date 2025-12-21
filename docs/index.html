@@ -51,7 +51,6 @@
       --section-music-player: #00ff41;
       --section-deal-scanner: #00ff00;
       --section-daily-drops: #00ff00;
-      --section-crypto-trading: #00ff00;
       --section-art-generator: #00ff00;
       --section-video-generator: #00ff00;
       --section-bot-widget: #00ff9c;
@@ -69,7 +68,6 @@
       --section-music-player: #bf00ff;
       --section-deal-scanner: #bf00ff;
       --section-daily-drops: #bf00ff;
-      --section-crypto-trading: #bf00ff;
       --section-art-generator: #bf00ff;
       --section-video-generator: #bf00ff;
       --section-bot-widget: #bf00ff;
@@ -87,7 +85,6 @@
       --section-music-player: #00bfff;
       --section-deal-scanner: #00bfff;
       --section-daily-drops: #00bfff;
-      --section-crypto-trading: #00bfff;
       --section-art-generator: #00bfff;
       --section-video-generator: #00bfff;
       --section-bot-widget: #00bfff;
@@ -105,7 +102,6 @@
       --section-music-player: #ff0040;
       --section-deal-scanner: #ff0040;
       --section-daily-drops: #ff0040;
-      --section-crypto-trading: #ff0040;
       --section-art-generator: #ff0040;
       --section-video-generator: #ff0040;
       --section-bot-widget: #ff0040;
@@ -123,7 +119,6 @@
       --section-music-player: #ffd700;
       --section-deal-scanner: #ffd700;
       --section-daily-drops: #ffd700;
-      --section-crypto-trading: #ffd700;
       --section-art-generator: #ffd700;
       --section-video-generator: #ffd700;
       --section-bot-widget: #ffd700;
@@ -141,7 +136,6 @@
       --section-music-player: #ff6600;
       --section-deal-scanner: #ff6600;
       --section-daily-drops: #ff6600;
-      --section-crypto-trading: #ff6600;
       --section-art-generator: #ff6600;
       --section-video-generator: #ff6600;
       --section-bot-widget: #ff6600;
@@ -159,7 +153,6 @@
       --section-music-player: #ffffff;
       --section-deal-scanner: #ffffff;
       --section-daily-drops: #ffffff;
-      --section-crypto-trading: #ffffff;
       --section-art-generator: #ffffff;
       --section-video-generator: #ffffff;
       --section-bot-widget: #ffffff;
@@ -412,7 +405,24 @@
 
 </head>
 <body>
-<!-- DONATE SECTION - Support the Matrix -->
+<!-- MTX ECOSYSTEM SECTION -->
+<div id="mtx-ecosystem" class="panel" style="margin: 30px auto; max-width: 900px; border: 2px solid var(--theme-border); background: var(--theme-bg-panel); box-shadow: 0 0 24px var(--theme-glow);">
+  <h2 style="color:var(--theme-primary); text-shadow: 0 0 10px var(--theme-glow); font-family: 'Courier New', monospace; letter-spacing: 2px; margin-bottom: 12px;">MTX Ecosystem</h2>
+  <div class="panel-text" style="font-size: 1.15rem; color: var(--theme-text); margin-bottom: 18px;">
+    <strong>MTX</strong> is the key token powering Matrix-Hub.<br>
+    Earn, spend, burn, and lock MTX to unlock features, access premium tools, and participate in the Casino.
+  </div>
+  <ul style="margin: 18px 0 0 20px; font-size: 1.08rem;">
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Earn MTX:</span> Usage milestones, bug reports, GitHub actions, community testing</li>
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Spend MTX:</span> Premium tools, priority execution, experimental modules, Casino games</li>
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Burn MTX:</span> A % of premium spending is burned to keep supply healthy</li>
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Lock MTX:</span> Stake MTX for tier access, unlock after a set period</li>
+    <li><span style="color:var(--theme-primary); font-weight:bold;">Casino:</span> Play slots, blackjack, roulette to win or spend MTX</li>
+  </ul>
+  <div class="panel-text" style="margin-top: 18px; color:var(--theme-secondary); font-size: 1.08rem;">
+    MTX is useful, accessible, and designed for sustainable growth—no hype cycles required.
+  </div>
+</div>
 <style>
 #donate-banner {
     margin: 0 auto 20px auto;
@@ -594,6 +604,33 @@
     letter-spacing: 1px;
 }
 
+.telegram-join-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #0088cc, #005580);
+    border: 2px solid var(--theme-primary, #00ff00);
+    border-radius: 8px;
+    padding: 12px 24px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+.telegram-join-btn:hover {
+    background: linear-gradient(135deg, #00a3e6, #006699);
+    box-shadow: 0 0 25px var(--theme-primary, #00ff00), 0 0 40px rgba(0, 136, 204, 0.5);
+    transform: scale(1.05);
+}
+
+.telegram-join-btn span {
+    color: var(--theme-primary, #00ff00);
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--theme-primary, #00ff00);
+    letter-spacing: 1px;
+}
+
 .donate-buttons-container {
     display: flex;
     flex-wrap: wrap;
@@ -607,7 +644,7 @@
         flex-direction: column;
         align-items: center;
     }
-    .venmo-donate-btn, .cashapp-donate-btn, .paypal-donate-btn {
+    .venmo-donate-btn, .cashapp-donate-btn, .paypal-donate-btn, .telegram-join-btn {
         margin-left: 0;
         width: 80%;
     }
@@ -641,6 +678,9 @@
     </div>
     <div class="donate-click-hint">Click any address to copy</div>
     <div class="donate-buttons-container">
+        <a href="https://t.me/matrixhuborg" target="_blank" rel="noopener noreferrer" class="telegram-join-btn">
+            <span>📢 Join Telegram Channel</span>
+        </a>
         <a href="https://www.paypal.me/bletourneau692" target="_blank" rel="noopener noreferrer" class="paypal-donate-btn">
             <span>💳 Donate via PayPal</span>
         </a>
@@ -649,6 +689,58 @@
         </a>
         <a href="https://cash.app/$bran8912" target="_blank" rel="noopener noreferrer" class="cashapp-donate-btn">
             <span>💵 Donate via CashApp</span>
+        </a>
+    </div>
+</div>
+
+<!-- TELEGRAM CHANNEL WIDGET -->
+<style>
+.telegram-widget-container {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px;
+    background: var(--theme-bg-panel);
+    border: 2px solid var(--theme-primary, #00ff00);
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.telegram-widget-title {
+    font-size: 20px;
+    color: var(--theme-primary, #00ff00);
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px var(--theme-primary, #00ff00);
+    letter-spacing: 2px;
+}
+
+.telegram-widget-subtitle {
+    font-size: 14px;
+    color: var(--theme-secondary, #00ffff);
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.telegram-embed {
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+</style>
+
+<div class="telegram-widget-container">
+    <div class="telegram-widget-title">📢 MATRIX HUB TELEGRAM</div>
+    <div class="telegram-widget-subtitle">Join our community for exclusive updates & deals</div>
+    <div class="telegram-embed">
+        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-post="matrixhuborg/1" data-width="100%"></script>
+    </div>
+    <div style="margin-top: 20px;">
+        <a href="https://t.me/matrixhuborg" target="_blank" rel="noopener noreferrer" 
+           style="display: inline-block; padding: 12px 30px; background: linear-gradient(135deg, #00ff00, #00cc00); color: #000; text-decoration: none; border-radius: 25px; font-weight: bold; box-shadow: 0 0 20px rgba(0, 255, 0, 0.4); transition: all 0.3s ease;">
+            🚀 Join Channel
         </a>
     </div>
 </div>
@@ -1232,41 +1324,41 @@
 	  // Matrix MP3 Player Playlist - Royalty-Free Music from Mixkit
 	  // All tracks are 100% free under the Mixkit Stock Music Free License
 	  // No attribution required - free for commercial and personal use
-    const matrixPlaylist = [
-      { title: "Cyberpunk City", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/140/140.mp3" },
-      { title: "Deep Techno Ambience", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/134/134.mp3" },
-      { title: "Techno Fest Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/124/124.mp3" },
-      { title: "Hazy After Hours", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/132/132.mp3" },
-      { title: "Minimal Techno 01", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/162/162.mp3" },
-      { title: "Minimal Emotion", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/160/160.mp3" },
-      { title: "Machine Drum Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/117/117.mp3" },
-      { title: "Dub Techno Groove", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/133/133.mp3" },
-      { title: "Trance Party", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/166/166.mp3" },
-      { title: "Infected Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/157/157.mp3" },
-      { title: "Goa Trance Mantra", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/137/137.mp3" },
-      { title: "Tech House vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/130/130.mp3" },
-      { title: "Kodama Night Town", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/114/114.mp3" },
-      { title: "Digital Clouds", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/175/175.mp3" },
-      { title: "Slow Rain", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/122/122.mp3" },
-      { title: "Sun in Your Eyes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/131/131.mp3" },
-      { title: "Better Times are Coming", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/173/173.mp3" },
-      { title: "Lonerism", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/159/159.mp3" },
-      { title: "B.O.R.N", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/620/620.mp3" },
-      { title: "Deep Urban", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/623/623.mp3" },
-      { title: "Feedback Dreams", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/588/588.mp3" },
-      { title: "Fragments Of Bangkok", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/625/625.mp3" },
-      { title: "Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/601/601.mp3" },
-      { title: "Silent Descent", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/614/614.mp3" },
-      { title: "Echoes", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/188/188.mp3" },
-      { title: "Sci-Fi Game", artist: "Arulo", url: "https://assets.mixkit.co/music/395/395.mp3" },
-      { title: "Sci-Fi Score", artist: "Arulo", url: "https://assets.mixkit.co/music/464/464.mp3" },
-      // --- Added songs ---
-      { title: "Neon Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/626/626.mp3" },
-      { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3" },
-      { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3" },
-      { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3" },
-      { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3" }
-    ];
+      const matrixPlaylist = [
+        { title: "Cyberpunk City", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/140/140.mp3" },
+        { title: "Deep Techno Ambience", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/134/134.mp3" },
+        { title: "Techno Fest Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/124/124.mp3" },
+        { title: "Hazy After Hours", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/132/132.mp3" },
+        { title: "Minimal Techno 01", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/162/162.mp3" },
+        { title: "Minimal Emotion", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/160/160.mp3" },
+        { title: "Machine Drum Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/117/117.mp3" },
+        { title: "Dub Techno Groove", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/133/133.mp3" },
+        { title: "Trance Party", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/166/166.mp3" },
+        { title: "Infected Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/157/157.mp3" },
+        { title: "Goa Trance Mantra", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/137/137.mp3" },
+        { title: "Tech House vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/130/130.mp3" },
+        { title: "Kodama Night Town", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/114/114.mp3" },
+        { title: "Digital Clouds", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/175/175.mp3" },
+        { title: "Slow Rain", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/122/122.mp3" },
+        { title: "Sun in Your Eyes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/131/131.mp3" },
+        { title: "Better Times are Coming", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/173/173.mp3" },
+        { title: "Lonerism", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/159/159.mp3" },
+        { title: "B.O.R.N", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/620/620.mp3" },
+        { title: "Deep Urban", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/623/623.mp3" },
+        { title: "Feedback Dreams", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/588/588.mp3" },
+        { title: "Fragments Of Bangkok", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/625/625.mp3" },
+        { title: "Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/601/601.mp3" },
+        { title: "Silent Descent", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/614/614.mp3" },
+        { title: "Echoes", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/188/188.mp3" },
+        { title: "Sci-Fi Game", artist: "Arulo", url: "https://assets.mixkit.co/music/395/395.mp3" },
+        { title: "Sci-Fi Score", artist: "Arulo", url: "https://assets.mixkit.co/music/464/464.mp3" },
+        // --- Added songs ---
+        { title: "Neon Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/626/626.mp3" },
+        { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3" },
+        { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3" },
+        { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3" },
+        { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3" }
+      ];
 
 	  const matrixAudio = document.getElementById('matrixAudio');
 	  // Enable CORS for Web Audio analysis (required for syncing visuals to remote MP3s)
@@ -2514,6 +2606,594 @@
   document.addEventListener('DOMContentLoaded', loadSavedTheme);
 </script>
 
+<!-- Matrix Gaming Section -->
+<div class="container">
+  <div class="panel matrix-gaming-panel">
+    <h2 style="text-align: center; margin-bottom: 15px;">🎮 MATRIX GAMING TERMINAL 🎮</h2>
+    <p style="text-align: center; color: var(--theme-text); margin-bottom: 20px; opacity: 0.8;">
+      Enter the digital realm - 7 Matrix-themed games to test your skills
+    </p>
+    
+    <div class="game-tabs">
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-game="matrix-rain">
+          🌧️ Digital Rain
+        </button>
+        <button class="tab-btn" data-game="hacking-simulator">
+          💻 Hacking Simulator
+        </button>
+        <button class="tab-btn" data-game="bullet-dodge">
+          🎯 Bullet Time
+        </button>
+        <button class="tab-btn" data-game="memory-game">
+          🧩 Memory Protocol
+        </button>
+        <button class="tab-btn" data-game="code-breaker">
+          ⌨️ Code Breaker
+        </button>
+        <button class="tab-btn" data-game="cyber-snake">
+          🐍 Cyber Snake
+        </button>
+        <button class="tab-btn" data-game="neos-training">
+          ⚡ Neo's Training
+        </button>
+      </div>
+
+      <div class="game-container">
+        <div class="game-frame active" data-game="matrix-rain">
+          <iframe 
+            src="/games/matrix-rain/" 
+            title="Matrix Digital Rain"
+            class="game-iframe"
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div class="game-frame" data-game="hacking-simulator">
+          <iframe 
+            src="/games/hacking-simulator/" 
+            title="Matrix Hacking Simulator"
+            class="game-iframe"
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div class="game-frame" data-game="bullet-dodge">
+          <iframe 
+            src="/games/bullet-dodge/" 
+            title="Matrix Bullet Dodge"
+            class="game-iframe"
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div class="game-frame" data-game="memory-game">
+          <iframe 
+            src="/games/memory-game/" 
+            title="Matrix Memory Game"
+            class="game-iframe"
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div class="game-frame" data-game="code-breaker">
+          <iframe 
+            src="/games/code-breaker/" 
+            title="Matrix Code Breaker"
+            class="game-iframe"
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div class="game-frame" data-game="cyber-snake">
+          <iframe 
+            src="/games/cyber-snake/" 
+            title="Cyber Snake"
+            class="game-iframe"
+            loading="lazy"
+          ></iframe>
+        </div>
+        <div class="game-frame" data-game="neos-training">
+          <iframe 
+            src="/games/neos-training/" 
+            title="Neo's Training"
+            class="game-iframe"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+
+      <div class="game-info">
+        <p style="text-align: center; color: var(--theme-text); opacity: 0.6; font-size: 0.85rem; margin-top: 10px;">
+          All games optimized for desktop & mobile • Swipe/Touch enabled
+        </p>
+        <button id="show-leaderboards-btn" style="margin: 15px auto; display: block; padding: 10px 20px; background: #000; border: 2px solid var(--theme-primary); color: var(--theme-primary); cursor: pointer; font-family: 'Courier New', monospace; border-radius: 5px;">
+          📊 VIEW LEADERBOARDS
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Leaderboards Modal -->
+<div id="leaderboards-modal" class="matrix-game-modal" style="display: none;">
+  <div class="matrix-game-modal-content">
+    <button class="modal-close-btn" id="close-leaderboards">×</button>
+    <h2 style="text-align: center; color: var(--theme-primary); margin-bottom: 20px;">🏆 MATRIX LEADERBOARDS 🏆</h2>
+    
+    <div class="leaderboard-tabs">
+      <button class="lb-tab active" data-game="bullet-dodge">🎯 Bullet Time</button>
+      <button class="lb-tab" data-game="memory-game">🧩 Memory</button>
+      <button class="lb-tab" data-game="cyber-snake">🐍 Snake</button>
+      <button class="lb-tab" data-game="code-breaker">⌨️ Code Breaker</button>
+      <button class="lb-tab" data-game="neos-training">⚡ Neo's Training</button>
+    </div>
+    
+    <div id="leaderboard-content" style="margin-top: 20px; min-height: 300px;">
+      <div id="leaderboard-display"></div>
+    </div>
+    
+    <p style="text-align: center; color: var(--theme-text); opacity: 0.6; font-size: 0.85rem; margin-top: 15px;">
+      Play games to see your scores here! Leaderboards saved locally.
+    </p>
+  </div>
+</div>
+
+<style>
+  .matrix-gaming-panel {
+    background: var(--theme-bg-panel) !important;
+    border: 2px solid var(--theme-primary);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+  }
+
+  .game-tabs {
+    width: 100%;
+  }
+
+  .tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tab-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--theme-primary);
+    border: 2px solid var(--theme-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px var(--theme-glow);
+  }
+
+  .tab-btn:hover {
+    background: rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 15px var(--theme-glow);
+    transform: translateY(-2px);
+  }
+
+  .tab-btn.active {
+    background: var(--theme-primary);
+    color: #000;
+    text-shadow: none;
+    box-shadow: 0 0 20px var(--theme-glow);
+  }
+
+  .game-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    border: 2px solid var(--theme-primary);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .game-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+  }
+
+  .game-frame.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .game-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  @media (max-width: 768px) {
+    .tab-btn {
+      flex: 1 1 45%;
+      font-size: 0.7rem;
+      padding: 0.5rem;
+      min-width: 100px;
+    }
+
+    .game-container {
+      height: 500px;
+      margin-bottom: 10px;
+    }
+    
+    .matrix-gaming-panel {
+      padding: 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .tab-btn {
+      flex: 1 1 100%;
+      font-size: 0.8rem;
+    }
+    
+    .game-container {
+      height: 450px;
+    }
+  }
+
+  /* Leaderboard Modal Styles */
+  .matrix-game-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .matrix-game-modal-content {
+    background: var(--theme-bg-dark);
+    border: 3px solid var(--theme-primary);
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 40px var(--theme-glow);
+    position: relative;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--theme-primary);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+  }
+
+  .modal-close-btn:hover {
+    color: #f00;
+    text-shadow: 0 0 10px #f00;
+  }
+
+  .leaderboard-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .lb-tab {
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--theme-primary);
+    color: var(--theme-primary);
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+
+  .lb-tab:hover {
+    background: rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 10px var(--theme-glow);
+  }
+
+  .lb-tab.active {
+    background: var(--theme-primary);
+    color: #000;
+    box-shadow: 0 0 15px var(--theme-glow);
+  }
+
+  .leaderboard-entry {
+    display: grid;
+    grid-template-columns: 50px 1fr 100px 120px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    background: rgba(0, 20, 0, 0.3);
+    margin-bottom: 8px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
+  }
+
+  .leaderboard-entry:hover {
+    background: rgba(0, 40, 0, 0.5);
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+  }
+
+  .leaderboard-entry.top-three {
+    border-width: 2px;
+    background: rgba(0, 30, 0, 0.5);
+  }
+
+  .leaderboard-entry .rank {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .leaderboard-entry .player-name {
+    color: var(--theme-primary);
+    text-shadow: 0 0 5px var(--theme-glow);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .leaderboard-entry .score {
+    color: #0ff;
+    text-align: right;
+    font-weight: bold;
+    text-shadow: 0 0 5px #0ff;
+  }
+
+  .leaderboard-entry .date {
+    color: #0a0;
+    text-align: right;
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 600px) {
+    .matrix-game-modal-content {
+      padding: 20px;
+    }
+
+    .lb-tab {
+      font-size: 0.7rem;
+      padding: 6px 10px;
+    }
+
+    .leaderboard-entry {
+      grid-template-columns: 40px 1fr 80px;
+      font-size: 0.85rem;
+    }
+
+    .leaderboard-entry .date {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const gameFrames = document.querySelectorAll('.game-frame');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const gameName = button.dataset.game;
+
+        // Remove active class from all buttons and frames
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        gameFrames.forEach(frame => frame.classList.remove('active'));
+
+        // Add active class to clicked button and corresponding frame
+        button.classList.add('active');
+        const activeFrame = document.querySelector(`.game-frame[data-game="${gameName}"]`);
+        if (activeFrame) {
+          activeFrame.classList.add('active');
+        }
+      });
+    });
+  });
+
+  // Leaderboard System
+  const leaderboardModal = document.getElementById('leaderboards-modal');
+  const showLeaderboardsBtn = document.getElementById('show-leaderboards-btn');
+  const closeLeaderboardsBtn = document.getElementById('close-leaderboards');
+  const lbTabs = document.querySelectorAll('.lb-tab');
+  const leaderboardDisplay = document.getElementById('leaderboard-display');
+
+  let currentLeaderboardGame = 'bullet-dodge';
+
+  function getLeaderboard(gameName) {
+    try {
+      const stored = localStorage.getItem(`matrix_leaderboard_${gameName}`);
+      if (!stored) return [];
+      const parsed = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.error('Error loading leaderboard:', error);
+      return [];
+    }
+  }
+
+  function formatDate(dateString) {
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'N/A';
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    } catch (error) {
+      return 'N/A';
+    }
+  }
+
+  function getRankIcon(rank) {
+    if (rank === 1) return '🥇';
+    if (rank === 2) return '🥈';
+    if (rank === 3) return '🥉';
+    return `#${rank}`;
+  }
+
+  function escapeHtml(text) {
+    try {
+      const div = document.createElement('div');
+      div.textContent = String(text || '');
+      return div.innerHTML;
+    } catch (error) {
+      return String(text || 'Anonymous');
+    }
+  }
+
+  function renderLeaderboard(gameName) {
+    if (!leaderboardDisplay) {
+      console.error('Leaderboard display element not found');
+      return;
+    }
+
+    const scores = getLeaderboard(gameName);
+    
+    if (!scores || scores.length === 0) {
+      leaderboardDisplay.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: var(--theme-text); opacity: 0.6;">
+          <p style="font-size: 1.2rem; margin-bottom: 10px;">No scores yet</p>
+          <p style="font-size: 0.9rem;">Be the first to set a record!</p>
+          <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.8;">Play games to see leaderboards here</p>
+        </div>
+      `;
+      return;
+    }
+
+    try {
+      leaderboardDisplay.innerHTML = scores.map((entry, index) => {
+        const rank = index + 1;
+        const name = escapeHtml(entry.name || 'Anonymous');
+        const score = Number(entry.score) || 0;
+        const date = formatDate(entry.date);
+        
+        return `
+          <div class="leaderboard-entry ${index < 3 ? 'top-three' : ''}">
+            <span class="rank">${getRankIcon(rank)}</span>
+            <span class="player-name">${name}</span>
+            <span class="score">${score.toLocaleString()}</span>
+            <span class="date">${date}</span>
+          </div>
+        `;
+      }).join('');
+    } catch (error) {
+      console.error('Error rendering leaderboard:', error);
+      leaderboardDisplay.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #f00;">
+          <p>Error loading leaderboard</p>
+        </div>
+      `;
+    }
+  }
+
+  // Initialize event listeners
+  if (showLeaderboardsBtn) {
+    showLeaderboardsBtn.addEventListener('click', () => {
+      if (leaderboardModal) {
+        leaderboardModal.style.display = 'flex';
+        renderLeaderboard(currentLeaderboardGame);
+      }
+    });
+  }
+
+  if (closeLeaderboardsBtn) {
+    closeLeaderboardsBtn.addEventListener('click', () => {
+      if (leaderboardModal) {
+        leaderboardModal.style.display = 'none';
+      }
+    });
+  }
+
+  if (leaderboardModal) {
+    leaderboardModal.addEventListener('click', (e) => {
+      if (e.target === leaderboardModal) {
+        leaderboardModal.style.display = 'none';
+      }
+    });
+  }
+
+  if (lbTabs) {
+    lbTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        lbTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const gameName = tab.dataset.game;
+        if (gameName) {
+          currentLeaderboardGame = gameName;
+          renderLeaderboard(currentLeaderboardGame);
+        }
+      });
+    });
+  }
+
+  // Listen for score updates from games via postMessage
+  window.addEventListener('message', (event) => {
+    try {
+      if (event.data && event.data.type === 'gameScore') {
+        const { game, name, score } = event.data;
+        if (game && name && typeof score === 'number') {
+          addScore(game, name, score);
+        }
+      }
+    } catch (error) {
+      console.error('Error processing game score message:', error);
+    }
+  });
+
+  function addScore(gameName, playerName, score) {
+    try {
+      const scores = getLeaderboard(gameName);
+      scores.push({
+        name: String(playerName).substring(0, 20),
+        score: Number(score) || 0,
+        date: new Date().toISOString()
+      });
+      scores.sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+      const topScores = scores.slice(0, 10);
+      localStorage.setItem(`matrix_leaderboard_${gameName}`, JSON.stringify(topScores));
+      
+      // Refresh the display if this game's leaderboard is currently showing
+      if (currentLeaderboardGame === gameName && leaderboardModal && leaderboardModal.style.display === 'flex') {
+        renderLeaderboard(gameName);
+      }
+    } catch (error) {
+      console.error('Error saving score:', error);
+    }
+  }
+
+  // Initialize the first leaderboard on page load
+  if (leaderboardDisplay) {
+    renderLeaderboard(currentLeaderboardGame);
+  }
+</script>
+
 <!-- Deal Scanner Section -->
 <div class="container">
   <div class="panel deal-scanner-panel">
@@ -3062,325 +3742,6 @@
 
   // Refresh button
   refreshBtn.addEventListener('click', loadDailyDrops);
-</script>
-
-<!-- CRYPTO TRADING TERMINAL SECTION -->
-<div class="container">
-  <div class="panel crypto-trading-panel">
-    <div class="crypto-header">
-      <h2>CRYPTO TRADING TERMINAL</h2>
-      <div class="crypto-status">
-        <span class="crypto-status-dot"></span>
-        <span>MARKETS OPEN</span>
-      </div>
-    </div>
-    <p class="crypto-subtitle">Real-time market data & advanced charting tools</p>
-    
-    <!-- Tab Navigation -->
-    <div class="crypto-tabs">
-      <button class="crypto-tab active" data-tab="charts">
-        <span class="tab-icon">📊</span>
-        <span>Live Charts</span>
-      </button>
-      <button class="crypto-tab" data-tab="prices">
-        <span class="tab-icon">💰</span>
-        <span>Price Tracker</span>
-      </button>
-    </div>
-
-    <!-- Tab Content -->
-    <div class="crypto-tab-content active" id="charts-tab">
-      <div class="crypto-widget-container">
-        <!-- TradingView Advanced Chart Widget -->
-        <div class="tradingview-widget-container" style="height:100%;width:100%">
-          <div id="tradingview_chart" style="height:500px;width:100%"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="crypto-tab-content" id="prices-tab">
-      <div class="crypto-widget-container">
-        <!-- TradingView Crypto Market Overview -->
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="crypto-footer">
-      <div class="crypto-disclaimer">Market data provided by TradingView. Not financial advice.</div>
-      <div class="crypto-links">
-        <a href="https://www.binance.us/universal_JHHGDSKDJ/auth/registration?ref=614205735" target="_blank" rel="noopener" class="crypto-link-btn">Trade on Binance</a>
-        <a href="https://btcc.com/invite/Ufihz4l" target="_blank" rel="noopener" class="crypto-link-btn">BTCC Exchange</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-  .crypto-trading-panel {
-    background: var(--theme-bg-panel) !important;
-    --matrix-pulse-color: var(--section-crypto-trading, #0f0);
-    border: 2px solid var(--section-crypto-trading, #0f0);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .crypto-trading-panel::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 200%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--section-crypto-trading, #0f0), transparent);
-    animation: scanLine 3s infinite;
-  }
-
-  .crypto-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .crypto-header h2 {
-    margin: 0;
-    font-family: 'Courier New', monospace;
-    text-shadow: 0 0 10px var(--section-crypto-trading, #0f0);
-  }
-
-  .crypto-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0, 255, 0, 0.1);
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--section-crypto-trading, #0f0);
-    font-family: 'Courier New', monospace;
-    font-size: 0.85rem;
-  }
-
-  .crypto-status-dot {
-    width: 10px;
-    height: 10px;
-    background: var(--section-crypto-trading, #0f0);
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-  }
-
-  .crypto-subtitle {
-    color: var(--section-crypto-trading, #0a0);
-    font-size: 0.9rem;
-    margin-bottom: 25px;
-    font-family: 'Courier New', monospace;
-    opacity: 0.8;
-  }
-
-  .crypto-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid rgba(0, 255, 0, 0.2);
-    padding-bottom: 0;
-  }
-
-  .crypto-tab {
-    background: rgba(0, 20, 0, 0.3);
-    border: 1px solid var(--section-crypto-trading, #0a0);
-    border-bottom: none;
-    border-radius: 8px 8px 0 0;
-    padding: 12px 24px;
-    color: var(--section-crypto-trading, #0f0);
-    cursor: pointer;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    position: relative;
-    bottom: -2px;
-  }
-
-  .crypto-tab:hover {
-    background: rgba(0, 40, 0, 0.5);
-    border-color: var(--section-crypto-trading, #0f0);
-    transform: translateY(-2px);
-  }
-
-  .crypto-tab.active {
-    background: rgba(0, 60, 0, 0.6);
-    border-color: var(--section-crypto-trading, #0f0);
-    color: #0ff;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-  }
-
-  .tab-icon {
-    font-size: 1.2rem;
-  }
-
-  .crypto-tab-content {
-    display: none;
-    animation: fadeIn 0.4s ease;
-  }
-
-  .crypto-tab-content.active {
-    display: block;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .crypto-widget-container {
-    background: #000;
-    border: 1px solid var(--section-crypto-trading, #0f0);
-    border-radius: 5px;
-    padding: 15px;
-    min-height: 500px;
-  }
-
-  .crypto-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid var(--section-crypto-trading, #0a0);
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-
-  .crypto-disclaimer {
-    font-size: 0.75rem;
-    color: var(--section-crypto-trading, #0a0);
-    font-family: 'Courier New', monospace;
-    opacity: 0.8;
-  }
-
-  .crypto-links {
-    display: flex;
-    gap: 10px;
-  }
-
-  .crypto-link-btn {
-    padding: 8px 16px;
-    background: rgba(0, 30, 0, 0.28);
-    border: 1px solid var(--section-crypto-trading, #0f0);
-    border-radius: 5px;
-    color: #0ff;
-    text-decoration: none;
-    font-family: 'Courier New', monospace;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
-  }
-
-  .crypto-link-btn:hover {
-    background: rgba(0, 60, 0, 0.4);
-    border-color: var(--section-crypto-trading, #0f0);
-    box-shadow: 0 5px 15px rgba(0, 255, 0, 0.2);
-    transform: translateY(-2px);
-  }
-
-  @media (max-width: 768px) {
-    .crypto-tabs {
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .crypto-tab {
-      border-radius: 8px;
-      bottom: 0;
-    }
-
-    .crypto-footer {
-      flex-direction: column;
-      text-align: center;
-    }
-
-    .crypto-links {
-      flex-direction: column;
-      width: 100%;
-    }
-
-    .crypto-link-btn {
-      width: 100%;
-      text-align: center;
-    }
-  }
-</style>
-
-<script>
-  // TradingView Widgets
-  (function() {
-    // Advanced Chart Widget
-    const chartScript = document.createElement('script');
-    chartScript.src = 'https://s3.tradingview.com/tv.js';
-    chartScript.async = true;
-    chartScript.onload = function() {
-      new TradingView.widget({
-        "width": "100%",
-        "height": 500,
-        "symbol": "BINANCE:BTCUSDT",
-        "interval": "D",
-        "timezone": "Etc/UTC",
-        "theme": "dark",
-        "style": "1",
-        "locale": "en",
-        "toolbar_bg": "#000000",
-        "enable_publishing": false,
-        "allow_symbol_change": true,
-        "container_id": "tradingview_chart",
-        "hide_side_toolbar": false,
-        "backgroundColor": "rgba(0, 0, 0, 0.8)",
-        "gridColor": "rgba(0, 255, 0, 0.1)",
-        "studies": [
-          "STD;SMA"
-        ]
-      });
-    };
-    document.head.appendChild(chartScript);
-
-    // Crypto Market Overview Widget  
-    const marketScript = document.createElement('script');
-    marketScript.type = 'text/javascript';
-    marketScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js';
-    marketScript.async = true;
-    marketScript.innerHTML = JSON.stringify({
-      "width": "100%",
-      "height": 490,
-      "defaultColumn": "overview",
-      "screener_type": "crypto_mkt",
-      "displayCurrency": "USD",
-      "colorTheme": "dark",
-      "locale": "en",
-      "backgroundColor": "rgba(0, 0, 0, 0.8)",
-      "gridColor": "rgba(0, 255, 0, 0.1)"
-    });
-    document.querySelector('#prices-tab .tradingview-widget-container__widget').appendChild(marketScript);
-  })();
-
-  // Tab Switching Logic
-  const cryptoTabs = document.querySelectorAll('.crypto-tab');
-  const cryptoTabContents = document.querySelectorAll('.crypto-tab-content');
-
-  cryptoTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      // Remove active class from all tabs and contents
-      cryptoTabs.forEach(t => t.classList.remove('active'));
-      cryptoTabContents.forEach(c => c.classList.remove('active'));
-
-      // Add active class to clicked tab
-      tab.classList.add('active');
-
-      // Show corresponding content
-      const tabName = tab.getAttribute('data-tab');
-      document.getElementById(`${tabName}-tab`).classList.add('active');
-    });
-  });
 </script>
 
 <!-- ALL CATEGORY LINKS - STORED FOR SCANNER AND DAILY DROPS (hidden from display)
@@ -6867,4 +7228,4 @@
 </style>
 
 </body>
-</html>
+                           </html>
