@@ -1,84 +1,4 @@
-// Matrix MP3 Player Playlist - Royalty-Free Music from Mixkit
-// All tracks are 100% free under the Mixkit Stock Music Free License
-// No attribution required - free for commercial and personal use
-const matrixPlaylist = [
-  { title: "Cyberpunk City", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/140/140.mp3" },
-  { title: "Deep Techno Ambience", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/134/134.mp3" },
-  { title: "Techno Fest Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/124/124.mp3" },
-  { title: "Hazy After Hours", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/132/132.mp3" },
-  { title: "Minimal Techno 01", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/162/162.mp3" },
-  { title: "Minimal Emotion", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/160/160.mp3" },
-  { title: "Machine Drum Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/117/117.mp3" },
-  { title: "Dub Techno Groove", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/133/133.mp3" },
-  { title: "Trance Party", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/166/166.mp3" },
-  { title: "Infected Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/157/157.mp3" },
-  { title: "Goa Trance Mantra", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/137/137.mp3" },
-  { title: "Tech House vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/130/130.mp3" },
-  { title: "Kodama Night Town", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/114/114.mp3" },
-  { title: "Digital Clouds", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/175/175.mp3" },
-  { title: "Slow Rain", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/122/122.mp3" },
-  { title: "Sun in Your Eyes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/131/131.mp3" },
-  { title: "Better Times are Coming", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/173/173.mp3" },
-  { title: "Lonerism", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/159/159.mp3" },
-  { title: "B.O.R.N", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/620/620.mp3" },
-  { title: "Deep Urban", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/623/623.mp3" },
-  { title: "Feedback Dreams", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/588/588.mp3" },
-  { title: "Fragments Of Bangkok", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/625/625.mp3" },
-  { title: "Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/601/601.mp3" },
-  { title: "Silent Descent", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/614/614.mp3" },
-  { title: "Echoes", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/188/188.mp3" },
-  { title: "Sci-Fi Game", artist: "Arulo", url: "https://assets.mixkit.co/music/395/395.mp3" },
-  { title: "Sci-Fi Score", artist: "Arulo", url: "https://assets.mixkit.co/music/464/464.mp3" },
-  // --- Added songs ---
-  { title: "Neon Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/626/626.mp3" },
-  { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3" },
-  { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3" },
-  { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3" },
-  { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3" },
-  // --- More new tracks ---
-  { title: "Neon Runner", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/628/628.mp3" },
-  { title: "Digital Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/629/629.mp3" },
-  { title: "Night Vision", artist: "Arulo", url: "https://assets.mixkit.co/music/398/398.mp3" },
-  { title: "Retro Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/399/399.mp3" },
-  { title: "Dream Machine", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/190/190.mp3" },
-  { title: "Synthwave Lights", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/630/630.mp3" },
-  { title: "Electric Avenue", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/631/631.mp3" },
-  { title: "Midnight Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/400/400.mp3" },
-  { title: "Digital Dreamscape", artist: "Arulo", url: "https://assets.mixkit.co/music/401/401.mp3" },
-  { title: "Neon Pulse", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/191/191.mp3" }
-];
-
-// Layers playlist for secondary track
-const layersPlaylist = [
-  { title: "Deep Techno Ambience", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/134/134.mp3", tags: ["ambient", "techno"] },
-  { title: "Hazy After Hours", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/132/132.mp3", tags: ["ambient"] },
-  { title: "Minimal Emotion", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/160/160.mp3", tags: ["minimal", "ambient"] },
-  { title: "Dub Techno Groove", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/133/133.mp3", tags: ["dub", "techno"] },
-  { title: "Digital Clouds", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/175/175.mp3", tags: ["ambient"] },
-  { title: "Slow Rain", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/122/122.mp3", tags: ["ambient"] },
-  { title: "Sun in Your Eyes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/131/131.mp3", tags: ["ambient"] },
-  { title: "Better Times are Coming", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/173/173.mp3", tags: ["ambient"] },
-  { title: "Lonerism", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/159/159.mp3", tags: ["minimal", "ambient"] },
-  { title: "Sci-Fi Score", artist: "Arulo", url: "https://assets.mixkit.co/music/464/464.mp3", tags: ["sci-fi", "ambient"] },
-  // --- Added layer tracks ---
-  { title: "Neon Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/626/626.mp3", tags: ["ambient", "techno"] },
-  { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3", tags: ["ambient"] },
-  { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3", tags: ["ambient"] },
-  { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3", tags: ["sci-fi", "ambient"] },
-  { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3", tags: ["ambient"] },
-  // --- More new layer tracks ---
-  { title: "Neon Runner", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/628/628.mp3", tags: ["ambient", "techno"] },
-  { title: "Digital Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/629/629.mp3", tags: ["ambient"] },
-  { title: "Night Vision", artist: "Arulo", url: "https://assets.mixkit.co/music/398/398.mp3", tags: ["ambient"] },
-  { title: "Retro Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/399/399.mp3", tags: ["sci-fi", "ambient"] },
-  { title: "Dream Machine", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/190/190.mp3", tags: ["ambient"] },
-  { title: "Synthwave Lights", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/630/630.mp3", tags: ["ambient"] },
-  { title: "Electric Avenue", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/631/631.mp3", tags: ["ambient"] },
-  { title: "Midnight Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/400/400.mp3", tags: ["ambient"] },
-  { title: "Digital Dreamscape", artist: "Arulo", url: "https://assets.mixkit.co/music/401/401.mp3", tags: ["ambient"] },
-  { title: "Neon Pulse", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/191/191.mp3", tags: ["ambient"] }
-];
-const CHAT_ENDPOINT = null; // Static site - no API
+const CHAT_ENDPOINT = "/api/chat";
 const CHAT_PROMPT = "secretary";
 
 const STORAGE_KEY = "matrixHubOracleSecretary.v1";
@@ -118,6 +38,62 @@ function saveTasks(tasks) {
 function normalize(text) {
   return (text || "").toLowerCase().replace(/\s+/g, " ").trim();
 }
+
+const MTX_INFO = `⚡ MTX SYSTEM FLOW — HOW IT POWERS SITE GROWTH
+
+1. ENTRY (FREE → MTX)
+• Site is usable without MTX
+• MTX unlocks deeper layers
+• No hard paywalls — only progression
+Result: Low friction, high retention
+
+2. ACTION → REWARD
+Users earn MTX by:
+• Creating accounts
+• Using tools
+• Testing beta features
+• Reporting issues (GitHub → MTX rewards)
+Result: Activity becomes growth fuel
+
+3. MTX AS FUEL (NOT STORAGE)
+MTX is consumed by:
+• Advanced tools
+• Compute-heavy actions
+• Priority queues
+• Experimental modules
+Result: Constant circulation, no hoarding
+
+4. FEEDBACK LOOP
+USE → EARN → UNLOCK → BUILD → REPEAT
+• Usage increases value
+• Value attracts contributors
+• Contributors build modules
+• Modules increase usage
+Result: Self-reinforcing ecosystem
+
+5. GITHUB INTEGRATION
+Tie MTX to GitHub actions:
+• PR merged → MTX reward
+• Bug labeled 'confirmed' → MTX reward
+• Feature accepted → MTX grant
+Result: Developers are directly incentivized
+
+6. FUTURE EXPANSION PATH
+MTX later enables:
+• Plugin marketplace
+• App-to-app payments
+• Partner integrations
+• DAO-lite governance
+Only after real usage exists.
+
+🧠 DESIGN RULES
+• MTX never required for basic access
+• MTX never marketed as profit
+• MTX only unlocks real function
+• Growth follows usage, not hype
+
+SYSTEM GROWS BY USE.
+MTX FLOWS WHERE SIGNAL EXISTS.`;
 
 function scrollToSelector(selector) {
   const el = document.querySelector(selector);
@@ -347,41 +323,6 @@ function createMessageEl(role, text) {
 }
 
 async function callOracle(conversation) {
-  // Static site fallback - provide helpful local responses
-  if (!CHAT_ENDPOINT) {
-    const lastMsg = conversation[conversation.length - 1]?.content?.toLowerCase() || "";
-    
-    const responses = {
-      help: "I can help you navigate Matrix Hub:\n\n• Run deal scanner\n• Refresh daily drops\n• Play/pause music\n• Generate art\n• Manage tasks with /tasks\n\nJust ask!",
-      greeting: "Welcome to Matrix Hub. I am here to assist you.\n\nTry commands like:\n- 'run deal scanner'\n- 'refresh daily drops'\n- 'play music'\n- '/tasks' to manage your list",
-      deals: "To access deals:\n• Say 'refresh daily drops' for latest offers\n• Say 'run deal scanner' to scan for deals\n• Check the Deal Scanner section on the page",
-      music: "Music Player controls:\n• 'play music' - Start playback\n• 'pause music' - Pause\n• 'next track' - Skip forward\n• 'previous track' - Go back",
-      art: "To generate art:\n• Scroll to the Art Generator section\n• Say 'open art generator'\n• Or say 'generate art' to create",
-      telegram: "Join our Telegram channel @matrixhuborg for:\n• Exclusive deals\n• Community updates\n• Real-time notifications\n\nScroll down to the Telegram section!",
-      mtx: "⚡ MTX SYSTEM FLOW — HOW IT POWERS SITE GROWTH\n\n1. ENTRY (FREE → MTX)\n• Site is usable without MTX\n• MTX unlocks deeper layers\n• No hard paywalls — only progression\nResult: Low friction, high retention\n\n2. ACTION → REWARD\nUsers earn MTX by:\n• Creating accounts\n• Using tools\n• Testing beta features\n• Reporting issues (GitHub → MTX rewards)\nResult: Activity becomes growth fuel\n\n3. MTX AS FUEL (NOT STORAGE)\nMTX is consumed by:\n• Advanced tools\n• Compute-heavy actions\n• Priority queues\n• Experimental modules\nResult: Constant circulation, no hoarding\n\n4. FEEDBACK LOOP\nUSE → EARN → UNLOCK → BUILD → REPEAT\n• Usage increases value\n• Value attracts contributors\n• Contributors build modules\n• Modules increase usage\nResult: Self-reinforcing ecosystem\n\n5. GITHUB INTEGRATION\nTie MTX to GitHub actions:\n• PR merged → MTX reward\n• Bug labeled 'confirmed' → MTX reward\n• Feature accepted → MTX grant\nResult: Developers are directly incentivized\n\n6. FUTURE EXPANSION PATH\nMTX later enables:\n• Plugin marketplace\n• App-to-app payments\n• Partner integrations\n• DAO-lite governance\nOnly after real usage exists.\n\n🧠 DESIGN RULES\n• MTX never required for basic access\n• MTX never marketed as profit\n• MTX only unlocks real function\n• Growth follows usage, not hype\n\nSYSTEM GROWS BY USE.\nMTX FLOWS WHERE SIGNAL EXISTS.",
-      default: "I understand. Try these commands:\n• 'help' for assistance\n• 'refresh daily drops'\n• 'run deal scanner'\n• 'play music'\n• '/tasks' to manage tasks"
-    };
-    
-    if (/\b(hi|hello|hey|greetings)\b/i.test(lastMsg)) {
-      return responses.greeting;
-    } else if (/\b(help|what can you do|commands)\b/i.test(lastMsg)) {
-      return responses.help;
-    } else if (/\b(deal|discount|offer|drop)\b/i.test(lastMsg)) {
-      return responses.deals;
-    } else if (/\b(music|song|play|track)\b/i.test(lastMsg)) {
-      return responses.music;
-    } else if (/\b(art|image|picture|generate)\b/i.test(lastMsg)) {
-      return responses.art;
-    } else if (/\b(telegram|channel|community)\b/i.test(lastMsg)) {
-      return responses.telegram;
-    } else if (/\b(mtx|matrix-hubcoin|matrixhubcoin|coin|crypto|currency|token|earn|reward)\b/i.test(lastMsg)) {
-      return responses.mtx;
-    } else {
-      return responses.default;
-    }
-  }
-  
-  // Original API call (not used in static deployment)
   const resp = await fetch(CHAT_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -483,6 +424,11 @@ async function handleLocalIntent(apps, rawText) {
     if (/\bimage\b/.test(t)) app?.actions?.find((a) => a.id === "i2v")?.run?.();
     if (/\btext\b/.test(t)) app?.actions?.find((a) => a.id === "t2v")?.run?.();
     return { handled: true, reply: "Video generator opened. Choose your tab and begin." };
+  }
+
+  // MTX cryptocurrency info
+  if (/\b(mtx|matrix-hubcoin|matrixhubcoin|coin|crypto|currency|token|earn|reward)\b/.test(t)) {
+    return { handled: true, reply: MTX_INFO };
   }
 
   if (wantsOpen) {

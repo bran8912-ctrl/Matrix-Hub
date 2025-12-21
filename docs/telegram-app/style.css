@@ -1,0 +1,243 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: #000000;
+    color: #00ff41;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+.matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(0deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    padding: 20px;
+    padding-bottom: 40px;
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(0, 255, 65, 0.05);
+    border: 2px solid #00ff41;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+.matrix-title {
+    font-size: 2em;
+    text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+}
+
+.subtitle {
+    color: #00cc33;
+    font-size: 0.9em;
+    letter-spacing: 2px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: rgba(0, 255, 65, 0.08);
+    border: 1px solid #00ff41;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00ff41, #00cc33);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.user-details {
+    flex: 1;
+}
+
+.username {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px #00ff41;
+}
+
+.user-id {
+    font-size: 0.8em;
+    color: #00cc33;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.feature-card {
+    background: rgba(0, 255, 65, 0.05);
+    border: 2px solid #00ff41;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+}
+
+.feature-card:active {
+    transform: scale(0.95);
+    background: rgba(0, 255, 65, 0.15);
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+}
+
+.feature-icon {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 5px #00ff41);
+}
+
+.feature-card h3 {
+    font-size: 1em;
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px #00ff41;
+}
+
+.feature-card p {
+    font-size: 0.75em;
+    color: #00cc33;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 15px;
+    border: 2px solid #00ff41;
+    border-radius: 10px;
+    background: rgba(0, 255, 65, 0.1);
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px #00ff41;
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+    background: rgba(0, 255, 65, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+}
+
+.action-btn.primary {
+    background: linear-gradient(135deg, rgba(0, 255, 65, 0.2), rgba(0, 204, 51, 0.2));
+}
+
+.action-btn.secondary {
+    background: rgba(0, 255, 65, 0.05);
+}
+
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 20px;
+    background: rgba(0, 255, 65, 0.05);
+    border: 1px solid #00ff41;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-shadow: 0 0 10px #00ff41;
+}
+
+.stat-label {
+    font-size: 0.7em;
+    color: #00cc33;
+}
+
+/* Responsive adjustments */
+@media (max-width: 360px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .matrix-title {
+        font-size: 1.5em;
+    }
+    
+    .stat-value {
+        font-size: 1.2em;
+    }
+}
+
+/* Telegram theme integration */
+body.telegram-light {
+    background: #ffffff;
+    color: #000000;
+}
+
+body.telegram-light .matrix-bg {
+    background: 
+        linear-gradient(0deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+
+body.telegram-light .app-header,
+body.telegram-light .feature-card,
+body.telegram-light .user-info,
+body.telegram-light .stats-section {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: #00cc33;
+}
+
+body.telegram-light .matrix-title,
+body.telegram-light .username,
+body.telegram-light h3 {
+    color: #00cc33;
+}
