@@ -34,7 +34,18 @@ const matrixPlaylist = [
   { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3" },
   { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3" },
   { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3" },
-  { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3" }
+  { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3" },
+  // --- More new tracks ---
+  { title: "Neon Runner", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/628/628.mp3" },
+  { title: "Digital Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/629/629.mp3" },
+  { title: "Night Vision", artist: "Arulo", url: "https://assets.mixkit.co/music/398/398.mp3" },
+  { title: "Retro Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/399/399.mp3" },
+  { title: "Dream Machine", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/190/190.mp3" },
+  { title: "Synthwave Lights", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/630/630.mp3" },
+  { title: "Electric Avenue", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/631/631.mp3" },
+  { title: "Midnight Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/400/400.mp3" },
+  { title: "Digital Dreamscape", artist: "Arulo", url: "https://assets.mixkit.co/music/401/401.mp3" },
+  { title: "Neon Pulse", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/191/191.mp3" }
 ];
 
 // Layers playlist for secondary track
@@ -54,7 +65,18 @@ const layersPlaylist = [
   { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3", tags: ["ambient"] },
   { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3", tags: ["ambient"] },
   { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3", tags: ["sci-fi", "ambient"] },
-  { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3", tags: ["ambient"] }
+  { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3", tags: ["ambient"] },
+  // --- More new layer tracks ---
+  { title: "Neon Runner", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/628/628.mp3", tags: ["ambient", "techno"] },
+  { title: "Digital Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/629/629.mp3", tags: ["ambient"] },
+  { title: "Night Vision", artist: "Arulo", url: "https://assets.mixkit.co/music/398/398.mp3", tags: ["ambient"] },
+  { title: "Retro Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/399/399.mp3", tags: ["sci-fi", "ambient"] },
+  { title: "Dream Machine", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/190/190.mp3", tags: ["ambient"] },
+  { title: "Synthwave Lights", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/630/630.mp3", tags: ["ambient"] },
+  { title: "Electric Avenue", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/631/631.mp3", tags: ["ambient"] },
+  { title: "Midnight Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/400/400.mp3", tags: ["ambient"] },
+  { title: "Digital Dreamscape", artist: "Arulo", url: "https://assets.mixkit.co/music/401/401.mp3", tags: ["ambient"] },
+  { title: "Neon Pulse", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/191/191.mp3", tags: ["ambient"] }
 ];
 const CHAT_ENDPOINT = null; // Static site - no API
 const CHAT_PROMPT = "secretary";
