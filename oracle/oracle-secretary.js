@@ -1,3 +1,19 @@
+// === MATRIX-HUB IMPORTANT DOCUMENTS ===
+const MTX_DOCS = {
+  'README': `{{README}}`,
+  'CODE_OF_CONDUCT': `{{CODE_OF_CONDUCT}}`,
+  'CONTRIBUTORS': `{{CONTRIBUTORS}}`,
+  'MUSIC_LICENSE': `{{MUSIC_LICENSE}}`,
+  'SUBMIT_MUSIC': `{{SUBMIT_MUSIC}}`,
+  'CASINO_CORE': `{{CASINO_CORE}}`,
+  'CASINO_MODULES': `{{CASINO_MODULES}}`,
+};
+
+function getDocByKey(key) {
+  return MTX_DOCS[key] || 'Document not found.';
+}
+
+// Add to handleLocalIntent for doc queries
 const CHAT_ENDPOINT = "/api/chat";
 const CHAT_PROMPT = "secretary";
 
@@ -138,7 +154,10 @@ function oracleToast(title, body, ttlMs = 4200) {
 
 function getSpeechVoice() {
   const voices = window.speechSynthesis?.getVoices?.() || [];
-  const preferred = voices.find((v) => /en/i.test(v.lang) && /female|woman|zira|samantha|victoria/i.test(v.name))
+  // Prefer older, human-like, wise, or classic male/female voices
+  const preferred = voices.find((v) => /en/i.test(v.lang) &&
+    /(old|grandpa|grandma|wise|male|alex|fred|ralph|paul|george|albert|bruce|daniel|frank|otto|moira|karen|lee|mike|edward|arthur|oliver|hugh|james|john|sam|steven|thomas|william)/i.test(v.name))
+    || voices.find((v) => /en/i.test(v.lang) && /male|man|old|wise/i.test(v.name))
     || voices.find((v) => /en/i.test(v.lang))
     || voices[0];
   return preferred || null;
@@ -151,8 +170,8 @@ function speakIfEnabled(state, text) {
 
   synth.cancel();
   const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 0.92;
-  utter.pitch = 0.92;
+  utter.rate = 0.85; // slower for older effect
+  utter.pitch = 0.7; // lower pitch for older effect
   utter.volume = 0.95;
 
   const voice = getSpeechVoice();
@@ -345,6 +364,29 @@ async function handleLocalIntent(apps, rawText) {
   const text = rawText.trim();
   const t = normalize(text);
   if (!t) return { handled: true, reply: "Say it plainly." };
+
+  // === Oracle: Important Docs ===
+  if (/\b(readme|whitepaper|mtx overview)\b/.test(t)) {
+    return { handled: true, reply: getDocByKey('README') };
+  }
+  if (/\b(code of conduct|conduct|rules)\b/.test(t)) {
+    return { handled: true, reply: getDocByKey('CODE_OF_CONDUCT') };
+  }
+  if (/\b(contributors|credits|who built)\b/.test(t)) {
+    return { handled: true, reply: getDocByKey('CONTRIBUTORS') };
+  }
+  if (/\b(music license|music attribution|music rights)\b/.test(t)) {
+    return { handled: true, reply: getDocByKey('MUSIC_LICENSE') };
+  }
+  if (/\b(submit music|music submission|add music)\b/.test(t)) {
+    return { handled: true, reply: getDocByKey('SUBMIT_MUSIC') };
+  }
+  if (/\b(casino core|casino contract|mtx contract)\b/.test(t)) {
+    return { handled: true, reply: getDocByKey('CASINO_CORE') };
+  }
+  if (/\b(casino modules|casino reserve|liquidity router|rng engine)\b/.test(t)) {
+    return { handled: true, reply: getDocByKey('CASINO_MODULES') };
+  }
 
   if (t === "/apps" || t === "apps") {
     return { handled: true, reply: "Open the Apps panel above, or ask: 'open daily drops', 'run deal scanner', 'play music'." };
