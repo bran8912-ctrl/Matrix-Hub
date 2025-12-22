@@ -239,7 +239,7 @@
         0 0 40px 0 rgba(0,255,0,0.08);
       will-change: box-shadow, background;
       transition: background 0.5s, box-shadow 0.5s;
-      opacity: 0.93;
+      opacity: 0.80;
     }
 
     .panel h2 {
@@ -2026,14 +2026,43 @@
         </div>
         <button class="btn custom-apply-btn" onclick="applyCustomColor()">APPLY CUSTOM</button>
       </div>
-      // Background FX color changer
+
+      <script>
       function applyCustomBgFxColor() {
         const bgfx = document.getElementById('custom-bgfx').value;
         window.matrixRainColor = bgfx;
         localStorage.setItem('matrixHubBgFxColor', bgfx);
-        // If you want to update the canvas immediately:
         if (typeof window.updateMatrixRainColorCanvas === 'function') window.updateMatrixRainColorCanvas(bgfx);
       }
+      // Patch: ensure applyCustomColor also applies/saves bgfx color
+      function applyCustomColor() {
+        const primary = document.getElementById('custom-primary').value;
+        const secondary = document.getElementById('custom-secondary').value;
+        const bgfx = document.getElementById('custom-bgfx').value;
+        document.documentElement.style.setProperty('--theme-primary', primary);
+        document.documentElement.style.setProperty('--theme-secondary', secondary);
+        document.documentElement.style.setProperty('--theme-glow', primary);
+        document.documentElement.style.setProperty('--theme-border', primary);
+        document.documentElement.style.setProperty('--theme-text', secondary);
+        window.matrixRainColor = bgfx;
+        localStorage.setItem('matrixHubTheme', 'custom');
+        localStorage.setItem('matrixHubCustomPrimary', primary);
+        localStorage.setItem('matrixHubCustomSecondary', secondary);
+        localStorage.setItem('matrixHubBgFxColor', bgfx);
+        if (typeof window.updateMatrixRainColorCanvas === 'function') window.updateMatrixRainColorCanvas(bgfx);
+        document.getElementById('current-theme-name').textContent = 'Custom Theme';
+      }
+
+      // Patch: Also apply/persist bgfx color on APPLY CUSTOM
+      const origApplyCustomColor = window.applyCustomColor;
+      window.applyCustomColor = function() {
+        const bgfx = document.getElementById('custom-bgfx').value;
+        window.matrixRainColor = bgfx;
+        localStorage.setItem('matrixHubBgFxColor', bgfx);
+        if (typeof window.updateMatrixRainColorCanvas === 'function') window.updateMatrixRainColorCanvas(bgfx);
+        origApplyCustomColor();
+      };
+      </script>
 
     </div>
 
@@ -2085,7 +2114,7 @@
     background: linear-gradient(120deg, var(--theme-bg-panel), rgba(0,0,0,0.10) 80%, var(--theme-bg-panel)), var(--theme-bg-panel) !important;
     backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
     -webkit-backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
-    opacity: 0.93;
+    opacity: 0.80;
     border: 2px solid var(--theme-border);
     position: relative;
     overflow: hidden;
@@ -2552,47 +2581,13 @@
     updateMatrixRainColor(themeColors[themeName] || '#00ff00');
   }
 
-	  function applyCustomColor() {
-	    const themeTarget = document.documentElement;
-	    const primary = document.getElementById('custom-primary').value;
-	    const secondary = document.getElementById('custom-secondary').value;
-
-	    // Custom theme should not be constrained by a preset theme class
-	    themeTarget.classList.remove(
-	      'theme-classic', 'theme-cyber-purple', 'theme-neon-blue',
-	      'theme-blood-red', 'theme-gold-elite', 'theme-toxic-orange',
-	      'theme-arctic-white', 'theme-synthwave'
-	    );
-
-	    // Apply custom colors via CSS variables
-	    themeTarget.style.setProperty('--theme-primary', primary);
-	    themeTarget.style.setProperty('--theme-secondary', secondary);
-	    themeTarget.style.setProperty('--theme-glow', primary);
-	    themeTarget.style.setProperty('--theme-border', primary);
-	    themeTarget.style.setProperty('--theme-text', secondary);
-
-    // Update active state
-    document.querySelectorAll('.theme-preset').forEach(preset => {
-      preset.classList.remove('active');
-    });
-
-    // Update display name
-    document.getElementById('current-theme-name').textContent = 'Custom Theme';
-    currentTheme = 'custom';
-
-    // Save custom colors
-    localStorage.setItem('matrixHubTheme', 'custom');
-    localStorage.setItem('matrixHubCustomPrimary', primary);
-    localStorage.setItem('matrixHubCustomSecondary', secondary);
-
-    // Update matrix rain color
-    updateMatrixRainColor(primary);
-  }
+    // (Replaced by patch above to also handle bgfx color)
 
   function resetTheme() {
     setTheme('classic');
     document.getElementById('custom-primary').value = '#00ff00';
     document.getElementById('custom-secondary').value = '#00ffff';
+    document.getElementById('custom-bgfx').value = '#00ff00';
 
     // Clear custom colors from CSS
     document.documentElement.style.removeProperty('--theme-primary');
@@ -2610,9 +2605,13 @@
     localStorage.removeItem('matrixHubCustomPrimary');
     localStorage.removeItem('matrixHubCustomSecondary');
     localStorage.removeItem('matrixHubSectionColors');
+    localStorage.removeItem('matrixHubBgFxColor');
 
     // Reset color pickers to default
     updateSectionColorInputs('classic');
+    window.matrixRainColor = '#00ff00';
+    if (typeof window.updateMatrixRainColorCanvas === 'function') window.updateMatrixRainColorCanvas('#00ff00');
+    document.getElementById('custom-bgfx').value = '#00ff00';
   }
 
   function updateMatrixRainColor(color) {
@@ -2627,20 +2626,16 @@
     if (savedTheme === 'custom') {
       const primary = localStorage.getItem('matrixHubCustomPrimary') || '#00ff00';
       const secondary = localStorage.getItem('matrixHubCustomSecondary') || '#00ffff';
-
-      // Load custom background FX color if set
       const bgfx = localStorage.getItem('matrixHubBgFxColor') || '#00ff00';
-      document.getElementById('custom-bgfx').value = bgfx;
-      window.matrixRainColor = bgfx;
-
       document.getElementById('custom-primary').value = primary;
       document.getElementById('custom-secondary').value = secondary;
-
+      document.getElementById('custom-bgfx').value = bgfx;
+      window.matrixRainColor = bgfx;
+      if (typeof window.updateMatrixRainColorCanvas === 'function') window.updateMatrixRainColorCanvas(bgfx);
       applyCustomColor();
     } else if (savedTheme && themeNames[savedTheme]) {
       setTheme(savedTheme);
     }
-
     // Load saved section colors (these override theme defaults)
     loadSavedSectionColors();
   }
@@ -3106,7 +3101,7 @@
     background: linear-gradient(120deg, var(--theme-bg-panel), rgba(0,0,0,0.10) 80%, var(--theme-bg-panel)), var(--theme-bg-panel) !important;
     backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
     -webkit-backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
-    opacity: 0.93;
+    opacity: 0.80;
     border: 2px solid var(--theme-primary);
     box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
   }
@@ -3584,7 +3579,7 @@
     background: linear-gradient(120deg, var(--theme-bg-panel), rgba(0,0,0,0.10) 80%, var(--theme-bg-panel)), var(--theme-bg-panel) !important;
     backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
     -webkit-backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
-    opacity: 0.93;
+    opacity: 0.80;
     --matrix-pulse-color: var(--section-deal-scanner, #0f0);
     border: 2px solid var(--section-deal-scanner, #0f0);
     font-family: 'Courier New', monospace;
@@ -3821,7 +3816,7 @@
     background: linear-gradient(120deg, var(--theme-bg-panel), rgba(0,0,0,0.10) 80%, var(--theme-bg-panel)), var(--theme-bg-panel) !important;
     backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
     -webkit-backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
-    opacity: 0.93;
+    opacity: 0.80;
     --matrix-pulse-color: var(--section-daily-drops, #0f0);
     border: 2px solid var(--section-daily-drops, #0f0);
     position: relative;
@@ -4544,7 +4539,13 @@
       <div class="oracle-header__controls">
         <button id="oracleAppsBtn" class="oracle-header__btn" type="button" title="Apps">APPS</button>
         <button id="oracleVoiceBtn" class="oracle-header__btn" type="button" aria-pressed="false" title="Voice">VOICE</button>
-        <select id="oracleVoiceSelect" style="margin:0 0 0 10px" title="Choose Oracle Voice"></select>
+        <select id="oracleVoiceSelect" style="margin:0 0 0 10px" title="Choose Oracle Voice">
+          <option value="default">Default</option>
+          <option value="matrix">Matrix</option>
+          <option value="cyber">Cyber</option>
+          <option value="oracle">Oracle</option>
+          <option value="neon">Neon</option>
+        </select>
         <button id="oracleCloseBtn" class="oracle-header__btn" type="button" title="Close">×</button>
       </div>
     </div>
@@ -4679,7 +4680,7 @@
     background: linear-gradient(120deg, var(--theme-bg-panel), rgba(0,0,0,0.10) 80%, var(--theme-bg-panel)), var(--theme-bg-panel) !important;
     backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
     -webkit-backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
-    opacity: 0.93;
+    opacity: 0.80;
     --matrix-pulse-color: var(--section-art-generator, #0f0);
     border: 2px solid var(--section-art-generator, #0f0);
     border-radius: 14px;
