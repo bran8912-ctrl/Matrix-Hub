@@ -1105,6 +1105,18 @@
 </style>
 
 <div id="matrix-player">
+    <!-- MTX CASINO GAMES SECTION (REACT) -->
+    <div id="mtx-casino-games-section" style="margin: 40px auto 40px auto; max-width: 900px;">
+      <div id="mtx-casino-react-root"></div>
+    </div>
+    <script src="/casino-bundle.js"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        if (window.MTXCasino && typeof window.MTXCasino.mount === 'function') {
+          window.MTXCasino.mount(document.getElementById('mtx-casino-react-root'));
+        }
+      });
+    </script>
     <div class="matrix-title">MATRIX-HUB MP3 PLAYER</div>
 
     <div class="player-tabs" role="tablist" aria-label="Matrix player tabs">
