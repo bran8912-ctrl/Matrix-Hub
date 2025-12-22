@@ -2024,6 +2024,30 @@
           <label for="custom-bgfx">Background FX:</label>
           <input type="color" id="custom-bgfx" value="#00ff00" onchange="applyCustomBgFxColor()">
         </div>
+        <div class="color-picker-wrapper">
+          <label for="color-music-player">Music Player:</label>
+          <input type="color" id="color-music-player" value="#00ff41" onchange="applySectionColor('music-player', this.value)">
+        </div>
+        <div class="color-picker-wrapper">
+          <label for="color-deal-scanner">Deal Scanner:</label>
+          <input type="color" id="color-deal-scanner" value="#00ff00" onchange="applySectionColor('deal-scanner', this.value)">
+        </div>
+        <div class="color-picker-wrapper">
+          <label for="color-daily-drops">Daily Drops:</label>
+          <input type="color" id="color-daily-drops" value="#00ff00" onchange="applySectionColor('daily-drops', this.value)">
+        </div>
+        <div class="color-picker-wrapper">
+          <label for="color-art-generator">Art Generator:</label>
+          <input type="color" id="color-art-generator" value="#00ff00" onchange="applySectionColor('art-generator', this.value)">
+        </div>
+        <div class="color-picker-wrapper">
+          <label for="color-video-generator">Video Generator:</label>
+          <input type="color" id="color-video-generator" value="#00ff00" onchange="applySectionColor('video-generator', this.value)">
+        </div>
+        <div class="color-picker-wrapper">
+          <label for="color-bot-widget">Bot Widget:</label>
+          <input type="color" id="color-bot-widget" value="#00ff9c" onchange="applySectionColor('bot-widget', this.value)">
+        </div>
         <button class="btn custom-apply-btn" onclick="applyCustomColor()">APPLY CUSTOM</button>
       </div>
 
@@ -2067,41 +2091,7 @@
     </div>
 
     <!-- Section-specific Color Controls -->
-    <div class="section-colors-area">
-      <h3 style="text-align: center; margin: 20px 0 15px; font-size: 1rem;">SECTION COLORS</h3>
-      <p class="section-colors-subtitle">Customize each section individually</p>
-
-      <div class="section-color-grid">
-        <div class="section-color-item">
-          <label for="color-music-player">Music Player:</label>
-          <input type="color" id="color-music-player" value="#00ff41" onchange="applySectionColor('music-player', this.value)">
-        </div>
-        <div class="section-color-item">
-          <label for="color-deal-scanner">Deal Scanner:</label>
-          <input type="color" id="color-deal-scanner" value="#00ff00" onchange="applySectionColor('deal-scanner', this.value)">
-        </div>
-        <div class="section-color-item">
-          <label for="color-daily-drops">Daily Drops:</label>
-          <input type="color" id="color-daily-drops" value="#00ff00" onchange="applySectionColor('daily-drops', this.value)">
-        </div>
-        <div class="section-color-item">
-          <label for="color-art-generator">Art Generator:</label>
-          <input type="color" id="color-art-generator" value="#00ff00" onchange="applySectionColor('art-generator', this.value)">
-        </div>
-        <div class="section-color-item">
-          <label for="color-video-generator">Video Generator:</label>
-          <input type="color" id="color-video-generator" value="#00ff00" onchange="applySectionColor('video-generator', this.value)">
-        </div>
-        <div class="section-color-item">
-          <label for="color-bot-widget">Bot Widget:</label>
-          <input type="color" id="color-bot-widget" value="#00ff9c" onchange="applySectionColor('bot-widget', this.value)">
-        </div>
-      </div>
-
-      <div class="section-color-actions">
-        <button class="btn section-sync-btn" onclick="syncAllSectionColors()">SYNC ALL TO PRIMARY</button>
-      </div>
-    </div>
+    <!-- Section-specific Color Controls removed: now unified in custom color section -->
 
     <div class="theme-actions">
       <button class="btn reset-theme-btn" onclick="resetTheme()">RESET TO DEFAULT</button>
@@ -2573,6 +2563,31 @@
 
     // Update section color inputs to match theme
     updateSectionColorInputs(themeName);
+
+    // Also update all custom color pickers to match theme
+    // (Primary, Secondary, BGFX, and all section pickers)
+    const themeDefaults = themeSectionColors[themeName] || themeSectionColors['classic'];
+    // Set section pickers
+    Object.keys(themeDefaults).forEach(section => {
+      const colorInput = document.getElementById(`color-${section}`);
+      if (colorInput) colorInput.value = themeDefaults[section];
+    });
+    // Set primary/secondary pickers if present
+    if (document.getElementById('custom-primary')) document.getElementById('custom-primary').value = themeColors[themeName] || '#00ff00';
+    if (document.getElementById('custom-secondary')) {
+      // Try to get secondary from theme CSS or fallback
+      let secondary = '#00ffff';
+      if (themeName === 'cyber-purple') secondary = '#ff00ff';
+      else if (themeName === 'neon-blue') secondary = '#00ffff';
+      else if (themeName === 'blood-red') secondary = '#ff6680';
+      else if (themeName === 'gold-elite') secondary = '#ffea00';
+      else if (themeName === 'toxic-orange') secondary = '#ff9933';
+      else if (themeName === 'arctic-white') secondary = '#e0e0e0';
+      else if (themeName === 'synthwave') secondary = '#00ffff';
+      document.getElementById('custom-secondary').value = secondary;
+    }
+    // Set bgfx to match primary by default
+    if (document.getElementById('custom-bgfx')) document.getElementById('custom-bgfx').value = themeColors[themeName] || '#00ff00';
 
     // Clear saved section colors when changing themes
     localStorage.removeItem('matrixHubSectionColors');
