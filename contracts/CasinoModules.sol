@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+// MTX Coin integration for user-based casino
+// Uses MTXToken contract from CasinoCore.sol
+// All casino modules interact with MTXToken for user balances and payouts
 import "./CasinoCore.sol";
 
 contract CasinoReserve {
@@ -9,6 +12,7 @@ contract CasinoReserve {
     uint public reserveCap;
     address public casinoCore;
 
+    // Only CasinoCore can interact with reserve
     modifier onlyCasinoCore() {
         require(msg.sender == casinoCore, "Not authorized");
         _;
@@ -20,10 +24,12 @@ contract CasinoReserve {
         casinoCore = _casinoCore;
     }
 
+    // Deposit MTX coins to reserve
     function deposit(uint amount) external onlyCasinoCore {
         reserveBalance += amount;
     }
 
+    // Pay winner in MTX coins
     function payWinner(address player, uint amount) external onlyCasinoCore {
         require(reserveBalance >= amount, "Insufficient reserve");
         reserveBalance -= amount;
@@ -36,6 +42,7 @@ contract CasinoReserve {
 }
 
 // Liquidity Router (DEX Integration)
+// Allows adding MTX coin liquidity to DEX pools
 contract LiquidityRouter {
     MTXToken public mtx;
     address public dexPool;
