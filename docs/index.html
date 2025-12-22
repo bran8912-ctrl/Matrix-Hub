@@ -229,14 +229,17 @@
       --matrix-pulse-color: var(--theme-border);
       border: 2px solid var(--theme-border);
       padding: 20px;
-      border-radius: 10px;
-      background: var(--theme-bg-panel);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      background: linear-gradient(120deg, var(--theme-bg-panel), rgba(0,0,0,0.10) 80%, var(--theme-bg-panel)), var(--theme-bg-panel);
+      backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
       box-shadow:
         0 0 0 calc(var(--matrix-bass) * 2px) var(--matrix-pulse-color),
-        0 0 calc(10px + var(--matrix-bass) * 24px) var(--matrix-pulse-color);
-      will-change: box-shadow;
+        0 0 calc(18px + var(--matrix-bass) * 32px) var(--matrix-pulse-color),
+        0 0 40px 0 rgba(0,255,0,0.08);
+      will-change: box-shadow, background;
+      transition: background 0.5s, box-shadow 0.5s;
+      opacity: 0.93;
     }
 
     .panel h2 {
@@ -2017,8 +2020,21 @@
           <label for="custom-secondary">Secondary:</label>
           <input type="color" id="custom-secondary" value="#00ffff" onchange="applyCustomColor()">
         </div>
+        <div class="color-picker-wrapper">
+          <label for="custom-bgfx">Background FX:</label>
+          <input type="color" id="custom-bgfx" value="#00ff00" onchange="applyCustomBgFxColor()">
+        </div>
         <button class="btn custom-apply-btn" onclick="applyCustomColor()">APPLY CUSTOM</button>
       </div>
+      // Background FX color changer
+      function applyCustomBgFxColor() {
+        const bgfx = document.getElementById('custom-bgfx').value;
+        window.matrixRainColor = bgfx;
+        localStorage.setItem('matrixHubBgFxColor', bgfx);
+        // If you want to update the canvas immediately:
+        if (typeof window.updateMatrixRainColorCanvas === 'function') window.updateMatrixRainColorCanvas(bgfx);
+      }
+
     </div>
 
     <!-- Section-specific Color Controls -->
@@ -2609,6 +2625,11 @@
       const primary = localStorage.getItem('matrixHubCustomPrimary') || '#00ff00';
       const secondary = localStorage.getItem('matrixHubCustomSecondary') || '#00ffff';
 
+      // Load custom background FX color if set
+      const bgfx = localStorage.getItem('matrixHubBgFxColor') || '#00ff00';
+      document.getElementById('custom-bgfx').value = bgfx;
+      window.matrixRainColor = bgfx;
+
       document.getElementById('custom-primary').value = primary;
       document.getElementById('custom-secondary').value = secondary;
 
@@ -2623,6 +2644,12 @@
 
   // Initialize theme on DOM load
   document.addEventListener('DOMContentLoaded', loadSavedTheme);
+  // Also load custom bgfx color for non-custom themes
+  const bgfx = localStorage.getItem('matrixHubBgFxColor');
+  if (bgfx) {
+    document.getElementById('custom-bgfx').value = bgfx;
+    window.matrixRainColor = bgfx;
+  }
 </script>
 
 <!-- Matrix Gaming Section -->
