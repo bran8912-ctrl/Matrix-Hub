@@ -1,20 +1,16 @@
 # MTX Casino Value Flow
 
 ## Bet Flow
-
-User MTX Bet
+User MTX
 ↓
 Casino Core
-├─ Liquidity Pool (DEX)
-├─ Casino Reserve
-├─ Dev / Maintenance
-└─ Game Resolution
+├─ Liquidity Pool
+├─ Reserve
+├─ Maintenance
+└─ Game Result
 
 ## Win Flow
-
-Casino Reserve
-↓
-Winner Payout (MTX)
+Reserve → Player
 
 No minting.
-No external siphoning.
+No siphoning.

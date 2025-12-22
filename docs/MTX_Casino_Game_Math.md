@@ -1,18 +1,13 @@
-# MTX Casino Game Math
+# Casino Game Math
 
-## Structural Edge
-All games share the same expected value.
-
-House Edge: 15%
+## House Edge
+15% structural edge.
 
 ### Allocation
-- 10% → MTX Liquidity
+- 10% → Liquidity
 - 3% → Casino Reserve
 - 2% → Development
 
-## Example (Coin Flip)
-Win Chance: 50%
-Multiplier: 1.7x
-EV: -0.15
-
-Same math, different variance.
+## Expected Value
+EV = -0.15 across all games.
+Variance changes, math does not.
