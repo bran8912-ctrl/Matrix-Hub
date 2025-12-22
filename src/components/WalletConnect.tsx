@@ -18,7 +18,11 @@ const TIERS = [
   { name: 'Platinum', threshold: 10000 },
 ];
 
-const WalletConnect: React.FC = () => {
+interface WalletConnectProps {
+  onWalletChange?: (wallet: { address: string; balance: number }) => void;
+}
+
+const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
   const [address, setAddress] = useState<string>('');
   const [balance, setBalance] = useState<number | null>(null);
   const [tier, setTier] = useState<string>('');
@@ -52,6 +56,9 @@ const WalletConnect: React.FC = () => {
       const formatted = parseFloat(formatUnits(rawBalance, decimals));
       setBalance(formatted);
       setTier(getTier(formatted));
+      if (onWalletChange) {
+        onWalletChange({ address: userAddress, balance: formatted });
+      }
     } catch (err) {
       setError('Failed to connect wallet.');
     }
@@ -94,6 +101,9 @@ const WalletConnect: React.FC = () => {
       const formatted = parseFloat(formatUnits(rawBalance, decimals));
       setBalance(formatted);
       setTier(getTier(formatted));
+      if (onWalletChange) {
+        onWalletChange({ address, balance: formatted });
+      }
     } catch (err) {
       setError('MTX deduction failed.');
     }
