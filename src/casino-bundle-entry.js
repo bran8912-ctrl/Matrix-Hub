@@ -3,19 +3,20 @@ import { createRoot } from "react-dom/client";
 import WalletConnect from "./components/WalletConnect";
 import GameTabs from "./casino/ui/GameTabs";
 
-export const MTXCasino = {
-  mount(domNode) {
-    if (!domNode) return;
-    const root = createRoot(domNode);
-    root.render(
-      <div>
-        <WalletConnect />
-        <div style={{ marginTop: 32 }}>
-          <GameTabs />
-        </div>
-      </div>
-    );
-  }
-};
 
-window.MTXCasino = MTXCasino;
+function mountMTXCasino(domNode) {
+  if (!domNode) return;
+  const root = createRoot(domNode);
+  root.render(
+    React.createElement(
+      'div',
+      null,
+      React.createElement(WalletConnect, null),
+      React.createElement('div', { style: { marginTop: 32 } },
+        React.createElement(GameTabs, null)
+      )
+    )
+  );
+}
+
+window.MTXCasino = { mount: mountMTXCasino };
