@@ -35,7 +35,8 @@
       --section-daily-drops: #00ff00;
       --section-art-generator: #00ff00;
       --section-video-generator: #00ff00;
-      --section-bot-widget: #00ff9c;
+        --section-bot-widget: #00ff9c;
+        --section-crypto-trading: #00ff00;
     }
 
     /* Preset Theme Classes */
@@ -48,12 +49,13 @@
       --theme-text: #00ffff;
       --theme-border: #00ff00;
       --theme-name: 'Classic Matrix';
-      --section-music-player: #00ff41;
-      --section-deal-scanner: #00ff00;
-      --section-daily-drops: #00ff00;
-      --section-art-generator: #00ff00;
-      --section-video-generator: #00ff00;
-      --section-bot-widget: #00ff9c;
+        --section-music-player: #00ff41;
+        --section-deal-scanner: #00ff00;
+        --section-daily-drops: #00ff00;
+        --section-art-generator: #00ff00;
+        --section-video-generator: #00ff00;
+        --section-bot-widget: #00ff9c;
+        --section-crypto-trading: #00ff00;
     }
 
     .theme-cyber-purple {
@@ -70,7 +72,8 @@
       --section-daily-drops: #bf00ff;
       --section-art-generator: #bf00ff;
       --section-video-generator: #bf00ff;
-      --section-bot-widget: #bf00ff;
+        --section-bot-widget: #bf00ff;
+        --section-crypto-trading: #bf00ff;
     }
 
     .theme-neon-blue {
@@ -87,7 +90,8 @@
       --section-daily-drops: #00bfff;
       --section-art-generator: #00bfff;
       --section-video-generator: #00bfff;
-      --section-bot-widget: #00bfff;
+        --section-bot-widget: #00bfff;
+        --section-crypto-trading: #00bfff;
     }
 
     .theme-blood-red {
@@ -104,7 +108,8 @@
       --section-daily-drops: #ff0040;
       --section-art-generator: #ff0040;
       --section-video-generator: #ff0040;
-      --section-bot-widget: #ff0040;
+        --section-bot-widget: #ff0040;
+        --section-crypto-trading: #ff0040;
     }
 
     .theme-gold-elite {
@@ -121,7 +126,8 @@
       --section-daily-drops: #ffd700;
       --section-art-generator: #ffd700;
       --section-video-generator: #ffd700;
-      --section-bot-widget: #ffd700;
+        --section-bot-widget: #ffd700;
+        --section-crypto-trading: #ffd700;
     }
 
     .theme-toxic-orange {
@@ -138,7 +144,8 @@
       --section-daily-drops: #ff6600;
       --section-art-generator: #ff6600;
       --section-video-generator: #ff6600;
-      --section-bot-widget: #ff6600;
+        --section-bot-widget: #ff6600;
+        --section-crypto-trading: #ff6600;
     }
 
     .theme-arctic-white {
@@ -155,7 +162,8 @@
       --section-daily-drops: #ffffff;
       --section-art-generator: #ffffff;
       --section-video-generator: #ffffff;
-      --section-bot-widget: #ffffff;
+        --section-bot-widget: #ffffff;
+        --section-crypto-trading: #ffffff;
     }
 
     .theme-synthwave {
@@ -172,7 +180,8 @@
       --section-daily-drops: #ff00ff;
       --section-art-generator: #ff00ff;
       --section-video-generator: #ff00ff;
-      --section-bot-widget: #ff00ff;
+        --section-bot-widget: #ff00ff;
+        --section-crypto-trading: #ff00ff;
     }
 
     * {
@@ -2429,8 +2438,18 @@
   function syncAllSectionColors() {
     const primary = document.getElementById('custom-primary').value || getComputedStyle(document.documentElement).getPropertyValue('--theme-primary').trim() || '#00ff00';
 
-    const sections = ['music-player', 'deal-scanner', 'daily-drops', 'art-generator', 'video-generator', 'bot-widget'];
-    sections.forEach(section => {
+    // Dynamically find all section CSS variables on :root
+    const rootStyles = getComputedStyle(document.documentElement);
+    const sectionVars = [];
+    for (let i = 0; i < rootStyles.length; i++) {
+      const prop = rootStyles[i];
+      if (prop.startsWith('--section-')) {
+        const section = prop.replace('--section-', '');
+        sectionVars.push(section);
+      }
+    }
+
+    sectionVars.forEach(section => {
       document.documentElement.style.setProperty(`--section-${section}`, primary);
       const colorInput = document.getElementById(`color-${section}`);
       if (colorInput) colorInput.value = primary;
@@ -2438,7 +2457,7 @@
 
     // Save all section colors
     const sectionColors = {};
-    sections.forEach(section => {
+    sectionVars.forEach(section => {
       sectionColors[section] = primary;
     });
     localStorage.setItem('matrixHubSectionColors', JSON.stringify(sectionColors));
