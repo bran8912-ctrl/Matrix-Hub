@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { BrowserProvider, formatUnits, parseUnits, Contract } from 'ethers';
 import Web3Modal from 'web3modal';
 
-// Replace with your MTX token contract address and ABI
-const MTX_TOKEN_ADDRESS = 'YOUR_MTX_TOKEN_ADDRESS';
+// Deployed MTX token contract address and ABI
+const MTX_TOKEN_ADDRESS = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0';
 const MTX_TOKEN_ABI = [
   // Minimal ABI for ERC-20 balanceOf
   "function balanceOf(address owner) view returns (uint256)",

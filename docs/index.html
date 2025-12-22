@@ -1302,7 +1302,21 @@ SOFTWARE.
 	}
 </style>
 
+<!-- MTX CASINO GAMES SECTION (REACT) -->
+<div id="mtx-casino-games-section" style="margin: 40px auto 40px auto; max-width: 900px;">
+  <div id="mtx-casino-react-root"></div>
+</div>
 <div id="matrix-player">
+    <!-- React + Casino Games Bundle Loader -->
+    <script src="/casino-bundle.js"></script>
+    <script>
+      // Mount React casino app if bundle is loaded
+      window.addEventListener('DOMContentLoaded', function() {
+        if (window.MTXCasino && typeof window.MTXCasino.mount === 'function') {
+          window.MTXCasino.mount(document.getElementById('mtx-casino-react-root'));
+        }
+      });
+    </script>
     <div class="matrix-title">MATRIX-HUB MP3 PLAYER</div>
     <div style="margin: 10px 0 18px 0; font-size: 0.98em; color: var(--theme-secondary); background: rgba(0,0,0,0.08); border-radius: 6px; padding: 8px;">
       <strong>Music License:</strong><br>

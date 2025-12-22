@@ -2,26 +2,9 @@
 pragma solidity ^0.8.0;
 
 // 2️⃣ MTX Token (Utility Only)
-contract MTXToken {
-    uint public totalSupply;
-    mapping(address => uint) public balances;
 
-    constructor(uint _initialSupply) {
-        totalSupply = _initialSupply;
-        balances[msg.sender] = _initialSupply;
-    }
-
-    function transfer(address from, address to, uint amount) public returns (bool) {
-        require(balances[from] >= amount, "Insufficient balance");
-        balances[from] -= amount;
-        balances[to] += amount;
-        return true;
-    }
-
-    function balanceOf(address account) public view returns (uint) {
-        return balances[account];
-    }
-}
+// Use OpenZeppelin IERC20 interface for MatrixHubCoin (MTX)
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 // 3️⃣ Casino Core Contract
 interface ILiquidityRouter {
@@ -38,7 +21,7 @@ interface IRNGEngine {
 }
 
 contract CasinoCore {
-    MTXToken public mtx;
+    IERC20 public mtx;
     ILiquidityRouter public liquidity;
     ICasinoReserve public reserve;
     IRNGEngine public rng;
@@ -63,7 +46,7 @@ contract CasinoCore {
         address _dev,
         address _governance
     ) {
-        mtx = MTXToken(_mtx);
+        mtx = IERC20(_mtx); // Deployed MatrixHubCoin: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
         liquidity = ILiquidityRouter(_liquidity);
         reserve = ICasinoReserve(_reserve);
         rng = IRNGEngine(_rng);
@@ -91,10 +74,12 @@ contract CasinoCore {
         devPercent = dev_;
     }
 
+
     function placeBet(uint amount, bytes calldata gameData) external {
         require(amount >= minBet, "Bet below minimum");
         require(amount <= maxBet, "Bet above maximum");
-        require(mtx.transfer(msg.sender, address(this), amount), "Transfer failed");
+        // User must approve CasinoCore for MTX spend
+        require(mtx.transferFrom(msg.sender, address(this), amount), "Transfer failed");
 
         uint payoutAmount = amount * payoutPercent / 100;
         uint liquidityAmount = amount * liquidityPercent / 100;
@@ -103,8 +88,10 @@ contract CasinoCore {
 
         liquidity.addLiquidity(liquidityAmount);
         reserve.deposit(reserveAmount);
-        (bool sent, ) = dev.call{value: devAmount}("");
-        require(sent, "Dev payment failed");
+        // Dev payment in MTX (optional)
+        if (devAmount > 0) {
+            require(mtx.transfer(dev, devAmount), "Dev payment failed");
+        }
 
         bool win = rng.resolve(gameData);
         if (win) {
