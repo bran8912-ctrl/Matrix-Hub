@@ -1337,6 +1337,7 @@
 	  // All tracks are 100% free under the Mixkit Stock Music Free License
 	  // No attribution required - free for commercial and personal use
       const matrixPlaylist = [
+        // --- Remote tracks ---
         { title: "Cyberpunk City", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/140/140.mp3" },
         { title: "Deep Techno Ambience", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/134/134.mp3" },
         { title: "Techno Fest Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/124/124.mp3" },
@@ -1369,7 +1370,17 @@
         { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3" },
         { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3" },
         { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3" },
-        { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3" }
+        { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3" },
+        // --- Local music files ---
+        { title: "Dreamwalker", artist: "Matrix Hub", url: "/music/dreamwalker.mp3" },
+        { title: "Cipher", artist: "Matrix Hub", url: "/music/cipher.mp3" },
+        { title: "Digital Ghost", artist: "Matrix Hub", url: "/music/digital-ghost.mp3" },
+        { title: "Sci-Fi Ambient 2", artist: "Matrix Hub", url: "/music/sci-fi-ambient-2.mp3" },
+        { title: "Night Owl", artist: "Matrix Hub", url: "/music/night-owl.mp3" },
+        { title: "Dark Sci-Fi Synth", artist: "Matrix Hub", url: "/music/dark-sci-fi-synth.mp3" },
+        { title: "Industrial Cyberpunk", artist: "Matrix Hub", url: "/music/industrial-cyberpunk.mp3" },
+        { title: "Sci-Fi Ambient 1", artist: "Matrix Hub", url: "/music/sci-fi-ambient-1.mp3" },
+        { title: "The Ambient", artist: "Matrix Hub", url: "/music/the-ambient.mp3" }
       ];
 
 	  const matrixAudio = document.getElementById('matrixAudio');
@@ -1520,6 +1531,7 @@
 		  // --- Layers tab (secondary track that can play alongside Matrix music) ---
 		  const matrixPlayerTabStorageKey = 'matrixPlayerActiveTab';
       const layersPlaylist = [
+        // --- Remote layer tracks ---
         { title: "Deep Techno Ambience", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/134/134.mp3", tags: ["ambient", "techno"] },
         { title: "Hazy After Hours", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/132/132.mp3", tags: ["ambient"] },
         { title: "Minimal Emotion", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/160/160.mp3", tags: ["minimal", "ambient"] },
@@ -1535,7 +1547,17 @@
         { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3", tags: ["ambient"] },
         { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3", tags: ["ambient"] },
         { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3", tags: ["sci-fi", "ambient"] },
-        { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3", tags: ["ambient"] }
+        { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3", tags: ["ambient"] },
+        // --- Local layer tracks ---
+        { title: "Dreamwalker", artist: "Matrix Hub", url: "/music/dreamwalker.mp3", tags: ["ambient"] },
+        { title: "Cipher", artist: "Matrix Hub", url: "/music/cipher.mp3", tags: ["ambient"] },
+        { title: "Digital Ghost", artist: "Matrix Hub", url: "/music/digital-ghost.mp3", tags: ["ambient"] },
+        { title: "Sci-Fi Ambient 2", artist: "Matrix Hub", url: "/music/sci-fi-ambient-2.mp3", tags: ["ambient"] },
+        { title: "Night Owl", artist: "Matrix Hub", url: "/music/night-owl.mp3", tags: ["ambient"] },
+        { title: "Dark Sci-Fi Synth", artist: "Matrix Hub", url: "/music/dark-sci-fi-synth.mp3", tags: ["ambient"] },
+        { title: "Industrial Cyberpunk", artist: "Matrix Hub", url: "/music/industrial-cyberpunk.mp3", tags: ["ambient"] },
+        { title: "Sci-Fi Ambient 1", artist: "Matrix Hub", url: "/music/sci-fi-ambient-1.mp3", tags: ["ambient"] },
+        { title: "The Ambient", artist: "Matrix Hub", url: "/music/the-ambient.mp3", tags: ["ambient"] }
       ];
 
 		  let currentLayerIndex = 0;
