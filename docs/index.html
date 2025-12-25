@@ -1352,21 +1352,6 @@ SOFTWARE.
 	    padding: 6px 12px !important;
 	}
 </style>
-
-<!-- MTX CASINO GAMES SECTION (REACT) -->
-<div id="mtx-casino-games-section" style="margin: 40px auto 40px auto; max-width: 900px;">
-  <div id="mtx-casino-react-root"></div>
-</div>
-<div id="matrix-player">
-    <!-- React + Casino Games Bundle Loader -->
-    <script src="/casino-bundle.js"></script>
-    <script>
-      // Mount React casino app if bundle is loaded
-      window.addEventListener('DOMContentLoaded', function() {
-        if (window.MTXCasino && typeof window.MTXCasino.mount === 'function') {
-          window.MTXCasino.mount(document.getElementById('mtx-casino-react-root'));
-        }
-      });
     </script>
     <div class="matrix-title">MATRIX-HUB MP3 PLAYER</div>
     <div style="margin: 10px 0 18px 0; font-size: 0.98em; color: var(--theme-secondary); background: rgba(0,0,0,0.08); border-radius: 6px; padding: 8px;">
@@ -2856,7 +2841,53 @@ SOFTWARE.
     window.matrixRainColor = bgfx;
   }
 </script>
+<!-- MTX Casino -->
 
+<!-- 1. Add Play Buttons for Each Game (replace your bullet list with this markup) -->
+<div class="panel-text" style="color:var(--theme-text); font-size: 1.05rem;">
+  <ul style="margin-left: 20px;">
+    <li>
+      <b>Slots:</b> Spin to win MTX. 
+      <a href="/games/casino/slots" class="btn" style="display:inline-block; margin-left:10px; width:auto;">Play Slots</a>
+    </li>
+    <li>
+      <b>Blackjack:</b> Beat the dealer for MTX.
+      <a href="/games/casino/blackjack" class="btn" style="display:inline-block; margin-left:10px; width:auto;">Play Blackjack</a>
+    </li>
+    <li>
+      <b>Roulette:</b> Bet MTX, win big.
+      <a href="/games/casino/roulette" class="btn" style="display:inline-block; margin-left:10px; width:auto;">Play Roulette</a>
+    </li>
+    <li>
+      <b>Dice Roll:</b> Player selects target (0–99). Win if roll is under target.
+    </li>
+    <li>
+      <b>Coin Flip:</b> 50/50 outcome (Heads or Tails).
+    </li>
+    <li>
+      <b>Number Match (1–100):</b> Exact match wins.
+    </li>
+    <li>
+      <b>Slot Probability Game:</b> Three-reel weighted symbols.
+    </li>
+    <li>
+      <b>Crash <span style="color:var(--theme-secondary);">(Phase 2)</span>:</b> Multiplier increases until crash.
+    </li>
+    <li>
+      <b>PvP Wager Arena <span style="color:var(--theme-secondary);">(Phase 3)</span>:</b> Player-versus-player MTX wagers.
+    </li>
+  </ul>
+</div>
+
+<!-- 2. Embed Casino UI Widget (recommended location: directly after the Play Buttons/list above) -->
+
+<div style="margin:40px 0;">
+  <h3 style="color:var(--theme-primary); margin-bottom:15px;">Play Casino Now</h3>
+  <div id="casino-widget" style="min-height:420px; border:2px solid var(--theme-glow); background:rgba(0,20,0,0.18); border-radius:16px; padding:18px;">
+    <span id="casino-loading" style="color:var(--theme-secondary);">Casino loading…</span>
+  </div>
+</div>
+	
 <!-- Matrix Gaming Section -->
 <div class="container">
   <div class="panel matrix-gaming-panel">
@@ -7814,6 +7845,21 @@ SOFTWARE.
     }
   }
 </style>
-
+<!-- 3. MTX Casino script -->
+<script src="/casino/casino-bundle.js"></script>
+<script>
+  function tryMountCasinoWidget() {
+    var casinoContainer = document.getElementById('casino-widget');
+    if (window.MTXCasino && window.MTXCasino.mount) {
+      window.MTXCasino.mount(casinoContainer);
+      var loader = document.getElementById('casino-loading');
+      if (loader) loader.style.display = 'none';
+    } else {
+      // Try again after delay, as script may not be ready
+      setTimeout(tryMountCasinoWidget, 500);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', tryMountCasinoWidget);
+</script>
 </body>
                            </html>
