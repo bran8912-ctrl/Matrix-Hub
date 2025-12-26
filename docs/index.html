@@ -2852,12 +2852,22 @@ SOFTWARE.
       Connect Wallet
     </button>
     <span id="walletAddress" class="text-yellow-300 text-sm"></span>
+    <span id="mtxBalance" class="text-yellow-200 text-sm"></span>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script>
+    // MTX ERC20 Token info
+    const MTX_TOKEN_ADDRESS = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+    const ERC20_ABI = [
+      "function balanceOf(address owner) view returns (uint256)",
+      "function decimals() view returns (uint8)"
+    ];
+
     const connectWalletBtn = document.getElementById('connectWalletBtn');
     const walletAddress = document.getElementById('walletAddress');
+    const mtxBalance = document.getElementById('mtxBalance');
     let provider, signer;
+
     connectWalletBtn.onclick = async () => {
       if (typeof window.ethereum === 'undefined') {
         walletAddress.textContent = "Please install MetaMask or another Ethereum wallet.";
@@ -2872,6 +2882,11 @@ SOFTWARE.
         connectWalletBtn.disabled = true;
         connectWalletBtn.textContent = "Connected";
         connectWalletBtn.classList.add('opacity-60','cursor-not-allowed');
+        // Get MTX balance
+        const token = new ethers.Contract(MTX_TOKEN_ADDRESS, ERC20_ABI, provider);
+        const decimals = await token.decimals();
+        const bal = await token.balanceOf(address);
+        mtxBalance.textContent = `| MTX Balance: ${ethers.utils.formatUnits(bal, decimals)}`;
       } catch (err) {
         walletAddress.textContent = "Connection failed: " + err.message;
       }
