@@ -904,6 +904,10 @@ SOFTWARE.
 </div>
 
 <!-- MATRIX MUSIC PLAYER -->
+	<div class="container">
+  <div class="panel theme-customizer-panel">
+    <h2 style="text-align: center; margin-bottom: 15px;">MATRIX MUSIC PLAYER</h2>
+    <p class="theme-subtitle">Choose your experience, add layer tracks and mixer for best results</p>
 <style>
 	#matrix-player {
     margin: 20px auto;
@@ -1352,7 +1356,7 @@ SOFTWARE.
 	    padding: 6px 12px !important;
 	}
 
-<script
+<script>
     <div class="matrix-title">MATRIX-HUB MP3 PLAYER</div>
     <div style="margin: 10px 0 18px 0; font-size: 0.98em; color: var(--theme-secondary); background: rgba(0,0,0,0.08); border-radius: 6px; padding: 8px;">
       <strong>Music License:</strong><br>
@@ -2840,6 +2844,87 @@ SOFTWARE.
     window.matrixRainColor = bgfx;
   }
 </script>
+<!-- Casino Balances UI Section -->
+<section class="mb-10 px-6 py-8 bg-secondary rounded-xl shadow-xl border-2 border-yellow-500 max-w-3xl mx-auto">
+  <h1 class="text-3xl font-extrabold text-yellow-400 mb-4 tracking-widest">Casino & MTX Balances</h1>
+  
+  <!-- Connect Wallet Button -->
+  <div class="mb-6 flex items-center gap-4">
+    <button id="connectWalletBtn" class="px-6 py-2 rounded-lg bg-yellow-400 text-gray-900 font-bold hover:bg-yellow-300 transition">
+      Connect Wallet
+    </button>
+    <span id="walletAddress" class="text-yellow-300 text-sm"></span>
+  </div>
+  
+  <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-yellow-100">
+    <div class="bg-gray-800 rounded-lg p-4">
+      <h2 class="font-semibold text-yellow-400 mb-2">Your MTX Balance</h2>
+      <div id="mtxBalance" class="text-lg font-bold"></div>
+    </div>
+
+    <div class="bg-gray-800 rounded-lg p-4">
+      <h2 class="font-semibold text-yellow-400 mb-2">CasinoCore MTX</h2>
+      <div id="coreBalance" class="text-lg font-bold"></div>
+    </div>
+
+    <div class="bg-gray-800 rounded-lg p-4">
+      <h2 class="font-semibold text-yellow-400 mb-2">CasinoReserve MTX</h2>
+      <div id="reserveBalance" class="text-lg font-bold"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script>
+    const MTX_TOKEN_ADDRESS = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+    const CASINO_CORE_ADDRESS = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
+    const CASINO_RESERVE_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
+    const ERC20_ABI = [
+      "function balanceOf(address owner) view returns (uint256)",
+      "function decimals() view returns (uint8)"
+    ];
+
+    const connectWalletBtn = document.getElementById('connectWalletBtn');
+    const walletAddress = document.getElementById('walletAddress');
+    const mtxBalanceDiv = document.getElementById('mtxBalance');
+    const coreBalanceDiv = document.getElementById('coreBalance');
+    const reserveBalanceDiv = document.getElementById('reserveBalance');
+    let provider, signer;
+
+    connectWalletBtn.onclick = async () => {
+      if (typeof window.ethereum === 'undefined') {
+        walletAddress.textContent = "Please install MetaMask or another Ethereum wallet.";
+        return;
+      }
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+        const userAddress = await signer.getAddress();
+        walletAddress.textContent = "Connected: " + userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
+        connectWalletBtn.disabled = true;
+        connectWalletBtn.textContent = "Connected";
+        connectWalletBtn.classList.add('opacity-60','cursor-not-allowed');
+
+        // Get MTX decimals
+        const tokenContract = new ethers.Contract(MTX_TOKEN_ADDRESS, ERC20_ABI, provider);
+        const decimals = await tokenContract.decimals();
+
+        // Get balances
+        const [userBal, coreBal, reserveBal] = await Promise.all([
+          tokenContract.balanceOf(userAddress),
+          tokenContract.balanceOf(CASINO_CORE_ADDRESS),
+          tokenContract.balanceOf(CASINO_RESERVE_ADDRESS)
+        ]);
+
+        mtxBalanceDiv.textContent = `${ethers.utils.formatUnits(userBal, decimals)} MTX`;
+        coreBalanceDiv.textContent = `${ethers.utils.formatUnits(coreBal, decimals)} MTX`;
+        reserveBalanceDiv.textContent = `${ethers.utils.formatUnits(reserveBal, decimals)} MTX`;
+      } catch (err) {
+        walletAddress.textContent = "Connection failed: " + err.message;
+      }
+    };
+  </script>
+</section>
 <!-- MTX Casino Section -->
 <section class="mb-10 px-6 py-8 bg-secondary rounded-xl shadow-xl border-2 border-yellow-500 max-w-3xl mx-auto">
   <h1 class="text-3xl font-extrabold text-yellow-400 mb-4 tracking-widest">MTX Casino</h1>
