@@ -2841,52 +2841,91 @@ SOFTWARE.
     window.matrixRainColor = bgfx;
   }
 </script>
-<!-- MTX Casino -->
-
-<!-- 1. Add Play Buttons for Each Game (replace your bullet list with this markup) -->
-<div class="panel-text" style="color:var(--theme-text); font-size: 1.05rem;">
-  <ul style="margin-left: 20px;">
-    <li>
-      <b>Slots:</b> Spin to win MTX. 
-      <a href="/games/casino/slots" class="btn" style="display:inline-block; margin-left:10px; width:auto;">Play Slots</a>
-    </li>
-    <li>
-      <b>Blackjack:</b> Beat the dealer for MTX.
-      <a href="/games/casino/blackjack" class="btn" style="display:inline-block; margin-left:10px; width:auto;">Play Blackjack</a>
-    </li>
-    <li>
-      <b>Roulette:</b> Bet MTX, win big.
-      <a href="/games/casino/roulette" class="btn" style="display:inline-block; margin-left:10px; width:auto;">Play Roulette</a>
-    </li>
-    <li>
-      <b>Dice Roll:</b> Player selects target (0–99). Win if roll is under target.
-    </li>
-    <li>
-      <b>Coin Flip:</b> 50/50 outcome (Heads or Tails).
-    </li>
-    <li>
-      <b>Number Match (1–100):</b> Exact match wins.
-    </li>
-    <li>
-      <b>Slot Probability Game:</b> Three-reel weighted symbols.
-    </li>
-    <li>
-      <b>Crash <span style="color:var(--theme-secondary);">(Phase 2)</span>:</b> Multiplier increases until crash.
-    </li>
-    <li>
-      <b>PvP Wager Arena <span style="color:var(--theme-secondary);">(Phase 3)</span>:</b> Player-versus-player MTX wagers.
-    </li>
-  </ul>
-</div>
-
-<!-- 2. Embed Casino UI Widget (recommended location: directly after the Play Buttons/list above) -->
-
-<div style="margin:40px 0;">
-  <h3 style="color:var(--theme-primary); margin-bottom:15px;">Play Casino Now</h3>
-  <div id="casino-widget" style="min-height:420px; border:2px solid var(--theme-glow); background:rgba(0,20,0,0.18); border-radius:16px; padding:18px;">
-    <span id="casino-loading" style="color:var(--theme-secondary);">Casino loading…</span>
+<!-- MTX Casino Section -->
+<section class="mb-10 px-6 py-8 bg-secondary rounded-xl shadow-xl border-2 border-yellow-500 max-w-3xl mx-auto">
+  <h1 class="text-3xl font-extrabold text-yellow-400 mb-4 tracking-widest">MTX Casino</h1>
+  <p class="mb-6 text-yellow-200">Play games to win or spend MTX!</p>
+  
+  <!-- Connect Wallet -->
+  <div class="flex items-center gap-4 mb-8">
+    <button id="connectWalletBtn" class="px-6 py-2 rounded-lg bg-yellow-400 text-gray-900 font-bold hover:bg-yellow-300 transition">
+      Connect Wallet
+    </button>
+    <span id="walletAddress" class="text-yellow-300 text-sm"></span>
   </div>
-</div>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script>
+    const connectWalletBtn = document.getElementById('connectWalletBtn');
+    const walletAddress = document.getElementById('walletAddress');
+    let provider, signer;
+    connectWalletBtn.onclick = async () => {
+      if (typeof window.ethereum === 'undefined') {
+        walletAddress.textContent = "Please install MetaMask or another Ethereum wallet.";
+        return;
+      }
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+        const address = await signer.getAddress();
+        walletAddress.textContent = "Connected: " + address.slice(0, 6) + "..." + address.slice(-4);
+        connectWalletBtn.disabled = true;
+        connectWalletBtn.textContent = "Connected";
+        connectWalletBtn.classList.add('opacity-60','cursor-not-allowed');
+      } catch (err) {
+        walletAddress.textContent = "Connection failed: " + err.message;
+      }
+    };
+  </script>
+
+  <div class="casino-games-list mb-6">
+    <h2 class="text-xl font-semibold text-yellow-300 mb-2 tracking-wide">Choose Your Game</h2>
+    <ul class="list-disc ml-6 space-y-1">
+      <li><a href="#slots" class="text-yellow-200 hover:underline">Slots</a> — Spin to win MTX</li>
+      <li><a href="#blackjack" class="text-yellow-200 hover:underline">Blackjack</a> — Beat the dealer for MTX</li>
+      <li><a href="#roulette" class="text-yellow-200 hover:underline">Roulette</a> — Bet MTX, win big</li>
+    </ul>
+  </div>
+
+  <div class="casino-instructions mb-8 p-4 border border-yellow-500 rounded bg-yellow-900 text-yellow-100">
+    <strong>How it works:</strong>
+    <ul class="list-disc ml-6">
+      <li>Spend MTX to play casino games</li>
+      <li>Win MTX by hitting jackpots or winning hands</li>
+      <li>All transactions are on-chain and transparent</li>
+      <li>MTX is required to play, but you can win more!</li>
+    </ul>
+  </div>
+
+  <!-- Individual game sections -->
+  <div id="slots" class="mb-10">
+    <h2 class="text-2xl font-bold text-yellow-300 mb-2">Slots</h2>
+    <p class="mb-2 text-yellow-100">Spin the reels to win MTX! Each spin costs 1 MTX.</p>
+    <div class="bg-yellow-800 p-3 rounded">
+      <p class="italic text-yellow-200">[Slots game coming soon]</p>
+    </div>
+  </div>
+
+  <div id="blackjack" class="mb-10">
+    <h2 class="text-2xl font-bold text-yellow-300 mb-2">Blackjack</h2>
+    <p class="mb-2 text-yellow-100">Beat the dealer to win MTX! Each hand costs 2 MTX.</p>
+    <div class="bg-yellow-800 p-3 rounded">
+      <p class="italic text-yellow-200">[Blackjack game coming soon]</p>
+    </div>
+  </div>
+
+  <div id="roulette">
+    <h2 class="text-2xl font-bold text-yellow-300 mb-2">Roulette</h2>
+    <p class="mb-2 text-yellow-100">Bet your MTX and spin the wheel! Minimum bet: 1 MTX.</p>
+    <div class="bg-yellow-800 p-3 rounded">
+      <p class="italic text-yellow-200">[Roulette game coming soon]</p>
+    </div>
+  </div>
+
+  <p class="mt-6 text-xs text-gray-400">
+    All casino features are in active development. Old standalone game pages have been unified here.
+  </p>
+</section>
 	
 <!-- Matrix Gaming Section -->
 <div class="container">
