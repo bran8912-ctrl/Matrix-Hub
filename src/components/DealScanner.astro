@@ -1,0 +1,278 @@
+---
+import Panel from './Panel.astro';
+---
+
+<Panel title="DEAL SCANNER TERMINAL" class="deal-scanner-panel">
+  <div id="scanner-terminal">
+    <div id="scanner-output"></div>
+    <button id="scan-btn" class="btn scan-button">INITIATE SCAN</button>
+  </div>
+  <div id="decoded-deals" style="display: none;">
+    <h3 class="decoded-title">DECODED OPPORTUNITIES</h3>
+    <div id="deals-container"></div>
+  </div>
+</Panel>
+
+<style>
+  .deal-scanner-panel {
+    margin: 30px auto;
+    font-family: 'Courier New', monospace;
+  }
+
+  #scanner-terminal {
+    background: #000;
+    border: 1px solid var(--theme-border);
+    border-radius: 5px;
+    padding: 15px;
+    min-height: 150px;
+  }
+
+  #scanner-output {
+    color: var(--theme-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    min-height: 120px;
+  }
+
+  #scanner-output .cursor {
+    animation: blink 0.7s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .scan-button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 12px;
+    background: var(--theme-bg-dark);
+    border: 2px solid var(--theme-border);
+    color: var(--theme-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .scan-button:hover:not(:disabled) {
+    background: rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 20px var(--theme-glow);
+  }
+
+  .scan-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  #decoded-deals {
+    margin-top: 20px;
+  }
+
+  .decoded-title {
+    text-align: center;
+    color: var(--theme-primary);
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px var(--theme-glow);
+  }
+
+  .decoded-deal {
+    background: rgba(0, 30, 0, 0.28);
+    border: 1px solid var(--theme-border);
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+  }
+
+  .decoded-deal:hover {
+    box-shadow: 0 0 20px var(--theme-glow);
+    transform: translateY(-2px);
+  }
+
+  .deal-label {
+    display: inline-block;
+    background: var(--theme-primary);
+    color: #000;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .decoded-deal .btn {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    background: var(--theme-bg-dark);
+    border: 2px solid var(--theme-border);
+    color: var(--theme-primary);
+    font-weight: bold;
+    transition: all 0.3s;
+  }
+
+  .decoded-deal .btn:hover {
+    background: rgba(0, 255, 0, 0.2);
+    box-shadow: 0 0 15px var(--theme-glow);
+  }
+
+  .deal-info {
+    font-size: 0.85rem;
+    color: var(--theme-secondary);
+    margin-top: 8px;
+    text-align: center;
+    opacity: 0.8;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  const scannerOutput = document.getElementById('scanner-output');
+  const scanBtn = document.getElementById('scan-btn');
+  const decodedDeals = document.getElementById('decoded-deals');
+  const dealsContainer = document.getElementById('deals-container');
+
+  // All available deals for rotation
+  const allDeals = [
+    // Crypto & Security
+    { label: 'CRYPTO SECURITY', title: 'Ledger Hardware Wallet', url: 'https://shop.ledger.com/?r=5b26c17b2e98', info: 'Protect your digital assets with military-grade security' },
+    { label: 'CRYPTO EXCHANGE', title: 'Binance US - Trade Crypto', url: 'https://www.binance.us/universal_JHHGDSKDJ/auth/registration?ref=614205735', info: 'Trade 100+ cryptocurrencies with low fees' },
+    { label: 'CRYPTO TRADING', title: 'BTCC Exchange', url: 'https://btcc.com/invite/Ufihz4l', info: 'Advanced crypto trading platform with bonuses' },
+    // Investing & Finance
+    { label: 'PASSIVE INCOME', title: 'Acorns Investing - FREE $5', url: 'https://acorns.com/share/?shareable_code=CQ1T7GA&first_name=Brandon&friend_reward=5', info: 'Start investing spare change automatically' },
+    { label: 'FREE STOCK', title: 'Robinhood - Get Free Stock', url: 'https://join.robinhood.com/brandol-06d7e3', info: 'Commission-free trading with sign-up bonus' },
+    // AI Tools
+    { label: 'AI TOOLS', title: 'VEED - AI Video Editor', url: 'https://veed.sjv.io/7aj7Pr', info: 'Professional video editing powered by AI' },
+    { label: 'AI TOOLS', title: 'Pictory - AI Video Creator', url: 'https://pictory.ai?ref=brandon94', info: 'Turn scripts into stunning videos with AI' },
+    { label: 'AI TOOLS', title: 'Invideo AI - Create Videos', url: 'https://invideo.sjv.io/o4E32b', info: 'Turn AI into income with unlimited generations' },
+    // Health & Fitness
+    { label: 'FITNESS DEALS', title: 'Redcon1 Supplements', url: 'http://rwrd.io/nr6geao?s', info: 'Premium supplements with exclusive rewards' },
+    // Games & Other
+    { label: 'GAMING', title: 'MPL PRO - Win Real Money', url: 'https://referral-mplpro.onelink.me/eMpV/6kc2y3ka', info: 'Compete in skill-based games for cash prizes' },
+    { label: 'GAMING', title: 'Stake.US - Social Casino', url: 'https://stake.us/?c=vKE8Fpwd', info: 'Free-to-play social casino experience' },
+    { label: 'DELIVERY', title: 'DoorDash - Food Delivery', url: 'https://drd.sh/W94sSoxe4jsGyFoO', info: 'Get food delivered with sign-up bonus' },
+    // TEMU
+    { label: 'HOT DEALS', title: 'TEMU - Super Fast Earning', url: 'https://temu.to/k/ph6uzzqbm7c', info: 'Earn rewards while shopping amazing deals' },
+    { label: 'HOT DEALS', title: 'TEMU - Hot Deals', url: 'https://temu.to/k/prxuzyej54g', info: 'Flash deals on trending products' },
+    { label: 'EXCLUSIVE', title: 'TEMU - Exclusive Deal', url: 'https://temu.to/k/pssqr37haqj', info: 'Special offer just for you' },
+    { label: '$200 COUPON', title: 'TEMU - $200 Coupon Bundle', url: 'https://temu.to/k/plk7nt89x6c', info: 'Massive savings coupon bundle' },
+    { label: 'BEST SELLERS', title: 'TEMU - Best Sellers', url: 'https://temu.to/k/pjbw6mpytbx', info: 'Shop the most popular items' },
+    // Amazon
+    { label: 'STREAMING', title: 'Prime for Young Adults', url: 'https://amzn.to/4pzCx7R', info: 'Discounted Prime for ages 18-24' },
+    { label: 'STREAMING', title: 'Amazon Prime', url: 'https://amzn.to/48AEXgW', info: 'Free shipping, streaming & more' },
+    { label: 'STREAMING', title: 'Prime Video', url: 'https://amzn.to/3XkW404', info: 'Stream movies & exclusive shows' },
+    { label: 'AUDIO', title: 'Audible Premium Plus', url: 'https://amzn.to/44p4Mhw', info: 'Unlimited audiobooks & originals' },
+    { label: 'READING', title: 'Kindle Unlimited', url: 'https://amzn.to/3XhTl7x', info: 'Unlimited reading on any device' },
+    { label: 'MUSIC', title: 'Amazon Music Unlimited', url: 'https://amzn.to/4rtHuBg', info: '100M+ songs ad-free' },
+    { label: 'FAMILY', title: 'Amazon Kids+', url: 'https://amzn.to/4oE71oJ', info: 'Kid-friendly content & games' },
+    { label: 'SAVINGS', title: 'Amazon Access (SNAP/EBT)', url: 'https://amzn.to/4rp4EZk', info: 'Discounted Prime for qualifying members' }
+  ];
+
+  // Track shown deals to avoid immediate repeats
+  let lastShownDeals: string[] = [];
+
+  const scannerLines = [
+    '> Initializing MATRIX-HUB deal scanner...',
+    '> Connecting to affiliate networks...',
+    '> Scanning 4,221 digital offers...',
+    '> Analyzing conversion rates...',
+    '> Filtering highest payouts...',
+    '> Decrypting opportunity data...',
+    '> Validating partner programs...',
+    '> SCAN COMPLETE.',
+    '> Displaying 3 profit-optimized opportunities...'
+  ];
+
+  // Fisher-Yates shuffle
+  function shuffleArray<T>(array: T[]): T[] {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+
+  // Get 3 random deals, avoiding the last shown deals
+  function getRandomDeals() {
+    // Filter out deals that were just shown
+    const availableDeals = allDeals.filter(deal => !lastShownDeals.includes(deal.url));
+
+    // Shuffle and pick 3
+    const shuffled = shuffleArray(availableDeals);
+    const selected = shuffled.slice(0, 3);
+
+    // Remember these for next time
+    lastShownDeals = selected.map(d => d.url);
+
+    return selected;
+  }
+
+  // Render deals to the container
+  function renderDeals(deals: typeof allDeals) {
+    if (!dealsContainer) return;
+    dealsContainer.innerHTML = deals.map(deal => `
+      <div class="decoded-deal">
+        <span class="deal-label">${deal.label}</span>
+        <a href="${deal.url}" class="btn" target="_blank" rel="noopener">${deal.title}</a>
+        <p class="deal-info">${deal.info}</p>
+      </div>
+    `).join('');
+  }
+
+  async function runScanner() {
+    if (!scanBtn || !scannerOutput || !decodedDeals) return;
+    
+    scanBtn.disabled = true;
+    scanBtn.textContent = 'SCANNING...';
+    scannerOutput.innerHTML = '';
+    decodedDeals.style.display = 'none';
+
+    for (let i = 0; i < scannerLines.length; i++) {
+      await typeText(scannerLines[i]);
+      await delay(300 + Math.random() * 400);
+    }
+
+    // Get and render random deals
+    const randomDeals = getRandomDeals();
+    renderDeals(randomDeals);
+
+    await delay(500);
+    decodedDeals.style.display = 'block';
+    decodedDeals.style.animation = 'fadeIn 0.5s ease-in';
+    scanBtn.textContent = 'SCAN AGAIN';
+    scanBtn.disabled = false;
+  }
+
+  async function typeText(text: string) {
+    if (!scannerOutput) return;
+    const line = document.createElement('div');
+    scannerOutput.appendChild(line);
+
+    for (let i = 0; i < text.length; i++) {
+      line.textContent = text.substring(0, i + 1);
+      await delay(20 + Math.random() * 30);
+    }
+    line.innerHTML += '<br>';
+    scannerOutput.scrollTop = scannerOutput.scrollHeight;
+  }
+
+  function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  if (scanBtn) {
+    scanBtn.addEventListener('click', runScanner);
+  }
+</script>

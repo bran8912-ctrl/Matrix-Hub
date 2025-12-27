@@ -6,6 +6,8 @@ import DonateBanner from "../components/DonateBanner.astro";
 import TelegramWidget from "../components/TelegramWidget.astro";
 import MusicPlayer from "../components/MusicPlayer.astro";
 import ThemeCustomizer from "../components/ThemeCustomizer.astro";
+import DailyDrops from "../components/DailyDrops.astro";
+import DealScanner from "../components/DealScanner.astro";
 
 export const prerender = true;
 ---
@@ -23,6 +25,12 @@ export const prerender = true;
 
   <!-- Casino Games Panel -->
   <CasinoGamesPanel />
+
+  <!-- Daily Drops Bot -->
+  <DailyDrops />
+
+  <!-- Deal Scanner -->
+  <DealScanner />
 
   <!-- Donation Banner -->
   <DonateBanner />
