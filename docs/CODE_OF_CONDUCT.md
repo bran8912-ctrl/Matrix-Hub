@@ -45,3 +45,11 @@ Matrix Hub is built on autonomy, transparency, and collaboration.
 We reject toxicity, gatekeeping, and ego-driven development.
 
 Respect the signal.
+
+---
+
+**Related Documentation:**
+- [Contributors](CONTRIBUTORS.md)
+- [MTX Whitepaper](MTX_Whitepaper.md)
+
+**[← Back to Documentation Index](../docs/)**
