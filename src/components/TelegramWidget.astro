@@ -1,0 +1,71 @@
+---
+// Telegram Channel Widget
+---
+
+<div class="telegram-widget-container">
+  <div class="telegram-widget-title">📢 MATRIX HUB TELEGRAM</div>
+  <div class="telegram-widget-subtitle">Join our community for exclusive updates & deals</div>
+  <div class="telegram-embed">
+    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-post="matrixhuborg/1" data-width="100%"></script>
+  </div>
+  <div style="margin-top: 20px;">
+    <a href="https://t.me/matrixhuborg" target="_blank" rel="noopener noreferrer" class="telegram-join-link">
+      🚀 Join Channel
+    </a>
+  </div>
+</div>
+
+<style>
+  .telegram-widget-container {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px;
+    background: var(--theme-bg-panel);
+    border: 2px solid var(--theme-primary, #00ff00);
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .telegram-widget-title {
+    font-size: 20px;
+    color: var(--theme-primary, #00ff00);
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px var(--theme-primary, #00ff00);
+    letter-spacing: 2px;
+  }
+
+  .telegram-widget-subtitle {
+    font-size: 14px;
+    color: var(--theme-secondary, #00ffff);
+    margin-bottom: 20px;
+    opacity: 0.9;
+  }
+
+  .telegram-embed {
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .telegram-join-link {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    color: #000;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .telegram-join-link:hover {
+    background: linear-gradient(135deg, #00cc00, #009900);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+    transform: scale(1.05);
+  }
+</style>

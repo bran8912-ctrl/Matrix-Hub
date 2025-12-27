@@ -1,0 +1,400 @@
+---
+import Panel from './Panel.astro';
+---
+
+<Panel title="THEME CUSTOMIZER" class="theme-customizer-panel">
+  <p class="theme-subtitle">Choose your reality - customize your experience</p>
+
+  <div class="current-theme-display">
+    <span class="theme-label">Active Theme:</span>
+    <span id="current-theme-name">Classic Matrix</span>
+  </div>
+
+  <div class="theme-presets">
+    <div class="theme-preset active" data-theme="classic">
+      <div class="theme-preview" style="background: linear-gradient(135deg, #000 0%, #001a00 100%); border-color: #00ff00;">
+        <div class="preview-glow" style="background: #00ff00;"></div>
+      </div>
+      <span class="theme-preset-name">Classic Matrix</span>
+    </div>
+
+    <div class="theme-preset" data-theme="cyber-purple">
+      <div class="theme-preview" style="background: linear-gradient(135deg, #0a000f 0%, #1e0030 100%); border-color: #bf00ff;">
+        <div class="preview-glow" style="background: #bf00ff;"></div>
+      </div>
+      <span class="theme-preset-name">Cyber Purple</span>
+    </div>
+
+    <div class="theme-preset" data-theme="neon-blue">
+      <div class="theme-preview" style="background: linear-gradient(135deg, #000a14 0%, #001e3c 100%); border-color: #00bfff;">
+        <div class="preview-glow" style="background: #00bfff;"></div>
+      </div>
+      <span class="theme-preset-name">Neon Blue</span>
+    </div>
+
+    <div class="theme-preset" data-theme="blood-red">
+      <div class="theme-preview" style="background: linear-gradient(135deg, #0f0000 0%, #300010 100%); border-color: #ff0040;">
+        <div class="preview-glow" style="background: #ff0040;"></div>
+      </div>
+      <span class="theme-preset-name">Blood Red</span>
+    </div>
+
+    <div class="theme-preset" data-theme="gold-elite">
+      <div class="theme-preview" style="background: linear-gradient(135deg, #0a0800 0%, #1e1900 100%); border-color: #ffd700;">
+        <div class="preview-glow" style="background: #ffd700;"></div>
+      </div>
+      <span class="theme-preset-name">Gold Elite</span>
+    </div>
+
+    <div class="theme-preset" data-theme="toxic-orange">
+      <div class="theme-preview" style="background: linear-gradient(135deg, #0f0800 0%, #301500 100%); border-color: #ff6600;">
+        <div class="preview-glow" style="background: #ff6600;"></div>
+      </div>
+      <span class="theme-preset-name">Toxic Orange</span>
+    </div>
+
+    <div class="theme-preset" data-theme="arctic-white">
+      <div class="theme-preview" style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); border-color: #ffffff;">
+        <div class="preview-glow" style="background: #ffffff;"></div>
+      </div>
+      <span class="theme-preset-name">Arctic White</span>
+    </div>
+
+    <div class="theme-preset" data-theme="synthwave">
+      <div class="theme-preview" style="background: linear-gradient(135deg, #0d0221 0%, #190532 100%); border-color: #ff00ff;">
+        <div class="preview-glow" style="background: linear-gradient(45deg, #ff00ff, #00ffff);"></div>
+      </div>
+      <span class="theme-preset-name">Synthwave</span>
+    </div>
+  </div>
+
+  <div class="custom-color-section">
+    <h3>CUSTOM COLOR</h3>
+    <div class="custom-color-controls">
+      <div class="color-picker-wrapper">
+        <label for="custom-primary">Primary:</label>
+        <input type="color" id="custom-primary" value="#00ff00">
+      </div>
+      <div class="color-picker-wrapper">
+        <label for="custom-secondary">Secondary:</label>
+        <input type="color" id="custom-secondary" value="#00ffff">
+      </div>
+      <button class="btn custom-apply-btn" id="applyCustomBtn">APPLY CUSTOM</button>
+    </div>
+  </div>
+</Panel>
+
+<script>
+  // Theme definitions
+  const themes = {
+    'classic': {
+      name: 'Classic Matrix',
+      primary: '#00ff00',
+      secondary: '#00ffff',
+      glow: '#00ff00',
+      bgDark: '#000000',
+      bgPanel: 'rgba(0, 20, 0, 0.18)',
+      text: '#00ffff',
+      border: '#00ff00'
+    },
+    'cyber-purple': {
+      name: 'Cyber Purple',
+      primary: '#bf00ff',
+      secondary: '#ff00ff',
+      glow: '#bf00ff',
+      bgDark: '#0a000f',
+      bgPanel: 'rgba(20, 0, 30, 0.18)',
+      text: '#ff66ff',
+      border: '#bf00ff'
+    },
+    'neon-blue': {
+      name: 'Neon Blue',
+      primary: '#00bfff',
+      secondary: '#00ffff',
+      glow: '#00bfff',
+      bgDark: '#000a14',
+      bgPanel: 'rgba(0, 15, 30, 0.18)',
+      text: '#66d9ff',
+      border: '#00bfff'
+    },
+    'blood-red': {
+      name: 'Blood Red',
+      primary: '#ff0040',
+      secondary: '#ff6680',
+      glow: '#ff0040',
+      bgDark: '#0f0000',
+      bgPanel: 'rgba(30, 0, 10, 0.18)',
+      text: '#ff8099',
+      border: '#ff0040'
+    },
+    'gold-elite': {
+      name: 'Gold Elite',
+      primary: '#ffd700',
+      secondary: '#ffea00',
+      glow: '#ffd700',
+      bgDark: '#0a0800',
+      bgPanel: 'rgba(30, 25, 0, 0.18)',
+      text: '#ffeb80',
+      border: '#ffd700'
+    },
+    'toxic-orange': {
+      name: 'Toxic Orange',
+      primary: '#ff6600',
+      secondary: '#ff9933',
+      glow: '#ff6600',
+      bgDark: '#0f0800',
+      bgPanel: 'rgba(30, 15, 0, 0.18)',
+      text: '#ffb366',
+      border: '#ff6600'
+    },
+    'arctic-white': {
+      name: 'Arctic White',
+      primary: '#ffffff',
+      secondary: '#e0e0e0',
+      glow: '#ffffff',
+      bgDark: '#0a0a0a',
+      bgPanel: 'rgba(20, 20, 20, 0.18)',
+      text: '#f0f0f0',
+      border: '#ffffff'
+    },
+    'synthwave': {
+      name: 'Synthwave',
+      primary: '#ff00ff',
+      secondary: '#00ffff',
+      glow: '#ff00ff',
+      bgDark: '#0d0221',
+      bgPanel: 'rgba(25, 5, 50, 0.18)',
+      text: '#00ffff',
+      border: '#ff00ff'
+    }
+  };
+
+  function setTheme(themeName: string) {
+    const theme = themes[themeName as keyof typeof themes];
+    if (!theme) return;
+
+    const root = document.documentElement;
+    root.style.setProperty('--theme-primary', theme.primary);
+    root.style.setProperty('--theme-secondary', theme.secondary);
+    root.style.setProperty('--theme-glow', theme.glow);
+    root.style.setProperty('--theme-bg-dark', theme.bgDark);
+    root.style.setProperty('--theme-bg-panel', theme.bgPanel);
+    root.style.setProperty('--theme-text', theme.text);
+    root.style.setProperty('--theme-border', theme.border);
+
+    // Update active state
+    document.querySelectorAll('.theme-preset').forEach(preset => {
+      preset.classList.remove('active');
+    });
+    const activePreset = document.querySelector(`[data-theme="${themeName}"]`);
+    if (activePreset) {
+      activePreset.classList.add('active');
+    }
+
+    // Update theme name display
+    const themeNameEl = document.getElementById('current-theme-name');
+    if (themeNameEl) {
+      themeNameEl.textContent = theme.name;
+    }
+
+    // Save to localStorage
+    localStorage.setItem('matrixHubTheme', themeName);
+  }
+
+  function applyCustomColor() {
+    const primary = (document.getElementById('custom-primary') as HTMLInputElement)?.value || '#00ff00';
+    const secondary = (document.getElementById('custom-secondary') as HTMLInputElement)?.value || '#00ffff';
+
+    const root = document.documentElement;
+    root.style.setProperty('--theme-primary', primary);
+    root.style.setProperty('--theme-secondary', secondary);
+    root.style.setProperty('--theme-glow', primary);
+    root.style.setProperty('--theme-border', primary);
+    root.style.setProperty('--theme-text', secondary);
+
+    // Update theme name
+    const themeNameEl = document.getElementById('current-theme-name');
+    if (themeNameEl) {
+      themeNameEl.textContent = 'Custom';
+    }
+
+    // Remove active state from presets
+    document.querySelectorAll('.theme-preset').forEach(preset => {
+      preset.classList.remove('active');
+    });
+
+    // Save custom colors
+    localStorage.setItem('matrixHubTheme', 'custom');
+    localStorage.setItem('matrixHubCustomPrimary', primary);
+    localStorage.setItem('matrixHubCustomSecondary', secondary);
+  }
+
+  // Initialize theme on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('matrixHubTheme') || 'classic';
+    
+    if (savedTheme === 'custom') {
+      const customPrimary = localStorage.getItem('matrixHubCustomPrimary') || '#00ff00';
+      const customSecondary = localStorage.getItem('matrixHubCustomSecondary') || '#00ffff';
+      (document.getElementById('custom-primary') as HTMLInputElement).value = customPrimary;
+      (document.getElementById('custom-secondary') as HTMLInputElement).value = customSecondary;
+      applyCustomColor();
+    } else {
+      setTheme(savedTheme);
+    }
+
+    // Add click handlers
+    document.querySelectorAll('.theme-preset').forEach(preset => {
+      preset.addEventListener('click', () => {
+        const theme = preset.getAttribute('data-theme');
+        if (theme) setTheme(theme);
+      });
+    });
+
+    const applyBtn = document.getElementById('applyCustomBtn');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', applyCustomColor);
+    }
+  });
+</script>
+
+<style>
+  .theme-customizer-panel {
+    --matrix-pulse-color: var(--theme-border);
+    margin: 30px auto;
+    max-width: 900px;
+  }
+
+  .theme-subtitle {
+    text-align: center;
+    color: var(--theme-text);
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .current-theme-display {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .theme-label {
+    color: var(--theme-text);
+    margin-right: 10px;
+    opacity: 0.8;
+  }
+
+  #current-theme-name {
+    color: var(--theme-primary);
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--theme-glow);
+  }
+
+  .theme-presets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .theme-preset {
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+
+  .theme-preset:hover {
+    transform: scale(1.05);
+  }
+
+  .theme-preset.active .theme-preview {
+    box-shadow: 0 0 20px var(--theme-glow), 0 0 40px var(--theme-glow);
+  }
+
+  .theme-preview {
+    width: 100%;
+    height: 80px;
+    border: 2px solid;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .preview-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    opacity: 0.8;
+  }
+
+  .theme-preset-name {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--theme-text);
+  }
+
+  .custom-color-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--theme-border);
+  }
+
+  .custom-color-section h3 {
+    text-align: center;
+    margin: 0 0 15px 0;
+    font-size: 1rem;
+    color: var(--theme-primary);
+    font-family: 'Courier New', monospace;
+  }
+
+  .custom-color-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    align-items: end;
+  }
+
+  .color-picker-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .color-picker-wrapper label {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--theme-text);
+  }
+
+  .color-picker-wrapper input[type="color"] {
+    width: 100%;
+    height: 40px;
+    border: 2px solid var(--theme-border);
+    border-radius: 5px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .custom-apply-btn {
+    grid-column: 1 / -1;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 768px) {
+    .theme-presets {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .custom-color-controls {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

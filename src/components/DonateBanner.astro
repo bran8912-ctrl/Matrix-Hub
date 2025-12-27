@@ -1,0 +1,249 @@
+---
+// Donate Banner with copyable wallet addresses
+---
+
+<div id="donate-banner">
+  <div class="donate-title">⚡ Keep The Matrix Alive ⚡</div>
+  <div class="donate-message">
+    Server costs and development require resources. Your contribution helps maintain free access for everyone in the Matrix.
+  </div>
+  <div class="donate-wallets">
+    <div class="wallet-item" data-address="bc1qfv2lky7ydu9yg6xwdmqea4h4n8mnvfry86nnuw">
+      <span class="wallet-label">BTC:</span>
+      <span class="wallet-address">bc1qfv2lky7ydu9yg6xwdmqea4h4n8mnvfry86nnuw</span>
+    </div>
+    <div class="wallet-item" data-address="0x8711467ad4baf15ab7691a4dadc139fcc9c4da54">
+      <span class="wallet-label">ETH:</span>
+      <span class="wallet-address">0x8711467ad4baf15ab7691a4dadc139fcc9c4da54</span>
+    </div>
+    <div class="wallet-item" data-address="6A5DvUXRH2ZxPYNG1WsdyanQ3QuU6vuWqCjgVx487UYx">
+      <span class="wallet-label">SOL:</span>
+      <span class="wallet-address">6A5DvUXRH2ZxPYNG1WsdyanQ3QuU6vuWqCjgVx487UYx</span>
+    </div>
+  </div>
+  <div class="donate-click-hint">Click any address to copy</div>
+  <div class="donate-buttons-container">
+    <a href="https://t.me/matrixhuborg" target="_blank" rel="noopener noreferrer" class="telegram-join-btn">
+      <span>📢 Join Telegram Channel</span>
+    </a>
+    <a href="https://www.paypal.me/bletourneau692" target="_blank" rel="noopener noreferrer" class="paypal-donate-btn">
+      <span>💳 Donate via PayPal</span>
+    </a>
+    <a href="https://venmo.com/code?user_id=2943286704603136860&created=1765731516" target="_blank" rel="noopener noreferrer" class="venmo-donate-btn">
+      <span>📱 Donate via Venmo</span>
+    </a>
+    <a href="https://cash.app/$bran8912" target="_blank" rel="noopener noreferrer" class="cashapp-donate-btn">
+      <span>💵 Donate via CashApp</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  // Copy to clipboard functionality with user feedback
+  document.addEventListener('DOMContentLoaded', () => {
+    const walletItems = document.querySelectorAll('.wallet-item');
+    
+    walletItems.forEach(item => {
+      item.addEventListener('click', async () => {
+        const address = item.getAttribute('data-address');
+        const label = item.querySelector('.wallet-label');
+        
+        if (address && label) {
+          try {
+            await navigator.clipboard.writeText(address);
+            const originalText = label.textContent;
+            label.textContent = 'Copied!';
+            label.style.color = '#00ff00';
+            
+            setTimeout(() => {
+              label.textContent = originalText;
+              label.style.color = '';
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  #donate-banner {
+    margin: 0 auto 20px auto;
+    padding: 15px 20px;
+    width: 90%;
+    max-width: 800px;
+    background: var(--theme-bg-panel);
+    border: 2px solid var(--theme-primary, #00ff00);
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    box-shadow:
+      0 0 0 calc(var(--matrix-bass) * 2px) var(--theme-primary, #00ff00),
+      0 0 calc(25px + var(--matrix-bass) * 28px) var(--theme-primary, #00ff00),
+      inset 0 0 15px rgba(0, 255, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  #donate-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+    animation: donateShimmer 3s infinite;
+  }
+
+  @keyframes donateShimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  .donate-title {
+    font-size: 16px;
+    color: var(--theme-primary, #00ff00);
+    margin-bottom: 8px;
+    text-shadow: 0 0 10px var(--theme-primary, #00ff00);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .donate-message {
+    font-size: 13px;
+    color: var(--theme-secondary, #00ffff);
+    margin-bottom: 12px;
+    opacity: 0.9;
+    line-height: 1.4;
+  }
+
+  .donate-wallets {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .wallet-item {
+    background: rgba(0, 255, 0, 0.05);
+    border: 1px solid var(--theme-primary, #00ff00);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: var(--theme-text, #00ffff);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .wallet-item:hover {
+    background: rgba(0, 255, 0, 0.15);
+    box-shadow: 0 0 15px var(--theme-primary, #00ff00);
+    transform: scale(1.02);
+  }
+
+  .wallet-label {
+    color: var(--theme-primary, #00ff00);
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  .wallet-address {
+    font-size: 10px;
+    word-break: break-all;
+    opacity: 0.85;
+  }
+
+  .donate-click-hint {
+    font-size: 9px;
+    color: var(--theme-secondary, #00ffff);
+    margin-top: 8px;
+    opacity: 0.6;
+  }
+
+  .donate-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .paypal-donate-btn,
+  .venmo-donate-btn,
+  .cashapp-donate-btn,
+  .telegram-join-btn {
+    display: inline-block;
+    border: 2px solid var(--theme-primary, #00ff00);
+    border-radius: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+  }
+
+  .paypal-donate-btn {
+    background: linear-gradient(135deg, #003087, #001a4d);
+  }
+
+  .venmo-donate-btn {
+    background: linear-gradient(135deg, #008CFF, #004d8c);
+  }
+
+  .cashapp-donate-btn {
+    background: linear-gradient(135deg, #00D632, #007a1d);
+  }
+
+  .telegram-join-btn {
+    background: linear-gradient(135deg, #0088cc, #005580);
+  }
+
+  .paypal-donate-btn:hover,
+  .venmo-donate-btn:hover,
+  .cashapp-donate-btn:hover,
+  .telegram-join-btn:hover {
+    box-shadow: 0 0 25px var(--theme-primary, #00ff00);
+    transform: scale(1.05);
+  }
+
+  .paypal-donate-btn span,
+  .venmo-donate-btn span,
+  .telegram-join-btn span {
+    color: var(--theme-primary, #00ff00);
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--theme-primary, #00ff00);
+    letter-spacing: 1px;
+  }
+
+  .cashapp-donate-btn span {
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 600px) {
+    .donate-buttons-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    .venmo-donate-btn, .cashapp-donate-btn, .paypal-donate-btn, .telegram-join-btn {
+      width: 80%;
+    }
+    .donate-wallets {
+      flex-direction: column;
+      align-items: center;
+    }
+    .wallet-item {
+      width: 90%;
+    }
+  }
+</style>
