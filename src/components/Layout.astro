@@ -39,6 +39,35 @@ const { title } = Astro.props;
     <Footer />
     
     <!-- Oracle Bot Widget -->
+    <div id="matrixBotButton" role="button" aria-label="Open Oracle chat" title="Ask the Oracle">◈</div>
+
+    <div id="matrixBotWindow">
+      <div id="matrixBotHeader">
+        <div class="oracle-header__title">THE ORACLE</div>
+        <div class="oracle-header__controls">
+          <button id="oracleAppsBtn" class="oracle-header__btn" type="button" title="Apps">APPS</button>
+          <button id="oracleVoiceBtn" class="oracle-header__btn" type="button" aria-pressed="false" title="Voice">VOICE</button>
+          <select id="oracleVoiceSelect" title="Choose Oracle Voice">
+            <option value="default">Default</option>
+            <option value="matrix">Matrix</option>
+            <option value="cyber">Cyber</option>
+            <option value="oracle">Oracle</option>
+            <option value="neon">Neon</option>
+          </select>
+          <button id="oracleCloseBtn" class="oracle-header__btn" type="button" title="Close">×</button>
+        </div>
+      </div>
+
+      <div id="oracleQuickActions"></div>
+      <div id="oracleAppsPanel" hidden></div>
+      <div id="matrixBotMessages"></div>
+
+      <div id="matrixBotInputArea">
+        <input id="matrixBotInput" type="text" placeholder="Ask the Oracle...">
+        <button id="matrixBotSend">➤</button>
+      </div>
+    </div>
+
     <div id="oracleMatrixToasts"></div>
     <script type="module" src="/oracle/oracle-secretary.js"></script>
   </body>

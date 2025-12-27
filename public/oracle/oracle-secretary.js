@@ -137,11 +137,35 @@ function oracleToast(title, body, ttlMs = 4200) {
 }
 
 function getSpeechVoice() {
+  const select = document.getElementById("oracleVoiceSelect");
+  const selectedVoice = select?.value || "default";
   const voices = window.speechSynthesis?.getVoices?.() || [];
-  const preferred = voices.find((v) => /en/i.test(v.lang) && /female|woman|zira|samantha|victoria/i.test(v.name))
-    || voices.find((v) => /en/i.test(v.lang))
-    || voices[0];
-  return preferred || null;
+  
+  // Matrix-themed voice selection
+  let preferred;
+  if (selectedVoice === "matrix") {
+    // Matrix: Lower pitch, slower rate for that digital voice effect
+    preferred = voices.find((v) => /en/i.test(v.lang) && /male|david|alex|tom/i.test(v.name))
+      || voices.find((v) => /en/i.test(v.lang));
+  } else if (selectedVoice === "cyber") {
+    // Cyber: Mid-range, slightly robotic
+    preferred = voices.find((v) => /en/i.test(v.lang) && /female|samantha|victoria/i.test(v.name))
+      || voices.find((v) => /en/i.test(v.lang));
+  } else if (selectedVoice === "oracle") {
+    // Oracle: Deep, authoritative voice
+    preferred = voices.find((v) => /en/i.test(v.lang) && /male.*us|alex|daniel/i.test(v.name))
+      || voices.find((v) => /en/i.test(v.lang));
+  } else if (selectedVoice === "neon") {
+    // Neon: Higher pitch, faster rate
+    preferred = voices.find((v) => /en/i.test(v.lang) && /female|zira|hazel/i.test(v.name))
+      || voices.find((v) => /en/i.test(v.lang));
+  } else {
+    // Default
+    preferred = voices.find((v) => /en/i.test(v.lang) && /female|woman|zira|samantha|victoria/i.test(v.name))
+      || voices.find((v) => /en/i.test(v.lang));
+  }
+  
+  return preferred || voices[0] || null;
 }
 
 function speakIfEnabled(state, text) {
@@ -152,9 +176,33 @@ function speakIfEnabled(state, text) {
   // Speech often requires a user gesture; this will be a no-op if blocked.
   synth.cancel();
   const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 0.92;
-  utter.pitch = 0.92;
-  utter.volume = 0.95;
+  
+  // Get selected voice mode for custom settings
+  const select = document.getElementById("oracleVoiceSelect");
+  const selectedVoice = select?.value || "default";
+  
+  // Apply voice-specific settings
+  if (selectedVoice === "matrix") {
+    utter.rate = 0.80;
+    utter.pitch = 0.70;
+    utter.volume = 0.90;
+  } else if (selectedVoice === "cyber") {
+    utter.rate = 0.90;
+    utter.pitch = 0.85;
+    utter.volume = 0.95;
+  } else if (selectedVoice === "oracle") {
+    utter.rate = 0.75;
+    utter.pitch = 0.60;
+    utter.volume = 1.00;
+  } else if (selectedVoice === "neon") {
+    utter.rate = 1.10;
+    utter.pitch = 1.10;
+    utter.volume = 0.95;
+  } else {
+    utter.rate = 0.92;
+    utter.pitch = 0.92;
+    utter.volume = 0.95;
+  }
 
   const voice = getSpeechVoice();
   if (voice) utter.voice = voice;
@@ -517,7 +565,7 @@ function init() {
     const open = botWin.style.display !== "flex";
     setWindowOpen(open);
     if (open && conversation.length === 0) {
-      const greet = "The door is already open.\n\nTry: “run deal scanner”, “refresh daily drops”, “play music”, or “/tasks”.";
+      const matrixGreetings = ["Wake up, Neo... The Matrix has you.\n\nFollow the white rabbit. Try asking about deals, music, or MTX tokens.", "The door is already open.\n\nI can help you navigate the system. Try: 'run deal scanner', 'play music', or 'what is mtx'.", "Welcome to the Matrix Hub.\n\nI am the Oracle. Ask me about daily drops, casino games, or site features.", "You've taken the red pill.\n\nThe path ahead reveals itself. Ask about tools, themes, or the MTX ecosystem."]; const greet = matrixGreetings[Math.floor(Math.random() * matrixGreetings.length)];
       conversation.push({ role: "assistant", content: greet });
       messages.appendChild(createMessageEl("assistant", greet));
       messages.scrollTop = messages.scrollHeight;
