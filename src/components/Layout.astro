@@ -27,6 +27,8 @@ const { title } = Astro.props;
     </script>
     <title>{title}</title>
     <link rel="stylesheet" href="/oracle/oracle-secretary.css" />
+    <!-- Note: External scripts (Google Analytics, Telegram Widget) are loaded without integrity hashes 
+         as they are dynamically updated by their providers. Consider implementing CSP headers for additional security. -->
   </head>
   <body>
     <MatrixRain />

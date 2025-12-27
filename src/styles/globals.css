@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
-/* Matrix Theme CSS Variables */
+/* Matrix Theme CSS Variables - Default to Classic Matrix */
 :root {
   --theme-primary: #00ff00;
   --theme-secondary: #00ffff;
@@ -14,17 +14,6 @@
   
   /* Audio-reactive UI pulse (0..1) */
   --matrix-bass: 0;
-}
-
-/* Preset Theme Classes */
-.theme-classic {
-  --theme-primary: #00ff00;
-  --theme-secondary: #00ffff;
-  --theme-glow: #00ff00;
-  --theme-bg-dark: #000000;
-  --theme-bg-panel: rgba(0, 20, 0, 0.18);
-  --theme-text: #00ffff;
-  --theme-border: #00ff00;
 }
 
 .theme-cyber-purple {
