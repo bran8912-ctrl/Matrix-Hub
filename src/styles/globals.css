@@ -1,10 +1,78 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+/* Matrix Theme CSS Variables */
+:root {
+  --theme-primary: #00ff00;
+  --theme-secondary: #00ffff;
+  --theme-glow: #00ff00;
+  --theme-bg-dark: #000000;
+  --theme-bg-panel: rgba(0, 20, 0, 0.18);
+  --theme-text: #00ffff;
+  --theme-border: #00ff00;
+  --theme-name: 'Classic Matrix';
+  
+  /* Audio-reactive UI pulse (0..1) */
+  --matrix-bass: 0;
+}
+
+/* Preset Theme Classes */
+.theme-classic {
+  --theme-primary: #00ff00;
+  --theme-secondary: #00ffff;
+  --theme-glow: #00ff00;
+  --theme-bg-dark: #000000;
+  --theme-bg-panel: rgba(0, 20, 0, 0.18);
+  --theme-text: #00ffff;
+  --theme-border: #00ff00;
+}
+
+.theme-cyber-purple {
+  --theme-primary: #bf00ff;
+  --theme-secondary: #ff00ff;
+  --theme-glow: #bf00ff;
+  --theme-bg-dark: #0a000f;
+  --theme-bg-panel: rgba(20, 0, 30, 0.18);
+  --theme-text: #ff66ff;
+  --theme-border: #bf00ff;
+}
+
+.theme-neon-blue {
+  --theme-primary: #00bfff;
+  --theme-secondary: #00ffff;
+  --theme-glow: #00bfff;
+  --theme-bg-dark: #000a14;
+  --theme-bg-panel: rgba(0, 15, 30, 0.18);
+  --theme-text: #66d9ff;
+  --theme-border: #00bfff;
+}
+
 @layer base {
-  a {
-    @apply hover:underline hover:underline-offset-2 hover:decoration-green-500;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
+  
+  body {
+    background: var(--theme-bg-dark);
+    color: var(--theme-text);
+    text-shadow: 0 0 7px var(--theme-glow);
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: Arial, sans-serif;
+  }
+  
+  a {
+    @apply hover:underline hover:underline-offset-2;
+    color: var(--theme-primary);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-shadow: 0 0 10px var(--theme-glow);
+  }
+  
   td {
     @apply pt-4 pb-6;
   }
@@ -12,6 +80,92 @@
     @apply py-4;
   }
   img {
-    @apply border rounded-sm border-neutral-500;
+    @apply border rounded-sm;
+    border-color: var(--theme-border);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--theme-primary);
+    text-shadow: 0 0 10px var(--theme-glow);
+  }
+}
+
+/* Matrix Rain Canvas */
+#matrix-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Panel Component Base Styles */
+.panel {
+  --matrix-pulse-color: var(--theme-border);
+  border: 2px solid var(--theme-border);
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(120deg, var(--theme-bg-panel), rgba(0,0,0,0.10) 80%, var(--theme-bg-panel)), var(--theme-bg-panel);
+  backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
+  box-shadow:
+    0 0 0 calc(var(--matrix-bass) * 2px) var(--matrix-pulse-color),
+    0 0 calc(18px + var(--matrix-bass) * 32px) var(--matrix-pulse-color),
+    0 0 40px 0 rgba(0,255,0,0.08);
+  will-change: box-shadow, background;
+  transition: background 0.5s, box-shadow 0.5s;
+  opacity: 0.80;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.panel-text {
+  padding: 10px 0;
+  font-size: 1.1rem;
+}
+
+/* Button Styles */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: var(--theme-bg-dark);
+  color: var(--theme-primary);
+  border: 1px solid var(--theme-border);
+  border-radius: 6px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--theme-bg-panel);
+  box-shadow: 0 0 10px var(--theme-glow);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .panel {
+    padding: 15px;
+  }
+  
+  .panel-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel {
+    padding: 10px;
   }
 }

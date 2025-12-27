@@ -1,0 +1,17 @@
+---
+interface Props {
+  title?: string;
+  class?: string;
+}
+
+const { title, class: className } = Astro.props;
+---
+
+<div class:list={["panel", className]}>
+  {title && <h2>{title}</h2>}
+  <slot />
+</div>
+
+<style>
+  /* Component-specific styles can be added here if needed */
+</style>

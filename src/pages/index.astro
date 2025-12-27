@@ -1,23 +1,88 @@
 ---
-import DailyDrops from "../components/DailyDrops.astro";
 import Layout from "../components/Layout.astro";
-import MatrixGaming from "../components/MatrixGaming.astro";
-import TemuSection from "../components/TemuSection.astro";
+import MTXEcosystem from "../components/MTXEcosystem.astro";
+import CasinoGamesPanel from "../components/CasinoGamesPanel.astro";
+import DonateBanner from "../components/DonateBanner.astro";
+import TelegramWidget from "../components/TelegramWidget.astro";
+import MusicPlayer from "../components/MusicPlayer.astro";
 
 export const prerender = true;
 ---
 
-<Layout title="Matrix Hub - Deals & Opportunities">
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold text-green-400 mb-4">
-      <span class="text-green-500">&#10022;</span> Welcome to the Matrix Hub
-    </h1>
-    <p class="text-neutral-300 text-lg">
-      Your gateway to exclusive deals, AI tools, and digital opportunities. The Oracle awaits in the bottom right corner.
+<Layout title="The Matrix Hub - Blockchain Tools & Casino">
+  <div class="homepage-header">
+    <h1 class="matrix-title">THE MATRIX HUB</h1>
+    <p class="matrix-subtitle">
+      Your gateway to blockchain tools, MTX token ecosystem, and provably fair casino games.
     </p>
   </div>
-  
-  <MatrixGaming />
-  <DailyDrops />
-  <TemuSection />
+
+  <!-- MTX Ecosystem Section -->
+  <MTXEcosystem />
+
+  <!-- Casino Games Panel -->
+  <CasinoGamesPanel />
+
+  <!-- Donation Banner -->
+  <DonateBanner />
+
+  <!-- Telegram Widget -->
+  <TelegramWidget />
+
+  <!-- Music Player -->
+  <MusicPlayer />
 </Layout>
+
+<style>
+  .homepage-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .matrix-title {
+    font-size: 2.8rem;
+    color: var(--theme-primary);
+    text-shadow: 0 0 20px var(--theme-glow);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow-pulse {
+    from {
+      text-shadow: 0 0 10px var(--theme-glow), 0 0 20px var(--theme-glow);
+    }
+    to {
+      text-shadow: 0 0 20px var(--theme-glow), 0 0 40px var(--theme-glow), 0 0 60px var(--theme-glow);
+    }
+  }
+
+  .matrix-subtitle {
+    font-size: 1.2rem;
+    color: var(--theme-text);
+    text-shadow: 0 0 10px var(--theme-secondary);
+    font-family: 'Courier New', monospace;
+  }
+
+  @media (max-width: 768px) {
+    .matrix-title {
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+
+    .matrix-subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .matrix-title {
+      font-size: 1.8rem;
+    }
+
+    .matrix-subtitle {
+      font-size: 0.9rem;
+    }
+  }
+</style>

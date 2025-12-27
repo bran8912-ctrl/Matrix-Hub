@@ -1,0 +1,145 @@
+---
+import Panel from './Panel.astro';
+---
+
+<Panel title="MTX COIN CASINO" class="casino-panel">
+  <div class="panel-text">
+    <strong style="color:var(--theme-primary);">Play Casino Games with MTX</strong><br>
+    <span style="color:var(--theme-secondary);">
+      The Matrix-Hub Casino lets users play slots, blackjack, roulette, and more using MTX coins.<br>
+      MTX is the exclusive currency for all casino games. Win, spend, and stake MTX to unlock new features and rewards.
+    </span>
+  </div>
+  
+  <div class="contract-info">
+    <strong>Live Contract Addresses:</strong><br>
+    <ul>
+      <li><strong>MTX Token (MatrixHubCoin):</strong> <span class="contract-address">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</span></li>
+      <li><strong>CasinoCore:</strong> <span class="contract-address">0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9</span></li>
+      <li><strong>CasinoReserve:</strong> <span class="contract-address">0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</span></li>
+    </ul>
+    <p style="margin-top: 10px;"><strong>Test Locally:</strong> Connect your wallet to the local Hardhat node and interact with the MTX Casino UI for live contract testing.</p>
+  </div>
+  
+  <div class="games-list">
+    <h3 style="color:var(--theme-primary); font-size: 1.13rem; margin-bottom: 10px;">MTX Casino Games</h3>
+    <ul>
+      <li><strong>Dice Roll:</strong> Player selects a target number (0–99). Win if roll is under target. Adjustable risk, transparent odds, fixed edge.</li>
+      <li><strong>Coin Flip:</strong> 50/50 outcome (Heads or Tails). Low variance, ideal onboarding, simple and auditable.</li>
+      <li><strong>Number Match (1–100):</strong> Player selects a number from 1 to 100. Exact match wins. High variance, clear odds, fair EV.</li>
+      <li><strong>Slot Probability Game:</strong> Three-reel weighted symbol system. Tuned RTP, controlled volatility, no hidden multipliers.</li>
+      <li><strong>Crash <span style="color:var(--theme-secondary);">(Phase 2)</span>:</strong> Multiplier increases until crash. Cash out before crash. High engagement, volatility limited by reserve, transparent logic.</li>
+      <li><strong>PvP Wager Arena <span style="color:var(--theme-secondary);">(Phase 3)</span>:</strong> Player-versus-player MTX wagers. No house edge, MTX utility expansion, community-driven.</li>
+    </ul>
+  </div>
+  
+  <div class="how-it-works">
+    <strong style="color:var(--theme-primary);">How It Works:</strong><br>
+    <ol>
+      <li>Connect your wallet and deposit MTX.</li>
+      <li>Choose a casino game and place your bet.</li>
+      <li>Win MTX, stake for rewards, or withdraw anytime.</li>
+    </ol>
+    <p style="margin-top: 10px;"><em style="color:var(--theme-secondary);">MTX Coin Casino is built for users—provably fair, secure, and rewarding.</em></p>
+  </div>
+  
+  <div class="casino-links">
+    <h4 style="color:var(--theme-primary); margin-bottom: 10px;">Learn More:</h4>
+    <ul>
+      <li><a href="/docs/MTX_Casino_Architecture.md" target="_blank">Casino Architecture</a></li>
+      <li><a href="/docs/MTX_Casino_Games.md" target="_blank">Casino Games</a></li>
+      <li><a href="/docs/MTX_Casino_Game_Math.md" target="_blank">Casino Game Math</a></li>
+      <li><a href="/docs/MTX_Provably_Fair.md" target="_blank">Provably Fair System</a></li>
+      <li><a href="/docs/MTX_Responsible_Play.md" target="_blank">Responsible Play</a></li>
+    </ul>
+  </div>
+</Panel>
+
+<style>
+  .casino-panel {
+    --matrix-pulse-color: var(--theme-border);
+    margin: 30px auto;
+    max-width: 900px;
+    border: 2px solid var(--theme-border);
+    box-shadow: 0 0 24px var(--theme-glow);
+  }
+  
+  .contract-info {
+    margin: 18px 0;
+    color: var(--theme-primary);
+    font-size: 1.01rem;
+    background: rgba(0,0,0,0.08);
+    border-radius: 6px;
+    padding: 12px;
+  }
+  
+  .contract-info ul {
+    margin: 10px 0 0 20px;
+    font-size: 1em;
+  }
+  
+  .contract-info li {
+    margin: 5px 0;
+  }
+  
+  .contract-address {
+    color: var(--theme-secondary);
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+  }
+  
+  .games-list {
+    margin: 24px 0;
+  }
+  
+  .games-list ul {
+    margin-left: 20px;
+    font-size: 1.05rem;
+    color: var(--theme-text);
+  }
+  
+  .games-list li {
+    margin: 8px 0;
+  }
+  
+  .how-it-works {
+    margin: 18px 0;
+    color: var(--theme-text);
+    font-size: 1.08rem;
+    background: rgba(0,0,0,0.08);
+    border-radius: 6px;
+    padding: 12px;
+  }
+  
+  .how-it-works ol {
+    margin: 10px 0 0 20px;
+  }
+  
+  .how-it-works li {
+    margin: 5px 0;
+  }
+  
+  .casino-links {
+    margin-top: 24px;
+  }
+  
+  .casino-links ul {
+    margin-left: 20px;
+    font-size: 1.05rem;
+  }
+  
+  .casino-links li {
+    margin: 8px 0;
+  }
+  
+  .casino-links a {
+    color: var(--theme-primary);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  
+  .casino-links a:hover {
+    color: var(--theme-secondary);
+    text-shadow: 0 0 10px var(--theme-glow);
+  }
+</style>
