@@ -37,3 +37,11 @@ Just builders improving the system.
 
 If you helped shape Matrix Hub,
 you are part of it.
+
+---
+
+**Related Documentation:**
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [MTX Whitepaper](MTX_Whitepaper.md)
+
+**[← Back to Documentation Index](../docs/)**
