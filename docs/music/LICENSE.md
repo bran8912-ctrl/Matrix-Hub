@@ -4,7 +4,7 @@ Matrix-Hub.org
 This directory contains third-party music assets used for ambient background audio,
 UI atmosphere, and non-commercial user experience within the Matrix Hub platform.
 
-All tracks listed below are either royalty-free or licensed under Creative Commons
+All tracks listed below are either royalty-free or licensed under [Creative Commons](https://creativecommons.org/)
 licenses that permit redistribution and public use with attribution.
 
 ---
@@ -98,3 +98,11 @@ Music assets are included to enhance atmosphere and user experience
 and remain the property of their respective creators.
 
 Respect the signal.
+
+---
+
+**Related Documentation:**
+- [Music Submission Guide](SUBMIT_MUSIC.md)
+- [Code of Conduct](../CODE_OF_CONDUCT.md)
+
+**[← Back to Documentation Index](../../docs/)**

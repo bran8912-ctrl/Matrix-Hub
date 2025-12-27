@@ -42,3 +42,12 @@ Matrix Hub reserves the right to reject:
 - Off-theme music
 
 Signal only.
+
+---
+
+**Related Documentation:**
+- [Music License & Attribution](LICENSE.md)
+- [Contributors](../CONTRIBUTORS.md)
+- [Code of Conduct](../CODE_OF_CONDUCT.md)
+
+**[← Back to Documentation Index](../../docs/)**
