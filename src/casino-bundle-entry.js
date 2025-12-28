@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import WalletConnect from "./components/WalletConnect";
-import GameTabs from "./casino/ui/GameTabs";
+import GameTabs from "./casino/_legacy/ui/GameTabs";
 
 
 function mountMTXCasino(domNode) {
