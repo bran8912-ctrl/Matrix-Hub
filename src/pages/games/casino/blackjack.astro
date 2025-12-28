@@ -1,12 +1,10 @@
 ---
-import WalletConnect from "../../../components/WalletConnect.tsx";
+import Layout from "../../../components/Layout.astro";
+import BlackjackGame from "../../../casino/blackjack/BlackjackGame";
 ---
 
-<h1 class="text-2xl font-bold mb-4">Blackjack</h1>
-<p>Beat the dealer to win MTX! Each hand costs 2 MTX.</p>
-<WalletConnect client:load />
-
-<div class="mt-6">
-  <!-- Casino blackjack game UI goes here -->
-  <p class="italic">[Blackjack game coming soon]</p>
-</div>
+<Layout title="Blackjack - Matrix-Hub Casino">
+  <div class="container mx-auto px-4 py-8">
+    <BlackjackGame client:load mtxBalance={0} />
+  </div>
+</Layout>

@@ -1,12 +1,10 @@
 ---
-import WalletConnect from "../../../components/WalletConnect.tsx";
+import Layout from "../../../components/Layout.astro";
+import RouletteGame from "../../../casino/roulette/RouletteGame";
 ---
 
-<h1 class="text-2xl font-bold mb-4">Roulette</h1>
-<p>Bet your MTX and spin the wheel! Minimum bet: 1 MTX.</p>
-<WalletConnect client:load />
-
-<div class="mt-6">
-  <!-- Casino roulette game UI goes here -->
-  <p class="italic">[Roulette game coming soon]</p>
-</div>
+<Layout title="Roulette - Matrix-Hub Casino">
+  <div class="container mx-auto px-4 py-8">
+    <RouletteGame client:load mtxBalance={0} />
+  </div>
+</Layout>

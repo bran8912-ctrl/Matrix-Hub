@@ -1,0 +1,10 @@
+---
+import Layout from "../../../components/Layout.astro";
+import DiceGame from "../../../casino/dice/DiceGame";
+---
+
+<Layout title="Dice - Matrix-Hub Casino">
+  <div class="container mx-auto px-4 py-8">
+    <DiceGame client:load mtxBalance={0} />
+  </div>
+</Layout>
