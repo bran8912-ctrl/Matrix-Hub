@@ -15,9 +15,7 @@ Variance changes, math does not.
 ---
 
 **Related Documentation:**
-- [Casino Games](MTX_Casino_Games.md)
-- [Provably Fair System](MTX_Casino_Provably_Fair.md)
-- [Tokenomics](MTX_Tokenomics.md)
-- [Casino Architecture](MTX_Casino_Architecture.md)
-
-**[← Back to Documentation Index](../docs/)**
+- [Casino Games](/docs/casino-games)
+- [Provably Fair System](/docs/provably-fair-system)
+- [MTX Tokenomics](/docs/mtx-tokenomics)
+- [Casino Architecture](/docs/casino-architecture)

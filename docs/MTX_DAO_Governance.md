@@ -1,8 +1,8 @@
 # MTX Governance
 
 ## Scope
-- Adjust [casino](MTX_Casino_Overview.md) percentages
-- Enable new [games](MTX_Casino_Games.md)
+- Adjust casino percentages
+- Enable new [games](/docs/casino-games)
 - Pause systems in emergencies
 
 ## Model
@@ -15,8 +15,6 @@
 ---
 
 **Related Documentation:**
-- [MTX Whitepaper](MTX_Whitepaper.md)
-- [Tokenomics](MTX_Tokenomics.md)
-- [Casino Architecture](MTX_Casino_Architecture.md)
-
-**[← Back to Documentation Index](../docs/)**
+- [MTX Whitepaper](/docs/mtx-whitepaper)
+- [MTX Tokenomics](/docs/mtx-tokenomics)
+- [Casino Architecture](/docs/casino-architecture)

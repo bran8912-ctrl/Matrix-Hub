@@ -21,8 +21,6 @@ MTX value is supported by [utility](https://en.wikipedia.org/wiki/Utility_token)
 ---
 
 **Related Documentation:**
-- [MTX Whitepaper](MTX_Whitepaper.md)
-- [Casino Game Math](MTX_Casino_Game_Math.md)
-- [DAO Governance](MTX_DAO_Governance.md)
-
-**[← Back to Documentation Index](../docs/)**
+- [MTX Whitepaper](/docs/mtx-whitepaper)
+- [Casino Game Math](/docs/casino-game-math)
+- [DAO Governance](/docs/dao-governance)
