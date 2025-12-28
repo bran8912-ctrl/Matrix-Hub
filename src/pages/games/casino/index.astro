@@ -1,26 +1,91 @@
 ---
+import Layout from "../../../components/Layout.astro";
 import WalletConnect from "../../../components/WalletConnect.tsx";
 ---
 
-<h1 class="text-3xl font-bold mb-4">Casino</h1>
-<p>Play games to win or spend MTX!</p>
-<WalletConnect client:load />
+<Layout title="Casino - Matrix-Hub">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-6 text-green-400">🎰 MTX Casino</h1>
+    <p class="text-xl text-gray-300 mb-4">Play games to win or spend MTX!</p>
+    
+    <div class="mb-8">
+      <WalletConnect client:load />
+    </div>
 
-<div class="mt-8">
-  <h2 class="text-xl font-semibold mb-2">Choose Your Game</h2>
-  <ul class="list-disc ml-6">
-    <li><a href="/games/casino/slots">Slots</a> — Spin to win MTX</li>
-    <li><a href="/games/casino/blackjack">Blackjack</a> — Beat the dealer for MTX</li>
-    <li><a href="/games/casino/roulette">Roulette</a> — Bet MTX, win big</li>
-  </ul>
-</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <!-- Slots -->
+      <a href="/games/casino/slots" class="bg-gray-800 hover:bg-gray-700 p-6 rounded-lg border-2 border-green-500 transition-colors">
+        <div class="text-5xl mb-3 text-center">🎰</div>
+        <h3 class="text-2xl font-bold text-green-400 mb-2">Slots</h3>
+        <p class="text-gray-300 mb-2">Spin the reels to win MTX!</p>
+        <p class="text-sm text-yellow-400">1 MTX per spin</p>
+      </a>
 
-<div class="mt-8 p-4 border border-yellow-500 rounded bg-yellow-900 text-yellow-100">
-  <strong>How it works:</strong>
-  <ul class="list-disc ml-6">
-    <li>Spend MTX to play casino games</li>
-    <li>Win MTX by hitting jackpots or winning hands</li>
-    <li>All transactions are on-chain and transparent</li>
-    <li>MTX is required to play, but you can win more!</li>
-  </ul>
-</div>
+      <!-- Blackjack -->
+      <a href="/games/casino/blackjack" class="bg-gray-800 hover:bg-gray-700 p-6 rounded-lg border-2 border-green-500 transition-colors">
+        <div class="text-5xl mb-3 text-center">🃏</div>
+        <h3 class="text-2xl font-bold text-green-400 mb-2">Blackjack</h3>
+        <p class="text-gray-300 mb-2">Beat the dealer for MTX!</p>
+        <p class="text-sm text-yellow-400">2 MTX per hand</p>
+      </a>
+
+      <!-- Roulette -->
+      <a href="/games/casino/roulette" class="bg-gray-800 hover:bg-gray-700 p-6 rounded-lg border-2 border-green-500 transition-colors">
+        <div class="text-5xl mb-3 text-center">🎡</div>
+        <h3 class="text-2xl font-bold text-green-400 mb-2">Roulette</h3>
+        <p class="text-gray-300 mb-2">Bet MTX and spin the wheel!</p>
+        <p class="text-sm text-yellow-400">Min 1 MTX bet</p>
+      </a>
+
+      <!-- Plinko -->
+      <a href="/games/casino/plinko" class="bg-gray-800 hover:bg-gray-700 p-6 rounded-lg border-2 border-green-500 transition-colors">
+        <div class="text-5xl mb-3 text-center">🎯</div>
+        <h3 class="text-2xl font-bold text-green-400 mb-2">Plinko</h3>
+        <p class="text-gray-300 mb-2">Drop the ball for big wins!</p>
+        <p class="text-sm text-yellow-400">Min 1 MTX bet</p>
+      </a>
+
+      <!-- Dice -->
+      <a href="/games/casino/dice" class="bg-gray-800 hover:bg-gray-700 p-6 rounded-lg border-2 border-green-500 transition-colors">
+        <div class="text-5xl mb-3 text-center">🎲</div>
+        <h3 class="text-2xl font-bold text-green-400 mb-2">Dice</h3>
+        <p class="text-gray-300 mb-2">Roll under your target to win!</p>
+        <p class="text-sm text-yellow-400">Min 1 MTX bet</p>
+      </a>
+
+      <!-- Mines -->
+      <a href="/games/casino/mines" class="bg-gray-800 hover:bg-gray-700 p-6 rounded-lg border-2 border-green-500 transition-colors">
+        <div class="text-5xl mb-3 text-center">💣</div>
+        <h3 class="text-2xl font-bold text-green-400 mb-2">Mines</h3>
+        <p class="text-gray-300 mb-2">Find gems, avoid mines!</p>
+        <p class="text-sm text-yellow-400">Min 1 MTX bet</p>
+      </a>
+    </div>
+
+    <div class="bg-yellow-900 border-2 border-yellow-500 rounded-lg p-6">
+      <h2 class="text-2xl font-bold text-yellow-300 mb-4">How It Works</h2>
+      <ul class="space-y-2 text-yellow-100">
+        <li class="flex items-start">
+          <span class="text-green-400 mr-2">✓</span>
+          <span>Spend MTX to play casino games</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-green-400 mr-2">✓</span>
+          <span>Win MTX by hitting jackpots or winning hands</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-green-400 mr-2">✓</span>
+          <span>All transactions are on-chain and transparent</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-green-400 mr-2">✓</span>
+          <span>Provably fair mechanics ensure honest gameplay</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-green-400 mr-2">✓</span>
+          <span>Connect your wallet to check MTX balance and play</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</Layout>
