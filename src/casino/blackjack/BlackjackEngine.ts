@@ -97,7 +97,7 @@ export class BlackjackEngine {
         playerScore,
         dealerScore,
         outcome: 'blackjack',
-        payout: this.BET_AMOUNT * 2.5, // 3:2 payout
+        payout: this.BET_AMOUNT * 2.5, // 3:2 payout (1.5x winnings + original bet = 2.5x total return)
       };
     }
 

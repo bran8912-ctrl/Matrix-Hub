@@ -30,8 +30,9 @@ export class PlinkoEngine {
       position += direction;
     }
 
-    const finalSlot = position;
-    const multiplier = MULTIPLIERS[finalSlot] || 0;
+    // Ensure position is within bounds (0 to MULTIPLIERS.length - 1)
+    const finalSlot = Math.min(position, MULTIPLIERS.length - 1);
+    const multiplier = MULTIPLIERS[finalSlot];
     const payout = betAmount * multiplier;
 
     return {

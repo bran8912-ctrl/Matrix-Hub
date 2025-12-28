@@ -52,19 +52,19 @@ export class RouletteEngine {
       case 'number':
         if (bet.value === number) {
           win = true;
-          payout = bet.amount * 36; // 35:1 + original bet
+          payout = bet.amount * 36; // 35:1 odds (35x winnings) + original bet = 36x total return
         }
         break;
       case 'red':
         if (color === 'red') {
           win = true;
-          payout = bet.amount * 2; // 1:1 + original bet
+          payout = bet.amount * 2; // 1:1 odds (1x winnings) + original bet = 2x total return
         }
         break;
       case 'black':
         if (color === 'black') {
           win = true;
-          payout = bet.amount * 2;
+          payout = bet.amount * 2; // 1:1 odds + original bet = 2x total return
         }
         break;
       case 'even':

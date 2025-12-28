@@ -34,12 +34,26 @@ export class MinesEngine {
 
     const minePositions = new Set<number>();
     
-    // Place mines using hash
+    // Place mines using hash - ensure we place exactly numMines
     let hashIndex = 0;
-    while (minePositions.size < numMines && hashIndex < hash.length - 4) {
+    let attempts = 0;
+    const maxAttempts = this.GRID_SIZE * 3; // Prevent infinite loops
+    
+    while (minePositions.size < numMines && attempts < maxAttempts) {
       const position = parseInt(hash.slice(hashIndex, hashIndex + 4), 16) % this.GRID_SIZE;
       minePositions.add(position);
-      hashIndex += 4;
+      hashIndex = (hashIndex + 4) % (hash.length - 4);
+      attempts++;
+    }
+    
+    // If we couldn't place enough mines from hash (highly unlikely), fill remaining randomly
+    if (minePositions.size < numMines) {
+      const availablePositions = Array.from({ length: this.GRID_SIZE }, (_, i) => i)
+        .filter(pos => !minePositions.has(pos));
+      while (minePositions.size < numMines && availablePositions.length > 0) {
+        const randomIndex = Math.floor(Math.random() * availablePositions.length);
+        minePositions.add(availablePositions.splice(randomIndex, 1)[0]);
+      }
     }
 
     return {
