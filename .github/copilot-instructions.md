@@ -2,13 +2,17 @@
 
 ## Project Overview
 
-Matrix-Hub.org is a live blockchain-powered platform combining web tools, casino games, and a token economy. It features:
+Matrix-Hub.org is a live blockchain-powered platform combining web tools,
+casino games, and a token economy. It features:
 
-- **MTX Token System**: A utility token for accessing premium features, playing casino games, and rewarding contributors
+- **MTX Token System**: A utility token for accessing premium features,
+  playing casino games, and rewarding contributors
 - **Casino Games**: Slots, Blackjack, and Roulette with on-chain MTX transactions
-- **Web3 Integration**: Wallet connectivity for MTX balance checking and permissioned access
+- **Web3 Integration**: Wallet connectivity for MTX balance checking and
+  permissioned access
 - **Modular Architecture**: Expandable tools and modules ecosystem
-- **GitHub-to-MTX Loop**: Contributors earn MTX for merged PRs and accepted issues
+- **GitHub-to-MTX Loop**: Contributors earn MTX for merged PRs and accepted
+  issues
 
 ## Tech Stack
 
@@ -23,7 +27,7 @@ Matrix-Hub.org is a live blockchain-powered platform combining web tools, casino
 
 ## Project Structure
 
-```
+```text
 /
 ├── src/
 │   ├── pages/          # Astro pages (index.astro, API routes)
@@ -46,7 +50,7 @@ Matrix-Hub.org is a live blockchain-powered platform combining web tools, casino
 
 - **TypeScript Config**: Extends `astro/tsconfigs/strict`
 - **JSX**: Use `react-jsx` transform for React components
-- **File Extensions**: 
+- **File Extensions**:
   - `.astro` for Astro components
   - `.tsx` for React components
   - `.ts` for TypeScript utilities
@@ -72,7 +76,8 @@ Matrix-Hub.org is a live blockchain-powered platform combining web tools, casino
 
 ### Core Principles
 
-1. **No MTX Required for Basic Access**: Free tier includes core tools and public modules
+1. **No MTX Required for Basic Access**: Free tier includes core tools and
+   public modules
 2. **Balance-Based Permissions**: MTX amount determines feature tiers, not pay-per-use
 3. **Non-Custodial**: Site reads wallet balance but never holds MTX
 4. **Transparent Gates**: Always show users what MTX unlocks
@@ -81,13 +86,15 @@ Matrix-Hub.org is a live blockchain-powered platform combining web tools, casino
 ### Access Tiers
 
 - **Basic (Free)**: Core tools, public modules, community features
-- **MTX Unlocked**: Advanced tools, priority queues, experimental modules, beta features
+- **MTX Unlocked**: Advanced tools, priority queues, experimental modules,
+  beta features
 
 ### MTX Flow
 
 - **Acquisition**: DEX purchase or platform earning
 - **Usage**: Unlock features, play casino games, stake for tiers
-- **Circulation**: Burn/lock mechanisms reduce supply; reward pools incentivize contributors
+- **Circulation**: Burn/lock mechanisms reduce supply; reward pools
+  incentivize contributors
 
 ## Casino Module
 
@@ -135,7 +142,8 @@ npm run astro ...       # Run Astro CLI commands
 ## File Naming and Organization
 
 - **Pages**: Use kebab-case for file names (e.g., `daily-drops.ts`, `index.astro`)
-- **Components**: Use PascalCase for component names (e.g., `WalletConnect.tsx`, `Header.astro`)
+- **Components**: Use PascalCase for component names
+  (e.g., `WalletConnect.tsx`, `Header.astro`)
 - **Utilities**: Use camelCase for utility files (e.g., `database.ts`)
 - **Assets**: Store in `/public` directory for static files
 
@@ -211,7 +219,8 @@ npm run astro ...       # Run Astro CLI commands
 2. **Test Locally**: Always test with `npm run dev` before committing
 3. **Build Before PR**: Ensure `npm run build` succeeds
 4. **Match Existing Patterns**: Follow established code structure and conventions
-5. **Astro-First**: Use Astro components for static content, React only when interactivity needed
+5. **Astro-First**: Use Astro components for static content, React only when
+   interactivity needed
 6. **TailwindCSS**: Use utility classes consistently with existing components
 7. **TypeScript**: Provide proper types; avoid `any` unless absolutely necessary
 8. **Documentation**: Update docs when changing core features or architecture
@@ -248,12 +257,12 @@ npm run astro ...       # Run Astro CLI commands
 - **Target**: Static site (Node-compatible hosting)
 - **Compatible Hosts**: Vercel, Render, Netlify, self-hosted Node servers
 - **Configuration**: See `astro.config.ts` for output settings
-- **Site URL**: https://matrix-hub.org
+- **Site URL**: <https://matrix-hub.org>
 
 ## Additional Resources
 
-- **Astro Docs**: https://docs.astro.build/
-- **Supabase Docs**: https://supabase.com/docs
+- **Astro Docs**: <https://docs.astro.build/>
+- **Supabase Docs**: <https://supabase.com/docs>
 - **Project Whitepaper**: `docs/MTX_Whitepaper.md`
 - **Casino Architecture**: `docs/MTX_Casino_Architecture.md`
 - **Tokenomics**: `docs/MTX_Tokenomics.md`
