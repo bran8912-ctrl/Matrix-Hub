@@ -1134,10 +1134,44 @@ SOFTWARE.
     opacity: 0.5;
     cursor: not-allowed;
 }
-
+<div class="panel theme-customizer-panel">
 .player-controls {
-    margin-bottom: 10px;
+   margin-bottom: 10px;
 }
+   <div class="panel-text" style="color: var(--section-music-player,#00ff41); border: 1.5px solid var(--section-music-player,#00ff41); border-radius: 8px; background: rgba(0,30,0,0.09); margin: 20px 0 0 0; padding: 16px;">
+    <div style="font-size: 1.22rem; font-weight: bold; margin-bottom: 7px; letter-spacing: 1px;">
+      🎵 Matrix Music Player — Quick Access
+    </div>
+    <ul style="margin-left:20px; margin-bottom: 10px;">
+      <li><b>Simple Player</b>: <a href="/" style="color:var(--section-music-player)">Homepage</a> – Clean interface, basic controls</li>
+      <li><b>Advanced Player</b>: <a href="/player.html" style="color:var(--section-music-player)">/player.html</a> – Mixer, layers, playlists</li>
+    </ul>
+    <div style="font-size:1.065rem; color:var(--theme-text);margin-bottom:4px;"><b>Features:</b></div>
+    <ul style="margin-left:16px; font-size:0.99em;">
+      <li><b>Simple:</b> Play/Pause, Prev/Next, Shuffle, Loop, Autoplay, 41+ track playlist</li>
+      <li><b>Advanced:</b> Mixer (Volume, Pan, EQ), layer multiple tracks, visual playlist, audio-reactive UI, saves preferences</li>
+    </ul>
+    <div style="font-size:1.065rem; color:var(--theme-text);margin:14px 0 4px 0;"><b>Music Library:</b></div>
+    <ul style="margin-left:16px; font-size:0.99em;">
+      <li><b>Remote tracks:</b> 30+ from <a href="https://mixkit.co" target="_blank" style="color:var(--section-music-player)">Mixkit</a> (cyberpunk, ambient, techno &amp; more; no attribution)</li>
+      <li><b>Local tracks:</b> /music/ folder (see <a href="music/LICENSE.md" style="color:var(--section-music-player)">license</a>)</li>
+    </ul>
+    <div style="margin:12px 0 3px 0;">
+      <b>Docs &amp; Contribute:</b>
+      <ul style="margin-left:18px;font-size:0.99em;">
+        <li><a href="docs/MP3_PLAYER_GUIDE.md" style="color:var(--section-music-player)">User Guide</a>, <a href="docs/MP3_PLAYER_TECHNICAL.md" style="color:var(--section-music-player)">Technical Docs</a></li>
+        <li><a href="music/SUBMIT_MUSIC.md" style="color:var(--section-music-player)">Submit Music</a> | <a href="music/LICENSE.md" style="color:var(--section-music-player)">Music License</a></li>
+      </ul>
+    </div>
+    <div style="font-size:0.97em; color:var(--theme-secondary); margin-top:10px;">
+      Cross-browser, mobile friendly. Web Audio API needed for advanced mixing.
+    </div>
+    <div style="margin-top:10px; font-size:0.95em; color:var(--theme-text)">
+      <b>Add tracks:</b> Drop MP3 in <code>/public/music/</code>, update playlist, add attribution per <a href="music/SUBMIT_MUSIC.md" style="color:var(--section-music-player)">guidelines</a>.
+    </div>
+    <div style="margin-top:8px; font-size:0.93em;"><b>Matrix Hub</b> – Signal over noise.</div>
+  </div>
+</div>
 
 .secondary-controls {
     margin-top: 10px;
