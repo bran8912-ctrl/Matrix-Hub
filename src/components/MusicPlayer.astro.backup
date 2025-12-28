@@ -42,12 +42,6 @@ import Panel from './Panel.astro';
     </div>
     
     <div id="playerStatus">Loop: OFF | Shuffle: OFF | Autoplay: ON</div>
-    
-    <div style="margin-top: 15px; text-align: center;">
-      <a href="/player.html" style="display: inline-block; padding: 8px 16px; background: var(--theme-bg-panel); color: var(--theme-primary); border: 1px solid var(--theme-primary); border-radius: 5px; text-decoration: none; font-size: 12px; transition: 0.2s;" onmouseover="this.style.background=getComputedStyle(document.documentElement).getPropertyValue('--theme-primary'); this.style.color='black';" onmouseout="this.style.background=getComputedStyle(document.documentElement).getPropertyValue('--theme-bg-panel'); this.style.color=getComputedStyle(document.documentElement).getPropertyValue('--theme-primary');">
-        🎚️ ADVANCED PLAYER (Mixer, Layers, Playlist)
-      </a>
-    </div>
   </div>
 </Panel>
 
