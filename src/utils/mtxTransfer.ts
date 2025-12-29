@@ -19,18 +19,8 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
   
   // Normalize the amount by trimming whitespace
   const normalizedAmount = amount.trim();
-  
-  // Check if amount is a valid positive decimal number (reject exponential, hex, etc.)
-  // Pattern rules:
-  // - Digits with optional decimal point (e.g., "10", "10.5") or a leading decimal point followed by digits (e.g., ".5")
-  // - Rejects zero-equivalent values like "0", "0.0", "00.000"
-  // - Allows values starting with decimal point like ".5"
-  const decimalPattern = /^(?!0+(?:\.0+)?$)\d*\.?\d+$/;
-  if (!decimalPattern.test(normalizedAmount)) {
-    throw new Error('Amount must be a valid positive decimal number.');
-  }
-  
-  // Check if amount is greater than zero and is a finite number
+
+  // Check that amount parses to a finite number and is strictly greater than zero
   const numericAmount = parseFloat(normalizedAmount);
   if (!Number.isFinite(numericAmount)) {
     throw new Error('Amount is too large or invalid.');
