@@ -39,9 +39,15 @@ Edit `.env` file:
 MAINNET_RPC_URL=https://eth.llamarpc.com
 PRIVATE_KEY=YOUR_DEPLOYER_PRIVATE_KEY_HERE
 ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY
+MTX_CONTRACT_ADDRESS=  # Leave empty until deployed
 ```
 
-**⚠️ SECURITY**: Never commit your private key! Keep `.env` in `.gitignore`.
+**⚠️ CRITICAL SECURITY**:
+- **NEVER** commit your `.env` file! It's protected by `.gitignore`.
+- Use a **burner wallet** for deployment, not your main wallet.
+- The `.env` file should contain real keys and must be kept secret.
+- Double-check `.env` is listed in `.gitignore` before committing.
+- After deployment, securely backup and then delete the private key from `.env`.
 
 ### 3. Deploy Contract
 
