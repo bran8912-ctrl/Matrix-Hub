@@ -115,11 +115,13 @@ The system sustains itself. The loop never stops.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                 DEX (Public Market)                     │
+│              MTX Purchase Options                        │
 │                                                         │
-│  ├─ Buy MTX                                            │
+│  ├─ Direct Mint: Send ETH → Receive MTX (1 ETH = 1000 MTX) │
+│  │  └─ Lower gas, instant minting, perfect for onboarding │
 │  │                                                      │
-│  └─ Sell MTX (optional exit)                           │
+│  └─ Uniswap DEX: Public market trading                  │
+│     └─ Market rates, high liquidity, any token swap     │
 └─────────────────────────────────────────────────────────┘
                         ↓
                  ┌─────────────┐
@@ -139,12 +141,13 @@ The system sustains itself. The loop never stops.
 ```
 
 **Entry Points:**
-- **DEX Acquisition**: Purchase MTX on public markets
+- **Direct Mint**: Send ETH directly to MTX contract for instant minting at fixed rate
+- **DEX Acquisition**: Purchase MTX on Uniswap at market rates
 - **Direct Earn**: Earn MTX through platform engagement (no purchase required)
 - **Wallet Connection**: Non-custodial — you control your MTX
 
 **Flow:**
-1. Acquire MTX (buy or earn)
+1. Acquire MTX (direct mint, DEX buy, or earn)
 2. Connect wallet to Matrix-Hub.org
 3. Use MTX to unlock features and tools
 4. Earn more MTX through contribution
@@ -395,6 +398,44 @@ MTX later enables:
 SYSTEM GROWS BY USE.
 MTX FLOWS WHERE SIGNAL EXISTS.
 ```
+
+---
+
+## 🚀 Quick Start: Getting MTX
+
+New to Matrix-Hub? Here's how to get started with MTX:
+
+### Option 1: Direct Mint (Recommended for First-Time Users)
+
+1. **Visit** [matrix-hub.org/buy-mtx](https://matrix-hub.org/buy-mtx)
+2. **Connect** your Ethereum wallet (MetaMask or compatible)
+3. **Send ETH** directly to the MTX contract to mint tokens
+4. **Rate**: 1 ETH = 1000 MTX (fixed)
+5. **Benefits**: Lower gas fees, instant minting, perfect for small purchases
+
+### Option 2: Uniswap DEX (For Market Trading)
+
+1. **Visit** [Uniswap](https://app.uniswap.org/#/swap?outputCurrency=0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0&chain=ethereum)
+2. **Connect** your wallet
+3. **Swap** ETH or any ERC-20 token for MTX
+4. **Benefits**: Market rates, high liquidity, flexible amounts
+
+### Option 3: Earn MTX (No Purchase Required)
+
+- Complete platform challenges
+- Contribute to GitHub (merged PRs earn MTX)
+- Report bugs and issues
+- Test beta features
+- Community participation
+
+### MTX Contract Information
+
+- **Contract Address**: `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`
+- **Network**: Ethereum Mainnet (ChainID: 1)
+- **Symbol**: MTX
+- **Decimals**: 18
+
+⚠️ **Always verify the contract address before sending ETH!**
 
 ---
 
