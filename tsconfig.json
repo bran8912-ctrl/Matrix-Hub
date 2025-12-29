@@ -4,6 +4,7 @@
   "exclude": ["dist"],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "types": ["@types/react", "@types/react-dom"]
+    "types": ["@types/react", "@types/react-dom"],
+    "resolveJsonModule": true
   }
 }
