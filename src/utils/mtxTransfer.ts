@@ -23,7 +23,7 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
   // Check that amount parses to a finite number and is strictly greater than zero
   const numericAmount = parseFloat(normalizedAmount);
   if (!Number.isFinite(numericAmount)) {
-    throw new Error('Amount is too large or invalid.');
+    throw new Error('Amount must be a valid number.');
   }
   if (numericAmount <= 0) {
     throw new Error('Amount must be greater than zero.');
