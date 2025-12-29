@@ -407,7 +407,7 @@ New to Matrix-Hub? Here's how to get started with MTX:
 
 ### ⚠️ MTX Contract Deployment Required
 
-**IMPORTANT**: The MTX token contract must be deployed to Polygon network to get a legitimate address before the platform can be used.
+**IMPORTANT**: The MTX token contract must be deployed to Ethereum Mainnet to get a legitimate address before the platform can be used.
 
 **Current Status**: Contract not yet deployed to live network.
 
@@ -420,15 +420,13 @@ npm install
 cp .env.example .env
 nano .env
 
-# Deploy to Polygon Amoy Testnet (recommended first)
-./scripts/deploy.sh
-# Select option 1 for testnet
+# Deploy to Ethereum Sepolia Testnet (recommended first)
+npm run deploy:sepolia
 
-# Get testnet MATIC from: https://faucet.polygon.technology/
+# Get testnet ETH from: https://sepoliafaucet.com/
 
-# After testing, deploy to Polygon Mainnet
-./scripts/deploy.sh
-# Select option 2 for mainnet
+# After testing, deploy to Ethereum Mainnet
+npm run deploy:mainnet
 ```
 
 See [MTX Deployment Guide](docs/MTX_Deployment_Guide.md) for detailed instructions.
@@ -438,16 +436,16 @@ See [MTX Deployment Guide](docs/MTX_Deployment_Guide.md) for detailed instructio
 ### Option 1: Direct Mint (Recommended for First-Time Users)
 
 1. **Visit** [matrix-hub.org/buy-mtx](https://matrix-hub.org/buy-mtx)
-2. **Connect** your Polygon wallet (MetaMask or compatible)
-3. **Send MATIC** directly to the MTX contract to mint tokens
-4. **Rate**: 1 MATIC = 1000 MTX (fixed)
+2. **Connect** your Ethereum wallet (MetaMask or compatible)
+3. **Send ETH** directly to the MTX contract to mint tokens
+4. **Rate**: 1 ETH = 1000 MTX (fixed)
 5. **Benefits**: Lower gas fees, instant minting, perfect for small purchases
 
-### Option 2: QuickSwap DEX (For Market Trading)
+### Option 2: Uniswap DEX (For Market Trading)
 
-1. **Visit** [QuickSwap](https://quickswap.exchange/)
+1. **Visit** [Uniswap](https://app.uniswap.org/)
 2. **Connect** your wallet
-3. **Swap** MATIC or any token for MTX
+3. **Swap** ETH or any token for MTX
 4. **Benefits**: Market rates, high liquidity, flexible amounts
 
 ### Option 3: Earn MTX (No Purchase Required)
@@ -460,11 +458,12 @@ See [MTX Deployment Guide](docs/MTX_Deployment_Guide.md) for detailed instructio
 
 ### MTX Contract Information
 
-- **Network**: Polygon Mainnet (ChainID: 137)
+- **Network**: Ethereum Mainnet (ChainID: 1)
 - **Contract Address**: *To be updated after deployment*
+- **Contract Owner**: 0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a
 - **Symbol**: MTX
 - **Decimals**: 18
-- **Polygonscan Account**: MatrixHubOrg
+- **Block Explorer**: Etherscan
 
 ⚠️ **Always verify the contract address before sending funds!**
 

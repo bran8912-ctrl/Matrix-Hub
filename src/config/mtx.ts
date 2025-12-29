@@ -1,10 +1,11 @@
-// MTX Token Configuration for Polygon Network
-// Polygonscan account: MatrixHubOrg
+// MTX Token Configuration for Ethereum Mainnet
+// Network: Ethereum Mainnet (Chain ID: 1)
 //
 // DEPLOYMENT STATUS: Contract must be deployed to get legitimate address
-// Use: npm run deploy or ./scripts/deploy.sh
+// Use: npm run deploy:mainnet (production) or npm run deploy:sepolia (testnet)
 // 
 // For production, set MTX_CONTRACT_ADDRESS in environment variables
+// Initial Owner: 0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a
 
 // Get contract address from environment or use placeholder
 const contractAddress = typeof process !== 'undefined' && process.env?.MTX_CONTRACT_ADDRESS 
@@ -17,33 +18,33 @@ const isPlaceholder = contractAddress === "0x00000000000000000000000000000000000
 
 if (isPlaceholder) {
   console.warn("⚠️  MTX: Using placeholder address. Deploy contract to get legitimate address.");
-  console.warn("    Run: npm run deploy or ./scripts/deploy.sh");
+  console.warn("    Run: npm run deploy:mainnet or npm run deploy:sepolia");
 }
 
 export const MTX = {
   address: contractAddress,
   symbol: "MTX",
   decimals: 18,
-  chainId: 137, // Polygon Mainnet
-  chainName: "Polygon",
+  chainId: 1, // Ethereum Mainnet
+  chainName: "Ethereum",
   name: "Matrix Hub Coin",
-  // Fixed MATIC to MTX rate for direct mint: 1 MATIC = 1000 MTX
+  // Fixed ETH to MTX rate for direct mint: 1 ETH = 1000 MTX
   ethToMtxRate: 1000,
   nativeCurrency: {
-    name: "MATIC",
-    symbol: "MATIC",
+    name: "ETH",
+    symbol: "ETH",
     decimals: 18
   },
-  rpcUrls: ["https://polygon-rpc.com/"],
-  blockExplorerUrls: ["https://polygonscan.com/"],
-  // Polygonscan account for contract verification: MatrixHubOrg
-  polygonscanAccount: "MatrixHubOrg",
+  rpcUrls: ["https://eth.llamarpc.com"],
+  blockExplorerUrls: ["https://etherscan.io/"],
+  // Contract owner for verification and management
+  owner: "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a",
   isDeployed: isValidAddress && !isPlaceholder,
   get blockExplorerUrl() {
     return `${this.blockExplorerUrls[0]}address/${this.address}`;
   },
   get uniswapUrl() {
-    // QuickSwap is the primary DEX on Polygon (Uniswap equivalent)
-    return `https://quickswap.exchange/#/swap?outputCurrency=${this.address}`;
+    // Uniswap is the primary DEX on Ethereum
+    return `https://app.uniswap.org/swap?outputCurrency=${this.address}&chain=ethereum`;
   }
 };

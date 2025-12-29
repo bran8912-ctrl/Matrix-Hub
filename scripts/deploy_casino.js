@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
-  console.log("Starting Casino Contracts Deployment...");
+  console.log("Starting Casino Contracts Deployment to Ethereum Mainnet...");
   console.log("Network:", hre.network.name);
   
   // Get deployer account
@@ -12,13 +12,13 @@ async function main() {
   
   // Check deployer balance
   const balance = await hre.ethers.provider.getBalance(deployer.address);
-  console.log("Account balance:", hre.ethers.formatEther(balance), "MATIC");
+  console.log("Account balance:", hre.ethers.formatEther(balance), "ETH");
   
   // Load MTX deployment info
   const mtxDeploymentFile = path.join(__dirname, "..", "deployments", `mtx-${hre.network.name}.json`);
   if (!fs.existsSync(mtxDeploymentFile)) {
     console.error("\n❌ Error: MTX token not deployed yet!");
-    console.error("   Deploy MTX first: npm run deploy:amoy");
+    console.error("   Deploy MTX first: npm run deploy:mainnet or npm run deploy:sepolia");
     process.exit(1);
   }
   
@@ -33,7 +33,7 @@ async function main() {
   const DEV_ADDRESS = deployer.address; // Use deployer as dev address
   const GOVERNANCE_ADDRESS = deployer.address; // Use deployer as governance
   
-  console.log("\n🎰 Deploying Casino Contracts...");
+  console.log("\n🎰 Deploying Casino Contracts on Ethereum...");
   console.log("Parameters:");
   console.log("- Reserve Cap:", hre.ethers.formatUnits(RESERVE_CAP, 18), "MTX");
   console.log("- Min Bet:", hre.ethers.formatUnits(MIN_BET, 18), "MTX");
@@ -61,13 +61,13 @@ async function main() {
   // Deploy LiquidityRouter (needs MTX address and DEX pool)
   console.log("\n3️⃣ Deploying LiquidityRouter...");
   const LiquidityRouter = await hre.ethers.getContractFactory("LiquidityRouter");
-  // For now, use deployer address as DEX pool (to be updated with actual QuickSwap pool)
+  // For now, use deployer address as DEX pool (to be updated with actual Uniswap pool)
   const tempDexPool = deployer.address;
   const liquidityRouter = await LiquidityRouter.deploy(MTX_ADDRESS, tempDexPool);
   await liquidityRouter.waitForDeployment();
   const liquidityAddress = await liquidityRouter.getAddress();
   console.log("✅ LiquidityRouter deployed:", liquidityAddress);
-  console.log("   ⚠️  Note: Update DEX pool address after creating QuickSwap pool");
+  console.log("   ⚠️  Note: Update DEX pool address after creating Uniswap pool");
   
   // Deploy CasinoCore
   console.log("\n4️⃣ Deploying CasinoCore...");
@@ -86,7 +86,7 @@ async function main() {
   const casinoCoreAddress = await casinoCore.getAddress();
   console.log("✅ CasinoCore deployed:", casinoCoreAddress);
   
-  console.log("\n🎉 All Casino Contracts Deployed Successfully!");
+  console.log("\n🎉 All Casino Contracts Deployed Successfully on Ethereum!");
   
   // Save deployment info
   const deploymentInfo = {
@@ -123,16 +123,16 @@ async function main() {
   console.log("\n1. Update CasinoReserve with correct CasinoCore address:");
   console.log(`   (This needs to be done on-chain or redeploy with correct address)`);
   
-  console.log("\n2. Create QuickSwap liquidity pool for MTX/MATIC");
-  console.log("   - Visit: https://quickswap.exchange/");
-  console.log("   - Create MTX/MATIC pool");
+  console.log("\n2. Create Uniswap liquidity pool for MTX/ETH");
+  console.log("   - Visit: https://app.uniswap.org/");
+  console.log("   - Create MTX/ETH pool");
   console.log("   - Update LiquidityRouter with pool address");
   
   console.log("\n3. Fund CasinoReserve with initial MTX:");
   console.log(`   - Transfer MTX to: ${reserveAddress}`);
   console.log("   - Recommended: 100,000+ MTX for initial liquidity");
   
-  console.log("\n4. Verify contracts on Polygonscan:");
+  console.log("\n4. Verify contracts on Etherscan:");
   console.log(`   npx hardhat verify --network ${hre.network.name} ${rngAddress}`);
   console.log(`   npx hardhat verify --network ${hre.network.name} ${reserveAddress} "${MTX_ADDRESS}" "${RESERVE_CAP}" "${tempCasinoCore}"`);
   console.log(`   npx hardhat verify --network ${hre.network.name} ${liquidityAddress} "${MTX_ADDRESS}" "${tempDexPool}"`);
@@ -143,18 +143,18 @@ async function main() {
   
   console.log("\n6. Update src/pages/api/place-bet.js with CasinoCore address");
   
-  console.log("\n7. Test casino functionality thoroughly");
+  console.log("\n7. Test casino functionality thoroughly on testnet first");
   
   // Get network explorer URL
   let explorerUrl = "";
-  if (hre.network.name === "polygon") {
-    explorerUrl = `https://polygonscan.com/address/${casinoCoreAddress}`;
-  } else if (hre.network.name === "amoy") {
-    explorerUrl = `https://amoy.polygonscan.com/address/${casinoCoreAddress}`;
+  if (hre.network.name === "mainnet") {
+    explorerUrl = `https://etherscan.io/address/${casinoCoreAddress}`;
+  } else if (hre.network.name === "sepolia") {
+    explorerUrl = `https://sepolia.etherscan.io/address/${casinoCoreAddress}`;
   }
   
   if (explorerUrl) {
-    console.log("\n🔍 View CasinoCore on Explorer:", explorerUrl);
+    console.log("\n🔍 View CasinoCore on Etherscan:", explorerUrl);
   }
   
   console.log("\n" + "=".repeat(60));

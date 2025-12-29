@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# MTX Token Deployment Script for Polygon Network
+# MTX Token Deployment Script for Ethereum Network
 # This script guides you through deploying the MTX token to get a legitimate contract address
 
 echo "================================================"
-echo "   MTX Token Deployment to Polygon Network"
+echo "   MTX Token Deployment to Ethereum Network"
 echo "================================================"
 echo ""
 
@@ -25,30 +25,30 @@ if [ "$PRIVATE_KEY" == "your_private_key_here" ] || [ -z "$PRIVATE_KEY" ]; then
     echo "❌ Error: PRIVATE_KEY not set in .env file"
     echo ""
     echo "To deploy, you need:"
-    echo "1. A wallet private key with MATIC for gas"
-    echo "2. Get testnet MATIC from: https://faucet.polygon.technology/"
+    echo "1. A wallet private key with ETH for gas"
+    echo "2. Get testnet ETH from: https://sepoliafaucet.com/"
     echo "3. Add your private key to .env file (without 0x prefix)"
     echo ""
     exit 1
 fi
 
 echo "Select deployment network:"
-echo "1) Polygon Amoy Testnet (Recommended for testing)"
-echo "2) Polygon Mainnet (Production - requires real MATIC)"
+echo "1) Ethereum Sepolia Testnet (Recommended for testing)"
+echo "2) Ethereum Mainnet (Production - requires real ETH)"
 echo "3) Exit"
 echo ""
 read -p "Enter choice [1-3]: " choice
 
 case $choice in
     1)
-        NETWORK="amoy"
+        NETWORK="sepolia"
         echo ""
-        echo "📋 Deploying to Polygon Amoy Testnet..."
-        echo "   Get testnet MATIC: https://faucet.polygon.technology/"
+        echo "📋 Deploying to Ethereum Sepolia Testnet..."
+        echo "   Get testnet ETH: https://sepoliafaucet.com/"
         echo ""
         ;;
     2)
-        NETWORK="polygon"
+        NETWORK="mainnet"
         echo ""
         read -p "⚠️  Are you sure you want to deploy to MAINNET? (yes/no): " confirm
         if [ "$confirm" != "yes" ]; then
@@ -56,7 +56,7 @@ case $choice in
             exit 0
         fi
         echo ""
-        echo "📋 Deploying to Polygon Mainnet..."
+        echo "�� Deploying to Ethereum Mainnet..."
         echo ""
         ;;
     3)
@@ -108,15 +108,15 @@ if [ -f "$DEPLOYMENT_FILE" ]; then
     echo ""
     
     # Ask about contract verification
-    read -p "Do you want to verify the contract on Polygonscan? (yes/no): " verify
+    read -p "Do you want to verify the contract on Etherscan? (yes/no): " verify
     if [ "$verify" == "yes" ]; then
-        if [ -z "$POLYGONSCAN_API_KEY" ] || [ "$POLYGONSCAN_API_KEY" == "your_polygonscan_api_key" ]; then
-            echo "⚠️  POLYGONSCAN_API_KEY not set in .env file"
-            echo "   Get API key from: https://polygonscan.com/myapikey"
+        if [ -z "$ETHERSCAN_API_KEY" ] || [ "$ETHERSCAN_API_KEY" == "your_etherscan_api_key" ]; then
+            echo "⚠️  ETHERSCAN_API_KEY not set in .env file"
+            echo "   Get API key from: https://etherscan.io/myapikey"
         else
             echo ""
             echo "🔍 Verifying contract..."
-            npx hardhat verify --network $NETWORK $CONTRACT_ADDRESS "100000000"
+            npx hardhat verify --network $NETWORK $CONTRACT_ADDRESS "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
             echo ""
         fi
     fi
@@ -143,14 +143,14 @@ if [ -f "$DEPLOYMENT_FILE" ]; then
     echo "1. ✅ Contract deployed successfully"
     echo "2. 📝 Update documentation with contract address"
     echo "3. 🧪 Test the contract thoroughly"
-    echo "4. 💧 Add liquidity to QuickSwap DEX"
+    echo "4. 💧 Add liquidity to Uniswap DEX"
     echo "5. 🎉 Announce the deployment"
     echo ""
     
-    if [ "$NETWORK" == "polygon" ]; then
-        echo "🔗 View on Polygonscan: https://polygonscan.com/address/$CONTRACT_ADDRESS"
+    if [ "$NETWORK" == "mainnet" ]; then
+        echo "🔗 View on Etherscan: https://etherscan.io/address/$CONTRACT_ADDRESS"
     else
-        echo "🔗 View on Amoy Polygonscan: https://amoy.polygonscan.com/address/$CONTRACT_ADDRESS"
+        echo "🔗 View on Sepolia Etherscan: https://sepolia.etherscan.io/address/$CONTRACT_ADDRESS"
     fi
     echo ""
 fi

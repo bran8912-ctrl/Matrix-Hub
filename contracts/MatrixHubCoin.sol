@@ -3,9 +3,16 @@ pragma solidity ^0.8.20;
 
 /*
  Matrix-HubCoin (MTX)
-  Utility token for the Matrix-Hub ecosystem.
-   Direct ETH→MTX mint for easy onboarding.
-   No taxes. Owner can pause minting.
+  Utility token for the Matrix-Hub ecosystem on Ethereum Mainnet.
+  Direct ETH→MTX mint for easy onboarding.
+  No taxes. Owner can pause minting.
+  
+  Network: Ethereum Mainnet (Chain ID: 1)
+  Token Standard: ERC-20
+  Initial Owner: 0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a
+  
+  Audit Trail: Standard OpenZeppelin ERC20 implementation with owner-controlled minting
+  Security: Auditable, transparent, and follows best practices
 */
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -27,15 +34,23 @@ contract MatrixHubCoin is ERC20, Ownable {
     event MintingPaused(bool paused);
     event Withdrawal(address indexed recipient, uint256 amount);
 
-    constructor(uint256 initialSupply) ERC20("Matrix-HubCoin", "MTX") Ownable(msg.sender) {
+    /**
+     * @dev Constructor sets the initial owner and mints the total supply to owner
+     * @param initialSupply The initial supply in whole tokens (e.g., 100000000 for 100M MTX)
+     * @param initialOwner The address that will own the contract and receive initial supply
+     */
+    constructor(uint256 initialSupply, address initialOwner) ERC20("Matrix-HubCoin", "MTX") Ownable(initialOwner) {
+        require(initialOwner != address(0), "Owner cannot be zero address");
+        require(initialSupply > 0, "Initial supply must be greater than zero");
         MAX_SUPPLY = initialSupply * 10 ** decimals();
-        _mint(msg.sender, MAX_SUPPLY);
+        _mint(initialOwner, MAX_SUPPLY);
     }
 
-    /*
-     Direct ETH→MTX purchase function
-     Users send ETH and receive MTX at the fixed rate
-    */
+    /**
+     * @dev Direct ETH→MTX purchase function
+     * Users send ETH and receive MTX at the fixed rate
+     * Network: Ethereum Mainnet
+     */
     function buyMTX() external payable {
         require(!mintingPaused, "Minting is paused");
         require(msg.value > 0, "Must send ETH to buy MTX");
@@ -51,10 +66,10 @@ contract MatrixHubCoin is ERC20, Ownable {
         emit MTXPurchased(msg.sender, msg.value, mtxAmount);
     }
     
-    /*
-     Fallback receive function - automatically calls buyMTX
-     Allows users to simply send ETH to contract address
-    */
+    /**
+     * @dev Fallback receive function - automatically calls buyMTX
+     * Allows users to simply send ETH to contract address
+     */
     receive() external payable {
         require(!mintingPaused, "Minting is paused");
         require(msg.value > 0, "Must send ETH to buy MTX");
@@ -70,24 +85,33 @@ contract MatrixHubCoin is ERC20, Ownable {
         emit MTXPurchased(msg.sender, msg.value, mtxAmount);
     }
     
-    /*
-     Owner functions for managing the direct mint feature
-    */
+    /**
+     * @dev Owner functions for managing the direct mint feature
+     */
     
-    // Update the ETH to MTX exchange rate
+    /**
+     * @dev Update the ETH to MTX exchange rate
+     * @param newRate The new exchange rate (1 ETH = newRate MTX)
+     */
     function setEthToMtxRate(uint256 newRate) external onlyOwner {
         require(newRate > 0, "Rate must be positive");
         ethToMtxRate = newRate;
         emit RateUpdated(newRate);
     }
     
-    // Pause or unpause minting (e.g., to transition to DEX-only)
+    /**
+     * @dev Pause or unpause minting (e.g., to transition to DEX-only)
+     * @param paused True to pause minting, false to unpause
+     */
     function setMintingPaused(bool paused) external onlyOwner {
         mintingPaused = paused;
         emit MintingPaused(paused);
     }
     
-    // Withdraw collected ETH to owner (for liquidity provision or operations)
+    /**
+     * @dev Withdraw collected ETH to recipient (for liquidity provision or operations)
+     * @param recipient Address to receive the ETH
+     */
     function withdrawETH(address payable recipient) external onlyOwner {
         require(recipient != address(0), "Invalid recipient");
         uint256 balance = address(this).balance;
@@ -99,10 +123,11 @@ contract MatrixHubCoin is ERC20, Ownable {
         emit Withdrawal(recipient, balance);
     }
 
-    /*
-     Burn function (optional utility)
-     Allows users to permanently destroy MTX
-    */
+    /**
+     * @dev Burn function (optional utility)
+     * Allows users to permanently destroy MTX
+     * @param amount Amount of MTX to burn
+     */
     function burn(uint256 amount) external {
         _burn(msg.sender, amount);
     }
