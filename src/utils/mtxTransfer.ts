@@ -87,7 +87,7 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
 /**
  * Helper function to ensure the correct network is selected.
  * Automatically switches to the configured network if needed.
- * For Polygon network, will attempt to add it to wallet if not present.
+ * For Ethereum network, will attempt to add it to wallet if not present.
  * 
  * @returns Promise<void>
  * @throws Error if network switch fails or is rejected

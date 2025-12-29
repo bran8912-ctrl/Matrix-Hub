@@ -11,10 +11,10 @@
     "deploy": "./scripts/deploy.sh",
     "compile": "hardhat compile",
     "test": "hardhat test",
-    "deploy:amoy": "hardhat run scripts/deploy_mtx.js --network amoy",
-    "deploy:polygon": "hardhat run scripts/deploy_mtx.js --network polygon",
-    "verify:amoy": "hardhat verify --network amoy",
-    "verify:polygon": "hardhat verify --network polygon"
+    "deploy:mainnet": "hardhat run scripts/deploy_mtx.js --network mainnet",
+    "deploy:sepolia": "hardhat run scripts/deploy_mtx.js --network sepolia",
+    "verify:mainnet": "hardhat verify --network mainnet",
+    "verify:sepolia": "hardhat verify --network sepolia"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

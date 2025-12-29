@@ -13,19 +13,13 @@ export default {
     }
   },
   networks: {
-    // Polygon Mainnet
-    polygon: {
-      url: process.env.POLYGON_RPC_URL || "https://polygon-rpc.com/",
+    // Ethereum Mainnet - PRIMARY NETWORK
+    mainnet: {
+      url: process.env.MAINNET_RPC_URL || "https://eth.llamarpc.com",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 137
+      chainId: 1
     },
-    // Polygon Amoy Testnet (recommended for testing)
-    amoy: {
-      url: process.env.AMOY_RPC_URL || "https://rpc-amoy.polygon.technology/",
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 80002
-    },
-    // Ethereum Sepolia Testnet (alternative)
+    // Ethereum Sepolia Testnet (recommended for testing)
     sepolia: {
       url: process.env.SEPOLIA_RPC_URL || "https://rpc.sepolia.org/",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
@@ -39,8 +33,7 @@ export default {
   },
   etherscan: {
     apiKey: {
-      polygon: process.env.POLYGONSCAN_API_KEY || "",
-      polygonAmoy: process.env.POLYGONSCAN_API_KEY || "",
+      mainnet: process.env.ETHERSCAN_API_KEY || "",
       sepolia: process.env.ETHERSCAN_API_KEY || ""
     }
   }
