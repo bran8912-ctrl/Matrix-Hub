@@ -1,0 +1,116 @@
+---
+import Layout from "../components/Layout.astro";
+import Wallet from "../components/Wallet.jsx";
+---
+
+<Layout title="Matrix-Hub Casino">
+  <div class="casino-page">
+    <h1 class="page-title">Matrix-Hub Casino</h1>
+    
+    <div class="wallet-section">
+      <Wallet client:load />
+    </div>
+
+    <div class="casino-info">
+      <h2>Welcome to the Casino</h2>
+      <p>
+        Connect your wallet to view your MTX balance and start playing casino games.
+        All games use MTX tokens for betting and rewards.
+      </p>
+      
+      <div class="games-link">
+        <a href="/games/casino" class="btn-primary">
+          Go to Casino Games
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .casino-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .page-title {
+    font-size: 3rem;
+    color: var(--theme-primary);
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 20px var(--theme-glow);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+  }
+
+  .wallet-section {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .casino-info {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid rgba(0, 255, 153, 0.2);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .casino-info h2 {
+    color: var(--theme-primary);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  .casino-info p {
+    color: var(--theme-text);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  .games-link {
+    margin-top: 2rem;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    background: var(--theme-primary);
+    color: #181818;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px var(--theme-glow);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--theme-glow);
+  }
+
+  @media (max-width: 768px) {
+    .casino-page {
+      padding: 1rem;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .casino-info h2 {
+      font-size: 1.5rem;
+    }
+
+    .casino-info p {
+      font-size: 1rem;
+    }
+  }
+</style>
