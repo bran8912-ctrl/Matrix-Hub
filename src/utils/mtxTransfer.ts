@@ -12,6 +12,23 @@ import mtxAbi from '../abi/mtx.json';
  * @throws Error if wallet not connected, insufficient balance, or transaction fails
  */
 export async function spendMTX(to: string, amount: string): Promise<string> {
+  // Normalize the amount by trimming whitespace
+  const normalizedAmount = amount.trim();
+
+  // Validate amount parameter
+  if (!normalizedAmount) {
+    throw new Error('Amount is required and cannot be empty.');
+  }
+
+  // Check that amount parses to a finite number and is strictly greater than zero
+  const numericAmount = parseFloat(normalizedAmount);
+  if (!Number.isFinite(numericAmount)) {
+    throw new Error('Amount must be a valid number.');
+  }
+  if (numericAmount <= 0) {
+    throw new Error('Amount must be greater than zero.');
+  }
+  
   // Check if window.ethereum is available
   if (!window.ethereum) {
     throw new Error('Ethereum wallet not found. Please install MetaMask or compatible wallet.');
@@ -29,7 +46,15 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
     const decimals = await mtxContract.decimals();
     
     // Convert amount to wei using contract decimals
-    const amountInWei = parseUnits(amount, decimals);
+    let amountInWei;
+    try {
+      amountInWei = parseUnits(normalizedAmount, decimals);
+    } catch (err: any) {
+      // Handle invalid amount format (e.g., scientific notation, multiple decimals)
+      throw new Error(
+        'Amount format is invalid. Please enter a plain decimal number (e.g., "10.5").'
+      );
+    }
     
     // Get user address for balance check
     const userAddress = await signer.getAddress();
