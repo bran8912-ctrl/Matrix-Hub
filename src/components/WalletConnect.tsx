@@ -2,14 +2,29 @@ import React, { useState } from 'react';
 import { BrowserProvider, formatUnits, parseUnits, Contract } from 'ethers';
 import Web3Modal from 'web3modal';
 import { MTX } from '../config/mtx';
+// MTX: Import MTX ABI from JSON file for token contract interaction
+import MTX_ABI_JSON from '../abi/mtx.json';
 
 // Deployed MTX token contract address and ABI
 const MTX_TOKEN_ADDRESS = MTX.address;
+// MTX: Use imported ABI from mtx.json, supplemented with additional methods
 const MTX_TOKEN_ABI = [
-  // Minimal ABI for ERC-20 balanceOf
-  "function balanceOf(address owner) view returns (uint256)",
+  ...MTX_ABI_JSON.map((item: any) => {
+    // Convert ABI format if needed
+    if (item.type === 'function') {
+      const inputs = item.inputs?.map((i: any) => `${i.type} ${i.name}`).join(', ') || '';
+      const outputs = item.outputs?.map((o: any) => o.type).join(', ') || '';
+      const outputStr = outputs ? ` returns (${outputs})` : '';
+      const stateMutability = item.stateMutability ? ` ${item.stateMutability}` : '';
+      return `function ${item.name}(${inputs})${stateMutability}${outputStr}`;
+    }
+    return item;
+  }),
+  // Additional methods for token operations
   "function decimals() view returns (uint8)",
-  "function transfer(address to, uint256 amount) returns (bool)"
+  "function transfer(address to, uint256 amount) returns (bool)",
+  "function symbol() view returns (string)",
+  "function name() view returns (string)"
 ];
 
 const TIERS = [
@@ -37,6 +52,43 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
       if (bal >= TIERS[i].threshold) return TIERS[i].name;
     }
     return 'Bronze'; 
+  };
+
+  // MTX: Add MTX token to wallet using wallet_watchAsset
+  const addTokenToWallet = async (): Promise<void> => {
+    setError('');
+    if (!provider) {
+      setError('Connect wallet first.');
+      return;
+    }
+    try {
+      const ethereum = (window as any).ethereum;
+      if (!ethereum) {
+        setError('MetaMask or compatible wallet not found.');
+        return;
+      }
+      
+      // Request to add MTX token to user's wallet
+      const wasAdded = await ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: MTX_TOKEN_ADDRESS,
+            symbol: MTX.symbol,
+            decimals: MTX.decimals,
+            image: '', // Optional: Add token logo URL if available
+          },
+        },
+      });
+
+      if (wasAdded) {
+        alert('MTX token added to wallet successfully!');
+      }
+    } catch (err) {
+      console.error('Failed to add token:', err);
+      setError('Failed to add MTX token to wallet.');
+    }
   };
 
   const connectWallet = async (): Promise<void> => {
@@ -153,6 +205,42 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
           <div><strong>Address:</strong> {address.slice(0, 6)}...{address.slice(-4)}</div>
           <div><strong>MTX Balance:</strong> {balance !== null ? balance : 'Loading...'}</div>
           <div><strong>Tier:</strong> {tier}</div>
+          {/* MTX: Add MTX to Wallet button */}
+          <div style={{ marginTop: '0.5rem' }}>
+            <button 
+              onClick={addTokenToWallet} 
+              style={{ 
+                padding: '0.25rem 0.75rem', 
+                fontSize: '0.875rem', 
+                background: '#4CAF50', 
+                color: '#fff', 
+                border: 'none', 
+                borderRadius: '4px', 
+                cursor: 'pointer',
+                marginRight: '0.5rem'
+              }}
+            >
+              Add MTX to Wallet
+            </button>
+            {/* MTX: Buy MTX link using uniswapUrl from config */}
+            <a 
+              href={MTX.uniswapUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ 
+                padding: '0.25rem 0.75rem', 
+                fontSize: '0.875rem', 
+                background: '#FF007A', 
+                color: '#fff', 
+                textDecoration: 'none',
+                border: 'none', 
+                borderRadius: '4px',
+                display: 'inline-block'
+              }}
+            >
+              Buy MTX on Uniswap
+            </a>
+          </div>
           {locked > 0 && (
             <div style={{ color: '#ffd700', marginTop: '0.5rem' }}>
               <strong>Locked MTX:</strong> {locked} (Unlocks: {lockUntil ? new Date(lockUntil).toLocaleString() : ''})
