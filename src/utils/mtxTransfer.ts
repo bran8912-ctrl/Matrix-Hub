@@ -22,7 +22,7 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
   
   // Check if amount is a valid positive decimal number (reject exponential, hex, etc.)
   // Pattern rules:
-  // - Digits only, with optional decimal point and at least one digit after the point
+  // - Digits with optional decimal point (e.g., "10", "10.5") or a leading decimal point followed by digits (e.g., ".5")
   // - Rejects zero-equivalent values like "0", "0.0", "00.000"
   // - Allows values starting with decimal point like ".5"
   const decimalPattern = /^(?!0+(?:\.0+)?$)\d*\.?\d+$/;
