@@ -12,6 +12,33 @@ import mtxAbi from '../abi/mtx.json';
  * @throws Error if wallet not connected, insufficient balance, or transaction fails
  */
 export async function spendMTX(to: string, amount: string): Promise<string> {
+  // Validate amount parameter
+  if (!amount || amount.trim() === '') {
+    throw new Error('Amount is required and cannot be empty.');
+  }
+  
+  // Normalize the amount by trimming whitespace
+  const normalizedAmount = amount.trim();
+  
+  // Check if amount is a valid positive decimal number (reject exponential, hex, etc.)
+  // Pattern rules:
+  // - Digits only, with optional decimal point and at least one digit after the point
+  // - Rejects zero-equivalent values like "0", "0.0", "00.000"
+  // - Allows values starting with decimal point like ".5"
+  const decimalPattern = /^(?!0+(?:\.0+)?$)\d*\.?\d+$/;
+  if (!decimalPattern.test(normalizedAmount)) {
+    throw new Error('Amount must be a valid positive decimal number.');
+  }
+  
+  // Check if amount is greater than zero and is a finite number
+  const numericAmount = parseFloat(normalizedAmount);
+  if (!Number.isFinite(numericAmount)) {
+    throw new Error('Amount is too large or invalid.');
+  }
+  if (numericAmount <= 0) {
+    throw new Error('Amount must be greater than zero.');
+  }
+  
   // Check if window.ethereum is available
   if (!window.ethereum) {
     throw new Error('Ethereum wallet not found. Please install MetaMask or compatible wallet.');
@@ -29,7 +56,7 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
     const decimals = await mtxContract.decimals();
     
     // Convert amount to wei using contract decimals
-    const amountInWei = parseUnits(amount, decimals);
+    const amountInWei = parseUnits(normalizedAmount, decimals);
     
     // Get user address for balance check
     const userAddress = await signer.getAddress();
