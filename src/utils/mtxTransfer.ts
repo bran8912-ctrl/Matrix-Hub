@@ -12,6 +12,22 @@ import mtxAbi from '../abi/mtx.json';
  * @throws Error if wallet not connected, insufficient balance, or transaction fails
  */
 export async function spendMTX(to: string, amount: string): Promise<string> {
+  // Validate amount parameter
+  if (!amount || amount.trim() === '') {
+    throw new Error('Amount is required and cannot be empty.');
+  }
+  
+  // Check if amount is a valid number
+  const numericAmount = Number(amount);
+  if (isNaN(numericAmount)) {
+    throw new Error('Amount must be a valid numeric string.');
+  }
+  
+  // Check if amount is positive
+  if (numericAmount <= 0) {
+    throw new Error('Amount must be greater than zero.');
+  }
+  
   // Check if window.ethereum is available
   if (!window.ethereum) {
     throw new Error('Ethereum wallet not found. Please install MetaMask or compatible wallet.');
