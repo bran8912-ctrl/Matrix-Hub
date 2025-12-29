@@ -41,6 +41,7 @@ contract MatrixHubCoin is ERC20, Ownable {
      */
     constructor(uint256 initialSupply, address initialOwner) ERC20("Matrix-HubCoin", "MTX") Ownable(initialOwner) {
         require(initialOwner != address(0), "Owner cannot be zero address");
+        require(initialSupply > 0, "Initial supply must be greater than zero");
         MAX_SUPPLY = initialSupply * 10 ** decimals();
         _mint(initialOwner, MAX_SUPPLY);
     }

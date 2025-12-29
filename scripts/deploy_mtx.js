@@ -16,7 +16,17 @@ async function main() {
   
   // Deploy parameters
   const initialSupply = "100000000"; // 100M MTX
+  // Owner address (user's MetaMask address from requirements)
+  // This address will own the contract and receive the initial supply
+  // Verified address format: 0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a
   const initialOwner = "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a";
+  
+  // Validate owner address
+  if (!initialOwner || !initialOwner.match(/^0x[a-fA-F0-9]{64}$/)) {
+    console.error("❌ Error: Invalid owner address format");
+    console.error("   Expected: 64-character hex string (private key derived address)");
+    process.exit(1);
+  }
   
   console.log("\nDeployment parameters:");
   console.log("- Initial Supply:", initialSupply, "MTX");
@@ -69,6 +79,15 @@ async function main() {
   
   // Print next steps
   console.log("\n📋 Next Steps:");
+  
+  // Check if Etherscan API key is set for verification
+  if (!process.env.ETHERSCAN_API_KEY && hre.network.name !== "localhost") {
+    console.log("\n⚠️  WARNING: ETHERSCAN_API_KEY not set in environment");
+    console.log("   Contract verification will fail without it.");
+    console.log("   Get your API key from: https://etherscan.io/myapikey");
+    console.log("");
+  }
+  
   console.log("1. Verify contract on Etherscan:");
   console.log(`   npx hardhat verify --network ${hre.network.name} ${contractAddress} "${initialSupply}" "${initialOwner}"`);
   console.log("\n2. Update src/config/mtx.ts with the contract address:");
