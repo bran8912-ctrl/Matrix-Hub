@@ -17,7 +17,7 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 
 #### MatrixHubCoin.sol - ERC-20 Token Contract
 - Standard OpenZeppelin ERC-20 implementation
-- Direct ETH→MTX mint function at fixed rate (1 ETH = 1000 MTX)
+- Direct ETH→MTX mint function at fixed rate (1 ETH = 100,000 MTX)
 - Added `receive()` fallback for simple ETH sends
 - Owner-controlled minting pause/unpause
 - Owner can adjust ETH→MTX exchange rate
@@ -137,7 +137,7 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 2. Connects Ethereum wallet (MetaMask)
 3. Enters ETH amount
 4. Confirms transaction
-5. Receives MTX instantly (1 ETH = 1000 MTX)
+5. Receives MTX instantly (1 ETH = 100,000 MTX)
 
 ### Option 2: Uniswap DEX (Market Trading)
 1. User visits Uniswap

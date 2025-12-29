@@ -17,7 +17,7 @@ December 29, 2024
 - **Token Standard**: ERC-20 (unchanged)
 - **Owner Address**: `0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a`
 - **Initial Supply**: 100,000,000 MTX
-- **Exchange Rate**: 1 ETH = 1000 MTX (previously 1 MATIC = 1000 MTX)
+- **Exchange Rate**: 1 ETH = 100,000 MTX (previously 1 MATIC = 1000 MTX)
 - **Key Changes**:
   - Constructor now accepts `initialOwner` parameter
   - Updated comments and documentation to reference Ethereum

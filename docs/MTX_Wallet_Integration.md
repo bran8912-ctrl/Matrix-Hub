@@ -64,7 +64,7 @@ Matrix Hub offers two ways to purchase MTX tokens:
 
 **How it works:**
 1. User sends ETH directly to the MTX contract
-2. Contract mints MTX at a fixed rate (1 ETH = 1000 MTX)
+2. Contract mints MTX at a fixed rate (1 ETH = 100,000 MTX)
 3. MTX tokens are instantly credited to user's wallet
 
 **Advantages:**
@@ -222,7 +222,7 @@ export const MTX = {
   decimals: 18,
   chainId: 1, // Ethereum mainnet
   name: "Matrix Hub Coin",
-  ethToMtxRate: 1000, // 1 ETH = 1000 MTX
+  ethToMtxRate: 100000, // 1 ETH = 100,000 MTX
   get uniswapUrl() {
     return `https://app.uniswap.org/#/swap?outputCurrency=${this.address}&chain=ethereum`;
   }

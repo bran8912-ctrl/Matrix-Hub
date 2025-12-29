@@ -13,7 +13,7 @@ Successfully completed the full migration of Matrix Hub MTX token and casino pla
   - Standard ERC-20 implementation using OpenZeppelin
   - Initial owner: `0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a`
   - Initial supply: 100,000,000 MTX
-  - Direct ETH→MTX mint: 1 ETH = 1000 MTX
+  - Direct ETH→MTX mint: 1 ETH = 100,000 MTX
   - Security validations added (owner address, initial supply)
   - Comprehensive documentation and comments
 
@@ -121,7 +121,7 @@ Successfully completed the full migration of Matrix Hub MTX token and casino pla
 | **DEX** | QuickSwap | Uniswap |
 | **Testnet** | Polygon Amoy (80002) | Ethereum Sepolia (11155111) |
 | **Testnet Faucet** | faucet.polygon.technology | sepoliafaucet.com |
-| **Exchange Rate** | 1 MATIC = 1000 MTX | 1 ETH = 1000 MTX |
+| **Exchange Rate** | 1 MATIC = 1000 MTX | 1 ETH = 100,000 MTX |
 
 ## Files Modified
 
