@@ -1,10 +1,13 @@
 ---
 import Layout from "../../../components/Layout.astro";
+import CasinoGameWrapper from "../../../components/CasinoGameWrapper";
 import PlinkoGame from "../../../casino/plinko/PlinkoGame";
 ---
 
 <Layout title="Plinko - Matrix-Hub Casino">
   <div class="container mx-auto px-4 py-8">
-    <PlinkoGame client:load mtxBalance={0} />
+    <CasinoGameWrapper client:load>
+      {(props: any) => <PlinkoGame {...props} />}
+    </CasinoGameWrapper>
   </div>
 </Layout>
