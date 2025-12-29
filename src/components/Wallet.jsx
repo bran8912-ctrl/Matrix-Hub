@@ -69,7 +69,7 @@ const Wallet = () => {
       const mtxContract = new Contract(MTX.address, mtxAbi, ethersProvider);
       const rawBalance = await mtxContract.balanceOf(userAddress);
       const decimals = await mtxContract.decimals();
-      const formattedBalance = parseFloat(formatUnits(rawBalance, decimals));
+      const formattedBalance = formatUnits(rawBalance, decimals);
       setBalance(formattedBalance);
     } catch (err) {
       console.error('Error fetching balance:', err);
