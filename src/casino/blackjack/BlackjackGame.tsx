@@ -30,6 +30,11 @@ export default function BlackjackGame({ walletAddress, mtxBalance, onBetPlaced }
       return;
     }
 
+    if (Number(mtxBalance) <= 0) {
+      alert('You need MTX to play.');
+      return;
+    }
+
     const betError = BlackjackEngine.validateBet(BlackjackEngine.BET_AMOUNT);
     if (betError) {
       setError(betError);

@@ -23,6 +23,11 @@ export default function DiceGame({ walletAddress, mtxBalance, onBetPlaced }: Dic
       return;
     }
 
+    if (Number(mtxBalance) <= 0) {
+      alert('You need MTX to play.');
+      return;
+    }
+
     const betError = DiceEngine.validateBet(betAmount, target);
     if (betError) {
       setError(betError);
