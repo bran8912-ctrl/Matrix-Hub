@@ -36,7 +36,7 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
       const token = new Contract(MTX_TOKEN_ADDRESS, MTX_TOKEN_ABI, provider);
       const rawBalance = await token.balanceOf(userAddress);
       const decimals = await token.decimals();
-      const formatted = parseFloat(formatUnits(rawBalance, decimals));
+      const formatted = Number(formatUnits(rawBalance, decimals));
       setBalance(formatted);
     } catch (err) {
       setError('Failed to connect wallet.');
