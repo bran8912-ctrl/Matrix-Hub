@@ -5,11 +5,9 @@ import { MTX } from '../config/mtx';
 
 // Deployed MTX token contract address and ABI
 const MTX_TOKEN_ADDRESS = MTX.address;
-// MTX: Use imported ABI from mtx.json, supplemented with additional methods for token operations
+// MTX: Define ABI for MTX token contract interactions (standard ERC-20 methods)
 const MTX_TOKEN_ABI = [
-  // balanceOf from mtx.json ABI
   "function balanceOf(address account) view returns (uint256)",
-  // Additional ERC-20 methods for token operations
   "function decimals() view returns (uint8)",
   "function transfer(address to, uint256 amount) returns (bool)",
   "function symbol() view returns (string)",
@@ -43,7 +41,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
     return 'Bronze'; 
   };
 
-  // MTX: Add MTX token to wallet using wallet_watchAsset
+  // MTX: Add MTX token to wallet using wallet_watchAsset (EIP-747)
   const addTokenToWallet = async (): Promise<void> => {
     setError('');
     if (!provider) {
@@ -51,13 +49,14 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
       return;
     }
     try {
+      // wallet_watchAsset requires direct ethereum object access (not through ethers provider)
       const ethereum = (window as any).ethereum;
       if (!ethereum) {
         setError('MetaMask or compatible wallet not found.');
         return;
       }
       
-      // Request to add MTX token to user's wallet
+      // Request to add MTX token to user's wallet using EIP-747
       const wasAdded = await ethereum.request({
         method: 'wallet_watchAsset',
         params: {
@@ -72,7 +71,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
       });
 
       if (wasAdded) {
-        // Token successfully added - no alert needed as wallet provides feedback
+        // Token successfully added - wallet provides user feedback
         console.log('MTX token added to wallet successfully');
       }
     } catch (err) {
