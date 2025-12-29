@@ -46,7 +46,7 @@ contract CasinoCore {
         address _dev,
         address _governance
     ) {
-        mtx = IERC20(_mtx); // Deployed MatrixHubCoin: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+        mtx = IERC20(_mtx); // MTX Token - deploy MatrixHubCoin first, then pass address here
         liquidity = ILiquidityRouter(_liquidity);
         reserve = ICasinoReserve(_reserve);
         rng = IRNGEngine(_rng);
