@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserProvider, Contract, parseEther, formatEther } from 'ethers';
+import { BrowserProvider, Contract, parseEther } from 'ethers';
 import { MTX } from '../config/mtx';
 import mtxAbi from '../abi/mtx.json';
 
