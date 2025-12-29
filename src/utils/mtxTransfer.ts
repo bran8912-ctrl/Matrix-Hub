@@ -17,13 +17,15 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
     throw new Error('Amount is required and cannot be empty.');
   }
   
-  // Check if amount is a valid number
-  const numericAmount = Number(amount);
-  if (isNaN(numericAmount)) {
-    throw new Error('Amount must be a valid numeric string.');
+  // Check if amount is a valid decimal number (reject exponential, hex, etc.)
+  // This pattern matches positive decimal numbers with optional decimal point
+  const decimalPattern = /^\d+\.?\d*$/;
+  if (!decimalPattern.test(amount.trim())) {
+    throw new Error('Amount must be a valid positive decimal number.');
   }
   
-  // Check if amount is positive
+  // Check if amount is greater than zero
+  const numericAmount = parseFloat(amount);
   if (numericAmount <= 0) {
     throw new Error('Amount must be greater than zero.');
   }
