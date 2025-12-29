@@ -2,25 +2,14 @@ import React, { useState } from 'react';
 import { BrowserProvider, formatUnits, parseUnits, Contract } from 'ethers';
 import Web3Modal from 'web3modal';
 import { MTX } from '../config/mtx';
-// MTX: Import MTX ABI from JSON file for token contract interaction
-import MTX_ABI_JSON from '../abi/mtx.json';
 
 // Deployed MTX token contract address and ABI
 const MTX_TOKEN_ADDRESS = MTX.address;
-// MTX: Use imported ABI from mtx.json, supplemented with additional methods
+// MTX: Use imported ABI from mtx.json, supplemented with additional methods for token operations
 const MTX_TOKEN_ABI = [
-  ...MTX_ABI_JSON.map((item: any) => {
-    // Convert ABI format if needed
-    if (item.type === 'function') {
-      const inputs = item.inputs?.map((i: any) => `${i.type} ${i.name}`).join(', ') || '';
-      const outputs = item.outputs?.map((o: any) => o.type).join(', ') || '';
-      const outputStr = outputs ? ` returns (${outputs})` : '';
-      const stateMutability = item.stateMutability ? ` ${item.stateMutability}` : '';
-      return `function ${item.name}(${inputs})${stateMutability}${outputStr}`;
-    }
-    return item;
-  }),
-  // Additional methods for token operations
+  // balanceOf from mtx.json ABI
+  "function balanceOf(address account) view returns (uint256)",
+  // Additional ERC-20 methods for token operations
   "function decimals() view returns (uint8)",
   "function transfer(address to, uint256 amount) returns (bool)",
   "function symbol() view returns (string)",
@@ -77,13 +66,14 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
             address: MTX_TOKEN_ADDRESS,
             symbol: MTX.symbol,
             decimals: MTX.decimals,
-            image: '', // Optional: Add token logo URL if available
+            // Image omitted - can be added later when token logo is available
           },
         },
       });
 
       if (wasAdded) {
-        alert('MTX token added to wallet successfully!');
+        // Token successfully added - no alert needed as wallet provides feedback
+        console.log('MTX token added to wallet successfully');
       }
     } catch (err) {
       console.error('Failed to add token:', err);
