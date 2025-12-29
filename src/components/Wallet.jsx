@@ -220,7 +220,7 @@ const Wallet = () => {
               fontWeight: 'bold',
               color: '#00ff99'
             }}>
-              {balance !== null ? balance.toFixed(4) : 'Loading...'} MTX
+              {balance !== null ? Number(balance).toFixed(4) : 'Loading...'} MTX
             </div>
           </div>
 
