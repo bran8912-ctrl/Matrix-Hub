@@ -263,6 +263,25 @@ const Wallet = () => {
             >
               Buy MTX on Uniswap
             </a>
+
+            {/* Buy MTX Direct Mint Button */}
+            <a
+              href="/buy-mtx"
+              style={{
+                padding: '0.5rem 1rem',
+                fontSize: '0.875rem',
+                background: '#00ff99',
+                color: '#181818',
+                textDecoration: 'none',
+                border: 'none',
+                borderRadius: '4px',
+                textAlign: 'center',
+                fontWeight: '500',
+                display: 'block'
+              }}
+            >
+              Buy MTX (Direct Mint)
+            </a>
           </div>
         </div>
       )}
