@@ -1,4 +1,4 @@
-import { BrowserProvider, Contract, parseUnits } from 'ethers';
+import { BrowserProvider, Contract, parseUnits, isAddress } from 'ethers';
 import { MTX } from '../config/mtx';
 import mtxAbi from '../abi/mtx.json';
 
@@ -15,6 +15,17 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
   // Check if window.ethereum is available
   if (!window.ethereum) {
     throw new Error('Ethereum wallet not found. Please install MetaMask or compatible wallet.');
+  }
+
+  // Validate recipient address
+  if (!to || !isAddress(to)) {
+    throw new Error('Invalid recipient address. Please provide a valid Ethereum address.');
+  }
+
+  // Validate amount is a valid positive number
+  const amountNum = parseFloat(amount);
+  if (!amount || isNaN(amountNum) || amountNum <= 0) {
+    throw new Error('Invalid amount. Please provide a valid positive number.');
   }
 
   try {

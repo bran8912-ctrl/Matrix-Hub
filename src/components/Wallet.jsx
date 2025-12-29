@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserProvider, Contract, formatUnits } from 'ethers';
 import Web3Modal from 'web3modal';
 import { MTX } from '../config/mtx';
@@ -115,7 +115,7 @@ const Wallet = () => {
   /**
    * Handle account changes (when user switches accounts in wallet)
    */
-  const handleAccountsChanged = async (accounts) => {
+  const handleAccountsChanged = useCallback(async (accounts) => {
     if (accounts.length === 0) {
       // User disconnected wallet
       setAddress('');
@@ -128,14 +128,14 @@ const Wallet = () => {
         await fetchBalance(provider, accounts[0]);
       }
     }
-  };
+  }, [address, provider]);
 
   /**
    * Handle chain/network changes (reload to ensure consistency)
    */
-  const handleChainChanged = () => {
+  const handleChainChanged = useCallback(() => {
     window.location.reload();
-  };
+  }, []);
 
   /**
    * Setup and cleanup event listeners when wallet is connected
@@ -154,7 +154,7 @@ const Wallet = () => {
         }
       };
     }
-  }, [address, provider]); // Re-run when address or provider changes
+  }, [address, handleAccountsChanged, handleChainChanged]); // Include handler functions in dependencies
 
   return (
     <div className="wallet-container" style={{
@@ -175,6 +175,7 @@ const Wallet = () => {
         <button
           onClick={connectWallet}
           disabled={loading}
+          className="wallet-connect-btn"
           style={{
             padding: '0.75rem 1.5rem',
             fontSize: '1rem',
@@ -185,7 +186,25 @@ const Wallet = () => {
             cursor: loading ? 'not-allowed' : 'pointer',
             fontWeight: 'bold',
             width: '100%',
-            opacity: loading ? 0.6 : 1
+            opacity: loading ? 0.6 : 1,
+            transition: 'all 0.2s ease-in-out'
+          }}
+          onMouseEnter={(e) => {
+            if (!loading) {
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 4px 12px rgba(0, 255, 153, 0.3)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = 'none';
+          }}
+          onFocus={(e) => {
+            e.target.style.outline = '2px solid #00ff99';
+            e.target.style.outlineOffset = '2px';
+          }}
+          onBlur={(e) => {
+            e.target.style.outline = 'none';
           }}
         >
           {loading ? 'Connecting...' : 'Connect Wallet'}
@@ -237,7 +256,25 @@ const Wallet = () => {
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
-                fontWeight: '500'
+                fontWeight: '500',
+                transition: 'all 0.2s ease-in-out'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-1px)';
+                e.target.style.boxShadow = '0 2px 8px rgba(76, 175, 80, 0.3)';
+                e.target.style.background = '#45a049';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
+                e.target.style.background = '#4CAF50';
+              }}
+              onFocus={(e) => {
+                e.target.style.outline = '2px solid #4CAF50';
+                e.target.style.outlineOffset = '2px';
+              }}
+              onBlur={(e) => {
+                e.target.style.outline = 'none';
               }}
             >
               Add MTX to Wallet
@@ -258,7 +295,25 @@ const Wallet = () => {
                 borderRadius: '4px',
                 textAlign: 'center',
                 fontWeight: '500',
-                display: 'block'
+                display: 'block',
+                transition: 'all 0.2s ease-in-out'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-1px)';
+                e.target.style.boxShadow = '0 2px 8px rgba(255, 0, 122, 0.3)';
+                e.target.style.background = '#e6006d';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
+                e.target.style.background = '#FF007A';
+              }}
+              onFocus={(e) => {
+                e.target.style.outline = '2px solid #FF007A';
+                e.target.style.outlineOffset = '2px';
+              }}
+              onBlur={(e) => {
+                e.target.style.outline = 'none';
               }}
             >
               Buy MTX on Uniswap
