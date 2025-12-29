@@ -28,6 +28,11 @@ export default function PlinkoGame({ walletAddress, mtxBalance, onBetPlaced }: P
       return;
     }
 
+    if (Number(mtxBalance) <= 0) {
+      alert('You need MTX to play.');
+      return;
+    }
+
     const betError = PlinkoEngine.validateBet(betAmount);
     if (betError) {
       setError(betError);

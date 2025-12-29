@@ -18,6 +18,11 @@ export default function SlotsGame({ walletAddress, mtxBalance, onBetPlaced }: Sl
       return;
     }
 
+    if (Number(mtxBalance) <= 0) {
+      alert('You need MTX to play.');
+      return;
+    }
+
     const betError = SlotsEngine.validateBet(SlotsEngine.BET_AMOUNT);
     if (betError) {
       setError(betError);
