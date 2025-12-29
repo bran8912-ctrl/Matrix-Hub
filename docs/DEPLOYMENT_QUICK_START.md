@@ -12,8 +12,8 @@ The MTX token contract is ready for deployment but has not been deployed to any 
 
 1. Install dependencies: `npm install`
 2. Create `.env` file: `cp .env.example .env`
-3. Add your private key to `.env` (wallet with MATIC for gas)
-4. Get testnet MATIC: https://faucet.polygon.technology/
+3. Add your private key to `.env` (wallet with ETH for gas)
+4. Get testnet ETH: https://sepoliafaucet.com/
 
 ### Deploy Commands
 
@@ -22,10 +22,10 @@ The MTX token contract is ready for deployment but has not been deployed to any 
 npm run deploy
 
 # Or deploy directly to testnet
-npm run deploy:amoy
+npm run deploy:sepolia
 
 # Or deploy directly to mainnet (after testing!)
-npm run deploy:polygon
+npm run deploy:mainnet
 ```
 
 ### After Deployment
@@ -33,10 +33,10 @@ npm run deploy:polygon
 1. **Verify Contract**
    ```bash
    # For testnet
-   npx hardhat verify --network amoy YOUR_CONTRACT_ADDRESS "100000000"
+   npm run verify:sepolia YOUR_CONTRACT_ADDRESS "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
    
    # For mainnet
-   npx hardhat verify --network polygon YOUR_CONTRACT_ADDRESS "100000000"
+   npm run verify:mainnet YOUR_CONTRACT_ADDRESS "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
    ```
 
 2. **Update Configuration**
@@ -44,38 +44,38 @@ npm run deploy:polygon
    - Or set `MTX_CONTRACT_ADDRESS` environment variable
 
 3. **Test Everything**
-   - Connect wallet on correct network (Polygon)
-   - Test direct mint with small amount
+   - Connect wallet on correct network (Ethereum Mainnet)
+   - Test direct mint with small amount (0.01 ETH)
    - Verify token appears in wallet
-   - Test DEX integration on QuickSwap
+   - Test DEX integration on Uniswap
 
 4. **Add Liquidity**
-   - Go to https://quickswap.exchange/
-   - Add MATIC/MTX liquidity pool
+   - Go to https://app.uniswap.org/
+   - Add ETH/MTX liquidity pool
    - Enables DEX trading
 
 ## Network Information
 
-### Polygon Mainnet (Production)
-- **Chain ID**: 137
-- **Currency**: MATIC
-- **RPC**: https://polygon-rpc.com/
-- **Explorer**: https://polygonscan.com/
-- **DEX**: QuickSwap
+### Ethereum Mainnet (Production)
+- **Chain ID**: 1
+- **Currency**: ETH
+- **RPC**: https://eth.llamarpc.com
+- **Explorer**: https://etherscan.io/
+- **DEX**: Uniswap
 
-### Polygon Amoy Testnet (Testing)
-- **Chain ID**: 80002
-- **Currency**: Test MATIC
-- **RPC**: https://rpc-amoy.polygon.technology/
-- **Explorer**: https://amoy.polygonscan.com/
-- **Faucet**: https://faucet.polygon.technology/
+### Ethereum Sepolia Testnet (Testing)
+- **Chain ID**: 11155111
+- **Currency**: Test ETH
+- **RPC**: https://rpc.sepolia.org/
+- **Explorer**: https://sepolia.etherscan.io/
+- **Faucet**: https://sepoliafaucet.com/
 
-## Verification on Polygonscan
+## Verification on Etherscan
 
-After deployment, verify your contract to link it to the MatrixHubOrg Polygonscan account:
+After deployment, verify your contract on Etherscan:
 
-1. Get Polygonscan API key from: https://polygonscan.com/myapikey
-2. Add to `.env`: `POLYGONSCAN_API_KEY=your_key_here`
+1. Get Etherscan API key from: https://etherscan.io/myapikey
+2. Add to `.env`: `ETHERSCAN_API_KEY=your_key_here`
 3. Run verification command (see above)
 
 ## Security Checklist
@@ -84,13 +84,13 @@ Before going live:
 
 - [ ] Contract deployed to testnet first
 - [ ] All functions tested on testnet
-- [ ] Contract verified on Polygonscan
+- [ ] Contract verified on Etherscan
 - [ ] Private keys secured (never commit to Git)
 - [ ] Contract ownership checked
 - [ ] Rate and minting controls tested
 - [ ] Emergency pause tested
 - [ ] Max supply verified
-- [ ] Initial DEX liquidity added
+- [ ] Initial DEX liquidity added (Uniswap)
 - [ ] All documentation updated
 - [ ] Frontend tested with real contract
 - [ ] User-facing addresses match deployment
@@ -103,17 +103,17 @@ Before going live:
 - Solidity compiler downloads from soliditylang.org
 
 **"Insufficient funds"**
-- Get more MATIC from faucet (testnet)
-- Or buy MATIC on exchange (mainnet)
+- Get more ETH from faucet (testnet)
+- Or buy ETH on exchange (mainnet)
 
 **"Transaction failed"**
 - Check gas price
 - Verify network is correct
-- Ensure wallet has enough MATIC
+- Ensure wallet has enough ETH
 
 **"Contract verification failed"**
 - Check constructor arguments match deployment
-- Verify Polygonscan API key is correct
+- Verify Etherscan API key is correct
 - Wait a few minutes after deployment before verifying
 
 ## Support
@@ -133,4 +133,4 @@ For detailed instructions, see:
 
 ---
 
-**Ready to deploy? Run: `npm run deploy`**
+**Ready to deploy? Run: `npm run deploy:sepolia` (testnet) or `npm run deploy:mainnet` (production)**

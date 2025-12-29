@@ -8,7 +8,7 @@ During a comprehensive audit of the Matrix-Hub codebase, we discovered **multipl
 
 ## Hardhat Default Addresses Found
 
-Hardhat generates deterministic contract addresses on local test networks. These addresses **ONLY exist on local development environments** and have **NO presence on any live blockchain** (Ethereum, Polygon, or any testnet).
+Hardhat generates deterministic contract addresses on local test networks. These addresses **ONLY exist on local development environments** and have **NO presence on any live blockchain** (Ethereum or any testnet).
 
 ### Addresses Found and Removed:
 
@@ -20,8 +20,8 @@ Hardhat generates deterministic contract addresses on local test networks. These
 
 ### Why These Addresses Are Dangerous
 
-1. **Non-existent on Live Networks**: These addresses have no deployed contracts on Ethereum, Polygon, or any public testnet
-2. **Fund Loss**: Any ETH/MATIC sent to these addresses would be **permanently lost**
+1. **Non-existent on Live Networks**: These addresses have no deployed contracts on Ethereum or any public testnet
+2. **Fund Loss**: Any ETH sent to these addresses would be **permanently lost**
 3. **Transaction Failure**: All smart contract interactions would fail
 4. **No Recovery**: Lost funds cannot be recovered
 5. **User Trust Damage**: Would destroy platform credibility
@@ -138,27 +138,27 @@ Updated:
 - MTX_Wallet_Integration.md - Network and deployment info
 - MTX_Tokenomics.md - Acquisition methods and deployment
 
-## Network Migration: Ethereum → Polygon
+## Network Migration: Polygon → Ethereum
 
-Additionally, based on the Polygonscan account requirement (MatrixHubOrg), we migrated the entire platform from Ethereum to Polygon:
+Following requirements to restore Ethereum Mainnet support, the platform has been migrated back from Polygon to Ethereum:
 
 ### Changes Made:
 
 | Aspect | Before | After |
 |--------|--------|-------|
-| Network | Ethereum Mainnet (1) | Polygon Mainnet (137) |
-| Currency | ETH | MATIC |
-| DEX | Uniswap | QuickSwap |
-| Explorer | Etherscan | Polygonscan |
-| Rate | 1 ETH = 1000 MTX | 1 MATIC = 1000 MTX |
+| Network | Polygon Mainnet (137) | Ethereum Mainnet (1) |
+| Currency | MATIC | ETH |
+| DEX | QuickSwap | Uniswap |
+| Explorer | Polygonscan | Etherscan |
+| Rate | 1 MATIC = 1000 MTX | 1 ETH = 1000 MTX |
 
-### Benefits of Polygon:
+### Ethereum Mainnet Benefits:
 
-1. **Lower Gas Fees**: ~100x cheaper than Ethereum
-2. **Faster Transactions**: 2-second block times
-3. **Better UX**: Affordable for small transactions
-4. **Growing Ecosystem**: Strong DeFi presence
-5. **Polygonscan Account**: MatrixHubOrg already exists
+1. **Greater Liquidity**: Deep liquidity on Uniswap
+2. **Established Ecosystem**: Most mature DeFi ecosystem
+3. **Wider User Base**: Largest blockchain by users and developers
+4. **Better Tooling**: Comprehensive developer infrastructure
+5. **Security**: Highest security standards and auditing resources
 
 ## Security Improvements
 
@@ -227,19 +227,19 @@ npm run build
 ### Phase 1: MTX Token (Required First)
 ```bash
 # Testnet first
-npm run deploy:amoy
+npm run deploy:sepolia
 # Update config with address
 # Test thoroughly
 
 # Then mainnet
-npm run deploy:polygon
-# Verify on Polygonscan
+npm run deploy:mainnet
+# Verify on Etherscan
 ```
 
 ### Phase 2: Casino Contracts
 ```bash
 # After MTX is live
-node scripts/deploy_casino.js --network polygon
+node scripts/deploy_casino.js --network mainnet
 # Update environment variables
 # Test casino functionality
 ```
@@ -247,7 +247,7 @@ node scripts/deploy_casino.js --network polygon
 ### Phase 3: Launch
 ```bash
 # Update all documentation
-# Add liquidity to QuickSwap
+# Add liquidity to Uniswap
 # Final testing
 # Announce deployment
 ```
@@ -276,7 +276,7 @@ We successfully identified and removed **all Hardhat local testnet default addre
 - ✅ **User-Safe**: Cannot lose funds before deployment
 - ✅ **Well-Documented**: Comprehensive deployment guides
 - ✅ **Production-Ready**: Prepared for legitimate deployment
-- ✅ **Network-Correct**: Configured for Polygon
+- ✅ **Network-Correct**: Configured for Ethereum Mainnet
 - ✅ **Status-Aware**: Validates deployment before allowing use
 
 The discovery of these addresses was critical. Using them would have:
