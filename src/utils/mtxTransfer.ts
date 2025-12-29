@@ -12,13 +12,13 @@ import mtxAbi from '../abi/mtx.json';
  * @throws Error if wallet not connected, insufficient balance, or transaction fails
  */
 export async function spendMTX(to: string, amount: string): Promise<string> {
-  // Validate amount parameter
-  if (!amount || amount.trim() === '') {
-    throw new Error('Amount is required and cannot be empty.');
-  }
-  
   // Normalize the amount by trimming whitespace
   const normalizedAmount = amount.trim();
+
+  // Validate amount parameter
+  if (!normalizedAmount) {
+    throw new Error('Amount is required and cannot be empty.');
+  }
 
   // Check that amount parses to a finite number and is strictly greater than zero
   const numericAmount = parseFloat(normalizedAmount);
