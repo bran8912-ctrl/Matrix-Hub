@@ -19,7 +19,7 @@ contract CasinoReserve {
     }
 
     constructor(address _mtx, uint _reserveCap, address _casinoCore) {
-        mtx = IERC20(_mtx); // Deployed MatrixHubCoin: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+        mtx = IERC20(_mtx); // MTX Token address - set from deployed MatrixHubCoin
         reserveCap = _reserveCap;
         casinoCore = _casinoCore;
     }
@@ -48,7 +48,7 @@ contract LiquidityRouter {
     address public dexPool;
 
     constructor(address _mtx, address _dexPool) {
-        mtx = IERC20(_mtx); // Deployed MatrixHubCoin: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+        mtx = IERC20(_mtx); // MTX Token address - set from deployed MatrixHubCoin
         dexPool = _dexPool;
     }
 

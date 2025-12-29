@@ -224,10 +224,27 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
                 textDecoration: 'none',
                 border: 'none', 
                 borderRadius: '4px',
-                display: 'inline-block'
+                display: 'inline-block',
+                marginRight: '0.5rem'
               }}
             >
               Buy MTX on Uniswap
+            </a>
+            {/* MTX: Direct Mint link */}
+            <a 
+              href="/buy-mtx"
+              style={{ 
+                padding: '0.25rem 0.75rem', 
+                fontSize: '0.875rem', 
+                background: '#00ff99', 
+                color: '#181818', 
+                textDecoration: 'none',
+                border: 'none', 
+                borderRadius: '4px',
+                display: 'inline-block'
+              }}
+            >
+              Buy MTX (Direct Mint)
             </a>
           </div>
           {locked > 0 && (

@@ -7,7 +7,14 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy": "./scripts/deploy.sh",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:amoy": "hardhat run scripts/deploy_mtx.js --network amoy",
+    "deploy:polygon": "hardhat run scripts/deploy_mtx.js --network polygon",
+    "verify:amoy": "hardhat verify --network amoy",
+    "verify:polygon": "hardhat verify --network polygon"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

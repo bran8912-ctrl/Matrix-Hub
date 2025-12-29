@@ -2,6 +2,14 @@
 
 This document describes the MTX wallet integration components and utilities added to the Matrix Hub project.
 
+## MTX Contract Information
+
+- **Contract Address**: `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`
+- **Network**: Ethereum Mainnet (ChainID: 1)
+- **Symbol**: MTX
+- **Decimals**: 18
+- **Name**: Matrix Hub Coin
+
 ## Components
 
 ### Wallet.jsx
@@ -14,6 +22,7 @@ A React island component that provides wallet connection and MTX token balance m
 - Display MTX token balance
 - Add MTX token to wallet (EIP-747)
 - Buy MTX on Uniswap
+- **NEW**: Buy MTX via Direct Mint
 - Automatic network switching to Ethereum mainnet
 - Handle account and network changes
 
@@ -25,6 +34,98 @@ import Wallet from "../components/Wallet.jsx";
 
 <Wallet client:load />
 ```
+
+### BuyMTX.tsx
+
+A React component for purchasing MTX directly with ETH using the direct mint feature.
+
+**Features:**
+- Display current ETH to MTX exchange rate
+- Calculate MTX amount based on ETH input
+- Send ETH to contract to mint MTX
+- Transaction status feedback
+- Security guidance and warnings
+- Testnet/Mainnet compatibility
+
+**Usage in Astro pages:**
+```astro
+---
+import BuyMTX from "../components/BuyMTX.tsx";
+---
+
+<BuyMTX client:load />
+```
+
+## Purchasing MTX
+
+Matrix Hub offers two ways to purchase MTX tokens:
+
+### Option 1: Direct Mint (Recommended for Onboarding)
+
+**How it works:**
+1. User sends ETH directly to the MTX contract
+2. Contract mints MTX at a fixed rate (1 ETH = 1000 MTX)
+3. MTX tokens are instantly credited to user's wallet
+
+**Advantages:**
+- Lower gas costs (single transaction)
+- Fixed, predictable pricing
+- Instant minting
+- Perfect for small purchases and first-time users
+- No slippage or liquidity concerns
+
+**How to use:**
+1. Visit `/buy-mtx` page on Matrix Hub
+2. Connect your Ethereum wallet
+3. Enter amount of ETH to spend
+4. Click "Buy MTX with ETH"
+5. Confirm transaction in wallet
+6. Receive MTX instantly
+
+**Technical details:**
+- Contract function: `buyMTX()` (payable)
+- Fallback function: `receive()` also works (send ETH directly to contract)
+- Rate can be updated by contract owner if needed
+- Minting can be paused by owner (e.g., for transition to DEX-only)
+
+**Code example:**
+```typescript
+import { BrowserProvider, Contract, parseEther } from 'ethers';
+import { MTX } from '../config/mtx';
+import mtxAbi from '../abi/mtx.json';
+
+async function buyMTXDirectMint(ethAmount: string) {
+  const provider = new BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+  const mtxContract = new Contract(MTX.address, mtxAbi, signer);
+  
+  // Send ETH to buyMTX function
+  const tx = await mtxContract.buyMTX({ value: parseEther(ethAmount) });
+  await tx.wait();
+  
+  return tx.hash;
+}
+```
+
+### Option 2: Uniswap DEX (Public Market)
+
+**How it works:**
+1. User swaps ETH or other tokens for MTX on Uniswap
+2. Pricing determined by liquidity pool (market rates)
+3. Instant settlement
+
+**Advantages:**
+- Market-based pricing
+- High liquidity for large purchases
+- Can swap from any ERC-20 token
+- Trusted, battle-tested platform
+
+**How to use:**
+1. Visit Uniswap link from Matrix Hub
+2. Connect wallet
+3. Select input token and amount
+4. Review swap details
+5. Confirm transaction
 
 ## Utilities
 
@@ -89,13 +190,26 @@ try {
 
 ## ABI (src/abi/mtx.json)
 
-The MTX token ABI includes the following ERC-20 methods:
+The MTX token ABI includes the following methods:
 
+**ERC-20 Standard:**
 - `balanceOf(address account)`: Read token balance
 - `transfer(address to, uint256 amount)`: Transfer tokens
 - `decimals()`: Get token decimals (18 for MTX)
 - `symbol()`: Get token symbol ("MTX")
 - `name()`: Get token name ("Matrix Hub Coin")
+- `totalSupply()`: Get total MTX supply
+- `burn(uint256 amount)`: Burn MTX tokens
+
+**Direct Mint Features:**
+- `buyMTX()`: Purchase MTX with ETH (payable)
+- `ethToMtxRate()`: Get current ETH to MTX exchange rate
+- `mintingPaused()`: Check if direct minting is paused
+- `MAX_SUPPLY()`: Get maximum MTX supply
+- `receive()`: Fallback function for direct ETH sends
+
+**Events:**
+- `MTXPurchased(address indexed buyer, uint256 ethAmount, uint256 mtxAmount)`: Emitted on successful purchase
 
 ## Configuration
 
@@ -103,18 +217,17 @@ The MTX token configuration is located in `src/config/mtx.ts`:
 
 ```typescript
 export const MTX = {
-  address: "0xYOUR_MTX_CONTRACT_ADDRESS", // Update before deployment
+  address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0", // Live contract address
   symbol: "MTX",
   decimals: 18,
   chainId: 1, // Ethereum mainnet
   name: "Matrix Hub Coin",
+  ethToMtxRate: 1000, // 1 ETH = 1000 MTX
   get uniswapUrl() {
     return `https://app.uniswap.org/#/swap?outputCurrency=${this.address}&chain=ethereum`;
   }
 };
 ```
-
-**Note:** Update `address` with the actual deployed MTX contract address before production deployment.
 
 ## Integration Example: Casino Betting
 

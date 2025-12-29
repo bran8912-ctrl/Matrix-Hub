@@ -1,0 +1,302 @@
+---
+import Layout from "../components/Layout.astro";
+import BuyMTX from "../components/BuyMTX.tsx";
+
+export const prerender = true;
+---
+
+<Layout title="Buy MTX - Matrix Hub">
+  <div class="buy-mtx-page">
+    <h1 class="page-title">Buy MTX</h1>
+    <p class="page-description">
+      Purchase MTX tokens directly with ETH using our secure direct mint feature, 
+      or buy on Uniswap for instant liquidity.
+    </p>
+    
+    <!-- Direct Mint Component -->
+    <div class="buy-section">
+      <BuyMTX client:load />
+    </div>
+
+    <div class="info-section">
+      <h2>Two Ways to Buy MTX</h2>
+      
+      <div class="purchase-options">
+        <div class="option-card">
+          <h3>🚀 Direct Mint (Recommended for Onboarding)</h3>
+          <ul>
+            <li><strong>Fixed Rate:</strong> 1 ETH = 1000 MTX</li>
+            <li><strong>Lower Gas:</strong> Single transaction, lower fees</li>
+            <li><strong>Instant:</strong> Immediate MTX minting to your wallet</li>
+            <li><strong>Perfect For:</strong> Small purchases, first-time users</li>
+            <li><strong>Security:</strong> Direct interaction with verified contract</li>
+          </ul>
+          <div class="cta">
+            <a href="#" class="cta-button direct">Use Direct Mint Above ↑</a>
+          </div>
+        </div>
+
+        <div class="option-card">
+          <h3>💱 Uniswap DEX (Public Market)</h3>
+          <ul>
+            <li><strong>Market Rate:</strong> Pricing based on liquidity pool</li>
+            <li><strong>High Liquidity:</strong> Swap any amount instantly</li>
+            <li><strong>Trusted Platform:</strong> Battle-tested DEX protocol</li>
+            <li><strong>Perfect For:</strong> Large purchases, market trading</li>
+            <li><strong>Flexibility:</strong> Swap from any ERC-20 token</li>
+          </ul>
+          <div class="cta">
+            <a 
+              href={`https://app.uniswap.org/#/swap?outputCurrency=0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0&chain=ethereum`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="cta-button uniswap"
+            >
+              Buy on Uniswap →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="security-notice">
+        <h3>🔒 Security & Best Practices</h3>
+        <ul>
+          <li><strong>Verify Contract Address:</strong> Always double-check you're interacting with the correct contract: <code>0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</code></li>
+          <li><strong>Network:</strong> Ensure you're on Ethereum Mainnet (ChainID: 1)</li>
+          <li><strong>Start Small:</strong> For first-time users, we recommend starting with a small test purchase</li>
+          <li><strong>Gas Fees:</strong> Consider current network gas prices before transacting</li>
+          <li><strong>Wallet Security:</strong> Never share your private keys or seed phrase</li>
+        </ul>
+      </div>
+
+      <div class="testnet-notice">
+        <h3>🧪 Testnet Information</h3>
+        <p>
+          If you're testing on a testnet (e.g., Sepolia, Goerli), make sure to:
+        </p>
+        <ul>
+          <li>Use testnet ETH (get from faucets)</li>
+          <li>Verify you're on the correct testnet network</li>
+          <li>Note that testnet MTX has no real value</li>
+          <li>Testnet contract addresses may differ from mainnet</li>
+        </ul>
+        <p class="warning">
+          ⚠️ <strong>Always verify network and contract address before sending real ETH!</strong>
+        </p>
+      </div>
+
+      <div class="next-steps">
+        <h3>After Purchase</h3>
+        <ol>
+          <li><strong>Add MTX to Wallet:</strong> Use the "Add MTX to Wallet" button to track your balance</li>
+          <li><strong>Connect Wallet:</strong> Visit the <a href="/wallet">wallet page</a> to view your MTX holdings</li>
+          <li><strong>Explore Features:</strong> Use MTX to access premium tools, play casino games, and more</li>
+          <li><strong>Join Community:</strong> Connect with other users on Telegram and Discord</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .buy-mtx-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    color: var(--theme-primary);
+    text-align: center;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 15px var(--theme-glow);
+    font-family: 'Courier New', monospace;
+  }
+
+  .page-description {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--theme-text);
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .buy-section {
+    margin: 2rem 0 3rem 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .info-section {
+    margin-top: 3rem;
+  }
+
+  .info-section h2 {
+    color: var(--theme-primary);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+  }
+
+  .info-section h3 {
+    color: var(--theme-primary);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  .purchase-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .option-card {
+    padding: 1.5rem;
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid rgba(0, 255, 153, 0.2);
+    border-radius: 8px;
+  }
+
+  .option-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .option-card ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .option-card li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--theme-text);
+  }
+
+  .option-card li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--theme-primary);
+    font-weight: bold;
+  }
+
+  .cta {
+    text-align: center;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .cta-button.direct {
+    background: var(--theme-primary);
+    color: #181818;
+  }
+
+  .cta-button.uniswap {
+    background: #FF007A;
+    color: #fff;
+  }
+
+  .cta-button:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+  }
+
+  .security-notice,
+  .testnet-notice,
+  .next-steps {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid rgba(0, 255, 153, 0.2);
+    border-radius: 8px;
+  }
+
+  .testnet-notice {
+    background: rgba(255, 153, 0, 0.05);
+    border-color: rgba(255, 153, 0, 0.3);
+  }
+
+  .security-notice ul,
+  .testnet-notice ul,
+  .next-steps ol {
+    color: var(--theme-text);
+    line-height: 1.8;
+  }
+
+  .security-notice li,
+  .testnet-notice li {
+    margin-bottom: 0.5rem;
+  }
+
+  .next-steps ol {
+    padding-left: 1.5rem;
+  }
+
+  .next-steps li {
+    margin-bottom: 0.75rem;
+  }
+
+  code {
+    background: #222;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    color: var(--theme-primary);
+  }
+
+  .warning {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    border-radius: 4px;
+    color: #ff6666;
+  }
+
+  a {
+    color: var(--theme-primary);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .buy-mtx-page {
+      padding: 1rem;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .page-description {
+      font-size: 1rem;
+    }
+
+    .purchase-options {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

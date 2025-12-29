@@ -33,9 +33,19 @@ import Panel from './Panel.astro';
   <div class="reserve-liquidity">
     <h3>💎 Casino Reserve & Liquidity</h3>
     
+    <!-- Casino Deployment Warning -->
+    <div class="deployment-notice">
+      <p><strong>⚠️ Casino Contracts Not Yet Deployed</strong></p>
+      <p>
+        The casino smart contracts (CasinoCore, CasinoReserve, LiquidityRouter) must be deployed
+        after the MTX token is live. Contract addresses will be updated here after deployment.
+      </p>
+      <p>See <a href="/docs/DEPLOYMENT_QUICK_START.md">Deployment Guide</a> for instructions.</p>
+    </div>
+    
     <div class="section-block">
       <h4>CasinoReserve Contract</h4>
-      <p><code>0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</code></p>
+      <p><code>Pending Deployment</code></p>
       <ul>
         <li><strong>Purpose:</strong> Holds MTX to pay winners and absorb losses</li>
         <li><strong>Funding:</strong> 3% of all bets go to reserve to maintain solvency</li>
@@ -218,6 +228,28 @@ import Panel from './Panel.astro';
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 15px;
+  }
+
+  .deployment-notice {
+    background: rgba(255, 153, 0, 0.1);
+    border: 2px solid #ff9900;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .deployment-notice p {
+    margin: 0.5rem 0;
+    color: var(--theme-text);
+  }
+
+  .deployment-notice strong {
+    color: #ffaa00;
+  }
+
+  .deployment-notice a {
+    color: #ffaa00;
+    text-decoration: underline;
   }
 
   .section-block h4 {

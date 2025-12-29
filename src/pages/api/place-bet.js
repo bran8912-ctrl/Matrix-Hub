@@ -1,11 +1,17 @@
 // src/pages/api/place-bet.js
 // API route to interact with CasinoCore contract for placing a bet
+// ⚠️ WARNING: This file needs to be updated with actual deployed contract addresses
+// See: docs/DEPLOYMENT_QUICK_START.md for deployment instructions
 
 import { ethers } from "ethers";
 
-const CASINO_CORE_ADDRESS = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
+// ⚠️ PLACEHOLDER - Update after deploying CasinoCore contract
+// The address below (0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9) is a Hardhat local testnet
+// default address and will NOT work on any live network!
+const CASINO_CORE_ADDRESS = process.env.CASINO_CORE_ADDRESS || "0x0000000000000000000000000000000000000000";
+
 const CASINO_CORE_ABI = [
-  // Add relevant ABI entries for bet placement and payout
+  // Add relevant ABI entries for bet placement and payout after deployment
   // Example: "function placeBet(uint256 amount, bytes calldata gameData) external"
 ];
 
@@ -14,18 +20,34 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  // Check if casino is deployed
+  if (CASINO_CORE_ADDRESS === "0x0000000000000000000000000000000000000000") {
+    return res.status(503).json({ 
+      error: "Casino contract not deployed yet. Please deploy contracts first.",
+      deploymentGuide: "/docs/DEPLOYMENT_QUICK_START.md"
+    });
+  }
+
   const { gameId, betAmount, gameData, walletAddress } = req.body;
 
-  // Connect to local Hardhat node
-  const provider = new ethers.JsonRpcProvider("http://localhost:8545");
-  const signer = provider.getSigner(); // Use first account for testing
-  const casinoCore = new ethers.Contract(CASINO_CORE_ADDRESS, CASINO_CORE_ABI, signer);
+  // Connect to Polygon network (not local Hardhat)
+  const rpcUrl = process.env.POLYGON_RPC_URL || "https://polygon-rpc.com/";
+  const provider = new ethers.JsonRpcProvider(rpcUrl);
+  
+  // Note: In production, you'll need proper wallet/signer setup
+  // For server-side transactions, use a secure key management system
+  const casinoCore = new ethers.Contract(CASINO_CORE_ADDRESS, CASINO_CORE_ABI, provider);
 
   try {
     // Example: call a bet function (update ABI and call as needed)
     // const tx = await casinoCore.placeBet(ethers.parseUnits(betAmount.toString(), 18), gameData);
     // await tx.wait();
-    res.status(200).json({ success: true, txHash: "dummy-tx-hash" });
+    
+    // TODO: Implement actual casino logic after contract deployment
+    res.status(503).json({ 
+      error: "Casino functionality not yet implemented. Deploy contracts first.",
+      status: "pending_deployment"
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
