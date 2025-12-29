@@ -43,8 +43,8 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
     // Execute transfer transaction
     const tx = await mtxContract.transfer(to, amountInWei);
     
-    // Wait for transaction confirmation
-    const receipt = await tx.wait();
+    // Wait for transaction confirmation (1 block confirmation)
+    const receipt = await tx.wait(1);
     
     // Return transaction hash
     return receipt.hash;
@@ -75,8 +75,8 @@ export async function ensureEthereum(): Promise<void> {
     const provider = new BrowserProvider(window.ethereum);
     const network = await provider.getNetwork();
     
-    // Check if we're on the correct network
-    if (Number(network.chainId) !== MTX.chainId) {
+    // Check if we're on the correct network (chainId is bigint in ethers v6)
+    if (network.chainId !== BigInt(MTX.chainId)) {
       // Attempt to switch network
       try {
         await window.ethereum.request({

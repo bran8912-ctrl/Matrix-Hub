@@ -53,12 +53,6 @@ const Wallet = () => {
       
       // Fetch MTX balance
       await fetchBalance(ethersProvider, userAddress);
-      
-      // Listen for account changes
-      if (window.ethereum) {
-        window.ethereum.on('accountsChanged', handleAccountsChanged);
-        window.ethereum.on('chainChanged', handleChainChanged);
-      }
     } catch (err) {
       console.error('Wallet connection error:', err);
       setError(err.message || 'Failed to connect wallet. Please try again.');
@@ -144,16 +138,23 @@ const Wallet = () => {
   };
 
   /**
-   * Cleanup event listeners on unmount
+   * Setup and cleanup event listeners when wallet is connected
    */
   useEffect(() => {
-    return () => {
-      if (window.ethereum) {
-        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-        window.ethereum.removeListener('chainChanged', handleChainChanged);
-      }
-    };
-  }, []);
+    // Only add event listeners if wallet is connected
+    if (window.ethereum && address) {
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+      window.ethereum.on('chainChanged', handleChainChanged);
+
+      // Cleanup listeners on unmount or when address changes
+      return () => {
+        if (window.ethereum) {
+          window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+          window.ethereum.removeListener('chainChanged', handleChainChanged);
+        }
+      };
+    }
+  }, [address, provider]); // Re-run when address or provider changes
 
   return (
     <div className="wallet-container" style={{
