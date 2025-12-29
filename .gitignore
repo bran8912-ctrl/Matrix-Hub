@@ -28,3 +28,9 @@ pnpm-debug.log*
 
 # Supabase
 supabase/.temp
+
+# Hardhat
+cache/
+artifacts/
+deployments/
+typechain-types/

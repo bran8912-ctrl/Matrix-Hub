@@ -85,8 +85,9 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
 }
 
 /**
- * Helper function to ensure the correct Ethereum network is selected.
+ * Helper function to ensure the correct network is selected.
  * Automatically switches to the configured network if needed.
+ * For Polygon network, will attempt to add it to wallet if not present.
  * 
  * @returns Promise<void>
  * @throws Error if network switch fails or is rejected
@@ -111,11 +112,26 @@ export async function ensureEthereum(): Promise<void> {
       } catch (switchError: any) {
         // This error code indicates the chain has not been added to MetaMask
         if (switchError.code === 4902) {
-          throw new Error(
-            `Please add Ethereum network (Chain ID: ${MTX.chainId}) to your wallet.`
-          );
+          // Try to add the network
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: `0x${MTX.chainId.toString(16)}`,
+                chainName: MTX.chainName,
+                nativeCurrency: MTX.nativeCurrency,
+                rpcUrls: MTX.rpcUrls,
+                blockExplorerUrls: MTX.blockExplorerUrls,
+              }],
+            });
+          } catch (addError: any) {
+            throw new Error(
+              `Failed to add ${MTX.chainName} network to wallet. Please add it manually.`
+            );
+          }
+        } else {
+          throw switchError;
         }
-        throw switchError;
       }
     }
   } catch (error: any) {
