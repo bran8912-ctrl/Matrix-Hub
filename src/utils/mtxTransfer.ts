@@ -46,7 +46,15 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
     const decimals = await mtxContract.decimals();
     
     // Convert amount to wei using contract decimals
-    const amountInWei = parseUnits(normalizedAmount, decimals);
+    let amountInWei;
+    try {
+      amountInWei = parseUnits(normalizedAmount, decimals);
+    } catch (err: any) {
+      // Handle invalid amount format (e.g., scientific notation, multiple decimals)
+      throw new Error(
+        'Amount format is invalid. Please enter a plain decimal number (e.g., "10.5").'
+      );
+    }
     
     // Get user address for balance check
     const userAddress = await signer.getAddress();
