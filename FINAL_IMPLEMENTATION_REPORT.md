@@ -193,7 +193,7 @@ Successfully completed the full migration of Matrix Hub MTX token and casino pla
 npm run deploy:sepolia
 
 # Verify on Etherscan
-npm run verify:sepolia <CONTRACT_ADDRESS> "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
+npm run verify:sepolia <CONTRACT_ADDRESS> "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
 ```
 
 ### Mainnet (Production)
@@ -204,7 +204,7 @@ npm run verify:sepolia <CONTRACT_ADDRESS> "100000000" "0xb248d5bd04f6fadee6146d0
 npm run deploy:mainnet
 
 # Verify on Etherscan
-npm run verify:mainnet <CONTRACT_ADDRESS> "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
+npm run verify:mainnet <CONTRACT_ADDRESS> "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
 ```
 
 ## Key Validations Added

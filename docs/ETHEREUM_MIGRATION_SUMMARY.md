@@ -15,7 +15,7 @@ December 29, 2024
 #### MatrixHubCoin (MTX Token)
 - **Network**: Migrated from Polygon (Chain ID 137) to Ethereum Mainnet (Chain ID 1)
 - **Token Standard**: ERC-20 (unchanged)
-- **Owner Address**: `0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a`
+- **Owner Address**: `0x58e7893356002ac8f8f612f7b3d29d8b181d85b3`
 - **Initial Supply**: 100,000,000 MTX
 - **Exchange Rate**: 1 ETH = 100,000 MTX (previously 1 MATIC = 1000 MTX)
 - **Key Changes**:
@@ -135,7 +135,7 @@ December 29, 2024
 
 The MTX contract is now owned by:
 ```
-0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a
+0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
 ```
 
 This address:
@@ -173,7 +173,7 @@ The contracts have been updated and are ready for deployment, but they have not 
 
 4. **Verify Contract**
    ```bash
-   npm run verify:mainnet <CONTRACT_ADDRESS> "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
+   npm run verify:mainnet <CONTRACT_ADDRESS> "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
    ```
 
 5. **Update Configuration**

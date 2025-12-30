@@ -4,8 +4,8 @@ This document describes the MTX wallet integration components and utilities adde
 
 ## MTX Contract Information
 
-- **Contract Address**: `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`
-- **Network**: Ethereum Mainnet (ChainID: 1)
+- **Contract Address**: *TBD mainnet address* (note: `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0` is a Hardhat local-test address and MUST NOT be used on live networks)
+- **Network**: Determined by your connected wallet / dApp configuration (e.g., Hardhat local testnet during development, Ethereum Mainnet after an official deployment)
 - **Symbol**: MTX
 - **Decimals**: 18
 - **Name**: Matrix Hub Coin
@@ -217,7 +217,10 @@ The MTX token configuration is located in `src/config/mtx.ts`:
 
 ```typescript
 export const MTX = {
-  address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0", // Live contract address
+  // IMPORTANT: Do not hardcode a test or example address here.
+  // Always configure the deployed MTX token address via environment.
+  // Set MTX_CONTRACT_ADDRESS in your `.env` based on your deployment artifacts.
+  address: import.meta.env.MTX_CONTRACT_ADDRESS || "0x0000000000000000000000000000000000000000", // Placeholder
   symbol: "MTX",
   decimals: 18,
   chainId: 1, // Ethereum mainnet

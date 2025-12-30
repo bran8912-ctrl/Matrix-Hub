@@ -114,10 +114,24 @@ if [ -f "$DEPLOYMENT_FILE" ]; then
             echo "⚠️  ETHERSCAN_API_KEY not set in .env file"
             echo "   Get API key from: https://etherscan.io/myapikey"
         else
-            echo ""
-            echo "🔍 Verifying contract..."
-            npx hardhat verify --network $NETWORK $CONTRACT_ADDRESS "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
-            echo ""
+            # Determine the token owner address used in the constructor
+            # Prefer MTX_OWNER_ADDRESS from the environment; otherwise use default
+            if [ -z "$MTX_OWNER_ADDRESS" ]; then
+                MTX_OWNER_ADDRESS="0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+            fi
+
+            # Basic validation: must look like a standard Ethereum address (0x + 40 hex chars)
+            if [[ ! "$MTX_OWNER_ADDRESS" =~ ^0x[0-9a-fA-F]{40}$ ]]; then
+                echo "⚠️  Invalid Ethereum address for MTX_OWNER_ADDRESS:"
+                echo "    '$MTX_OWNER_ADDRESS'"
+                echo "    Expected format: 0x followed by 40 hexadecimal characters."
+                echo "    Skipping Etherscan verification. Please fix MTX_OWNER_ADDRESS and run again."
+            else
+                echo ""
+                echo "🔍 Verifying contract..."
+                npx hardhat verify --network "$NETWORK" "$CONTRACT_ADDRESS" "100000000" "$MTX_OWNER_ADDRESS"
+                echo ""
+            fi
         fi
     fi
     
@@ -128,8 +142,14 @@ if [ -f "$DEPLOYMENT_FILE" ]; then
         # Backup current config
         cp src/config/mtx.ts src/config/mtx.ts.backup
         
-        # Update the address in config
-        sed -i "s/address: \"0x0000000000000000000000000000000000000000\"/address: \"$CONTRACT_ADDRESS\"/" src/config/mtx.ts
+        # Update the address in config (portable sed -i usage for cross-platform compatibility)
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            # macOS requires empty string after -i
+            sed -i '' "s/\"0x0000000000000000000000000000000000000000\"/\"$CONTRACT_ADDRESS\"/" src/config/mtx.ts
+        else
+            # Linux and other Unix-like systems
+            sed -i "s/\"0x0000000000000000000000000000000000000000\"/\"$CONTRACT_ADDRESS\"/" src/config/mtx.ts
+        fi
         
         echo "✅ Updated src/config/mtx.ts with new contract address"
         echo "   Backup saved to src/config/mtx.ts.backup"

@@ -1,6 +1,7 @@
 ---
 import Layout from "../components/Layout.astro";
 import BuyMTX from "../components/BuyMTX.tsx";
+import { MTX } from "../config/mtx.ts";
 
 export const prerender = true;
 ---
@@ -47,7 +48,7 @@ export const prerender = true;
           </ul>
           <div class="cta">
             <a 
-              href={`https://app.uniswap.org/#/swap?outputCurrency=0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0&chain=ethereum`}
+              href={MTX.uniswapUrl}
               target="_blank"
               rel="noopener noreferrer"
               class="cta-button uniswap"
@@ -61,7 +62,7 @@ export const prerender = true;
       <div class="security-notice">
         <h3>🔒 Security & Best Practices</h3>
         <ul>
-          <li><strong>Verify Contract Address:</strong> Always double-check you're interacting with the correct contract: <code>0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</code></li>
+          <li><strong>Verify Contract Address:</strong> Always double-check you're interacting with the correct contract: <code>{MTX.address}</code></li>
           <li><strong>Network:</strong> Ensure you're on Ethereum Mainnet (ChainID: 1)</li>
           <li><strong>Start Small:</strong> For first-time users, we recommend starting with a small test purchase</li>
           <li><strong>Gas Fees:</strong> Consider current network gas prices before transacting</li>

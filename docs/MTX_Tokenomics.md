@@ -1,7 +1,8 @@
 # MTX Tokenomics
 
 ## Contract Information
-- **Address**: `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`
+- **Address**: `TBA – see verified deployment details`
+  > **Note:** Earlier drafts listed `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`, which is a Hardhat local-test address and **not** a mainnet contract. Always use the verified MTX contract address from the official deployment/configuration docs or the Etherscan link referenced in the deployment documentation.
 - **Network**: Ethereum Mainnet (ChainID: 1)
 - **Symbol**: MTX
 - **Decimals**: 18

@@ -7,7 +7,7 @@
 // ⚠️ AFTER DEPLOYMENT: Update this file with the real contract address
 // For production, set MTX_CONTRACT_ADDRESS in environment variables
 // Exchange Rate: 1 ETH = 100,000 MTX (configured in contract)
-// Initial Owner: 0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a
+// Initial Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
 
 // Get contract address from environment or use placeholder
 const contractAddress = typeof process !== 'undefined' && process.env?.MTX_CONTRACT_ADDRESS 
@@ -22,6 +22,9 @@ if (isPlaceholder) {
   console.warn("⚠️  MTX: Using placeholder address. Deploy contract to get legitimate address.");
   console.warn("    Run: npm run deploy:mainnet or npm run deploy:sepolia");
 }
+
+// Note: For runtime verification that contract is actually deployed, call provider.getCode(address)
+// to check that bytecode exists at the address when isDeployed is true
 
 export const MTX = {
   address: contractAddress,
@@ -40,7 +43,7 @@ export const MTX = {
   rpcUrls: ["https://eth.llamarpc.com"],
   blockExplorerUrls: ["https://etherscan.io/"],
   // Contract owner for verification and management
-  owner: "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a",
+  owner: "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3",
   isDeployed: isValidAddress && !isPlaceholder,
   get blockExplorerUrl() {
     return `${this.blockExplorerUrls[0]}address/${this.address}`;

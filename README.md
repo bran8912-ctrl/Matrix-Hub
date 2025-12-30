@@ -460,7 +460,7 @@ See [MTX Deployment Guide](docs/MTX_Deployment_Guide.md) for detailed instructio
 
 - **Network**: Ethereum Mainnet (ChainID: 1)
 - **Contract Address**: *To be updated after deployment*
-- **Contract Owner**: 0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a
+- **Contract Owner**: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
 - **Symbol**: MTX
 - **Decimals**: 18
 - **Block Explorer**: Etherscan
