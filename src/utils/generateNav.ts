@@ -27,7 +27,6 @@
  */
 
 import fg from 'fast-glob';
-import matter from 'gray-matter';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -69,15 +68,31 @@ function extractPageMetadata(filePath: string): PageMetadata {
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
     
-    // Parse frontmatter
-    const { data } = matter(content);
+    // Extract title and navCategory from Astro frontmatter
+    // Look for patterns like: export const title = "..." or title: "..."
+    let title: string | null = null;
+    let navCategory: string | null = null;
     
-    // Extract title from frontmatter or generate from filename
-    let title: string;
-    if (data.title) {
-      title = data.title;
-    } else {
-      // Fallback: generate title from filename
+    // Try to extract from frontmatter block (between --- markers)
+    const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
+    if (frontmatterMatch) {
+      const frontmatter = frontmatterMatch[1];
+      
+      // Match: export const title = "..." or title: "..."
+      const titleMatch = frontmatter.match(/(?:export const )?title\s*[=:]\s*["']([^"']+)["']/);
+      if (titleMatch) {
+        title = titleMatch[1];
+      }
+      
+      // Match: export const navCategory = "..." or navCategory: "..."
+      const categoryMatch = frontmatter.match(/(?:export const )?navCategory\s*[=:]\s*["']([^"']+)["']/);
+      if (categoryMatch) {
+        navCategory = categoryMatch[1];
+      }
+    }
+    
+    // Fallback: generate title from filename if not found
+    if (!title) {
       const fileName = path.basename(filePath, path.extname(filePath));
       
       // Special case for index files
@@ -92,9 +107,6 @@ function extractPageMetadata(filePath: string): PageMetadata {
           .join(' ');
       }
     }
-    
-    // Extract custom category if present
-    const navCategory = data.navCategory || null;
     
     return { title, navCategory };
   } catch (error) {
