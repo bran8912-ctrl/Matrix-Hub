@@ -240,7 +240,7 @@ export const MTX = {
 
 For more information:
 - [Full Deployment Guide](MTX_Deployment_Guide.md)
-- [Quick Start Guide](DEPLOYMENT_QUICK_START.md)
+- [Quick Start Guide](QUICK_DEPLOY.md)
 - [Wallet Integration](MTX_Wallet_Integration.md)
 
 ---
