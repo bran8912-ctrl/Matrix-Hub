@@ -19,7 +19,7 @@
  * - Active page highlighting
  */
 
-import { getNavigation } from '../utils/generateNav.js';
+import { getNavigation } from '../utils/generateNav';
 
 // Generate navigation at build time
 const navTabs = await getNavigation();
@@ -242,7 +242,8 @@ const currentPath = Astro.url.pathname;
     transition: transform 0.3s ease;
   }
 
-  .tab-dropdown[aria-expanded="true"] .dropdown-arrow {
+  .tab-dropdown[aria-expanded="true"] .dropdown-arrow,
+  .tab-dropdown:hover .dropdown-arrow {
     transform: rotate(180deg);
   }
 
@@ -366,15 +367,26 @@ const currentPath = Astro.url.pathname;
   }
 </style>
 
-<script>
+<script is:inline>
   /**
    * Tab navigation interactivity
    * Handles mobile menu and dropdown interactions
+   * Using is:inline to run once and avoid duplicate event listeners
    */
   
   // Mobile menu toggle
   const mobileToggle = document.querySelector('.mobile-menu-toggle');
   const tabList = document.querySelector('.tab-list');
+
+  // Track viewport mode for consistent behavior
+  const isMobileViewport = () => {
+    if (typeof window.matchMedia === 'function') {
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+    return window.innerWidth <= 768;
+  };
+
+  let isMobileMode = isMobileViewport();
 
   if (mobileToggle && tabList) {
     mobileToggle.addEventListener('click', () => {
@@ -382,35 +394,72 @@ const currentPath = Astro.url.pathname;
       mobileToggle.setAttribute('aria-expanded', isOpen.toString());
     });
 
-    // Close mobile menu when clicking outside
+    // Close mobile menu when clicking outside (but not on toggle button)
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.tab-nav')) {
+      const target = e.target;
+      if (!target.closest('.tab-nav') || target.closest('.mobile-menu-toggle')) {
+        return;
+      }
+      if (!target.closest('.tab-list') && !target.closest('.mobile-menu-toggle')) {
         tabList.classList.remove('open');
         mobileToggle.setAttribute('aria-expanded', 'false');
       }
     });
   }
 
-  // Dropdown toggles for mobile
+  // Handle viewport resize to update behavior dynamically
+  window.addEventListener('resize', () => {
+    const currentlyMobile = isMobileViewport();
+
+    if (currentlyMobile === isMobileMode) {
+      return;
+    }
+
+    isMobileMode = currentlyMobile;
+
+    // When switching to desktop view, reset mobile-specific open/expanded state
+    if (!isMobileMode) {
+      if (tabList) {
+        tabList.classList.remove('open');
+      }
+      if (mobileToggle) {
+        mobileToggle.setAttribute('aria-expanded', 'false');
+      }
+      document.querySelectorAll('.tab-dropdown').forEach(d => {
+        d.setAttribute('aria-expanded', 'false');
+      });
+      document.querySelectorAll('.tab-button').forEach(b => {
+        b.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
+  // Dropdown toggles for mobile only
   const dropdownButtons = document.querySelectorAll('.tab-button');
   
   dropdownButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-      if (window.innerWidth <= 768) {
-        const dropdown = button.closest('.tab-dropdown');
-        const isExpanded = dropdown.getAttribute('aria-expanded') === 'true';
-        
-        // Close all other dropdowns
-        document.querySelectorAll('.tab-dropdown').forEach(d => {
-          if (d !== dropdown) {
-            d.setAttribute('aria-expanded', 'false');
-          }
-        });
-        
-        // Toggle current dropdown
-        dropdown.setAttribute('aria-expanded', (!isExpanded).toString());
-        button.setAttribute('aria-expanded', (!isExpanded).toString());
+    button.addEventListener('click', () => {
+      if (!isMobileMode) {
+        // Let desktop rely on CSS :hover behavior only
+        return;
       }
+
+      const dropdown = button.closest('.tab-dropdown');
+      if (!dropdown) {
+        return;
+      }
+
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+      
+      // Close all other dropdowns
+      document.querySelectorAll('.tab-button').forEach(b => {
+        if (b !== button) {
+          b.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Toggle current dropdown (only on button, not parent)
+      button.setAttribute('aria-expanded', (!isExpanded).toString());
     });
   });
 
@@ -438,8 +487,8 @@ const currentPath = Astro.url.pathname;
       if (mobileToggle) {
         mobileToggle.setAttribute('aria-expanded', 'false');
       }
-      document.querySelectorAll('.tab-dropdown').forEach(d => {
-        d.setAttribute('aria-expanded', 'false');
+      document.querySelectorAll('.tab-button').forEach(b => {
+        b.setAttribute('aria-expanded', 'false');
       });
     }
   });

@@ -1,5 +1,5 @@
 /**
- * generateNav.js - Build-time navigation generator for Matrix-Hub
+ * generateNav.ts - Build-time navigation generator for Matrix-Hub
  * 
  * This utility scans the src/pages directory and builds a navigation structure
  * based on the folder hierarchy. It extracts page titles from frontmatter when available.
@@ -14,7 +14,7 @@
  * CUSTOMIZATION TIPS:
  * - To exclude additional folders, add them to EXCLUDED_PATHS
  * - To customize tab order, modify the sortTabs() function
- * - To change how titles are extracted, update extractTitle()
+ * - To change how titles are extracted, update extractPageMetadata()
  * - Use 'navCategory' in frontmatter to override a page's category
  */
 
@@ -30,74 +30,86 @@ const __dirname = path.dirname(__filename);
 // Paths and files to exclude from navigation
 const EXCLUDED_PATHS = [
   '**/api/**',        // API routes
-  '**/_*.{astro,jsx,tsx}', // Files starting with underscore
+  '**/_*.astro',      // Astro files starting with underscore
   '**/_*.md',         // Markdown files starting with underscore
 ];
 
+interface PageMetadata {
+  title: string;
+  navCategory: string | null;
+}
+
+interface NavigationPage {
+  title: string;
+  path: string;
+  isIndex: boolean;
+}
+
+interface NavigationTab {
+  id: string;
+  label: string;
+  pages: NavigationPage[];
+}
+
 /**
- * Extract title from frontmatter or generate from filename
- * @param {string} filePath - Path to the file
- * @returns {string} - Page title
+ * Extract title and navCategory from frontmatter or generate from filename
+ * This combines reading operations to avoid duplicate file I/O
+ * @param filePath - Path to the file
+ * @returns Page metadata including title and custom category
  */
-function extractTitle(filePath) {
+function extractPageMetadata(filePath: string): PageMetadata {
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
     
     // Parse frontmatter
     const { data } = matter(content);
     
-    // Check for title in frontmatter
+    // Extract title from frontmatter or generate from filename
+    let title: string;
     if (data.title) {
-      return data.title;
+      title = data.title;
+    } else {
+      // Fallback: generate title from filename
+      const fileName = path.basename(filePath, path.extname(filePath));
+      
+      // Special case for index files
+      if (fileName === 'index') {
+        title = 'Overview';
+      } else {
+        // Convert kebab-case or snake_case to Title Case
+        title = fileName
+          .replace(/[-_]/g, ' ')
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
     }
     
-    // Fallback: generate title from filename
-    const fileName = path.basename(filePath, path.extname(filePath));
+    // Extract custom category if present
+    const navCategory = data.navCategory || null;
     
-    // Special case for index files
-    if (fileName === 'index') {
-      return 'Overview';
-    }
-    
-    // Convert kebab-case or snake_case to Title Case
-    return fileName
-      .replace(/[-_]/g, ' ')
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    return { title, navCategory };
   } catch (error) {
-    console.warn(`Warning: Could not extract title from ${filePath}:`, error.message);
+    console.warn(`Warning: Could not extract metadata from ${filePath}:`, (error as Error).message);
     // Fallback to filename
     const fileName = path.basename(filePath, path.extname(filePath));
-    return fileName.charAt(0).toUpperCase() + fileName.slice(1);
-  }
-}
-
-/**
- * Extract navCategory from frontmatter if present
- * @param {string} filePath - Path to the file
- * @returns {string|null} - Custom category or null
- */
-function extractNavCategory(filePath) {
-  try {
-    const content = fs.readFileSync(filePath, 'utf-8');
-    const { data } = matter(content);
-    return data.navCategory || null;
-  } catch (error) {
-    return null;
+    return {
+      title: fileName.charAt(0).toUpperCase() + fileName.slice(1),
+      navCategory: null
+    };
   }
 }
 
 /**
  * Convert file path to URL path
- * @param {string} filePath - File path relative to src/pages
- * @returns {string} - URL path
+ * @param filePath - File path relative to src/pages
+ * @returns URL path
  */
-function filePathToUrlPath(filePath) {
+function filePathToUrlPath(filePath: string): string {
   // Remove file extension
   let urlPath = filePath.replace(/\.(astro|md|mdx)$/, '');
   
-  // Remove 'index' from end of path
+  // Remove 'index' from end of path (handles nested index files like games/casino/index.astro)
   urlPath = urlPath.replace(/\/index$/, '') || '/';
   
   // Ensure leading slash
@@ -110,10 +122,10 @@ function filePathToUrlPath(filePath) {
 
 /**
  * Sort tabs in a specific order
- * @param {Array} tabs - Array of tab objects
- * @returns {Array} - Sorted tabs
+ * @param tabs - Array of tab objects
+ * @returns Sorted tabs
  */
-function sortTabs(tabs) {
+function sortTabs(tabs: NavigationTab[]): NavigationTab[] {
   // Define preferred order
   const order = ['home', 'games', 'docs', 'wallet', 'buy-mtx', 'casino'];
   
@@ -139,9 +151,9 @@ function sortTabs(tabs) {
 
 /**
  * Generate navigation structure from pages directory
- * @returns {Promise<Array>} - Navigation structure
+ * @returns Navigation structure
  */
-export async function generateNavigation() {
+export async function generateNavigation(): Promise<NavigationTab[]> {
   const pagesDir = path.resolve(__dirname, '../pages');
   
   // Find all page files, excluding specified paths
@@ -152,20 +164,19 @@ export async function generateNavigation() {
   });
   
   // Build navigation structure
-  const navMap = new Map();
+  const navMap = new Map<string, NavigationTab>();
   
   for (const file of files) {
     const fullPath = path.join(pagesDir, file);
-    const title = extractTitle(fullPath);
-    const customCategory = extractNavCategory(fullPath);
+    const { title, navCategory } = extractPageMetadata(fullPath);
     const urlPath = filePathToUrlPath(file);
     
     // Determine category
-    let category = 'home';
+    let category: string;
     
-    if (customCategory) {
+    if (navCategory) {
       // Use custom category from frontmatter
-      category = customCategory;
+      category = navCategory;
     } else if (file === 'index.astro') {
       // Root index is home
       category = 'home';
@@ -190,10 +201,16 @@ export async function generateNavigation() {
     }
     
     // Add page to category
-    navMap.get(category).pages.push({
+    // Check for index files with all supported extensions
+    const isIndexFile = file.endsWith('index.astro') || 
+                       file.endsWith('index.md') || 
+                       file.endsWith('index.mdx') || 
+                       file === 'index.astro';
+    
+    navMap.get(category)!.pages.push({
       title,
       path: urlPath,
-      isIndex: file.endsWith('index.astro') || file === 'index.astro'
+      isIndex: isIndexFile
     });
   }
   
@@ -215,13 +232,9 @@ export async function generateNavigation() {
 
 /**
  * Get navigation data (for use in Astro components)
- * This function caches the result to avoid multiple filesystem scans
+ * This function directly delegates to generateNavigation without caching.
+ * During static site generation, Astro handles caching appropriately.
  */
-let cachedNav = null;
-
-export async function getNavigation() {
-  if (!cachedNav) {
-    cachedNav = await generateNavigation();
-  }
-  return cachedNav;
+export async function getNavigation(): Promise<NavigationTab[]> {
+  return generateNavigation();
 }
