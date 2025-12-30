@@ -116,7 +116,7 @@ if [ -f "$DEPLOYMENT_FILE" ]; then
         else
             echo ""
             echo "🔍 Verifying contract..."
-            npx hardhat verify --network $NETWORK $CONTRACT_ADDRESS "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
+            npx hardhat verify --network $NETWORK $CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
             echo ""
         fi
     fi

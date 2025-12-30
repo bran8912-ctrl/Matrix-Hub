@@ -11,7 +11,7 @@ Successfully completed the full migration of Matrix Hub MTX token and casino pla
 #### 1. Smart Contracts ✅
 - **MatrixHubCoin (MTX Token)**
   - Standard ERC-20 implementation using OpenZeppelin
-  - Initial owner: `0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a`
+  - Initial owner: `0x58e7893356002ac8f8f612f7b3d29d8b181d85b3`
   - Initial supply: 100,000,000 MTX
   - Direct ETH→MTX mint: 1 ETH = 100,000 MTX
   - Security validations added (owner address, initial supply)
@@ -75,7 +75,7 @@ Successfully completed the full migration of Matrix Hub MTX token and casino pla
 #### 4. Deployment Scripts ✅
 - **scripts/deploy_mtx.js**
   - Ethereum Mainnet deployment
-  - Owner address: `0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a`
+  - Owner address: `0x58e7893356002ac8f8f612f7b3d29d8b181d85b3`
   - Address validation added
   - Etherscan verification commands
   - Uniswap liquidity instructions
@@ -193,7 +193,7 @@ Successfully completed the full migration of Matrix Hub MTX token and casino pla
 npm run deploy:sepolia
 
 # Verify on Etherscan
-npm run verify:sepolia <CONTRACT_ADDRESS> "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
+npm run verify:sepolia <CONTRACT_ADDRESS> "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
 ```
 
 ### Mainnet (Production)
@@ -204,7 +204,7 @@ npm run verify:sepolia <CONTRACT_ADDRESS> "100000000" "0xb248d5bd04f6fadee6146d0
 npm run deploy:mainnet
 
 # Verify on Etherscan
-npm run verify:mainnet <CONTRACT_ADDRESS> "100000000" "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a"
+npm run verify:mainnet <CONTRACT_ADDRESS> "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
 ```
 
 ## Key Validations Added
@@ -223,7 +223,7 @@ npm run verify:mainnet <CONTRACT_ADDRESS> "100000000" "0xb248d5bd04f6fadee6146d0
 
 ## Contract Owner Details
 
-**Owner Address**: `0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a`
+**Owner Address**: `0x58e7893356002ac8f8f612f7b3d29d8b181d85b3`
 
 **Owner Capabilities**:
 - Receives initial supply (100M MTX)

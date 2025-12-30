@@ -18,13 +18,13 @@ async function main() {
   const initialSupply = "100000000"; // 100M MTX
   // Owner address (user's MetaMask address from requirements)
   // This address will own the contract and receive the initial supply
-  // Verified address format: 0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a
-  const initialOwner = "0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a";
+  // Verified address format: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+  const initialOwner = "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3";
   
   // Validate owner address
-  if (!initialOwner || !initialOwner.match(/^0x[a-fA-F0-9]{64}$/)) {
+  if (!initialOwner || !initialOwner.match(/^0x[a-fA-F0-9]{40}$/)) {
     console.error("❌ Error: Invalid owner address format");
-    console.error("   Expected: 64-character hex string (private key derived address)");
+    console.error("   Expected: 40-character hex string (Ethereum address)");
     process.exit(1);
   }
   
