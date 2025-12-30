@@ -3,6 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+  "deploy:sepolia:casino": "node scripts/deploy_casino.js sepolia",
+  "deploy:mainnet:casino": "node scripts/deploy_casino.js mainnet",
+  "deploy:sepolia:mtx": "node scripts/deploy_mtx.js sepolia",
+  "deploy:mainnet:mtx": "node scripts/deploy_mtx.js mainnet",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
