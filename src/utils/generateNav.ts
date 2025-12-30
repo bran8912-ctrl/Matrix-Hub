@@ -11,11 +11,19 @@
  * import { generateNavigation } from '../utils/generateNav.js';
  * const navData = await generateNavigation();
  * 
+ * NAVIGATION STRUCTURE:
+ * - Pages in subdirectories (e.g., src/pages/docs/) are grouped into dropdown tabs
+ * - Top-level pages (e.g., src/pages/wallet.astro) get their own individual tabs
+ * - Single-page tabs render as direct links; multi-page tabs render as dropdowns
+ * - The root index.astro is always placed in the "Home" category
+ * 
  * CUSTOMIZATION TIPS:
  * - To exclude additional folders, add them to EXCLUDED_PATHS
  * - To customize tab order, modify the sortTabs() function
  * - To change how titles are extracted, update extractPageMetadata()
  * - Use 'navCategory' in frontmatter to override a page's category
+ * - To group multiple top-level pages: add 'navCategory: "tools"' to their frontmatter
+ *   or move them into a subdirectory (e.g., src/pages/tools/)
  */
 
 import fg from 'fast-glob';
@@ -185,7 +193,21 @@ export async function generateNavigation(): Promise<NavigationTab[]> {
       category = file.split('/')[0];
     } else {
       // Top-level pages (not in a folder) go to their own category
-      // e.g., wallet.astro -> wallet category
+      // e.g., wallet.astro -> 'wallet' category, buy-mtx.astro -> 'buy-mtx' category
+      // 
+      // DESIGN NOTE: Each top-level page gets its own tab/category. While this creates
+      // single-page tabs (which render as direct links rather than dropdowns), it provides
+      // clear, prominent navigation for important standalone pages like Wallet, Buy MTX, etc.
+      // 
+      // CUSTOMIZATION: To group multiple top-level pages together, you can either:
+      // 1. Move pages into a subdirectory (e.g., create src/pages/tools/ folder)
+      // 2. Add 'navCategory: "tools"' to the frontmatter of pages you want grouped
+      // 
+      // Example frontmatter to group pages:
+      // ---
+      // title: "My Page"
+      // navCategory: "tools"  # This page will appear in a "Tools" dropdown
+      // ---
       const fileName = path.basename(file, path.extname(file));
       category = fileName;
     }
