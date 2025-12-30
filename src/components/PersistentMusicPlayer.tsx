@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface Track {
   title: string;
@@ -60,6 +60,7 @@ export default function PersistentMusicPlayer() {
   const [isLoopOn, setIsLoopOn] = useState(false);
   const [isAutoplayOn, setIsAutoplayOn] = useState(true);
   const [isMinimized, setIsMinimized] = useState(true);
+  const [playedTracks, setPlayedTracks] = useState<number[]>([]);
 
   // Load state from localStorage on mount
   useEffect(() => {
@@ -103,15 +104,91 @@ export default function PersistentMusicPlayer() {
     localStorage.setItem('matrixPlayerMinimized', isMinimized.toString());
   }, [isMinimized]);
 
-  // Save playback position periodically
+  // Save playback position periodically (only when it changes meaningfully)
   useEffect(() => {
+    let lastSavedTime = 0;
+
     const interval = setInterval(() => {
-      if (audioRef.current && !audioRef.current.paused) {
-        localStorage.setItem('matrixPlayerTime', audioRef.current.currentTime.toString());
+      const audio = audioRef.current;
+      if (audio && !audio.paused) {
+        const currentTime = audio.currentTime;
+
+        // Only persist when the time has changed by at least 5 seconds
+        if (Math.abs(currentTime - lastSavedTime) >= 5) {
+          localStorage.setItem('matrixPlayerTime', currentTime.toString());
+          lastSavedTime = currentTime;
+        }
       }
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  const handlePlay = () => {
+    if (audioRef.current) {
+      audioRef.current.play().catch((error) => {
+        console.error('Audio playback failed:', error);
+        setIsPlaying(false);
+      });
+      setIsPlaying(true);
+    }
+  };
+
+  const handlePause = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const getNextShuffledTrack = useCallback(() => {
+    const unplayedTracks = matrixPlaylist
+      .map((_, index) => index)
+      .filter(index => !playedTracks.includes(index));
+
+    if (unplayedTracks.length === 0) {
+      // All tracks played, reset
+      setPlayedTracks([]);
+      return Math.floor(Math.random() * matrixPlaylist.length);
+    }
+
+    const randomIndex = Math.floor(Math.random() * unplayedTracks.length);
+    const selectedTrack = unplayedTracks[randomIndex];
+    setPlayedTracks([...playedTracks, selectedTrack]);
+    return selectedTrack;
+  }, [playedTracks]);
+
+  const handlePrevious = useCallback(() => {
+    let newIndex;
+    if (isShuffleOn) {
+      // In shuffle mode, go to a random previous track
+      newIndex = Math.floor(Math.random() * matrixPlaylist.length);
+    } else {
+      newIndex = (currentTrackIndex - 1 + matrixPlaylist.length) % matrixPlaylist.length;
+    }
+    setCurrentTrackIndex(newIndex);
+    if (isPlaying && audioRef.current) {
+      audioRef.current.play().catch((error) => {
+        console.error('Audio playback failed:', error);
+        setIsPlaying(false);
+      });
+    }
+  }, [currentTrackIndex, isShuffleOn, isPlaying]);
+
+  const handleNext = useCallback(() => {
+    let newIndex;
+    if (isShuffleOn) {
+      newIndex = getNextShuffledTrack();
+    } else {
+      newIndex = (currentTrackIndex + 1) % matrixPlaylist.length;
+    }
+    setCurrentTrackIndex(newIndex);
+    if (isPlaying && audioRef.current) {
+      audioRef.current.play().catch((error) => {
+        console.error('Audio playback failed:', error);
+        setIsPlaying(false);
+      });
+    }
+  }, [currentTrackIndex, isShuffleOn, isPlaying, getNextShuffledTrack]);
 
   // Request media session for background playback
   useEffect(() => {
@@ -127,7 +204,9 @@ export default function PersistentMusicPlayer() {
       });
 
       navigator.mediaSession.setActionHandler('play', () => {
-        audioRef.current?.play();
+        audioRef.current?.play().catch((error) => {
+          console.error('Audio playback failed:', error);
+        });
         setIsPlaying(true);
       });
 
@@ -139,37 +218,7 @@ export default function PersistentMusicPlayer() {
       navigator.mediaSession.setActionHandler('previoustrack', handlePrevious);
       navigator.mediaSession.setActionHandler('nexttrack', handleNext);
     }
-  }, [currentTrackIndex]);
-
-  const handlePlay = () => {
-    if (audioRef.current) {
-      audioRef.current.play();
-      setIsPlaying(true);
-    }
-  };
-
-  const handlePause = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
-  };
-
-  const handlePrevious = () => {
-    const newIndex = (currentTrackIndex - 1 + matrixPlaylist.length) % matrixPlaylist.length;
-    setCurrentTrackIndex(newIndex);
-    if (isPlaying && audioRef.current) {
-      audioRef.current.play();
-    }
-  };
-
-  const handleNext = () => {
-    const newIndex = (currentTrackIndex + 1) % matrixPlaylist.length;
-    setCurrentTrackIndex(newIndex);
-    if (isPlaying && audioRef.current) {
-      audioRef.current.play();
-    }
-  };
+  }, [currentTrackIndex, handlePrevious, handleNext]);
 
   const handleEnded = () => {
     if (isAutoplayOn && !isLoopOn) {
@@ -197,6 +246,7 @@ export default function PersistentMusicPlayer() {
           className="minimize-btn"
           onClick={() => setIsMinimized(!isMinimized)}
           title={isMinimized ? "Expand Player" : "Minimize Player"}
+          aria-label={isMinimized ? "Expand Player" : "Minimize Player"}
         >
           {isMinimized ? '▼' : '▲'}
         </button>
@@ -213,13 +263,13 @@ export default function PersistentMusicPlayer() {
           </div>
 
           <div className="player-controls">
-            <button onClick={handlePrevious} title="Previous">⏮</button>
+            <button onClick={handlePrevious} title="Previous" aria-label="Previous track">⏮</button>
             {isPlaying ? (
-              <button onClick={handlePause} title="Pause">⏸</button>
+              <button onClick={handlePause} title="Pause" aria-label="Pause">⏸</button>
             ) : (
-              <button onClick={handlePlay} title="Play">▶</button>
+              <button onClick={handlePlay} title="Play" aria-label="Play">▶</button>
             )}
-            <button onClick={handleNext} title="Next">⏭</button>
+            <button onClick={handleNext} title="Next" aria-label="Next track">⏭</button>
           </div>
 
           <div className="secondary-controls">
@@ -227,6 +277,8 @@ export default function PersistentMusicPlayer() {
               className={isShuffleOn ? 'active' : ''}
               onClick={() => setIsShuffleOn(!isShuffleOn)}
               title="Shuffle"
+              aria-label="Toggle shuffle"
+              aria-pressed={isShuffleOn}
             >
               🔀
             </button>
@@ -234,6 +286,8 @@ export default function PersistentMusicPlayer() {
               className={isLoopOn ? 'active' : ''}
               onClick={() => setIsLoopOn(!isLoopOn)}
               title="Loop"
+              aria-label="Toggle loop"
+              aria-pressed={isLoopOn}
             >
               🔁
             </button>
@@ -241,6 +295,8 @@ export default function PersistentMusicPlayer() {
               className={isAutoplayOn ? 'active' : ''}
               onClick={() => setIsAutoplayOn(!isAutoplayOn)}
               title="Autoplay"
+              aria-label="Toggle autoplay"
+              aria-pressed={isAutoplayOn}
             >
               🔊
             </button>

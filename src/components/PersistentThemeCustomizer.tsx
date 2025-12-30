@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface Theme {
   name: string;
@@ -100,6 +100,37 @@ export default function PersistentThemeCustomizer() {
   const [customSecondary, setCustomSecondary] = useState('#00ffff');
   const [isMinimized, setIsMinimized] = useState(true);
 
+  const applyTheme = useCallback((themeName: string) => {
+    const theme = themes[themeName];
+    if (!theme) return;
+
+    const root = document.documentElement;
+    root.style.setProperty('--theme-primary', theme.primary);
+    root.style.setProperty('--theme-secondary', theme.secondary);
+    root.style.setProperty('--theme-glow', theme.glow);
+    root.style.setProperty('--theme-bg-dark', theme.bgDark);
+    root.style.setProperty('--theme-bg-panel', theme.bgPanel);
+    root.style.setProperty('--theme-text', theme.text);
+    root.style.setProperty('--theme-border', theme.border);
+
+    setCurrentTheme(themeName);
+    localStorage.setItem('matrixHubTheme', themeName);
+  }, []);
+
+  const applyCustomTheme = useCallback((primary: string, secondary: string) => {
+    const root = document.documentElement;
+    root.style.setProperty('--theme-primary', primary);
+    root.style.setProperty('--theme-secondary', secondary);
+    root.style.setProperty('--theme-glow', primary);
+    root.style.setProperty('--theme-border', primary);
+    root.style.setProperty('--theme-text', secondary);
+
+    setCurrentTheme('custom');
+    localStorage.setItem('matrixHubTheme', 'custom');
+    localStorage.setItem('matrixHubCustomPrimary', primary);
+    localStorage.setItem('matrixHubCustomSecondary', secondary);
+  }, []);
+
   useEffect(() => {
     // Load saved theme on mount
     const savedTheme = localStorage.getItem('matrixHubTheme') || 'classic';
@@ -119,42 +150,11 @@ export default function PersistentThemeCustomizer() {
       setCurrentTheme(savedTheme);
       applyTheme(savedTheme);
     }
-  }, []);
+  }, [applyTheme, applyCustomTheme]);
 
   useEffect(() => {
     localStorage.setItem('themeCustomizerMinimized', isMinimized.toString());
   }, [isMinimized]);
-
-  const applyTheme = (themeName: string) => {
-    const theme = themes[themeName];
-    if (!theme) return;
-
-    const root = document.documentElement;
-    root.style.setProperty('--theme-primary', theme.primary);
-    root.style.setProperty('--theme-secondary', theme.secondary);
-    root.style.setProperty('--theme-glow', theme.glow);
-    root.style.setProperty('--theme-bg-dark', theme.bgDark);
-    root.style.setProperty('--theme-bg-panel', theme.bgPanel);
-    root.style.setProperty('--theme-text', theme.text);
-    root.style.setProperty('--theme-border', theme.border);
-
-    setCurrentTheme(themeName);
-    localStorage.setItem('matrixHubTheme', themeName);
-  };
-
-  const applyCustomTheme = (primary: string, secondary: string) => {
-    const root = document.documentElement;
-    root.style.setProperty('--theme-primary', primary);
-    root.style.setProperty('--theme-secondary', secondary);
-    root.style.setProperty('--theme-glow', primary);
-    root.style.setProperty('--theme-border', primary);
-    root.style.setProperty('--theme-text', secondary);
-
-    setCurrentTheme('custom');
-    localStorage.setItem('matrixHubTheme', 'custom');
-    localStorage.setItem('matrixHubCustomPrimary', primary);
-    localStorage.setItem('matrixHubCustomSecondary', secondary);
-  };
 
   const handleCustomApply = () => {
     applyCustomTheme(customPrimary, customSecondary);
@@ -178,6 +178,7 @@ export default function PersistentThemeCustomizer() {
           className="minimize-btn"
           onClick={() => setIsMinimized(!isMinimized)}
           title={isMinimized ? "Expand Theme Customizer" : "Minimize Theme Customizer"}
+          aria-label={isMinimized ? "Expand Theme Customizer" : "Minimize Theme Customizer"}
         >
           {isMinimized ? '▼' : '▲'}
         </button>
@@ -193,10 +194,11 @@ export default function PersistentThemeCustomizer() {
 
           <div className="theme-presets">
             {themePresets.map((preset) => (
-              <div
+              <button
                 key={preset.key}
                 className={`theme-preset ${currentTheme === preset.key ? 'active' : ''}`}
                 onClick={() => applyTheme(preset.key)}
+                aria-label={`Select ${themes[preset.key].name} theme`}
               >
                 <div
                   className="theme-preview"
@@ -211,7 +213,7 @@ export default function PersistentThemeCustomizer() {
                   ></div>
                 </div>
                 <span className="theme-preset-name">{themes[preset.key].name}</span>
-              </div>
+              </button>
             ))}
           </div>
 
@@ -316,10 +318,19 @@ export default function PersistentThemeCustomizer() {
           cursor: pointer;
           text-align: center;
           transition: transform 0.2s;
+          background: transparent;
+          border: none;
+          padding: 0;
+          width: 100%;
         }
 
         .theme-preset:hover {
           transform: scale(1.05);
+        }
+
+        .theme-preset:focus {
+          outline: 2px solid var(--theme-primary, #00ff00);
+          outline-offset: 2px;
         }
 
         .theme-preset.active .theme-preview {
