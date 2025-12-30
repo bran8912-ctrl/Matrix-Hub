@@ -198,7 +198,7 @@ npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b
 ├── Interactive Checklist     → DEPLOYMENT_CHECKLIST.md
 ├── Complete Reference        → DEPLOYMENT_SUMMARY.md
 ├── Full Comprehensive Guide  → MTX_Deployment_Guide.md
-├── Original Quick Start      → DEPLOYMENT_QUICK_START.md
+├── Original Quick Start      → QUICK_DEPLOY.md
 └── Scripts Documentation     → scripts/README.md
 ```
 
