@@ -203,9 +203,6 @@ const Wallet = () => {
             e.target.style.outline = '2px solid #00ff99';
             e.target.style.outlineOffset = '2px';
           }}
-          onBlur={(e) => {
-            e.target.style.outline = 'none';
-          }}
         >
           {loading ? 'Connecting...' : 'Connect Wallet'}
         </button>
