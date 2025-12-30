@@ -27,7 +27,7 @@ Before running the deployment command, ensure you have:
 - [ ] Go to: https://etherscan.io/myapikey
 - [ ] Create account or sign in
 - [ ] Generate new API key
-- [ ] Copy API key (example format: `RG53PFV8R4C6GD9ERBERTI4U1IW1E2GQPQ`)
+- [ ] Copy API key (example format: `EXAMPLE_ETHERSCAN_API_KEY_1234567890`)
 
 ### 4. Environment Configuration ✅
 - [ ] Run: `cp .env.example .env`

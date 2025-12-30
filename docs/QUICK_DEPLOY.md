@@ -19,7 +19,7 @@
    Edit `.env`:
    ```env
    PRIVATE_KEY=your_burner_wallet_private_key_without_0x
-   ETHERSCAN_API_KEY=RG53PFV8R4C6GD9ERBERTI4U1IW1E2GQPQ
+   ETHERSCAN_API_KEY=your_etherscan_api_key_here
    ```
 
 ## Deploy (2 minutes)

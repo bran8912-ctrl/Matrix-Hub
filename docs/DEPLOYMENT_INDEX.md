@@ -107,7 +107,7 @@ npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b
 3. **Etherscan API Key**
    - Get from: https://etherscan.io/myapikey
    - Used for contract verification
-   - Example: `RG53PFV8R4C6GD9ERBERTI4U1IW1E2GQPQ`
+   - Example: `ETHERSCAN_API_KEY=ABC123XYZ456YOUR_KEY_HERE`
 
 4. **Environment File**
    - Copy `.env.example` to `.env`

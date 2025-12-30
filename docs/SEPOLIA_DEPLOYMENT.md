@@ -41,7 +41,7 @@ PRIVATE_KEY=your_private_key_without_0x
 SEPOLIA_RPC_URL=https://rpc.sepolia.org/
 
 # Etherscan API key for contract verification
-ETHERSCAN_API_KEY=RG53PFV8R4C6GD9ERBERTI4U1IW1E2GQPQ
+ETHERSCAN_API_KEY=your_etherscan_api_key_here
 ```
 
 **Security Reminder:**
@@ -79,7 +79,7 @@ This will:
 
 **Expected output:**
 ```
-Starting MTX Token Deployment to Ethereum Mainnet...
+Starting MTX Token Deployment to Sepolia testnet...
 Network: sepolia
 Deploying with account: 0xYourDeployerAddress
 Account balance: 1.0 ETH
@@ -87,10 +87,10 @@ Account balance: 1.0 ETH
 Deployment parameters:
 - Initial Supply: 100000000 MTX
 - Initial Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
-- Token Name: Matrix-HubCoin
+- Token Name: MatrixHubCoin
 - Token Symbol: MTX
 - Decimals: 18
-- Network: Ethereum Mainnet (Chain ID: 1)
+- Network: Sepolia (Chain ID: 11155111)
 
 Deploying MatrixHubCoin contract...
 
