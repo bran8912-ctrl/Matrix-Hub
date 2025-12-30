@@ -24,7 +24,7 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
 
   // Validate amount is a valid positive number
   const amountNum = parseFloat(amount);
-  if (!amount || isNaN(amountNum) || amountNum <= 0) {
+  if (isNaN(amountNum) || amountNum <= 0) {
     throw new Error('Invalid amount. Please provide a valid positive number.');
   }
 

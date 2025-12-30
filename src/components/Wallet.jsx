@@ -64,7 +64,7 @@ const Wallet = () => {
   /**
    * Fetch MTX token balance for the connected address
    */
-  const fetchBalance = async (ethersProvider, userAddress) => {
+  const fetchBalance = useCallback(async (ethersProvider, userAddress) => {
     try {
       const mtxContract = new Contract(MTX.address, mtxAbi, ethersProvider);
       const rawBalance = await mtxContract.balanceOf(userAddress);
@@ -75,7 +75,7 @@ const Wallet = () => {
       console.error('Error fetching balance:', err);
       setError('Failed to fetch MTX balance.');
     }
-  };
+  }, []);
 
   /**
    * Add MTX token to user's wallet using EIP-747 (wallet_watchAsset)
@@ -128,7 +128,7 @@ const Wallet = () => {
         await fetchBalance(provider, accounts[0]);
       }
     }
-  }, [address, provider]);
+  }, [address, provider, fetchBalance]);
 
   /**
    * Handle chain/network changes (reload to ensure consistency)
@@ -154,7 +154,7 @@ const Wallet = () => {
         }
       };
     }
-  }, [address, handleAccountsChanged, handleChainChanged]); // Include handler functions in dependencies
+  }, [address, provider, handleAccountsChanged, handleChainChanged]); // Include all dependencies
 
   return (
     <div className="wallet-container" style={{
@@ -176,33 +176,6 @@ const Wallet = () => {
           onClick={connectWallet}
           disabled={loading}
           className="wallet-connect-btn"
-          style={{
-            padding: '0.75rem 1.5rem',
-            fontSize: '1rem',
-            background: '#00ff99',
-            color: '#181818',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontWeight: 'bold',
-            width: '100%',
-            opacity: loading ? 0.6 : 1,
-            transition: 'all 0.2s ease-in-out'
-          }}
-          onMouseEnter={(e) => {
-            if (!loading) {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 4px 12px rgba(0, 255, 153, 0.3)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.transform = 'translateY(0)';
-            e.target.style.boxShadow = 'none';
-          }}
-          onFocus={(e) => {
-            e.target.style.outline = '2px solid #00ff99';
-            e.target.style.outlineOffset = '2px';
-          }}
         >
           {loading ? 'Connecting...' : 'Connect Wallet'}
         </button>
@@ -245,34 +218,7 @@ const Wallet = () => {
             {/* Add MTX to Wallet Button */}
             <button
               onClick={addTokenToWallet}
-              style={{
-                padding: '0.5rem 1rem',
-                fontSize: '0.875rem',
-                background: '#4CAF50',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontWeight: '500',
-                transition: 'all 0.2s ease-in-out'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-1px)';
-                e.target.style.boxShadow = '0 2px 8px rgba(76, 175, 80, 0.3)';
-                e.target.style.background = '#45a049';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = 'none';
-                e.target.style.background = '#4CAF50';
-              }}
-              onFocus={(e) => {
-                e.target.style.outline = '2px solid #4CAF50';
-                e.target.style.outlineOffset = '2px';
-              }}
-              onBlur={(e) => {
-                e.target.style.outline = 'none';
-              }}
+              className="wallet-action-btn"
             >
               Add MTX to Wallet
             </button>
@@ -282,36 +228,7 @@ const Wallet = () => {
               href={MTX.uniswapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                padding: '0.5rem 1rem',
-                fontSize: '0.875rem',
-                background: '#FF007A',
-                color: '#fff',
-                textDecoration: 'none',
-                border: 'none',
-                borderRadius: '4px',
-                textAlign: 'center',
-                fontWeight: '500',
-                display: 'block',
-                transition: 'all 0.2s ease-in-out'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-1px)';
-                e.target.style.boxShadow = '0 2px 8px rgba(255, 0, 122, 0.3)';
-                e.target.style.background = '#e6006d';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = 'none';
-                e.target.style.background = '#FF007A';
-              }}
-              onFocus={(e) => {
-                e.target.style.outline = '2px solid #FF007A';
-                e.target.style.outlineOffset = '2px';
-              }}
-              onBlur={(e) => {
-                e.target.style.outline = 'none';
-              }}
+              className="wallet-uniswap-btn"
             >
               Buy MTX on Uniswap
             </a>
