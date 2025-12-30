@@ -9,7 +9,7 @@ pragma solidity ^0.8.20;
   
   Network: Ethereum Mainnet (Chain ID: 1)
   Token Standard: ERC-20
-  Initial Owner: 0xb248d5bd04f6fadee6146d0dac1da82b842a437b9c6444c4cbc1e7ee37033e7a
+  Initial Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
   
   Audit Trail: Standard OpenZeppelin ERC20 implementation with owner-controlled minting
   Security: Auditable, transparent, and follows best practices
