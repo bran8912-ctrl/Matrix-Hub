@@ -9,7 +9,7 @@
 2. **Get Etherscan API Key**
    - Go to: https://etherscan.io/myapikey
    - Sign up/login → Create API key
-   - Copy the key (e.g., `RG53PFV8R4C6GD9ERBERTI4U1IW1E2GQPQ`)
+   - Copy the key (e.g., `ABC123XYZ456YOUR_KEY_HERE`)
 
 3. **Create .env file**
    ```bash
