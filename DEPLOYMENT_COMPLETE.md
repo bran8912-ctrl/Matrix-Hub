@@ -127,6 +127,7 @@ The deployment will create:
 | **Network** | Sepolia (ChainID: 11155111) |
 | **Contract** | MatrixHubCoin.sol |
 
+> Note: The token's display name uses a hyphen (**Matrix-HubCoin**), while the Solidity contract file and contract name use **MatrixHubCoin** (no hyphen). This difference is intentional and follows Solidity naming conventions.
 > **Note**: The token's display name uses a hyphen (**Matrix-HubCoin**), while the Solidity contract name is **MatrixHubCoin** (no hyphen). This difference is intentional and follows Solidity naming conventions which don't allow hyphens in contract names.
 
 ---
