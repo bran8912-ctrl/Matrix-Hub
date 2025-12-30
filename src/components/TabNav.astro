@@ -1,0 +1,657 @@
+---
+/**
+ * TabNav.astro - Automatic data-driven navigation component
+ * 
+ * This component generates navigation tabs based on the src/pages directory structure.
+ * Tabs are derived from top-level folders, with dropdowns showing all pages in each category.
+ * 
+ * CUSTOMIZATION TIPS:
+ * - To change the appearance, modify the CSS styles below
+ * - To adjust tab behavior, update the JavaScript in the <script> section
+ * - To change which pages appear, modify EXCLUDED_PATHS in src/utils/generateNav.js
+ * - Add 'navCategory' to page frontmatter to override auto-detected category
+ * 
+ * FEATURES:
+ * - Automatic navigation generation from filesystem
+ * - Responsive mobile menu
+ * - Dropdown menus for page categories
+ * - Accessibility support (ARIA labels, keyboard navigation)
+ * - Active page highlighting
+ */
+
+import { getNavigation } from '../utils/generateNav';
+
+// Generate navigation at build time
+const navTabs = await getNavigation();
+
+// Get current path for active state
+const currentPath = Astro.url.pathname;
+---
+
+<nav class="tab-nav" role="navigation" aria-label="Main navigation">
+  <div class="tab-nav-container">
+    <!-- Mobile menu toggle -->
+    <button 
+      class="mobile-menu-toggle" 
+      aria-label="Toggle menu" 
+      aria-expanded="false"
+      type="button"
+    >
+      <span class="hamburger"></span>
+    </button>
+
+    <!-- Navigation tabs -->
+    <ul class="tab-list" role="menubar">
+      {navTabs.map((tab) => {
+        // Check if this tab contains the current page
+        const isActiveTab = tab.pages.some(page => page.path === currentPath);
+        
+        return (
+          <li class="tab-item" role="none">
+            {tab.pages.length === 1 ? (
+              // Single page - direct link
+              <a 
+                href={tab.pages[0].path}
+                class={`tab-link ${currentPath === tab.pages[0].path ? 'active' : ''}`}
+                role="menuitem"
+              >
+                {tab.label}
+              </a>
+            ) : (
+              // Multiple pages - dropdown
+              <div class={`tab-dropdown ${isActiveTab ? 'active-tab' : ''}`}>
+                <button 
+                  class="tab-button"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  type="button"
+                  role="menuitem"
+                >
+                  {tab.label}
+                  <span class="dropdown-arrow">▼</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  {tab.pages.map((page) => (
+                    <li role="none">
+                      <a 
+                        href={page.path}
+                        class={`dropdown-item ${currentPath === page.path ? 'active' : ''}`}
+                        role="menuitem"
+                      >
+                        {page.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  /* Main navigation container */
+  .tab-nav {
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom: 2px solid var(--theme-primary, #00ff99);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .tab-nav-container {
+    max-width: 1152px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    position: relative;
+  }
+
+  /* Mobile menu toggle */
+  .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1001;
+  }
+
+  .hamburger {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--theme-primary, #00ff99);
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background: var(--theme-primary, #00ff99);
+    transition: transform 0.3s;
+  }
+
+  .hamburger::before {
+    top: -8px;
+  }
+
+  .hamburger::after {
+    bottom: -8px;
+  }
+
+  /* Animate hamburger when open */
+  .mobile-menu-toggle[aria-expanded="true"] .hamburger {
+    background: transparent;
+  }
+
+  .mobile-menu-toggle[aria-expanded="true"] .hamburger::before {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
+
+  .mobile-menu-toggle[aria-expanded="true"] .hamburger::after {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+
+  /* Tab list */
+  .tab-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tab-item {
+    position: relative;
+  }
+
+  /* Tab links (single pages) */
+  .tab-link {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: var(--theme-text, #00ff99);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+  }
+
+  .tab-link:hover {
+    color: var(--theme-primary, #00ff99);
+    background: rgba(0, 255, 153, 0.1);
+    text-shadow: 0 0 10px var(--theme-glow, rgba(0, 255, 153, 0.5));
+  }
+
+  .tab-link.active {
+    color: var(--theme-primary, #00ff99);
+    border-bottom-color: var(--theme-primary, #00ff99);
+    text-shadow: 0 0 15px var(--theme-glow, rgba(0, 255, 153, 0.8));
+  }
+
+  /* Tab buttons (with dropdown) */
+  .tab-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--theme-text, #00ff99);
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .tab-button:hover {
+    color: var(--theme-primary, #00ff99);
+    background: rgba(0, 255, 153, 0.1);
+    text-shadow: 0 0 10px var(--theme-glow, rgba(0, 255, 153, 0.5));
+  }
+
+  .tab-dropdown.active-tab .tab-button {
+    color: var(--theme-primary, #00ff99);
+    border-bottom-color: var(--theme-primary, #00ff99);
+  }
+
+  .dropdown-arrow {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+  }
+
+  .tab-dropdown[aria-expanded="true"] .dropdown-arrow,
+  .tab-dropdown:hover .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* Dropdown menu */
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid var(--theme-primary, #00ff99);
+    border-radius: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 255, 153, 0.2);
+    z-index: 1002;
+  }
+
+  .tab-dropdown:hover .dropdown-menu,
+  .tab-dropdown[aria-expanded="true"] .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* Dropdown items */
+  .dropdown-item {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: var(--theme-text, #00ff99);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .dropdown-item:hover {
+    background: rgba(0, 255, 153, 0.15);
+    color: var(--theme-primary, #00ff99);
+    text-shadow: 0 0 8px var(--theme-glow, rgba(0, 255, 153, 0.5));
+    padding-left: 2rem;
+  }
+
+  .dropdown-item.active {
+    background: rgba(0, 255, 153, 0.2);
+    color: var(--theme-primary, #00ff99);
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--theme-glow, rgba(0, 255, 153, 0.8));
+  }
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .mobile-menu-toggle {
+      display: block;
+    }
+
+    .tab-list {
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.98);
+      border-right: 2px solid var(--theme-primary, #00ff99);
+      padding: 5rem 0 2rem;
+      gap: 0;
+      justify-content: flex-start;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .tab-list.open {
+      transform: translateX(0);
+    }
+
+    .tab-item {
+      width: 100%;
+    }
+
+    .tab-link,
+    .tab-button {
+      width: 100%;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0, 255, 153, 0.2);
+    }
+
+    .dropdown-menu {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: rgba(0, 255, 153, 0.05);
+    }
+
+    .tab-dropdown[aria-expanded="true"] .dropdown-menu {
+      max-height: 500px;
+    }
+
+    .dropdown-item {
+      padding-left: 2.5rem;
+    }
+
+    .dropdown-item:hover {
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+<script is:inline>
+  /**
+   * Tab navigation interactivity
+   * Handles mobile menu and dropdown interactions
+   * Using is:inline to run once and avoid duplicate event listeners
+   */
+  
+  // Mobile menu toggle
+  const mobileToggle = document.querySelector('.mobile-menu-toggle');
+  const tabList = document.querySelector('.tab-list');
+
+  // Track viewport mode for consistent behavior
+  const isMobileViewport = () => {
+    if (typeof window.matchMedia === 'function') {
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+    return window.innerWidth <= 768;
+  };
+
+  let isMobileMode = isMobileViewport();
+
+  if (mobileToggle && tabList) {
+    mobileToggle.addEventListener('click', () => {
+      const isOpen = tabList.classList.toggle('open');
+      mobileToggle.setAttribute('aria-expanded', isOpen.toString());
+    });
+
+    // Close mobile menu when clicking outside (but not on toggle button)
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!target.closest('.tab-nav') || target.closest('.mobile-menu-toggle')) {
+        return;
+      }
+      if (!target.closest('.tab-list') && !target.closest('.mobile-menu-toggle')) {
+        tabList.classList.remove('open');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // Handle viewport resize to update behavior dynamically
+  window.addEventListener('resize', () => {
+    const currentlyMobile = isMobileViewport();
+
+    if (currentlyMobile === isMobileMode) {
+      return;
+    }
+
+    isMobileMode = currentlyMobile;
+
+    // When switching to desktop view, reset mobile-specific open/expanded state
+    if (!isMobileMode) {
+      if (tabList) {
+        tabList.classList.remove('open');
+      }
+      if (mobileToggle) {
+        mobileToggle.setAttribute('aria-expanded', 'false');
+      }
+      document.querySelectorAll('.tab-dropdown').forEach(d => {
+        d.setAttribute('aria-expanded', 'false');
+      });
+      document.querySelectorAll('.tab-button').forEach(b => {
+        b.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
+  // Dropdown toggles for mobile only
+  const dropdownButtons = document.querySelectorAll('.tab-button');
+  
+  dropdownButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      if (!isMobileMode) {
+        // Let desktop rely on CSS :hover behavior only
+        return;
+      }
+
+      const dropdown = button.closest('.tab-dropdown');
+      if (!dropdown) {
+        return;
+      }
+
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+      
+      // Close all other dropdowns
+      document.querySelectorAll('.tab-button').forEach(b => {
+        if (b !== button) {
+          b.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Toggle current dropdown (only on button, not parent)
+      button.setAttribute('aria-expanded', (!isExpanded).toString());
+    });
+  });
+
+  // Close dropdowns when clicking links
+  const dropdownLinks = document.querySelectorAll('.dropdown-item');
+  
+  dropdownLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (tabList) {
+        tabList.classList.remove('open');
+      }
+      if (mobileToggle) {
+        mobileToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  // Comprehensive keyboard navigation following WAI-ARIA Authoring Practices
+  // https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
+  
+  const menuItems = Array.from(document.querySelectorAll('.tab-link, .tab-button'));
+  let currentFocusIndex = -1;
+
+  // Helper: Get all focusable items in a dropdown menu
+  function getDropdownItems(dropdown) {
+    return Array.from(dropdown.querySelectorAll('.dropdown-item'));
+  }
+
+  // Helper: Move focus to specific menu item
+  function setFocusToMenuItem(menuItem, preventScroll = false) {
+    if (menuItem) {
+      menuItem.focus({ preventScroll });
+    }
+  }
+
+  // Helper: Close all dropdowns
+  function closeAllDropdowns() {
+    document.querySelectorAll('.tab-button').forEach(btn => {
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  // Main keyboard navigation handler for menubar
+  document.addEventListener('keydown', (e) => {
+    const target = e.target;
+
+    // Handle Escape key - close menus
+    if (e.key === 'Escape') {
+      if (tabList) {
+        tabList.classList.remove('open');
+      }
+      if (mobileToggle) {
+        mobileToggle.setAttribute('aria-expanded', 'false');
+      }
+      closeAllDropdowns();
+      
+      // Return focus to the button that opened the dropdown
+      if (target.classList.contains('dropdown-item')) {
+        const dropdown = target.closest('.tab-dropdown');
+        const button = dropdown?.querySelector('.tab-button');
+        if (button) {
+          setFocusToMenuItem(button);
+        }
+      }
+      return;
+    }
+
+    // Handle navigation in top-level menubar (tab-link or tab-button)
+    if (target.classList.contains('tab-link') || target.classList.contains('tab-button')) {
+      const currentIndex = menuItems.indexOf(target);
+
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        // Move to previous tab
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
+        setFocusToMenuItem(menuItems[prevIndex]);
+        closeAllDropdowns();
+      } 
+      else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        // Move to next tab
+        const nextIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
+        setFocusToMenuItem(menuItems[nextIndex]);
+        closeAllDropdowns();
+      }
+      else if (e.key === 'ArrowDown' && target.classList.contains('tab-button')) {
+        e.preventDefault();
+        // Open dropdown and move focus to first item
+        const dropdown = target.closest('.tab-dropdown');
+        if (dropdown) {
+          target.setAttribute('aria-expanded', 'true');
+          const items = getDropdownItems(dropdown);
+          if (items.length > 0) {
+            setFocusToMenuItem(items[0]);
+          }
+        }
+      }
+      else if (e.key === 'Home') {
+        e.preventDefault();
+        // Move to first tab
+        setFocusToMenuItem(menuItems[0]);
+        closeAllDropdowns();
+      }
+      else if (e.key === 'End') {
+        e.preventDefault();
+        // Move to last tab
+        setFocusToMenuItem(menuItems[menuItems.length - 1]);
+        closeAllDropdowns();
+      }
+      else if ((e.key === 'Enter' || e.key === ' ') && target.classList.contains('tab-button')) {
+        e.preventDefault();
+        // Toggle dropdown with Enter or Space
+        const isExpanded = target.getAttribute('aria-expanded') === 'true';
+        closeAllDropdowns();
+        
+        if (!isExpanded) {
+          target.setAttribute('aria-expanded', 'true');
+          const dropdown = target.closest('.tab-dropdown');
+          if (dropdown) {
+            const items = getDropdownItems(dropdown);
+            if (items.length > 0) {
+              setFocusToMenuItem(items[0]);
+            }
+          }
+        }
+      }
+    }
+
+    // Handle navigation within dropdown menu
+    if (target.classList.contains('dropdown-item')) {
+      const dropdown = target.closest('.tab-dropdown');
+      const items = getDropdownItems(dropdown);
+      const currentIndex = items.indexOf(target);
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        // Move to next item in dropdown
+        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+        setFocusToMenuItem(items[nextIndex]);
+      }
+      else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        // Move to previous item in dropdown
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+        setFocusToMenuItem(items[prevIndex]);
+      }
+      else if (e.key === 'Home') {
+        e.preventDefault();
+        // Move to first item in dropdown
+        setFocusToMenuItem(items[0]);
+      }
+      else if (e.key === 'End') {
+        e.preventDefault();
+        // Move to last item in dropdown
+        setFocusToMenuItem(items[items.length - 1]);
+      }
+      else if (e.key === 'Tab') {
+        // Allow Tab to exit the menu naturally
+        closeAllDropdowns();
+      }
+    }
+
+    // Handle mobile menu toggle with keyboard
+    if (target === mobileToggle && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      // Click handler will handle the toggle
+    }
+  });
+
+  // Focus trap for mobile menu when open
+  if (tabList && mobileToggle) {
+    tabList.addEventListener('keydown', (e) => {
+      if (!tabList.classList.contains('open')) {
+        return;
+      }
+
+      const focusableElements = Array.from(
+        tabList.querySelectorAll('a[href], button:not([disabled])')
+      );
+
+      if (e.key === 'Tab') {
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    });
+  }
+</script>
