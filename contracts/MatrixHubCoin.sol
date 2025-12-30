@@ -5,14 +5,14 @@ pragma solidity ^0.8.20;
  Matrix-HubCoin (MTX)
   Utility token for the Matrix-Hub ecosystem on Ethereum Mainnet.
   Direct ETH→MTX mint for easy onboarding.
-  No taxes. Owner can pause minting.
+  No transfer taxes. Owner can adjust ETH→MTX rate, pause/unpause minting, and withdraw collected ETH.
   
   Network: Ethereum Mainnet (Chain ID: 1)
   Token Standard: ERC-20
   Initial Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
   
-  Audit Trail: Standard OpenZeppelin ERC20 implementation with owner-controlled minting
-  Security: Auditable, transparent, and follows best practices
+  Audit Trail: Standard OpenZeppelin ERC20 implementation with owner-controlled minting and ETH management
+  Security: Auditable, transparent, and follows best practices. Not trustless: relies on owner to manage minting parameters and withdrawals.
 */
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -67,22 +67,11 @@ contract MatrixHubCoin is ERC20, Ownable {
     }
     
     /**
-     * @dev Fallback receive function - automatically calls buyMTX
-     * Allows users to simply send ETH to contract address
+     * @dev Fallback receive function - forwards to buyMTX
+     * Allows users to simply send ETH to contract address to buy MTX
      */
     receive() external payable {
-        require(!mintingPaused, "Minting is paused");
-        require(msg.value > 0, "Must send ETH to buy MTX");
-        
-        // Calculate MTX to mint
-        uint256 mtxAmount = (msg.value * ethToMtxRate * 10 ** decimals()) / 1 ether;
-        
-        require(totalSupply() + mtxAmount <= MAX_SUPPLY, "Exceeds max supply");
-        
-        // Mint MTX to sender
-        _mint(msg.sender, mtxAmount);
-        
-        emit MTXPurchased(msg.sender, msg.value, mtxAmount);
+        buyMTX();
     }
     
     /**

@@ -1,5 +1,6 @@
 ---
 import Panel from './Panel.astro';
+import { MTX } from '../config/mtx.ts';
 ---
 
 <Panel title="MTX COIN CASINO" class="casino-panel">
@@ -14,7 +15,7 @@ import Panel from './Panel.astro';
   <div class="contract-info">
     <strong>Live Contract Addresses:</strong><br>
     <ul>
-      <li><strong>MTX Token (MatrixHubCoin):</strong> <span class="contract-address">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</span></li>
+      <li><strong>MTX Token (MatrixHubCoin):</strong> <span class="contract-address">{MTX.address}</span></li>
       <li><strong>CasinoCore:</strong> <span class="contract-address">0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9</span></li>
       <li><strong>CasinoReserve:</strong> <span class="contract-address">0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</span></li>
     </ul>

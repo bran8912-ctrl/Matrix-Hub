@@ -30,13 +30,15 @@ export default async function handler(req, res) {
 
   const { gameId, betAmount, gameData, walletAddress } = req.body;
 
-  // Connect to Polygon network (not local Hardhat)
-  const rpcUrl = process.env.POLYGON_RPC_URL || "https://polygon-rpc.com/";
-  const provider = new ethers.JsonRpcProvider(rpcUrl);
-  
-  // Note: In production, you'll need proper wallet/signer setup
-  // For server-side transactions, use a secure key management system
-  const casinoCore = new ethers.Contract(CASINO_CORE_ADDRESS, CASINO_CORE_ABI, provider);
+  // Connect to Ethereum network and CasinoCore contract
+  // NOTE: Actual on-chain betting is not yet implemented. When implementing:
+  // const rpcUrl = process.env.MAINNET_RPC_URL || "https://eth.llamarpc.com";
+  // const provider = new ethers.JsonRpcProvider(rpcUrl);
+  //
+  // Example: call a bet function (update ABI and call as needed)
+  // const casinoCore = new ethers.Contract(CASINO_CORE_ADDRESS, CASINO_CORE_ABI, provider);
+  //
+  // In production, you'll need proper wallet/signer setup and a secure key management system.
 
   try {
     // Example: call a bet function (update ABI and call as needed)
