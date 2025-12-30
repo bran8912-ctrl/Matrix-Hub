@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserProvider, Contract, formatUnits } from 'ethers';
 import Web3Modal from 'web3modal';
 import { MTX } from '../config/mtx';
@@ -64,7 +64,7 @@ const Wallet = () => {
   /**
    * Fetch MTX token balance for the connected address
    */
-  const fetchBalance = async (ethersProvider, userAddress) => {
+  const fetchBalance = useCallback(async (ethersProvider, userAddress) => {
     try {
       const mtxContract = new Contract(MTX.address, mtxAbi, ethersProvider);
       const rawBalance = await mtxContract.balanceOf(userAddress);
@@ -75,7 +75,7 @@ const Wallet = () => {
       console.error('Error fetching balance:', err);
       setError('Failed to fetch MTX balance.');
     }
-  };
+  }, []);
 
   /**
    * Add MTX token to user's wallet using EIP-747 (wallet_watchAsset)
@@ -115,7 +115,7 @@ const Wallet = () => {
   /**
    * Handle account changes (when user switches accounts in wallet)
    */
-  const handleAccountsChanged = async (accounts) => {
+  const handleAccountsChanged = useCallback(async (accounts) => {
     if (accounts.length === 0) {
       // User disconnected wallet
       setAddress('');
@@ -128,14 +128,14 @@ const Wallet = () => {
         await fetchBalance(provider, accounts[0]);
       }
     }
-  };
+  }, [address, provider, fetchBalance]);
 
   /**
    * Handle chain/network changes (reload to ensure consistency)
    */
-  const handleChainChanged = () => {
+  const handleChainChanged = useCallback(() => {
     window.location.reload();
-  };
+  }, []);
 
   /**
    * Setup and cleanup event listeners when wallet is connected
@@ -154,7 +154,7 @@ const Wallet = () => {
         }
       };
     }
-  }, [address, provider]); // Re-run when address or provider changes
+  }, [address, provider, handleAccountsChanged, handleChainChanged]); // Include all dependencies
 
   return (
     <div className="wallet-container" style={{
@@ -175,18 +175,7 @@ const Wallet = () => {
         <button
           onClick={connectWallet}
           disabled={loading}
-          style={{
-            padding: '0.75rem 1.5rem',
-            fontSize: '1rem',
-            background: '#00ff99',
-            color: '#181818',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontWeight: 'bold',
-            width: '100%',
-            opacity: loading ? 0.6 : 1
-          }}
+          className="wallet-connect-btn"
         >
           {loading ? 'Connecting...' : 'Connect Wallet'}
         </button>
@@ -229,16 +218,7 @@ const Wallet = () => {
             {/* Add MTX to Wallet Button */}
             <button
               onClick={addTokenToWallet}
-              style={{
-                padding: '0.5rem 1rem',
-                fontSize: '0.875rem',
-                background: '#4CAF50',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontWeight: '500'
-              }}
+              className="wallet-action-btn"
             >
               Add MTX to Wallet
             </button>
@@ -248,18 +228,7 @@ const Wallet = () => {
               href={MTX.uniswapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                padding: '0.5rem 1rem',
-                fontSize: '0.875rem',
-                background: '#FF007A',
-                color: '#fff',
-                textDecoration: 'none',
-                border: 'none',
-                borderRadius: '4px',
-                textAlign: 'center',
-                fontWeight: '500',
-                display: 'block'
-              }}
+              className="wallet-uniswap-btn"
             >
               Buy MTX on Uniswap
             </a>
