@@ -1,0 +1,254 @@
+---
+import Layout from "../components/Layout.astro";
+
+export const prerender = true;
+title: "MTX Contract";
+navCategory: "mtx-token";
+---
+
+<Layout title="MTX Token Contract - Matrix Hub">
+  <div class="contract-page">
+    <h1 class="page-title">MTX Token Contract</h1>
+    <p class="page-description">
+      Official MTX token smart contract information and details
+    </p>
+
+    <div class="contract-info">
+      <div class="info-card">
+        <h2>Contract Details</h2>
+        <div class="detail-row">
+          <span class="label">Contract Address:</span>
+          <code class="value">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</code>
+        </div>
+        <div class="detail-row">
+          <span class="label">Token Name:</span>
+          <span class="value">Matrix Hub Coin</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Token Symbol:</span>
+          <span class="value">MTX</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Decimals:</span>
+          <span class="value">18</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Network:</span>
+          <span class="value">Ethereum Mainnet (Chain ID: 1)</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Standard:</span>
+          <span class="value">ERC-20</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h2>Tokenomics</h2>
+        <ul>
+          <li><strong>Max Supply:</strong> 1,000,000,000 MTX</li>
+          <li><strong>Mint Rate:</strong> 1 ETH = 100,000 MTX</li>
+          <li><strong>Burn Mechanism:</strong> Casino games and premium features</li>
+          <li><strong>Utility:</strong> Access to casino, premium tools, staking rewards</li>
+        </ul>
+        <a href="/docs/mtx-tokenomics" class="btn-link">View Full Tokenomics →</a>
+      </div>
+
+      <div class="info-card">
+        <h2>Quick Actions</h2>
+        <div class="actions">
+          <a href="/wallet" class="btn-primary">Connect Wallet</a>
+          <a href="/buy-mtx" class="btn-primary">Buy MTX</a>
+          <a 
+            href="https://etherscan.io/token/0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-secondary"
+          >
+            View on Etherscan →
+          </a>
+        </div>
+      </div>
+
+      <div class="info-card security">
+        <h2>🔒 Security</h2>
+        <ul>
+          <li>Smart contract based on OpenZeppelin standards</li>
+          <li>Deployed on Ethereum mainnet for maximum security</li>
+          <li>All transactions are transparent and verifiable on-chain</li>
+          <li>Always verify contract address before transactions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .contract-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    color: var(--theme-primary);
+    text-align: center;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 15px var(--theme-glow);
+    font-family: 'Courier New', monospace;
+  }
+
+  .page-description {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--theme-text);
+    margin-bottom: 3rem;
+    opacity: 0.9;
+  }
+
+  .contract-info {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .info-card {
+    padding: 2rem;
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid rgba(0, 255, 153, 0.2);
+    border-radius: 8px;
+  }
+
+  .info-card.security {
+    background: rgba(0, 153, 255, 0.05);
+    border-color: rgba(0, 153, 255, 0.3);
+  }
+
+  .info-card h2 {
+    color: var(--theme-primary);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0, 255, 153, 0.1);
+  }
+
+  .detail-row:last-child {
+    border-bottom: none;
+  }
+
+  .label {
+    font-weight: bold;
+    color: var(--theme-text);
+  }
+
+  .value {
+    color: var(--theme-primary);
+  }
+
+  code.value {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    word-break: break-all;
+  }
+
+  .info-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .info-card li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--theme-text);
+  }
+
+  .info-card li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--theme-primary);
+    font-weight: bold;
+  }
+
+  .btn-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--theme-primary);
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .btn-link:hover {
+    text-decoration: underline;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--theme-primary);
+    color: #181818;
+  }
+
+  .btn-secondary {
+    background: rgba(0, 255, 153, 0.2);
+    color: var(--theme-primary);
+    border: 1px solid var(--theme-primary);
+  }
+
+  .btn-primary:hover,
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    .contract-page {
+      padding: 1rem;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .detail-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .actions {
+      flex-direction: column;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

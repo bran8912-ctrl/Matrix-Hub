@@ -134,8 +134,8 @@ function filePathToUrlPath(filePath: string): string {
  * @returns Sorted tabs
  */
 function sortTabs(tabs: NavigationTab[]): NavigationTab[] {
-  // Define preferred order
-  const order = ['home', 'games', 'docs', 'wallet', 'buy-mtx', 'casino'];
+  // Define preferred order for navigation tabs
+  const order = ['home', 'casino', 'mtx-token', 'leaderboards', 'resources', 'dao'];
   
   return tabs.sort((a, b) => {
     const aIndex = order.indexOf(a.id.toLowerCase());
@@ -214,10 +214,28 @@ export async function generateNavigation(): Promise<NavigationTab[]> {
     
     // Initialize category if not exists
     if (!navMap.has(category)) {
+      // Create a readable label for the category
+      let label: string;
+      if (category === 'home') {
+        label = 'Home';
+      } else if (category === 'casino') {
+        label = 'Casino';
+      } else if (category === 'mtx-token') {
+        label = 'MTX Token';
+      } else if (category === 'leaderboards') {
+        label = 'Leaderboards';
+      } else if (category === 'resources') {
+        label = 'Resources';
+      } else if (category === 'dao') {
+        label = 'DAO';
+      } else {
+        // Fallback: convert kebab-case to Title Case
+        label = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      }
+      
       navMap.set(category, {
         id: category,
-        label: category === 'home' ? 'Home' : 
-               category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+        label: label,
         pages: []
       });
     }
