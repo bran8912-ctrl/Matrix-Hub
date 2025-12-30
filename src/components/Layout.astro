@@ -2,6 +2,7 @@
 import "../../src/styles/globals.css";
 import Footer from "./Footer.astro";
 import Header from "./Header.astro";
+import TabNav from "./TabNav.astro";
 import MatrixRain from "./MatrixRain.astro";
 import PersistentThemeCustomizer from "./PersistentThemeCustomizer.tsx";
 import PersistentMusicPlayer from "./PersistentMusicPlayer.tsx";
@@ -36,6 +37,7 @@ const { title } = Astro.props;
     <MatrixRain />
     <PersistentThemeCustomizer client:load />
     <PersistentMusicPlayer client:load />
+    <TabNav />
     <Header />
     <main class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-8">
       <slot />
