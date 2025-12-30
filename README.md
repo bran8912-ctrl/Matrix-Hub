@@ -117,7 +117,7 @@ The system sustains itself. The loop never stops.
 ┌─────────────────────────────────────────────────────────┐
 │              MTX Purchase Options                        │
 │                                                         │
-│  ├─ Direct Mint: Send ETH → Receive MTX (1 ETH = 1000 MTX) │
+│  ├─ Direct Mint: Send ETH → Receive MTX (1 ETH = 100,000 MTX) │
 │  │  └─ Lower gas, instant minting, perfect for onboarding │
 │  │                                                      │
 │  └─ Uniswap DEX: Public market trading                  │
@@ -438,7 +438,7 @@ See [MTX Deployment Guide](docs/MTX_Deployment_Guide.md) for detailed instructio
 1. **Visit** [matrix-hub.org/buy-mtx](https://matrix-hub.org/buy-mtx)
 2. **Connect** your Ethereum wallet (MetaMask or compatible)
 3. **Send ETH** directly to the MTX contract to mint tokens
-4. **Rate**: 1 ETH = 1000 MTX (fixed)
+4. **Rate**: 1 ETH = 100,000 MTX (fixed)
 5. **Benefits**: Lower gas fees, instant minting, perfect for small purchases
 
 ### Option 2: Uniswap DEX (For Market Trading)

@@ -22,7 +22,7 @@
 ## Acquisition Methods
 
 ### 1. Direct Mint (Primary Onboarding Method)
-- **Rate**: 1 ETH = 1000 MTX (fixed)
+- **Rate**: 1 ETH = 100,000 MTX (fixed)
 - **Method**: Send ETH to contract, receive MTX instantly
 - **Advantages**: 
   - Lower gas costs than DEX swaps

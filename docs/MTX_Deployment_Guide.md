@@ -39,9 +39,15 @@ Edit `.env` file:
 MAINNET_RPC_URL=https://eth.llamarpc.com
 PRIVATE_KEY=YOUR_DEPLOYER_PRIVATE_KEY_HERE
 ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY
+MTX_CONTRACT_ADDRESS=  # Leave empty until deployed
 ```
 
-**⚠️ SECURITY**: Never commit your private key! Keep `.env` in `.gitignore`.
+**⚠️ CRITICAL SECURITY**:
+- **NEVER** commit your `.env` file! It's protected by `.gitignore`.
+- Use a **burner wallet** for deployment, not your main wallet.
+- The `.env` file should contain real keys and must be kept secret.
+- Double-check `.env` is listed in `.gitignore` before committing.
+- After deployment, securely backup and then delete the private key from `.env`.
 
 ### 3. Deploy Contract
 
@@ -92,7 +98,7 @@ export const MTX = {
   chainId: 1, // Ethereum Mainnet
   chainName: "Ethereum",
   name: "Matrix Hub Coin",
-  ethToMtxRate: 1000,
+  ethToMtxRate: 100000,
   // ... rest of config
 };
 ```
@@ -164,3 +170,32 @@ Before going live:
 ## Current Status: NOT DEPLOYED ⚠️
 
 The contract is currently using a placeholder address and is not functional on any live network. All mint and purchase features will fail until proper deployment is completed.
+
+## Post-Deployment Update Checklist
+
+**CRITICAL**: After deploying the MTX contract to mainnet, you MUST update the following:
+
+### Configuration Files
+- [ ] `src/config/mtx.ts` - Replace placeholder address with deployed contract address
+- [ ] `.env` file - Set `MTX_CONTRACT_ADDRESS` environment variable
+
+### Documentation Files (Update all placeholder addresses)
+- [ ] `docs/MTX_Tokenomics.md` - Update contract address
+- [ ] `docs/MTX_Wallet_Integration.md` - Update contract address in examples
+- [ ] `docs/MTX_Deployment_Guide.md` - Update with actual deployment info
+- [ ] `docs/DEPLOYMENT_QUICK_START.md` - Update with deployment date and address
+- [ ] `docs/ETHEREUM_MIGRATION_SUMMARY.md` - Update deployment status
+- [ ] `README.md` - Update contract address if mentioned
+
+### User-Facing Pages
+- [ ] `src/pages/buy-mtx.astro` - Update any hardcoded addresses
+- [ ] Verify `src/components/BuyMTX.tsx` is using the config correctly
+
+### Post-Launch
+- [ ] Take screenshots of working wallet connection and MTX purchase flow
+- [ ] Update documentation with actual transaction examples and Etherscan links
+- [ ] Verify all Etherscan links point to mainnet (not testnet)
+- [ ] Announce deployment and share verified contract address
+- [ ] Monitor first few transactions closely
+
+**Exchange Rate Confirmed**: 1 ETH = 100,000 MTX (as configured in contract and all docs)

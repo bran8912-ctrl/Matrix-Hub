@@ -150,7 +150,7 @@ Following requirements to restore Ethereum Mainnet support, the platform has bee
 | Currency | MATIC | ETH |
 | DEX | QuickSwap | Uniswap |
 | Explorer | Polygonscan | Etherscan |
-| Rate | 1 MATIC = 1000 MTX | 1 ETH = 1000 MTX |
+| Rate | 1 MATIC = 1000 MTX | 1 ETH = 100,000 MTX |
 
 ### Ethereum Mainnet Benefits:
 

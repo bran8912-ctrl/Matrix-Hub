@@ -41,7 +41,10 @@ npm run deploy:mainnet
 
 2. **Update Configuration**
    - Update `src/config/mtx.ts` with the deployed contract address
+   - Update `src/pages/buy-mtx.astro` with the deployed contract address (if hardcoded)
+   - Update all documentation with the real contract address
    - Or set `MTX_CONTRACT_ADDRESS` environment variable
+   - **IMPORTANT**: Replace placeholder `0x0000000000000000000000000000000000000000` everywhere
 
 3. **Test Everything**
    - Connect wallet on correct network (Ethereum Mainnet)

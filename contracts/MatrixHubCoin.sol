@@ -22,8 +22,8 @@ contract MatrixHubCoin is ERC20, Ownable {
     // Max supply is fixed at deployment
     uint256 public immutable MAX_SUPPLY;
     
-    // Fixed exchange rate: 1 ETH = 1000 MTX (can be adjusted by owner)
-    uint256 public ethToMtxRate = 1000;
+    // Fixed exchange rate: 1 ETH = 100,000 MTX (can be adjusted by owner)
+    uint256 public ethToMtxRate = 100000;
     
     // Minting can be paused by owner (e.g., when transitioning to DEX-only)
     bool public mintingPaused = false;
