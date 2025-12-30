@@ -416,7 +416,7 @@ New to Matrix-Hub? Here's how to get started with MTX:
 # Install dependencies
 npm install
 
-# Set up environment variables (add private key and API keys)
+# Set up environment variables (add private key and Etherscan API key)
 cp .env.example .env
 nano .env
 
@@ -429,7 +429,11 @@ npm run deploy:sepolia
 npm run deploy:mainnet
 ```
 
-See [MTX Deployment Guide](docs/MTX_Deployment_Guide.md) for detailed instructions.
+**Deployment Documentation**:
+- 🚀 [Quick Deploy Guide](docs/QUICK_DEPLOY.md) - Get started in 5 minutes
+- 📋 [Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md) - Pre-deployment checklist
+- 📖 [Sepolia Deployment Guide](docs/SEPOLIA_DEPLOYMENT.md) - Detailed testnet deployment
+- 📚 [Full Deployment Guide](docs/MTX_Deployment_Guide.md) - Complete instructions
 
 ### Once Deployed: Purchase Options
 
@@ -487,6 +491,17 @@ All commands are run from the root of the project, from a terminal:
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## Smart Contract Commands
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm run compile`         | Compile Solidity contracts                       |
+| `npm run test`            | Run Hardhat tests                                |
+| `npm run deploy:sepolia`  | Deploy MTX contract to Sepolia testnet           |
+| `npm run deploy:mainnet`  | Deploy MTX contract to Ethereum mainnet          |
+| `npm run verify:sepolia`  | Verify contract on Sepolia Etherscan            |
+| `npm run verify:mainnet`  | Verify contract on Mainnet Etherscan            |
 
 ## Developing Locally
 
