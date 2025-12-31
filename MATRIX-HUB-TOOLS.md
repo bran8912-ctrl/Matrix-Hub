@@ -351,7 +351,7 @@ Add to your build scripts in `package.json`:
 
 **URL:** `https://matrix-hub.org/owners` (or `/owners` on your local dev server)
 
-**Password:** `Baby2315!`
+**Access Control:** Protected via admin-configured credentials (never document real passwords here; use environment configuration or your auth provider settings).
 
 **Important:** This page is NOT linked in site navigation - only accessible via direct URL
 
