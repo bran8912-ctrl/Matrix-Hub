@@ -130,11 +130,12 @@ jobs:
             
             // Add scan results
             const failed = '${{ steps.scan.outputs.failed_count }}';
+            const failedCount = Number(failed) || 0;
             const total = '${{ steps.scan.outputs.total_files }}';
             comment += `- ✅ Total files processed: **${total}**\n`;
             
-            if (failed > 0) {
-              comment += `- ⚠️ Files with parsing errors: **${failed}**\n`;
+            if (failedCount > 0) {
+              comment += `- ⚠️ Files with parsing errors: **${failedCount}**\n`;
               comment += '\n> Review the error log artifact for details on failed files.\n';
             } else {
               comment += `- ✅ All files parsed successfully\n`;
