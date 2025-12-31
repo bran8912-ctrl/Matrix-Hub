@@ -174,13 +174,13 @@ function sortTabs(tabs: NavigationTab[]): NavigationTab[] {
  * @returns Navigation structure
  */
 export async function generateNavigation(): Promise<NavigationTab[]> {
-  const pagesDir = path.resolve(__dirname, '../pages');
+  const pagesDir = path.join(process.cwd(), 'src/pages');
   
   // Find all page files, excluding specified paths
   const pattern = '**/*.{astro,md,mdx}';
   const files =console.log("DEBUG pagesDir:", pagesDir);await fg(pattern, {
     cwd: pagesDir,
-    ignore: EXCLUDED_PATHS,
+    ignore: EXCLUDED_PATHS,console.log("DEBUG FOUND FILES:", files);
   });
   
   // Build navigation structure
