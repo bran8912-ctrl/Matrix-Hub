@@ -196,15 +196,18 @@ async function generateAnalytics(contentData) {
   try {
     await ensureOutputDir();
     
+    const totalWords = contentData.reduce((sum, item) => sum + item.wordCount, 0);
+    const totalSize = contentData.reduce((sum, item) => sum + item.size, 0);
+    
     const analytics = {
       generated: new Date().toISOString(),
       summary: {
         totalFiles: contentData.length,
-        totalWords: contentData.reduce((sum, item) => sum + item.wordCount, 0),
-        totalSize: contentData.reduce((sum, item) => sum + item.size, 0),
-        avgWordsPerFile: Math.round(
-          contentData.reduce((sum, item) => sum + item.wordCount, 0) / contentData.length
-        ),
+        totalWords: totalWords,
+        totalSize: totalSize,
+        avgWordsPerFile: contentData.length > 0
+          ? Math.round(totalWords / contentData.length)
+          : 0,
       },
       categories: {},
       tagCloud: {},
