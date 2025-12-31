@@ -422,7 +422,7 @@ Available categories:
 
 ## Integration with CI/CD
 
-The content workflow is designed to integrate seamlessly with GitHub Actions and other CI/CD platforms. See the [GitHub Actions Workflow](#github-actions-workflow) section for implementation details.
+The content workflow is designed to integrate seamlessly with GitHub Actions and other CI/CD platforms.
 
 ## Advanced Usage
 
