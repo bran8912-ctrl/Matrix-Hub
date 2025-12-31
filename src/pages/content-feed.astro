@@ -3,6 +3,10 @@ import Layout from '../components/Layout.astro';
 import { readFile, access } from 'fs/promises';
 import { join } from 'path';
 
+export const prerender = true;
+export const title = "Content Feed";
+export const navCategory = "resources";
+
 // This page demonstrates the content workflow by displaying the public feed
 const feedPath = '/public-feed.json';
 
