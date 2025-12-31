@@ -11,6 +11,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+content-workflow-errors.log
+
+# content workflow generated files
+public/public-feed.json
+public/content-analytics.json
 
 
 # environment variables
