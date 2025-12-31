@@ -178,7 +178,7 @@ export async function generateNavigation(): Promise<NavigationTab[]> {
   
   // Find all page files, excluding specified paths
   const pattern = '**/*.{astro,md,mdx}';
-  const files = await fg(pattern, {
+  const files =console.log("DEBUG pagesDir:", pagesDir);await fg(pattern, {
     cwd: pagesDir,
     ignore: EXCLUDED_PATHS,
   });
