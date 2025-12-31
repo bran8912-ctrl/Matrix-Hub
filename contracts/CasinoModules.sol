@@ -1,11 +1,25 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+/**
+ * @title CasinoModules - Supporting Contracts for Matrix Hub Casino
+ * @dev Reserve, Liquidity Router, and RNG Engine for Ethereum Mainnet
+ * @notice All modules use MTX (ERC-20) token for casino operations
+ * 
+ * Network: Ethereum Mainnet (Chain ID: 1)
+ * Currency: ETH
+ * Token: MTX (Matrix Hub Coin)
+ */
+
 // MTX Coin integration for user-based casino
 // Uses MTXToken contract from CasinoCore.sol
 // All casino modules interact with MTXToken for user balances and payouts
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+/**
+ * @title CasinoReserve
+ * @dev Holds MTX reserves for casino payouts on Ethereum
+ */
 contract CasinoReserve {
     IERC20 public mtx;
     uint public reserveBalance;
@@ -18,8 +32,14 @@ contract CasinoReserve {
         _;
     }
 
+    /**
+     * @dev Constructor initializes reserve with MTX token address
+     * @param _mtx Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Ethereum
+     * @param _reserveCap Maximum reserve capacity in MTX
+     * @param _casinoCore Address of CasinoCore contract
+     */
     constructor(address _mtx, uint _reserveCap, address _casinoCore) {
-        mtx = IERC20(_mtx); // Deployed MatrixHubCoin: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+        mtx = IERC20(_mtx); // MTX Token address on Ethereum - set from deployed MatrixHubCoin
         reserveCap = _reserveCap;
         casinoCore = _casinoCore;
     }
@@ -41,14 +61,21 @@ contract CasinoReserve {
     }
 }
 
-// Liquidity Router (DEX Integration)
-// Allows adding MTX coin liquidity to DEX pools
+/**
+ * @title LiquidityRouter
+ * @dev Manages liquidity for MTX/ETH pool on Ethereum DEX (Uniswap)
+ */
 contract LiquidityRouter {
     IERC20 public mtx;
     address public dexPool;
 
+    /**
+     * @dev Constructor initializes router with MTX token and DEX pool
+     * @param _mtx Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Ethereum
+     * @param _dexPool Address of Uniswap V2/V3 pool for MTX/ETH
+     */
     constructor(address _mtx, address _dexPool) {
-        mtx = IERC20(_mtx); // Deployed MatrixHubCoin: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+        mtx = IERC20(_mtx); // MTX Token address on Ethereum - set from deployed MatrixHubCoin
         dexPool = _dexPool;
     }
 
@@ -58,7 +85,10 @@ contract LiquidityRouter {
     }
 }
 
-// Provably Fair RNG Engine
+/**
+ * @title RNGEngine
+ * @dev Provably fair random number generator for casino games on Ethereum
+ */
 contract RNGEngine {
     bytes32 public serverSeedHash;
     bytes32 public clientSeed;

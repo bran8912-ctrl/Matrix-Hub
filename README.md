@@ -115,11 +115,13 @@ The system sustains itself. The loop never stops.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                 DEX (Public Market)                     │
+│              MTX Purchase Options                        │
 │                                                         │
-│  ├─ Buy MTX                                            │
+│  ├─ Direct Mint: Send ETH → Receive MTX (1 ETH = 100,000 MTX) │
+│  │  └─ Lower gas, instant minting, perfect for onboarding │
 │  │                                                      │
-│  └─ Sell MTX (optional exit)                           │
+│  └─ Uniswap DEX: Public market trading                  │
+│     └─ Market rates, high liquidity, any token swap     │
 └─────────────────────────────────────────────────────────┘
                         ↓
                  ┌─────────────┐
@@ -139,12 +141,13 @@ The system sustains itself. The loop never stops.
 ```
 
 **Entry Points:**
-- **DEX Acquisition**: Purchase MTX on public markets
+- **Direct Mint**: Send ETH directly to MTX contract for instant minting at fixed rate
+- **DEX Acquisition**: Purchase MTX on Uniswap at market rates
 - **Direct Earn**: Earn MTX through platform engagement (no purchase required)
 - **Wallet Connection**: Non-custodial — you control your MTX
 
 **Flow:**
-1. Acquire MTX (buy or earn)
+1. Acquire MTX (direct mint, DEX buy, or earn)
 2. Connect wallet to Matrix-Hub.org
 3. Use MTX to unlock features and tools
 4. Earn more MTX through contribution
@@ -398,6 +401,78 @@ MTX FLOWS WHERE SIGNAL EXISTS.
 
 ---
 
+## 🚀 Quick Start: Getting MTX
+
+New to Matrix-Hub? Here's how to get started with MTX:
+
+### ⚠️ MTX Contract Deployment Required
+
+**IMPORTANT**: The MTX token contract must be deployed to Ethereum Mainnet to get a legitimate address before the platform can be used.
+
+**Current Status**: Contract not yet deployed to live network.
+
+**To Deploy**:
+```bash
+# Install dependencies
+npm install
+
+# Set up environment variables (add private key and Etherscan API key)
+cp .env.example .env
+nano .env
+
+# Deploy to Ethereum Sepolia Testnet (recommended first)
+npm run deploy:sepolia
+
+# Get testnet ETH from: https://sepoliafaucet.com/
+
+# After testing, deploy to Ethereum Mainnet
+npm run deploy:mainnet
+```
+
+**Deployment Documentation**:
+- 🚀 [Quick Deploy Guide](docs/QUICK_DEPLOY.md) - Get started in 5 minutes
+- 📋 [Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md) - Pre-deployment checklist
+- 📖 [Sepolia Deployment Guide](docs/SEPOLIA_DEPLOYMENT.md) - Detailed testnet deployment
+- 📚 [Full Deployment Guide](docs/MTX_Deployment_Guide.md) - Complete instructions
+
+### Once Deployed: Purchase Options
+
+### Option 1: Direct Mint (Recommended for First-Time Users)
+
+1. **Visit** [matrix-hub.org/buy-mtx](https://matrix-hub.org/buy-mtx)
+2. **Connect** your Ethereum wallet (MetaMask or compatible)
+3. **Send ETH** directly to the MTX contract to mint tokens
+4. **Rate**: 1 ETH = 100,000 MTX (fixed)
+5. **Benefits**: Lower gas fees, instant minting, perfect for small purchases
+
+### Option 2: Uniswap DEX (For Market Trading)
+
+1. **Visit** [Uniswap](https://app.uniswap.org/)
+2. **Connect** your wallet
+3. **Swap** ETH or any token for MTX
+4. **Benefits**: Market rates, high liquidity, flexible amounts
+
+### Option 3: Earn MTX (No Purchase Required)
+
+- Complete platform challenges
+- Contribute to GitHub (merged PRs earn MTX)
+- Report bugs and issues
+- Test beta features
+- Community participation
+
+### MTX Contract Information
+
+- **Network**: Ethereum Mainnet (ChainID: 1)
+- **Contract Address**: *To be updated after deployment*
+- **Contract Owner**: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- **Symbol**: MTX
+- **Decimals**: 18
+- **Block Explorer**: Etherscan
+
+⚠️ **Always verify the contract address before sending funds!**
+
+---
+
 ## Deployment
 
 This starter can be deployed to any Node-compatible hosting provider that supports static + server output (for example: Vercel, Render, or self-hosted Node servers). If you previously used hosting-specific features (image proxy, provider extensions), these have been removed in favor of a generic Node setup.
@@ -416,6 +491,17 @@ All commands are run from the root of the project, from a terminal:
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## Smart Contract Commands
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm run compile`         | Compile Solidity contracts                       |
+| `npm run test`            | Run Hardhat tests                                |
+| `npm run deploy:sepolia`  | Deploy MTX contract to Sepolia testnet           |
+| `npm run deploy:mainnet`  | Deploy MTX contract to Ethereum mainnet          |
+| `npm run verify:sepolia`  | Verify contract on Sepolia Etherscan            |
+| `npm run verify:mainnet`  | Verify contract on Mainnet Etherscan            |
 
 ## Developing Locally
 

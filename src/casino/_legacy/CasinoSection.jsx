@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import WalletConnect from '../components/WalletConnect';
+import WalletConnect from '../../components/WalletConnect';
 import GameTabs from './ui/GameTabs';
 
 export default function CasinoSection() {

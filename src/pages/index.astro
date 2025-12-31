@@ -5,12 +5,13 @@ import CasinoGamesPanel from "../components/CasinoGamesPanel.astro";
 import MTXOwnershipPanel from "../components/MTXOwnershipPanel.astro";
 import DonateBanner from "../components/DonateBanner.astro";
 import TelegramWidget from "../components/TelegramWidget.astro";
-import MusicPlayer from "../components/MusicPlayer.astro";
-import ThemeCustomizer from "../components/ThemeCustomizer.astro";
 import DailyDrops from "../components/DailyDrops.astro";
 import DealScanner from "../components/DealScanner.astro";
 
 export const prerender = true;
+
+export const title = "Home";
+export const navCategory = "home";
 ---
 
 <Layout title="The Matrix Hub - Blockchain Tools & Casino">
@@ -41,12 +42,6 @@ export const prerender = true;
 
   <!-- Telegram Widget -->
   <TelegramWidget />
-
-  <!-- Music Player -->
-  <MusicPlayer />
-
-  <!-- Theme Customizer -->
-  <ThemeCustomizer />
 </Layout>
 
 <style>
@@ -79,26 +74,5 @@ export const prerender = true;
     color: var(--theme-text);
     text-shadow: 0 0 10px var(--theme-secondary);
     font-family: 'Courier New', monospace;
-  }
-
-  @media (max-width: 768px) {
-    .matrix-title {
-      font-size: 2rem;
-      letter-spacing: 2px;
-    }
-
-    .matrix-subtitle {
-      font-size: 1rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .matrix-title {
-      font-size: 1.8rem;
-    }
-
-    .matrix-subtitle {
-      font-size: 0.9rem;
-    }
   }
 </style>

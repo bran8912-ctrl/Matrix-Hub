@@ -5,11 +5,13 @@ import { MTX } from '../config/mtx';
 
 // Deployed MTX token contract address and ABI
 const MTX_TOKEN_ADDRESS = MTX.address;
+// MTX: Define ABI for MTX token contract interactions (standard ERC-20 methods)
 const MTX_TOKEN_ABI = [
-  // Minimal ABI for ERC-20 balanceOf
-  "function balanceOf(address owner) view returns (uint256)",
+  "function balanceOf(address account) view returns (uint256)",
   "function decimals() view returns (uint8)",
-  "function transfer(address to, uint256 amount) returns (bool)"
+  "function transfer(address to, uint256 amount) returns (bool)",
+  "function symbol() view returns (string)",
+  "function name() view returns (string)"
 ];
 
 const TIERS = [
@@ -37,6 +39,45 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
       if (bal >= TIERS[i].threshold) return TIERS[i].name;
     }
     return 'Bronze'; 
+  };
+
+  // MTX: Add MTX token to wallet using wallet_watchAsset (EIP-747)
+  const addTokenToWallet = async (): Promise<void> => {
+    setError('');
+    if (!provider) {
+      setError('Connect wallet first.');
+      return;
+    }
+    try {
+      // wallet_watchAsset requires direct ethereum object access (not through ethers provider)
+      const ethereum = (window as any).ethereum;
+      if (!ethereum) {
+        setError('MetaMask or compatible wallet not found.');
+        return;
+      }
+      
+      // Request to add MTX token to user's wallet using EIP-747
+      const wasAdded = await ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: MTX_TOKEN_ADDRESS,
+            symbol: MTX.symbol,
+            decimals: MTX.decimals,
+            // Image omitted - can be added later when token logo is available
+          },
+        },
+      });
+
+      if (wasAdded) {
+        // Token successfully added - wallet provides user feedback
+        console.log('MTX token added to wallet successfully');
+      }
+    } catch (err) {
+      console.error('Failed to add token:', err);
+      setError('Failed to add MTX token to wallet.');
+    }
   };
 
   const connectWallet = async (): Promise<void> => {
@@ -153,6 +194,59 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
           <div><strong>Address:</strong> {address.slice(0, 6)}...{address.slice(-4)}</div>
           <div><strong>MTX Balance:</strong> {balance !== null ? balance : 'Loading...'}</div>
           <div><strong>Tier:</strong> {tier}</div>
+          {/* MTX: Add MTX to Wallet button */}
+          <div style={{ marginTop: '0.5rem' }}>
+            <button 
+              onClick={addTokenToWallet} 
+              style={{ 
+                padding: '0.25rem 0.75rem', 
+                fontSize: '0.875rem', 
+                background: '#4CAF50', 
+                color: '#fff', 
+                border: 'none', 
+                borderRadius: '4px', 
+                cursor: 'pointer',
+                marginRight: '0.5rem'
+              }}
+            >
+              Add MTX to Wallet
+            </button>
+            {/* MTX: Buy MTX link using uniswapUrl from config */}
+            <a 
+              href={MTX.uniswapUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ 
+                padding: '0.25rem 0.75rem', 
+                fontSize: '0.875rem', 
+                background: '#FF007A', 
+                color: '#fff', 
+                textDecoration: 'none',
+                border: 'none', 
+                borderRadius: '4px',
+                display: 'inline-block',
+                marginRight: '0.5rem'
+              }}
+            >
+              Buy MTX on Uniswap
+            </a>
+            {/* MTX: Direct Mint link */}
+            <a 
+              href="/buy-mtx"
+              style={{ 
+                padding: '0.25rem 0.75rem', 
+                fontSize: '0.875rem', 
+                background: '#00ff99', 
+                color: '#181818', 
+                textDecoration: 'none',
+                border: 'none', 
+                borderRadius: '4px',
+                display: 'inline-block'
+              }}
+            >
+              Buy MTX (Direct Mint)
+            </a>
+          </div>
           {locked > 0 && (
             <div style={{ color: '#ffd700', marginTop: '0.5rem' }}>
               <strong>Locked MTX:</strong> {locked} (Unlocks: {lockUntil ? new Date(lockUntil).toLocaleString() : ''})

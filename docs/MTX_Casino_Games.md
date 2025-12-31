@@ -21,9 +21,7 @@ Player vs Player wagers.
 ---
 
 **Related Documentation:**
-- [Provably Fair System](MTX_Casino_Provably_Fair.md)
-- [Casino Game Math](MTX_Casino_Game_Math.md)
-- [Casino Architecture](MTX_Casino_Architecture.md)
-- [Responsible Play](MTX_Casino_Responsible_Play.md)
-
-**[← Back to Documentation Index](../docs/)**
+- [Provably Fair System](/docs/provably-fair-system)
+- [Casino Game Math](/docs/casino-game-math)
+- [Casino Architecture](/docs/casino-architecture)
+- [Responsible Play](/docs/responsible-play)

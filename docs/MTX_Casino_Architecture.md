@@ -4,7 +4,7 @@
 - Casino Core
 - MTX [Liquidity](https://en.wikipedia.org/wiki/Market_liquidity) Router
 - Casino Reserve
-- [Provably Fair](MTX_Casino_Provably_Fair.md) RNG
+- [Provably Fair](/docs/provably-fair-system) RNG
 
 ## Principles
 - Community owned
@@ -15,9 +15,7 @@
 ---
 
 **Related Documentation:**
-- [Casino Overview](MTX_Casino_Overview.md)
-- [Casino Games](MTX_Casino_Games.md)
-- [Casino Game Math](MTX_Casino_Game_Math.md)
-- [DAO Governance](MTX_DAO_Governance.md)
-
-**[← Back to Documentation Index](../docs/)**
+- [Casino Games](/docs/casino-games)
+- [Casino Game Math](/docs/casino-game-math)
+- [Provably Fair System](/docs/provably-fair-system)
+- [DAO Governance](/docs/dao-governance)

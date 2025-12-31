@@ -15,9 +15,5 @@ Entertainment, not exploitation.
 ---
 
 **Related Documentation:**
-- [Casino Overview](MTX_Casino_Overview.md)
-- [Casino Games](MTX_Casino_Games.md)
-- [Casino Disclaimer](MTX_Casino_Disclaimer.md)
-- [General Responsible Play Guidelines](MTX_Responsible_Play.md)
-
-**[← Back to Documentation Index](../docs/)**
+- [Casino Games](/docs/casino-games)
+- [Disclaimer](/docs/disclaimer)

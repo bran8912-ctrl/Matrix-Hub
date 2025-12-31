@@ -33,9 +33,19 @@ import Panel from './Panel.astro';
   <div class="reserve-liquidity">
     <h3>💎 Casino Reserve & Liquidity</h3>
     
+    <!-- Casino Deployment Warning -->
+    <div class="deployment-notice">
+      <p><strong>⚠️ Casino Contracts Not Yet Deployed</strong></p>
+      <p>
+        The casino smart contracts (CasinoCore, CasinoReserve, LiquidityRouter) must be deployed
+        after the MTX token is live. Contract addresses will be updated here after deployment.
+      </p>
+      <p>See <a href="/docs/DEPLOYMENT_QUICK_START.md">Deployment Guide</a> for instructions.</p>
+    </div>
+    
     <div class="section-block">
       <h4>CasinoReserve Contract</h4>
-      <p><code>0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</code></p>
+      <p><code>Pending Deployment</code></p>
       <ul>
         <li><strong>Purpose:</strong> Holds MTX to pay winners and absorb losses</li>
         <li><strong>Funding:</strong> 3% of all bets go to reserve to maintain solvency</li>
@@ -147,14 +157,14 @@ import Panel from './Panel.astro';
       <p class="summary-note">
         <em>Note: MTX is a utility token, not a security. It provides governance rights and ecosystem access, 
         but does not guarantee profits or represent equity ownership in a legal entity. Always review the 
-        <a href="/docs/MTX_Disclaimer.md" target="_blank">Disclaimer</a> before participating.</em>
+        <a href="/docs/disclaimer">Disclaimer</a> before participating.</em>
       </p>
     </div>
   </div>
 
   <div class="ownership-cta">
-    <a href="/docs/MTX_Whitepaper.md" target="_blank" class="cta-button">Read Full Whitepaper</a>
-    <a href="/docs/MTX_DAO_Governance.md" target="_blank" class="cta-button">Learn About Governance</a>
+    <a href="/docs/mtx-whitepaper" class="cta-button">Read Full Whitepaper</a>
+    <a href="/docs/dao-governance" class="cta-button">Learn About Governance</a>
     <a href="/games/casino/" class="cta-button primary">Play Casino Games</a>
   </div>
 </Panel>
@@ -218,6 +228,28 @@ import Panel from './Panel.astro';
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 15px;
+  }
+
+  .deployment-notice {
+    background: rgba(255, 153, 0, 0.1);
+    border: 2px solid #ff9900;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .deployment-notice p {
+    margin: 0.5rem 0;
+    color: var(--theme-text);
+  }
+
+  .deployment-notice strong {
+    color: #ffaa00;
+  }
+
+  .deployment-notice a {
+    color: #ffaa00;
+    text-decoration: underline;
   }
 
   .section-block h4 {
@@ -436,31 +468,5 @@ import Panel from './Panel.astro';
   .cta-button.primary:hover {
     background: var(--theme-secondary);
     box-shadow: 0 0 30px var(--theme-glow);
-  }
-
-  @media (max-width: 768px) {
-    .comparison-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .mechanics-flow {
-      flex-direction: column;
-    }
-
-    .flow-arrow {
-      transform: rotate(90deg);
-      margin: 10px 0;
-    }
-
-    .revenue-row {
-      grid-template-columns: 1fr;
-      gap: 5px;
-    }
-
-    .revenue-label,
-    .revenue-value,
-    .revenue-desc {
-      text-align: left;
-    }
   }
 </style>

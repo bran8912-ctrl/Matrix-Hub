@@ -27,6 +27,11 @@ export default function RouletteGame({ walletAddress, mtxBalance, onBetPlaced }:
       return;
     }
 
+    if (Number(mtxBalance) <= 0) {
+      alert('You need MTX to play.');
+      return;
+    }
+
     const bet: RouletteBet = {
       type: betType,
       value: betType === 'number' ? betNumber : undefined,

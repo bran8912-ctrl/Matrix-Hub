@@ -1,12 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// 2️⃣ MTX Token (Utility Only)
+/**
+ * @title CasinoCore - Matrix Hub Casino Core Contract
+ * @dev Casino management contract for Ethereum Mainnet
+ * @notice Uses MTX (ERC-20) token for all casino operations
+ * 
+ * Network: Ethereum Mainnet (Chain ID: 1)
+ * Currency: ETH
+ * Token: MTX (Matrix Hub Coin)
+ */
 
 // Use OpenZeppelin IERC20 interface for MatrixHubCoin (MTX)
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-// 3️⃣ Casino Core Contract
+/**
+ * @dev Interfaces for casino modules
+ */
 interface ILiquidityRouter {
     function addLiquidity(uint amount) external;
 }
@@ -20,6 +30,10 @@ interface IRNGEngine {
     function resolve(bytes calldata gameData) external returns (bool);
 }
 
+/**
+ * @title CasinoCore
+ * @dev Main casino contract managing bets, payouts, and game logic on Ethereum
+ */
 contract CasinoCore {
     IERC20 public mtx;
     ILiquidityRouter public liquidity;
@@ -36,6 +50,17 @@ contract CasinoCore {
     address public dev;
     address public governance;
 
+    /**
+     * @dev Constructor initializes casino with required contract addresses
+     * @param _mtx Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Ethereum
+     * @param _liquidity Address of LiquidityRouter contract
+     * @param _reserve Address of CasinoReserve contract
+     * @param _rng Address of RNGEngine contract
+     * @param _minBet Minimum bet amount in MTX (with 18 decimals)
+     * @param _maxBet Maximum bet amount in MTX (with 18 decimals)
+     * @param _dev Developer address for fee collection
+     * @param _governance Governance address for parameter updates
+     */
     constructor(
         address _mtx,
         address _liquidity,
@@ -46,7 +71,7 @@ contract CasinoCore {
         address _dev,
         address _governance
     ) {
-        mtx = IERC20(_mtx); // Deployed MatrixHubCoin: 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+        mtx = IERC20(_mtx); // MTX Token on Ethereum - deploy MatrixHubCoin first, then pass address here
         liquidity = ILiquidityRouter(_liquidity);
         reserve = ICasinoReserve(_reserve);
         rng = IRNGEngine(_rng);

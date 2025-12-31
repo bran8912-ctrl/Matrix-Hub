@@ -1,14 +1,27 @@
 ---
 import Panel from './Panel.astro';
+import { MTX } from '../config/mtx';
 ---
 
 <Panel title="MTX ECOSYSTEM" class="mtx-panel">
+  <!-- Deployment Status Warning -->
+  {!MTX.isDeployed && (
+    <div class="deployment-warning">
+      <h4>⚠️ Deployment Required</h4>
+      <p>
+        The MTX token contract must be deployed to Ethereum Mainnet before the platform can be used.
+        See <a href="/docs/DEPLOYMENT_QUICK_START.md">Deployment Guide</a> for instructions.
+      </p>
+    </div>
+  )}
+
   <div class="panel-text">
-    <strong>MTX</strong> is the key token powering Matrix-Hub.<br>
+    <strong>MTX</strong> is the key token powering Matrix-Hub on Ethereum Mainnet.<br>
     Earn, spend, burn, and lock MTX to unlock features, access premium tools, and participate in the Casino.
   </div>
   
   <ul class="mtx-features">
+    <li><span class="feature-label">Buy MTX:</span> Direct mint with ETH or purchase on Uniswap DEX</li>
     <li><span class="feature-label">Earn MTX:</span> Usage milestones, bug reports, GitHub actions, community testing</li>
     <li><span class="feature-label">Spend MTX:</span> Premium tools, priority execution, experimental modules, Casino games</li>
     <li><span class="feature-label">Burn MTX:</span> A % of premium spending is burned to keep supply healthy</li>
@@ -19,14 +32,61 @@ import Panel from './Panel.astro';
   <div class="panel-text mtx-summary">
     MTX is useful, accessible, and designed for sustainable growth—no hype cycles required.
   </div>
+
+  <!-- Contract Information -->
+  <div class="contract-info">
+    <h4>📋 Contract Information</h4>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Network:</span>
+        <span class="info-value">Ethereum Mainnet (ChainID: 1)</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Contract Address:</span>
+        <span class="info-value">
+          {MTX.isDeployed ? (
+            <a href={MTX.blockExplorerUrl} target="_blank" rel="noopener noreferrer">
+              {MTX.address.slice(0, 10)}...{MTX.address.slice(-8)}
+            </a>
+          ) : (
+            <span class="pending">Pending Deployment</span>
+          )}
+        </span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Symbol:</span>
+        <span class="info-value">MTX</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Block Explorer:</span>
+        <span class="info-value">Etherscan</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="mtx-purchase-cta">
+    <h4 style="color:var(--theme-primary); margin-bottom: 10px;">Get Started with MTX:</h4>
+    <div class="cta-buttons">
+      <a href="/buy-mtx" class="cta-btn primary" class:list={[{disabled: !MTX.isDeployed}]}>
+        Buy MTX (Direct Mint)
+      </a>
+      <a href={MTX.uniswapUrl} target="_blank" rel="noopener noreferrer" class="cta-btn secondary" class:list={[{disabled: !MTX.isDeployed}]}>
+        Buy on Uniswap
+      </a>
+      <a href="/wallet" class="cta-btn tertiary">Connect Wallet</a>
+    </div>
+    {!MTX.isDeployed && (
+      <p class="cta-note">Purchase options will be available after contract deployment.</p>
+    )}
+  </div>
   
   <div class="mtx-links">
     <h4 style="color:var(--theme-primary); margin-bottom: 10px;">Learn More About MTX:</h4>
     <ul>
-      <li><a href="/docs/MTX_Whitepaper.md" target="_blank">MTX Whitepaper</a></li>
-      <li><a href="/docs/MTX_Tokenomics.md" target="_blank">MTX Tokenomics</a></li>
-      <li><a href="/docs/MTX_DAO_Governance.md" target="_blank">DAO Governance</a></li>
-      <li><a href="/docs/MTX_Disclaimer.md" target="_blank">Disclaimer</a></li>
+      <li><a href="/docs/mtx-whitepaper">MTX Whitepaper</a></li>
+      <li><a href="/docs/mtx-tokenomics">MTX Tokenomics</a></li>
+      <li><a href="/docs/dao-governance">DAO Governance</a></li>
+      <li><a href="/docs/disclaimer">Disclaimer</a></li>
     </ul>
   </div>
 </Panel>
@@ -38,6 +98,79 @@ import Panel from './Panel.astro';
     max-width: 900px;
     border: 2px solid var(--theme-border);
     box-shadow: 0 0 24px var(--theme-glow);
+  }
+
+  .deployment-warning {
+    background: rgba(255, 153, 0, 0.1);
+    border: 2px solid #ff9900;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .deployment-warning h4 {
+    color: #ffaa00;
+    margin-bottom: 0.5rem;
+  }
+
+  .deployment-warning p {
+    color: var(--theme-text);
+    margin: 0;
+  }
+
+  .deployment-warning a {
+    color: #ffaa00;
+    text-decoration: underline;
+  }
+
+  .contract-info {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .contract-info h4 {
+    color: var(--theme-primary);
+    margin-bottom: 1rem;
+  }
+
+  .info-grid {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: rgba(0, 255, 153, 0.05);
+    border-radius: 4px;
+  }
+
+  .info-label {
+    color: var(--theme-secondary);
+    font-weight: 600;
+  }
+
+  .info-value {
+    color: var(--theme-text);
+    font-family: 'Courier New', monospace;
+  }
+
+  .info-value a {
+    color: var(--theme-primary);
+    text-decoration: none;
+  }
+
+  .info-value a:hover {
+    text-decoration: underline;
+  }
+
+  .info-value .pending {
+    color: #ffaa00;
+    font-style: italic;
   }
   
   .mtx-features {
@@ -59,6 +192,63 @@ import Panel from './Panel.astro';
     margin-top: 18px;
     color: var(--theme-secondary);
     font-size: 1.08rem;
+  }
+  
+  .mtx-purchase-cta {
+    margin-top: 24px;
+    padding: 1.5rem;
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid rgba(0, 255, 153, 0.2);
+    border-radius: 8px;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .cta-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  
+  .cta-btn.primary {
+    background: var(--theme-primary);
+    color: #181818;
+  }
+  
+  .cta-btn.secondary {
+    background: #FF007A;
+    color: #fff;
+  }
+  
+  .cta-btn.tertiary {
+    background: #444;
+    color: #fff;
+  }
+
+  .cta-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .cta-note {
+    margin-top: 0.75rem;
+    color: #ffaa00;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+  
+  .cta-btn:not(.disabled):hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
   }
   
   .mtx-links {

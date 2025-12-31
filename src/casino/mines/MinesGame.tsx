@@ -20,6 +20,11 @@ export default function MinesGame({ walletAddress, mtxBalance, onBetPlaced }: Mi
       return;
     }
 
+    if (Number(mtxBalance) <= 0) {
+      alert('You need MTX to play.');
+      return;
+    }
+
     const betError = MinesEngine.validateBet(betAmount, numMines);
     if (betError) {
       setError(betError);

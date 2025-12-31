@@ -16,8 +16,6 @@ No manipulation after commitment.
 ---
 
 **Related Documentation:**
-- [Casino Games](MTX_Casino_Games.md)
-- [Casino Architecture](MTX_Casino_Architecture.md)
-- [Casino Game Math](MTX_Casino_Game_Math.md)
-
-**[← Back to Documentation Index](../docs/)**
+- [Casino Games](/docs/casino-games)
+- [Casino Architecture](/docs/casino-architecture)
+- [Casino Game Math](/docs/casino-game-math)
