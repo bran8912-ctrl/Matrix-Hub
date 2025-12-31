@@ -2,8 +2,6 @@
 import Layout from "../components/Layout.astro";
 
 export const prerender = true;
-title: "MTX Contract";
-navCategory: "mtx-token";
 
 export const title = "MTX Contract";
 export const navCategory = "mtx-token";
@@ -21,7 +19,7 @@ export const navCategory = "mtx-token";
         <h2>Contract Details</h2>
         <div class="detail-row">
           <span class="label">Contract Address:</span>
-          <code class="value">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</code>
+          <code class="value">Pending Deployment</code>
         </div>
         <div class="detail-row">
           <span class="label">Token Name:</span>
@@ -61,14 +59,9 @@ export const navCategory = "mtx-token";
         <div class="actions">
           <a href="/wallet" class="btn-primary">Connect Wallet</a>
           <a href="/buy-mtx" class="btn-primary">Buy MTX</a>
-          <a 
-            href="https://etherscan.io/token/0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-secondary"
-          >
-            View on Etherscan →
-          </a>
+          <span class="btn-secondary btn-disabled" title="Contract not yet deployed">
+            View on Etherscan (Coming Soon)
+          </span>
         </div>
       </div>
 
@@ -223,10 +216,20 @@ export const navCategory = "mtx-token";
     border: 1px solid var(--theme-primary);
   }
 
+  .btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   .btn-primary:hover,
   .btn-secondary:hover {
     transform: translateY(-2px);
     opacity: 0.9;
+  }
+
+  .btn-disabled:hover {
+    transform: none;
+    opacity: 0.5;
   }
 
   @media (max-width: 768px) {

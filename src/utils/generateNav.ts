@@ -69,7 +69,7 @@ function extractPageMetadata(filePath: string): PageMetadata {
     const content = fs.readFileSync(filePath, 'utf-8');
     
     // Extract title and navCategory from Astro frontmatter
-    // Look for patterns like: export const title = "..." or title: "..."
+    // Look for patterns like: export const title = "..."
     let title: string | null = null;
     let navCategory: string | null = null;
     
@@ -78,14 +78,14 @@ function extractPageMetadata(filePath: string): PageMetadata {
     if (frontmatterMatch) {
       const frontmatter = frontmatterMatch[1];
       
-      // Match: export const title = "..." or title: "..."
-      const titleMatch = frontmatter.match(/(?:export const )?title\s*[=:]\s*["']([^"']+)["']/);
+      // Match: export const title = "..."
+      const titleMatch = frontmatter.match(/export\s+const\s+title\s*=\s*["']([^"']+)["']/);
       if (titleMatch) {
         title = titleMatch[1];
       }
       
-      // Match: export const navCategory = "..." or navCategory: "..."
-      const categoryMatch = frontmatter.match(/(?:export const )?navCategory\s*[=:]\s*["']([^"']+)["']/);
+      // Match: export const navCategory = "..."
+      const categoryMatch = frontmatter.match(/export\s+const\s+navCategory\s*=\s*["']([^"']+)["']/);
       if (categoryMatch) {
         navCategory = categoryMatch[1];
       }
