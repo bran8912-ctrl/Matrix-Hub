@@ -206,46 +206,18 @@ export const prerender = true;
 </Layout>
 
 <script>
-  // Client-side password gating
-  const CORRECT_PASSWORD = 'Baby2315!';
-  
+  // Owners portal is intentionally not access-controlled on the client.
+  // Always show the portal content and hide the password gate if present.
   const passwordGate = document.getElementById('password-gate');
   const portalContent = document.getElementById('portal-content');
-  const passwordInput = document.getElementById('password-input') as HTMLInputElement;
-  const submitBtn = document.getElementById('submit-password');
-  const errorMessage = document.getElementById('error-message');
-
-  // Check if already authenticated (session storage)
-  if (sessionStorage.getItem('owners-authenticated') === 'true') {
-    showPortal();
-  }
 
   function showPortal() {
     if (passwordGate) passwordGate.style.display = 'none';
     if (portalContent) portalContent.style.display = 'block';
-    sessionStorage.setItem('owners-authenticated', 'true');
   }
 
-  function checkPassword() {
-    const enteredPassword = passwordInput?.value || '';
-    
-    if (enteredPassword === CORRECT_PASSWORD) {
-      showPortal();
-      if (errorMessage) errorMessage.textContent = '';
-    } else {
-      if (errorMessage) {
-        errorMessage.textContent = '❌ Incorrect password. Access denied.';
-      }
-      if (passwordInput) passwordInput.value = '';
-    }
-  }
-
-  submitBtn?.addEventListener('click', checkPassword);
-  passwordInput?.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      checkPassword();
-    }
-  });
+  // Reveal the portal content immediately on page load.
+  showPortal();
 </script>
 
 <style>
