@@ -1,0 +1,11 @@
+# Matrix-Hub.org robots.txt
+
+# Allow all crawlers by default
+User-agent: *
+Allow: /
+
+# Disallow private/admin pages
+Disallow: /owners
+
+# Sitemap location
+Sitemap: https://matrix-hub.org/sitemap.xml

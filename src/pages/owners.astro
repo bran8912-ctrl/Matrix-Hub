@@ -3,6 +3,14 @@ import Layout from "../components/Layout.astro";
 
 export const prerender = true;
 
+// Get password from environment variable at build time
+// Use a hashed version for better security
+const OWNERS_PASSWORD_HASH = import.meta.env.OWNERS_PASSWORD_HASH;
+
+if (!OWNERS_PASSWORD_HASH || OWNERS_PASSWORD_HASH === 'sha256-placeholder') {
+  throw new Error("OWNERS_PASSWORD_HASH environment variable must be set for the owners portal. Run: node scripts/generate-password-hash.js 'your-password'");
+}
+
 // This page is NOT linked in navigation - accessible only by direct URL
 ---
 
@@ -13,22 +21,24 @@ export const prerender = true;
         <h1 class="portal-title">🔐 MATRIX-HUB OWNERS PORTAL</h1>
         <p class="portal-subtitle">Authorized Access Only</p>
         
-        <div class="password-form">
+        <form id="password-form" class="password-form">
           <label for="password-input">
             Access code
             <input 
               type="password" 
-              id="password-input" 
+              id="password-input"
+              name="password"
               placeholder="Enter access code"
               class="password-input"
               autocomplete="off"
+              required
             />
           </label>
-          <button id="submit-password" class="submit-btn">
+          <button type="submit" class="submit-btn">
             ACCESS PORTAL
           </button>
           <div id="error-message" class="error-message"></div>
-        </div>
+        </form>
       </div>
     </div>
 
@@ -201,6 +211,50 @@ export const prerender = true;
         </div>
       </section>
 
+      <!-- Interactive Terminal Section -->
+      <section class="tool-section">
+        <h2 class="section-title">💻 Interactive Terminal</h2>
+        
+        <div class="tool-card terminal-card">
+          <h3>🖥️ Command Executor</h3>
+          <p>Run content workflow commands directly from the browser:</p>
+          
+          <div class="terminal">
+            <div class="terminal-header">
+              <span class="terminal-title">Matrix-Hub Terminal</span>
+              <button id="clear-terminal" class="terminal-btn">Clear</button>
+            </div>
+            <div id="terminal-output" class="terminal-output">
+              <div class="terminal-line">Welcome to Matrix-Hub Owners Portal Terminal</div>
+              <div class="terminal-line">Available commands: content:scan, content:generate, content:analytics, content:help</div>
+              <div class="terminal-line">Type a command and press Enter to execute</div>
+              <div class="terminal-line">&nbsp;</div>
+            </div>
+            <div class="terminal-input-line">
+              <span class="terminal-prompt">$</span>
+              <input 
+                type="text" 
+                id="terminal-input" 
+                class="terminal-input"
+                placeholder="Enter command (e.g., content:generate)"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <div class="terminal-note">
+            <p><strong>Note:</strong> This terminal simulates command execution. In production, commands would run server-side.</p>
+            <p>Available commands:</p>
+            <ul>
+              <li><code>content:scan</code> - Scan and index content files</li>
+              <li><code>content:generate</code> - Generate public JSON feed</li>
+              <li><code>content:analytics</code> - Generate analytics report</li>
+              <li><code>content:help</code> - Show help information</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <div class="footer-note">
         <p>🔐 This page is accessible only via direct URL - not linked in site navigation</p>
         <p>🌟 Matrix-Hub: Signal Over Noise</p>
@@ -209,19 +263,193 @@ export const prerender = true;
   </div>
 </Layout>
 
-<script>
-  // Owners portal is intentionally not access-controlled on the client.
-  // Always show the portal content and hide the password gate if present.
+<script define:vars={{ OWNERS_PASSWORD_HASH }}>
+  // Client-side authentication with password hashing
   const passwordGate = document.getElementById('password-gate');
   const portalContent = document.getElementById('portal-content');
+  const passwordForm = document.getElementById('password-form');
+  const passwordInput = document.getElementById('password-input');
+  const errorMessage = document.getElementById('error-message');
+
+  // Check if already authenticated
+  const isAuthenticated = sessionStorage.getItem('owners_auth') === 'authenticated';
+  
+  if (isAuthenticated) {
+    showPortal();
+  }
 
   function showPortal() {
     if (passwordGate) passwordGate.style.display = 'none';
     if (portalContent) portalContent.style.display = 'block';
   }
 
-  // Reveal the portal content immediately on page load.
-  showPortal();
+  // Simple SHA-256 hash function
+  async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return 'sha256-' + hashHex;
+  }
+
+  passwordForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const password = passwordInput.value;
+    
+    try {
+      const hash = await sha256(password);
+      
+      if (hash === OWNERS_PASSWORD_HASH) {
+        sessionStorage.setItem('owners_auth', 'authenticated');
+        errorMessage.textContent = '';
+        showPortal();
+      } else {
+        errorMessage.textContent = '❌ Invalid access code';
+        passwordInput.value = '';
+      }
+    } catch (error) {
+      const errorName = error && typeof error === 'object' && 'name' in error
+        ? error.name
+        : typeof error;
+
+      // Log a more detailed error for debugging
+      console.error('Auth error:', errorName, error);
+
+      // Provide a slightly more specific user-facing message
+      if (error instanceof Error && /crypto|subtle/i.test(error.message || '')) {
+        errorMessage.textContent = '❌ Authentication error: secure crypto functions are not available in this browser.';
+      } else {
+        errorMessage.textContent = '❌ Authentication error: unable to process access code. Please try again.';
+      }
+    }
+  });
+
+  // Terminal functionality
+  const terminalInput = document.getElementById('terminal-input');
+  const terminalOutput = document.getElementById('terminal-output');
+  const clearTerminalBtn = document.getElementById('clear-terminal');
+
+  const commands = {
+    'content:scan': {
+      description: 'Scanning content files...',
+      output: [
+        '🔍 Scanning content files...',
+        '✅ Found 68 content files',
+        '✅ Scan complete: 68 files processed',
+        '',
+        'Files by category:',
+        '  - Documentation: 9 files',
+        '  - Pages: 17 files',
+        '  - Content: 2 files',
+        '  - Other: 40 files'
+      ]
+    },
+    'content:generate': {
+      description: 'Generating public feed...',
+      output: [
+        '🔍 Scanning content files...',
+        '✅ Found 68 content files',
+        '📝 Generating public feed...',
+        '✅ Public feed generated: public/public-feed.json',
+        '',
+        '✅ Feed generation complete'
+      ]
+    },
+    'content:analytics': {
+      description: 'Generating analytics...',
+      output: [
+        '🔍 Scanning content files...',
+        '✅ Found 68 content files',
+        '📊 Generating analytics...',
+        '✅ Analytics generated: public/content-analytics.json',
+        '',
+        '📊 Summary:',
+        '   Total Files: 68',
+        '   Total Words: 29,486',
+        '   Avg Words/File: 434',
+        '   Total Size: 255.89 KB',
+        '',
+        '✅ Analytics generation complete'
+      ]
+    },
+    'content:help': {
+      description: 'Showing help...',
+      output: [
+        'Matrix-Hub Content Workflow Commands',
+        '====================================',
+        '',
+        'Available commands:',
+        '  content:scan       - Scan and index all content files',
+        '  content:generate   - Generate public JSON feeds',
+        '  content:analytics  - Generate analytics report',
+        '  content:help       - Show this help message',
+        '',
+        'Usage: npm run <command>',
+        '',
+        'For more information, see CONTENT_WORKFLOW.md'
+      ]
+    },
+    'help': {
+      description: 'Showing available commands...',
+      output: [
+        'Available commands:',
+        '  content:scan',
+        '  content:generate',
+        '  content:analytics',
+        '  content:help',
+        '',
+        'Type a command and press Enter to execute'
+      ]
+    }
+  };
+
+  function addTerminalLine(text, type = 'output') {
+    const line = document.createElement('div');
+    line.className = `terminal-line terminal-${type}`;
+    line.textContent = text;
+    terminalOutput.appendChild(line);
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+  }
+
+  function executeCommand(cmd) {
+    const trimmedCmd = cmd.trim();
+    
+    // Show the command being executed
+    addTerminalLine(`$ ${trimmedCmd}`, 'command');
+    
+    if (!trimmedCmd) {
+      return;
+    }
+
+    if (commands[trimmedCmd]) {
+      const command = commands[trimmedCmd];
+      command.output.forEach(line => {
+        addTerminalLine(line, 'output');
+      });
+    } else {
+      addTerminalLine(`Command not found: ${trimmedCmd}`, 'error');
+      addTerminalLine('Type "help" to see available commands', 'info');
+    }
+    
+    addTerminalLine('', 'output'); // Add blank line
+  }
+
+  terminalInput?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      const command = terminalInput.value;
+      executeCommand(command);
+      terminalInput.value = '';
+    }
+  });
+
+  clearTerminalBtn?.addEventListener('click', () => {
+    terminalOutput.innerHTML = `
+      <div class="terminal-line">Welcome to Matrix-Hub Owners Portal Terminal</div>
+      <div class="terminal-line">Available commands: content:scan, content:generate, content:analytics, content:help</div>
+      <div class="terminal-line">Type a command and press Enter to execute</div>
+      <div class="terminal-line">&nbsp;</div>
+    `;
+  });
 </script>
 
 <style>
@@ -500,5 +728,140 @@ export const prerender = true;
     .tool-card {
       padding: 1rem;
     }
+  }
+
+  /* Terminal Styles */
+  .terminal-card {
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(0, 255, 0, 0.4);
+  }
+
+  .terminal {
+    background: #000;
+    border: 2px solid rgba(0, 255, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 1rem 0;
+  }
+
+  .terminal-header {
+    background: rgba(0, 255, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .terminal-title {
+    color: #00ff00;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+
+  .terminal-btn {
+    background: rgba(0, 255, 0, 0.2);
+    border: 1px solid rgba(0, 255, 0, 0.4);
+    color: #00ff00;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+
+  .terminal-btn:hover {
+    background: rgba(0, 255, 0, 0.3);
+    border-color: #00ff00;
+  }
+
+  .terminal-output {
+    padding: 1rem;
+    min-height: 300px;
+    max-height: 500px;
+    overflow-y: auto;
+    background: #000;
+  }
+
+  .terminal-line {
+    color: #00ff00;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .terminal-command {
+    color: #00ff00;
+    font-weight: bold;
+  }
+
+  .terminal-output {
+    color: #00cc00;
+  }
+
+  .terminal-error {
+    color: #ff6666;
+  }
+
+  .terminal-info {
+    color: #ffaa00;
+  }
+
+  .terminal-input-line {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 255, 0, 0.05);
+    border-top: 1px solid rgba(0, 255, 0, 0.3);
+  }
+
+  .terminal-prompt {
+    color: #00ff00;
+    margin-right: 0.5rem;
+    font-weight: bold;
+  }
+
+  .terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    outline: none;
+  }
+
+  .terminal-input::placeholder {
+    color: rgba(0, 255, 0, 0.4);
+  }
+
+  .terminal-note {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(0, 255, 0, 0.05);
+    border: 1px solid rgba(0, 255, 0, 0.2);
+    border-radius: 6px;
+  }
+
+  .terminal-note p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  .terminal-note ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .terminal-note li {
+    margin: 0.25rem 0;
+  }
+
+  .terminal-note code {
+    background: rgba(0, 255, 0, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.85rem;
   }
 </style>
