@@ -145,7 +145,7 @@ jobs:
             }
             
             comment += '\n---\n';
-            comment += '💡 See [CONTENT_WORKFLOW.md](../blob/main/CONTENT_WORKFLOW.md) for content best practices.\n';
+            comment += '💡 See [CONTENT_WORKFLOW.md](https://github.com/bran8912-ctrl/Matrix-Hub.org/blob/main/CONTENT_WORKFLOW.md) for content best practices.\n';
             
             // Post comment
             github.rest.issues.createComment({

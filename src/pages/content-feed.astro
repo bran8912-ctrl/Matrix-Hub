@@ -1,5 +1,7 @@
 ---
 import Layout from '../components/Layout.astro';
+import { readFile, access } from 'fs/promises';
+import { join } from 'path';
 
 // This page demonstrates the content workflow by displaying the public feed
 const feedPath = '/public-feed.json';
@@ -10,14 +12,12 @@ let feedError = null;
 
 try {
   // Try to load the feed at build time
-  const fs = await import('fs');
-  const path = await import('path');
-  const feedFile = path.join(process.cwd(), 'public', 'public-feed.json');
+  const feedFile = join(process.cwd(), 'public', 'public-feed.json');
   
-  if (fs.existsSync(feedFile)) {
-    const content = fs.readFileSync(feedFile, 'utf-8');
-    feedData = JSON.parse(content);
-  }
+  // Check if file exists using async access
+  await access(feedFile);
+  const content = await readFile(feedFile, 'utf-8');
+  feedData = JSON.parse(content);
 } catch (error) {
   feedError = 'Feed not yet generated. Run `npm run content:generate` to create it.';
 }
