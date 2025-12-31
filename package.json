@@ -18,7 +18,13 @@
     "deploy:mainnet": "hardhat run scripts/deploy_mtx.js --network mainnet",
     "deploy:sepolia": "hardhat run scripts/deploy_mtx.js --network sepolia",
     "verify:mainnet": "hardhat verify --network mainnet",
-    "verify:sepolia": "hardhat verify --network sepolia"
+    "verify:sepolia": "hardhat verify --network sepolia",
+    "content-workflow": "node content-workflow.js",
+    "content:scan": "node content-workflow.js scan",
+    "content:generate": "node content-workflow.js generate",
+    "content:watch": "node content-workflow.js watch",
+    "content:analytics": "node content-workflow.js analytics",
+    "content:help": "node content-workflow.js help"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
