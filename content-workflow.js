@@ -51,6 +51,10 @@ const CONFIG = {
     '**/node_modules/**',
     '**/dist/**',
     '**/.git/**',
+    '**/src/components/**',
+    '**/src/casino/**',
+    '**/src/utils/**',
+    '**/src/layouts/**',
   ],
 };
 

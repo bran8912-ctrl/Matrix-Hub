@@ -207,7 +207,7 @@ ERROR_LOG_FILE="content-workflow-errors.log"
 CONTENT_PATTERNS="**/*.md,**/*.mdx,**/*.astro"
 
 # Patterns to exclude (comma-separated)
-EXCLUDE_PATTERNS="**/node_modules/**,**/dist/**,**/.git/**"
+EXCLUDE_PATTERNS="**/node_modules/**,**/dist/**,**/.git/**,**/src/components/**,**/src/casino/**,**/src/utils/**,**/src/layouts/**"
 ```
 
 **Example with custom directories:**
@@ -222,9 +222,9 @@ The script uses the following defaults if no environment variables are set:
 - **Content Directories:** `src/content`, `docs`, `src/pages`
 - **Output Directory:** `public`
 - **File Patterns:** `**/*.md`, `**/*.mdx`, `**/*.astro`
-- **Excluded Patterns:** `**/node_modules/**`, `**/dist/**`, `**/.git/**`
+- **Excluded Patterns:** `**/node_modules/**`, `**/dist/**`, `**/.git/**`, `**/src/components/**`, `**/src/casino/**`, `**/src/utils/**`, `**/src/layouts/**`
 
-These defaults are optimized for the Matrix-Hub project structure.
+These defaults are optimized for the Matrix-Hub project structure and exclude component, utility, and layout files which contain TypeScript interfaces rather than content.
 
 ## Common Use Cases
 
