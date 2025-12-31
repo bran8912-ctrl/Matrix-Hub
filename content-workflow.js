@@ -107,7 +107,7 @@ async function scanContent() {
           modified: fileStats.mtime,
           created: fileStats.birthtime,
           size: fileStats.size,
-          wordCount: parsed.content.split(/\s+/).length,
+          wordCount: parsed.content.trim().split(/\s+/).filter(Boolean).length,
           frontmatter: parsed.data,
         });
       } catch (error) {
