@@ -14,7 +14,7 @@ The `/owners` page is protected with password authentication to restrict access 
 1. **Password is never stored in plain text** - Only the SHA-256 hash is used
 2. **Session-based auth** - Authentication clears when browser session ends
 3. **Not linked in navigation** - Page is only accessible via direct URL
-4. **robots.txt** - Can be configured to prevent search engine indexing
+4. **robots.txt** - Configured to prevent search engine indexing of the owners portal
 
 ## Setup Instructions
 
@@ -85,13 +85,9 @@ Deploy the `dist/` directory to your hosting provider. The authentication will w
 
 ## Additional Security Recommendations
 
-### 1. Hide from Search Engines
+### 1. Search Engine Protection
 
-Add to `public/robots.txt`:
-```
-User-agent: *
-Disallow: /owners
-```
+The project already includes a `public/robots.txt` configuration that prevents search engines from indexing the `/owners` path. If you customize `public/robots.txt`, make sure you keep a rule that disallows crawling of `/owners`.
 
 ### 2. Use Strong Passwords
 
@@ -119,11 +115,31 @@ If your hosting provider supports it, add IP whitelisting for additional securit
 
 ## Limitations
 
+⚠️ **IMPORTANT SECURITY NOTE**: This authentication is implemented entirely on the client-side by comparing the user-entered password hash against `OWNERS_PASSWORD_HASH` embedded into the static HTML/JS. This only hides the portal content in the DOM and **does not enforce any server-side access control**.
+
+**An attacker can bypass this by:**
+- Viewing the page source to see the password hash
+- Manipulating the DOM (e.g., calling `showPortal()` or changing styles)
+- Modifying the client script to skip authentication
+- Brute-forcing the SHA-256 hash (fast hashing algorithm)
+
+**This authentication provides:**
+- Protection against casual visitors
+- Search engine crawling prevention
+- Simple access control for non-sensitive content
+
+**Do NOT use this for:**
+- Protecting truly sensitive data
+- Production security requirements
+- Compliance-required access control
+- Multi-user access management
+
 Since this is client-side authentication on a static site:
 
 1. **Password hash is in source code** - Anyone with access to the built HTML can see the hash
-2. **Not cryptographically secure** - Determined attackers could brute force the hash
-3. **Session-only persistence** - Users must re-authenticate in new sessions
+2. **SHA-256 is not password-secure** - Fast hashing makes brute-force attacks feasible
+3. **No server-side enforcement** - Authentication can be bypassed via browser dev tools
+4. **Session-only persistence** - Users must re-authenticate in new sessions
 
 ## When to Upgrade
 
