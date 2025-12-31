@@ -589,6 +589,39 @@ if (DEBUG) console.log('Debug: operation details...');
 
 ## Advanced Configuration
 
+### Environment Variables
+
+The script can be configured via environment variables without modifying code:
+
+```bash
+# Content directories (comma-separated)
+export CONTENT_DIRS="src/content,docs,blog"
+
+# Output directory
+export OUTPUT_DIR="dist/public"
+
+# Feed file locations
+export PUBLIC_FEED_FILE="dist/public/feed.json"
+export ANALYTICS_FILE="dist/public/analytics.json"
+export ERROR_LOG_FILE="logs/content-errors.log"
+
+# File patterns (comma-separated)
+export CONTENT_PATTERNS="**/*.md,**/*.mdx,**/*.astro"
+export EXCLUDE_PATTERNS="**/node_modules/**,**/dist/**,**/.git/**"
+
+# Run the script with custom config
+node content-workflow.js generate
+```
+
+**Available environment variables:**
+- `CONTENT_DIRS` - Directories to scan (default: `src/content,docs,src/pages`)
+- `OUTPUT_DIR` - Output directory (default: `public`)
+- `PUBLIC_FEED_FILE` - Public feed path (default: `public/public-feed.json`)
+- `ANALYTICS_FILE` - Analytics file path (default: `public/content-analytics.json`)
+- `ERROR_LOG_FILE` - Error log path (default: `content-workflow-errors.log`)
+- `CONTENT_PATTERNS` - File patterns to match (default: `**/*.md,**/*.mdx,**/*.astro`)
+- `EXCLUDE_PATTERNS` - Patterns to exclude (default: `**/node_modules/**,**/dist/**,**/.git/**`)
+
 ### Customizing Scan Patterns
 
 Edit `CONFIG` in `content-workflow.js`:
@@ -633,19 +666,35 @@ async function generateCustomFeed(contentData) {
 
 #### Astro Integration
 
-Add to `astro.config.ts`:
+Add to your build scripts in `package.json`:
+
+```json
+{
+  "scripts": {
+    "prebuild": "node content-workflow.js generate",
+    "build": "astro build"
+  }
+}
+```
+
+Or use an Astro integration with the `astro:build:start` hook:
 
 ```typescript
+// astro.config.ts
 import { defineConfig } from 'astro/config';
 import { execSync } from 'child_process';
 
 export default defineConfig({
-  // ... other config
-  build: {
-    before: () => {
-      execSync('node content-workflow.js generate');
+  integrations: [
+    {
+      name: 'content-workflow',
+      hooks: {
+        'astro:build:start': async () => {
+          execSync('node content-workflow.js generate', { stdio: 'inherit' });
+        }
+      }
     }
-  }
+  ]
 });
 ```
 
@@ -654,11 +703,13 @@ export default defineConfig({
 Create `vite-plugin-content-workflow.js`:
 
 ```javascript
+import { execSync } from 'child_process';
+
 export default function contentWorkflow() {
   return {
     name: 'content-workflow',
     buildStart() {
-      execSync('node content-workflow.js generate');
+      execSync('node content-workflow.js generate', { stdio: 'inherit' });
     }
   };
 }

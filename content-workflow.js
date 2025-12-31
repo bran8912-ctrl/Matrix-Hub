@@ -35,36 +35,43 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Configuration
+// Configuration - can be overridden via environment variables
 const CONFIG = {
-  contentDirs: ['src/content', 'docs', 'src/pages'],
-  outputDir: 'public',
-  publicFeedFile: 'public/public-feed.json',
-  analyticsFile: 'public/content-analytics.json',
-  errorLogFile: 'content-workflow-errors.log',
-  patterns: [
+  contentDirs: process.env.CONTENT_DIRS?.split(',') || ['src/content', 'docs', 'src/pages'],
+  outputDir: process.env.OUTPUT_DIR || 'public',
+  publicFeedFile: process.env.PUBLIC_FEED_FILE || 'public/public-feed.json',
+  analyticsFile: process.env.ANALYTICS_FILE || 'public/content-analytics.json',
+  errorLogFile: process.env.ERROR_LOG_FILE || 'content-workflow-errors.log',
+  patterns: process.env.CONTENT_PATTERNS?.split(',') || [
     '**/*.md',
     '**/*.mdx',
     '**/*.astro',
   ],
-  excludePatterns: [
+  excludePatterns: process.env.EXCLUDE_PATTERNS?.split(',') || [
     '**/node_modules/**',
     '**/dist/**',
     '**/.git/**',
   ],
 };
 
-// Error logging utility
+// Error logging utility with basic queue to handle concurrent writes
+let logQueue = Promise.resolve();
+
 async function logError(error, context = '') {
   const timestamp = new Date().toISOString();
   const logMessage = `[${timestamp}] ${context ? `[${context}] ` : ''}${error.message}\n${error.stack}\n\n`;
   
-  try {
-    await fs.appendFile(CONFIG.errorLogFile, logMessage);
-    console.error(`❌ Error logged: ${error.message}`);
-  } catch (logErr) {
-    console.error('Failed to write to error log:', logErr);
-  }
+  // Queue the write operation to prevent race conditions
+  logQueue = logQueue.then(async () => {
+    try {
+      await fs.appendFile(CONFIG.errorLogFile, logMessage);
+      console.error(`❌ Error logged: ${error.message}`);
+    } catch (logErr) {
+      console.error('Failed to write to error log:', logErr);
+    }
+  });
+  
+  return logQueue;
 }
 
 // Ensure output directory exists
