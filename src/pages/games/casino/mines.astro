@@ -2,6 +2,11 @@
 import Layout from "../../../components/Layout.astro";
 import CasinoGameWrapper from "../../../components/CasinoGameWrapper";
 import MinesGame from "../../../casino/mines/MinesGame";
+
+export const prerender = true;
+
+export const title = "Mines";
+export const navCategory = "casino";
 ---
 
 <Layout title="Mines - Matrix-Hub Casino">

@@ -27,7 +27,6 @@
  */
 
 import fg from 'fast-glob';
-import matter from 'gray-matter';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -69,15 +68,31 @@ function extractPageMetadata(filePath: string): PageMetadata {
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
     
-    // Parse frontmatter
-    const { data } = matter(content);
+    // Extract title and navCategory from Astro frontmatter
+    // Look for patterns like: export const title = "..."
+    let title: string | null = null;
+    let navCategory: string | null = null;
     
-    // Extract title from frontmatter or generate from filename
-    let title: string;
-    if (data.title) {
-      title = data.title;
-    } else {
-      // Fallback: generate title from filename
+    // Try to extract from frontmatter block (between --- markers)
+    const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
+    if (frontmatterMatch) {
+      const frontmatter = frontmatterMatch[1];
+      
+      // Match: export const title = "..."
+      const titleMatch = frontmatter.match(/export\s+const\s+title\s*=\s*["']([^"']+)["']/);
+      if (titleMatch) {
+        title = titleMatch[1];
+      }
+      
+      // Match: export const navCategory = "..."
+      const categoryMatch = frontmatter.match(/export\s+const\s+navCategory\s*=\s*["']([^"']+)["']/);
+      if (categoryMatch) {
+        navCategory = categoryMatch[1];
+      }
+    }
+    
+    // Fallback: generate title from filename if not found
+    if (!title) {
       const fileName = path.basename(filePath, path.extname(filePath));
       
       // Special case for index files
@@ -92,9 +107,6 @@ function extractPageMetadata(filePath: string): PageMetadata {
           .join(' ');
       }
     }
-    
-    // Extract custom category if present
-    const navCategory = data.navCategory || null;
     
     return { title, navCategory };
   } catch (error) {
@@ -134,8 +146,8 @@ function filePathToUrlPath(filePath: string): string {
  * @returns Sorted tabs
  */
 function sortTabs(tabs: NavigationTab[]): NavigationTab[] {
-  // Define preferred order
-  const order = ['home', 'games', 'docs', 'wallet', 'buy-mtx', 'casino'];
+  // Define preferred order for navigation tabs
+  const order = ['home', 'casino', 'mtx-token', 'leaderboards', 'resources', 'dao'];
   
   return tabs.sort((a, b) => {
     const aIndex = order.indexOf(a.id.toLowerCase());
@@ -214,10 +226,28 @@ export async function generateNavigation(): Promise<NavigationTab[]> {
     
     // Initialize category if not exists
     if (!navMap.has(category)) {
+      // Create a readable label for the category
+      let label: string;
+      if (category === 'home') {
+        label = 'Home';
+      } else if (category === 'casino') {
+        label = 'Casino';
+      } else if (category === 'mtx-token') {
+        label = 'MTX Token';
+      } else if (category === 'leaderboards') {
+        label = 'Leaderboards';
+      } else if (category === 'resources') {
+        label = 'Resources';
+      } else if (category === 'dao') {
+        label = 'DAO';
+      } else {
+        // Fallback: convert kebab-case to Title Case
+        label = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      }
+      
       navMap.set(category, {
         id: category,
-        label: category === 'home' ? 'Home' : 
-               category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+        label: label,
         pages: []
       });
     }

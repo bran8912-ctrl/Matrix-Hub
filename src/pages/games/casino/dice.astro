@@ -2,6 +2,11 @@
 import Layout from "../../../components/Layout.astro";
 import CasinoGameWrapper from "../../../components/CasinoGameWrapper";
 import DiceGame from "../../../casino/dice/DiceGame";
+
+export const prerender = true;
+
+export const title = "Dice";
+export const navCategory = "casino";
 ---
 
 <Layout title="Dice - Matrix-Hub Casino">
