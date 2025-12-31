@@ -1,0 +1,528 @@
+---
+import Layout from "../components/Layout.astro";
+
+export const prerender = true;
+
+// This page is NOT linked in navigation - accessible only by direct URL
+---
+
+<Layout title="Matrix-Hub Owners Portal">
+  <div class="owners-portal">
+    <div id="password-gate" class="password-gate">
+      <div class="password-container">
+        <h1 class="portal-title">🔐 MATRIX-HUB OWNERS PORTAL</h1>
+        <p class="portal-subtitle">Authorized Access Only</p>
+        
+        <div class="password-form">
+          <input 
+            type="password" 
+            id="password-input" 
+            placeholder="Enter access code"
+            class="password-input"
+          />
+          <button id="submit-password" class="submit-btn">
+            ACCESS PORTAL
+          </button>
+          <div id="error-message" class="error-message"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="portal-content" class="portal-content" style="display: none;">
+      <h1 class="welcome-title">🎯 WELCOME TO THE MATRIX-HUB COMMAND CENTER</h1>
+      
+      <div class="intro-section">
+        <p class="intro-text">
+          This is your central hub for managing the Matrix-Hub ecosystem. From here, you control 
+          content workflows, marketing feeds, analytics, and ecosystem updates.
+        </p>
+        <p class="highlight-text">
+          <strong>🚀 Matrix-Hub</strong> is investor-ready, feature-rich, and built for scale.
+        </p>
+      </div>
+
+      <!-- Content Workflow Tools Section -->
+      <section class="tool-section">
+        <h2 class="section-title">📝 Content Workflow Management</h2>
+        
+        <div class="tool-card">
+          <h3>🔧 Using content-workflow.js</h3>
+          <p>The powerful content management script located at the project root handles:</p>
+          <ul>
+            <li><strong>Content Discovery</strong> - Automatically scans all markdown, MDX, and Astro files</li>
+            <li><strong>Public Feed Generation</strong> - Creates <code>public/public-feed.json</code> for marketing/SEO</li>
+            <li><strong>Live Updates</strong> - Watch mode auto-regenerates feeds on file changes</li>
+            <li><strong>Analytics</strong> - Generates detailed content metrics in <code>public/content-analytics.json</code></li>
+            <li><strong>Error Logging</strong> - Comprehensive error tracking in <code>content-workflow-errors.log</code></li>
+          </ul>
+
+          <h4>Commands:</h4>
+          <div class="command-list">
+            <div class="command-item">
+              <code>node content-workflow.js scan</code>
+              <span class="command-desc">Scan and index all content files</span>
+            </div>
+            <div class="command-item">
+              <code>node content-workflow.js generate</code>
+              <span class="command-desc">Generate public JSON feed</span>
+            </div>
+            <div class="command-item">
+              <code>node content-workflow.js watch</code>
+              <span class="command-desc">Watch for changes and auto-update</span>
+            </div>
+            <div class="command-item">
+              <code>node content-workflow.js analytics</code>
+              <span class="command-desc">Generate content analytics report</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <h3>📦 Quick Install Dependencies</h3>
+          <p>All required dependencies are already configured:</p>
+          <ul>
+            <li><code>fast-glob</code> - Fast file pattern matching</li>
+            <li><code>gray-matter</code> - Frontmatter parsing</li>
+            <li><code>chokidar</code> - File system watcher</li>
+          </ul>
+          <p class="install-note">
+            Dependencies are installed automatically with <code>npm install</code>
+          </p>
+        </div>
+      </section>
+
+      <!-- Marketing & Updates Section -->
+      <section class="tool-section">
+        <h2 class="section-title">📊 Marketing & Update Tools</h2>
+        
+        <div class="tool-card">
+          <h3>🌐 Public Feed (public-feed.json)</h3>
+          <p>This JSON feed is perfect for:</p>
+          <ul>
+            <li><strong>Marketing Teams</strong> - Real-time content inventory for campaigns</li>
+            <li><strong>SEO Tools</strong> - Structured data for search engine optimization</li>
+            <li><strong>External APIs</strong> - Machine-readable content catalog</li>
+            <li><strong>Analytics Platforms</strong> - Content performance tracking</li>
+          </ul>
+          <p class="feed-info">
+            Location: <code>/public/public-feed.json</code><br>
+            Access: <code>https://matrix-hub.org/public-feed.json</code>
+          </p>
+        </div>
+
+        <div class="tool-card">
+          <h3>📈 Content Analytics (content-analytics.json)</h3>
+          <p>Comprehensive metrics including:</p>
+          <ul>
+            <li>Total files, words, and content size</li>
+            <li>Category breakdowns and averages</li>
+            <li>Tag cloud analysis</li>
+            <li>Content health scores (missing titles, descriptions, tags)</li>
+          </ul>
+          <p class="feed-info">
+            Location: <code>/public/content-analytics.json</code><br>
+            Use for investor presentations and ecosystem reporting
+          </p>
+        </div>
+      </section>
+
+      <!-- Ecosystem Management Section -->
+      <section class="tool-section">
+        <h2 class="section-title">🎮 Matrix-Hub Ecosystem Management</h2>
+        
+        <div class="tool-card">
+          <h3>💎 What Makes Matrix-Hub Powerful</h3>
+          <ul>
+            <li><strong>MTX Token Economy</strong> - Utility token with real use cases in casino and tools</li>
+            <li><strong>Provably Fair Casino</strong> - On-chain gaming with Slots, Blackjack, Roulette</li>
+            <li><strong>Modular Architecture</strong> - Expandable tools and features ecosystem</li>
+            <li><strong>Web3 Integration</strong> - Wallet connectivity and blockchain interactions</li>
+            <li><strong>Community-Driven</strong> - GitHub-to-MTX rewards for contributors</li>
+            <li><strong>Professional Build</strong> - Astro 5 + React 19 + TypeScript + TailwindCSS</li>
+          </ul>
+        </div>
+
+        <div class="tool-card">
+          <h3>📢 Messaging for Investors & Marketing</h3>
+          <p><strong>Elevator Pitch:</strong></p>
+          <blockquote class="pitch">
+            Matrix-Hub is a live blockchain-powered platform combining web tools, 
+            casino games, and a token economy. Built on Ethereum with MTX token, 
+            featuring provably fair gaming, expandable tooling modules, and a 
+            community-driven GitHub-to-MTX reward system. Investor-ready with 
+            smart contracts, documentation, and professional architecture.
+          </blockquote>
+
+          <p><strong>Key Stats to Highlight:</strong></p>
+          <ul>
+            <li>✓ Production-ready smart contracts on Ethereum</li>
+            <li>✓ 3 casino games with on-chain transactions</li>
+            <li>✓ Comprehensive tokenomics and DAO governance</li>
+            <li>✓ Modern tech stack (Astro 5, React 19, TypeScript)</li>
+            <li>✓ Active community and contribution system</li>
+            <li>✓ Fully documented codebase and APIs</li>
+          </ul>
+        </div>
+
+        <div class="tool-card">
+          <h3>🚀 Quick Action Checklist</h3>
+          <ol>
+            <li><strong>Run Analytics:</strong> <code>node content-workflow.js analytics</code></li>
+            <li><strong>Generate Feed:</strong> <code>node content-workflow.js generate</code></li>
+            <li><strong>Start Watch Mode:</strong> <code>node content-workflow.js watch</code> (for live updates)</li>
+            <li><strong>Review Metrics:</strong> Check <code>public/content-analytics.json</code></li>
+            <li><strong>Update Marketing:</strong> Use <code>public/public-feed.json</code> for campaigns</li>
+            <li><strong>Monitor Errors:</strong> Check <code>content-workflow-errors.log</code></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Documentation Section -->
+      <section class="tool-section">
+        <h2 class="section-title">📚 Full Documentation</h2>
+        <div class="tool-card">
+          <p>
+            For complete setup, usage, and management instructions, see:<br>
+            <strong><code>MATRIX-HUB-TOOLS.md</code></strong> in the project root
+          </p>
+          <p>
+            Additional docs available in <code>/docs</code> directory:
+          </p>
+          <ul>
+            <li><code>MTX_Tokenomics.md</code> - Token economy details</li>
+            <li><code>MTX_Casino_Architecture.md</code> - Casino system design</li>
+            <li><code>MTX_Whitepaper.md</code> - Complete project whitepaper</li>
+            <li><code>MTX_DAO_Governance.md</code> - Governance structure</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-note">
+        <p>🔐 This page is accessible only via direct URL - not linked in site navigation</p>
+        <p>🌟 Matrix-Hub: Signal Over Noise</p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Client-side password gating
+  const CORRECT_PASSWORD = 'Baby2315!';
+  
+  const passwordGate = document.getElementById('password-gate');
+  const portalContent = document.getElementById('portal-content');
+  const passwordInput = document.getElementById('password-input') as HTMLInputElement;
+  const submitBtn = document.getElementById('submit-password');
+  const errorMessage = document.getElementById('error-message');
+
+  // Check if already authenticated (session storage)
+  if (sessionStorage.getItem('owners-authenticated') === 'true') {
+    showPortal();
+  }
+
+  function showPortal() {
+    if (passwordGate) passwordGate.style.display = 'none';
+    if (portalContent) portalContent.style.display = 'block';
+    sessionStorage.setItem('owners-authenticated', 'true');
+  }
+
+  function checkPassword() {
+    const enteredPassword = passwordInput?.value || '';
+    
+    if (enteredPassword === CORRECT_PASSWORD) {
+      showPortal();
+      if (errorMessage) errorMessage.textContent = '';
+    } else {
+      if (errorMessage) {
+        errorMessage.textContent = '❌ Incorrect password. Access denied.';
+      }
+      if (passwordInput) passwordInput.value = '';
+    }
+  }
+
+  submitBtn?.addEventListener('click', checkPassword);
+  passwordInput?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      checkPassword();
+    }
+  });
+</script>
+
+<style>
+  .owners-portal {
+    min-height: 70vh;
+  }
+
+  /* Password Gate Styles */
+  .password-gate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+  }
+
+  .password-container {
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.1), rgba(0, 100, 0, 0.05));
+    border: 2px solid rgba(0, 255, 0, 0.3);
+    border-radius: 12px;
+    padding: 3rem;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 255, 0, 0.2);
+  }
+
+  .portal-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00ff00;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+
+  .portal-subtitle {
+    color: #00cc00;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+
+  .password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .password-input {
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 2px solid rgba(0, 255, 0, 0.3);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #00ff00;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .password-input:focus {
+    outline: none;
+    border-color: #00ff00;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+  }
+
+  .submit-btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 255, 0, 0.4);
+  }
+
+  .error-message {
+    color: #ff3333;
+    font-weight: bold;
+    min-height: 1.5rem;
+  }
+
+  /* Portal Content Styles */
+  .portal-content {
+    animation: fadeIn 0.5s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .welcome-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #00ff00;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+  }
+
+  .intro-section {
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.1), rgba(0, 100, 0, 0.05));
+    border: 2px solid rgba(0, 255, 0, 0.3);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .intro-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .highlight-text {
+    font-size: 1.2rem;
+    color: #00ff00;
+    text-align: center;
+  }
+
+  .tool-section {
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00ff00;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(0, 255, 0, 0.3);
+  }
+
+  .tool-card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 255, 0, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tool-card h3 {
+    color: #00ff00;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .tool-card h4 {
+    color: #00cc00;
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .tool-card ul,
+  .tool-card ol {
+    margin-left: 1.5rem;
+    line-height: 1.8;
+  }
+
+  .tool-card li {
+    margin-bottom: 0.5rem;
+  }
+
+  .command-list {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .command-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+  }
+
+  .command-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .command-item code {
+    color: #00ff00;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  .command-desc {
+    color: #00cc00;
+    font-size: 0.9rem;
+    margin-left: 1rem;
+  }
+
+  code {
+    background: rgba(0, 255, 0, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+  }
+
+  .install-note {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(0, 255, 0, 0.05);
+    border-left: 3px solid #00ff00;
+    border-radius: 4px;
+  }
+
+  .feed-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(0, 100, 0, 0.2);
+    border-radius: 4px;
+    line-height: 1.8;
+  }
+
+  .pitch {
+    background: rgba(0, 255, 0, 0.05);
+    border-left: 4px solid #00ff00;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: rgba(0, 255, 0, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 255, 0, 0.2);
+  }
+
+  .footer-note p {
+    margin: 0.5rem 0;
+    color: #00ff00;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .password-container {
+      padding: 2rem;
+      margin: 1rem;
+    }
+
+    .portal-title {
+      font-size: 1.5rem;
+    }
+
+    .welcome-title {
+      font-size: 1.8rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .tool-card {
+      padding: 1rem;
+    }
+  }
+</style>

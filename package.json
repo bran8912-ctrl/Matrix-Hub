@@ -27,6 +27,7 @@
     "@tailwindcss/vite": "^4.0.1",
     "@vitejs/plugin-react": "^5.1.2",
     "astro": "^5.15.9",
+    "chokidar": "^5.0.0",
     "ethers": "^6.16.0",
     "fast-glob": "^3.3.3",
     "gray-matter": "^4.0.3",
