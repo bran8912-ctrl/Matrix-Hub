@@ -179,12 +179,10 @@ export async function generateNavigation(): Promise<NavigationTab[]> {
   
   // Find all page files, excluding specified paths
   const pattern = '**/*.{astro,md,mdx}';
-  console.log("DEBUG pagesDir:", pagesDir);
   const files = await fg(pattern, {
     cwd: pagesDir,
     ignore: EXCLUDED_PATHS,
   });
-  console.log("DEBUG FOUND FILES:", files);
   
   // Build navigation structure
   const navMap = new Map<string, NavigationTab>();

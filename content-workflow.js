@@ -90,6 +90,7 @@ async function scanContent() {
     console.log(`✅ Found ${files.length} content files`);
     
     const contentData = [];
+    const failedFiles = [];
     
     for (const file of files) {
       try {
@@ -112,8 +113,13 @@ async function scanContent() {
         });
       } catch (error) {
         await logError(error, `Processing file: ${file}`);
+        failedFiles.push(file);
         // Continue processing other files
       }
+    }
+    
+    if (failedFiles.length > 0) {
+      console.warn(`⚠️  ${failedFiles.length} file(s) failed to process. Check error log for details.`);
     }
     
     return contentData;
@@ -123,7 +129,20 @@ async function scanContent() {
   }
 }
 
-// Infer category from file path
+/**
+ * Infer category from file path
+ * 
+ * Returns one of the following category values based on the file path:
+ * - 'documentation': Files in /docs/ directory
+ * - 'page': Files in /pages/ directory
+ * - 'content': Files in /content/ directory
+ * - 'casino': Files in /casino/ directory
+ * - 'games': Files in /games/ directory
+ * - 'other': All other files (default catch-all)
+ * 
+ * @param {string} filePath - The path to the file
+ * @returns {string} The inferred category name
+ */
 function inferCategory(filePath) {
   if (filePath.includes('/docs/')) return 'documentation';
   if (filePath.includes('/pages/')) return 'page';
@@ -292,8 +311,11 @@ async function watchContent() {
   });
   
   let updateTimeout;
+  let isShuttingDown = false;
   
   const scheduleUpdate = () => {
+    if (isShuttingDown) return;
+    
     clearTimeout(updateTimeout);
     updateTimeout = setTimeout(async () => {
       console.log('\n🔄 Changes detected, updating feeds...');
@@ -325,12 +347,34 @@ async function watchContent() {
       await logError(error, 'watchContent - watcher');
     });
   
-  // Keep process alive
-  process.on('SIGINT', () => {
-    console.log('\n\n🛑 Stopping watcher...');
-    watcher.close();
+  // Graceful shutdown handling
+  const gracefulShutdown = async () => {
+    if (isShuttingDown) return;
+    isShuttingDown = true;
+    
+    console.log('\n\n🛑 Shutting down gracefully...');
+    
+    // Wait for any pending updates to complete
+    if (updateTimeout) {
+      console.log('⏳ Waiting for pending updates to complete...');
+      await new Promise(resolve => {
+        const checkInterval = setInterval(() => {
+          if (!updateTimeout) {
+            clearInterval(checkInterval);
+            resolve();
+          }
+        }, 100);
+      });
+    }
+    
+    console.log('✅ Closing file watcher...');
+    await watcher.close();
+    console.log('👋 Goodbye!\n');
     process.exit(0);
-  });
+  };
+  
+  process.on('SIGINT', gracefulShutdown);
+  process.on('SIGTERM', gracefulShutdown);
 }
 
 // Show help
