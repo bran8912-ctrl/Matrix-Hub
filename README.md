@@ -503,6 +503,20 @@ All commands are run from the root of the project, from a terminal:
 | `npm run verify:sepolia`  | Verify contract on Sepolia Etherscan            |
 | `npm run verify:mainnet`  | Verify contract on Mainnet Etherscan            |
 
+## Content Workflow Commands
+
+Matrix-Hub includes a powerful content management workflow for marketing, analytics, and SEO optimization.
+
+| Command                    | Action                                           |
+| :------------------------- | :----------------------------------------------- |
+| `npm run content:scan`     | Scan and index all content files                 |
+| `npm run content:generate` | Generate public JSON feeds from content          |
+| `npm run content:analytics`| Generate detailed content analytics report       |
+| `npm run content:watch`    | Watch for file changes and auto-update feeds     |
+| `npm run content:help`     | Show content workflow help                       |
+
+📚 **Full Documentation:** See [CONTENT_WORKFLOW.md](CONTENT_WORKFLOW.md) for detailed usage instructions, examples, troubleshooting, and advanced features.
+
 ## Developing Locally
 
 | Prerequisites                                                                |

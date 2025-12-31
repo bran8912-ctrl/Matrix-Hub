@@ -1,0 +1,161 @@
+name: Content Validation
+
+on:
+  pull_request:
+    paths:
+      - 'src/content/**'
+      - 'src/pages/**'
+      - 'docs/**'
+      - '**.md'
+      - '**.mdx'
+      - '**.astro'
+
+jobs:
+  validate-content:
+    name: Validate Content Quality
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Scan content files
+        id: scan
+        run: |
+          echo "## Content Scan Results" >> $GITHUB_STEP_SUMMARY
+          npm run content:scan 2>&1 | tee scan-output.txt
+          
+          # Extract failed files count
+          FAILED_COUNT=$(grep -oP '⚠️\s+\K\d+' scan-output.txt || echo "0")
+          TOTAL_FILES=$(grep -oP '✅ Scan complete: \K\d+' scan-output.txt || echo "0")
+          
+          echo "failed_count=$FAILED_COUNT" >> $GITHUB_OUTPUT
+          echo "total_files=$TOTAL_FILES" >> $GITHUB_OUTPUT
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Files Processed:** $TOTAL_FILES" >> $GITHUB_STEP_SUMMARY
+          echo "- **Failed Files:** $FAILED_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Generate analytics
+        run: |
+          npm run content:analytics 2>&1 | tee analytics-output.txt
+          
+          echo "## Content Analytics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -A 10 "📊 Summary:" analytics-output.txt >> $GITHUB_STEP_SUMMARY || echo "Analytics summary not available" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check content health
+        id: health
+        run: |
+          if [ -f "public/content-analytics.json" ]; then
+            # Extract health metrics
+            NO_TITLES=$(jq '.contentHealth.filesWithoutTitles' public/content-analytics.json)
+            NO_DESC=$(jq '.contentHealth.filesWithoutDescriptions' public/content-analytics.json)
+            NO_TAGS=$(jq '.contentHealth.filesWithoutTags' public/content-analytics.json)
+            
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## Content Health Metrics" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Files without titles | $NO_TITLES |" >> $GITHUB_STEP_SUMMARY
+            echo "| Files without descriptions | $NO_DESC |" >> $GITHUB_STEP_SUMMARY
+            echo "| Files without tags | $NO_TAGS |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Set health warnings
+            if [ "$NO_TITLES" -gt "5" ] || [ "$NO_DESC" -gt "10" ]; then
+              echo "health_warning=true" >> $GITHUB_OUTPUT
+              echo "⚠️ **Warning:** Content health metrics show significant gaps in metadata." >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+      
+      - name: Upload error log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-workflow-errors
+          path: content-workflow-errors.log
+          if-no-files-found: ignore
+          retention-days: 30
+      
+      - name: Upload generated feeds
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-feeds
+          path: |
+            public/public-feed.json
+            public/content-analytics.json
+          if-no-files-found: ignore
+          retention-days: 7
+      
+      - name: Check for critical errors
+        run: |
+          if [ -f "content-workflow-errors.log" ]; then
+            ERROR_COUNT=$(wc -l < content-workflow-errors.log)
+            
+            if [ "$ERROR_COUNT" -gt "100" ]; then
+              echo "❌ Critical: Too many content errors detected ($ERROR_COUNT lines in error log)" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "Please review the error log artifact for details." >> $GITHUB_STEP_SUMMARY
+              exit 1
+            fi
+          fi
+      
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let comment = '## 📊 Content Validation Results\n\n';
+            
+            // Add scan results
+            const failed = '${{ steps.scan.outputs.failed_count }}';
+            const failedCount = Number(failed) || 0;
+            const total = '${{ steps.scan.outputs.total_files }}';
+            comment += `- ✅ Total files processed: **${total}**\n`;
+            
+            if (failedCount > 0) {
+              comment += `- ⚠️ Files with parsing errors: **${failedCount}**\n`;
+              comment += '\n> Review the error log artifact for details on failed files.\n';
+            } else {
+              comment += `- ✅ All files parsed successfully\n`;
+            }
+            
+            // Add health warning if present
+            const healthWarning = '${{ steps.health.outputs.health_warning }}';
+            if (healthWarning === 'true') {
+              comment += '\n⚠️ **Content Health Warning**\n';
+              comment += 'Some content files are missing metadata (titles, descriptions, or tags).\n';
+              comment += 'Consider adding metadata to improve SEO and content discovery.\n';
+            }
+            
+            comment += '\n---\n';
+            comment += '💡 See [CONTENT_WORKFLOW.md](https://github.com/bran8912-ctrl/Matrix-Hub.org/blob/main/CONTENT_WORKFLOW.md) for content best practices.\n';
+            
+            // Post comment
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
