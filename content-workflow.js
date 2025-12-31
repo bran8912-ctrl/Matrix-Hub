@@ -415,8 +415,8 @@ async function main() {
 }
 
 // Run if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  void main();
 }
 
 export { scanContent, generatePublicFeed, generateAnalytics, watchContent };
