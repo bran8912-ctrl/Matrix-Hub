@@ -14,12 +14,16 @@ export const prerender = true;
         <p class="portal-subtitle">Authorized Access Only</p>
         
         <div class="password-form">
-          <input 
-            type="password" 
-            id="password-input" 
-            placeholder="Enter access code"
-            class="password-input"
-          />
+          <label for="password-input">
+            Access code
+            <input 
+              type="password" 
+              id="password-input" 
+              placeholder="Enter access code"
+              class="password-input"
+              autocomplete="off"
+            />
+          </label>
           <button id="submit-password" class="submit-btn">
             ACCESS PORTAL
           </button>
