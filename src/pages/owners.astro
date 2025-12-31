@@ -5,10 +5,26 @@ export const prerender = true;
 
 // Get password from environment variable at build time
 // Use a hashed version for better security
-const OWNERS_PASSWORD_HASH = import.meta.env.OWNERS_PASSWORD_HASH;
+// Wrapped in try/catch to prevent build failures if env var is missing
+let OWNERS_PASSWORD_HASH;
+let passwordConfigured = false;
 
-if (!OWNERS_PASSWORD_HASH || OWNERS_PASSWORD_HASH === 'sha256-placeholder') {
-  throw new Error("OWNERS_PASSWORD_HASH environment variable must be set for the owners portal. Run: node scripts/generate-password-hash.js 'your-password'");
+try {
+  OWNERS_PASSWORD_HASH = import.meta.env.OWNERS_PASSWORD_HASH;
+  
+  // Check if password is configured properly
+  if (!OWNERS_PASSWORD_HASH || OWNERS_PASSWORD_HASH === 'sha256-placeholder' || OWNERS_PASSWORD_HASH.trim() === '') {
+    console.warn("⚠️ OWNERS_PASSWORD_HASH not configured. Owners portal will display a configuration message.");
+    OWNERS_PASSWORD_HASH = 'sha256-not-configured';
+    passwordConfigured = false;
+  } else {
+    passwordConfigured = true;
+    console.log("✅ Owners portal password hash loaded successfully");
+  }
+} catch (error) {
+  console.error("Failed to load OWNERS_PASSWORD_HASH:", error);
+  OWNERS_PASSWORD_HASH = 'sha256-not-configured';
+  passwordConfigured = false;
 }
 
 // This page is NOT linked in navigation - accessible only by direct URL
@@ -21,24 +37,35 @@ if (!OWNERS_PASSWORD_HASH || OWNERS_PASSWORD_HASH === 'sha256-placeholder') {
         <h1 class="portal-title">🔐 MATRIX-HUB OWNERS PORTAL</h1>
         <p class="portal-subtitle">Authorized Access Only</p>
         
-        <form id="password-form" class="password-form">
-          <label for="password-input">
-            Access code
-            <input 
-              type="password" 
-              id="password-input"
-              name="password"
-              placeholder="Enter access code"
-              class="password-input"
-              autocomplete="off"
-              required
-            />
-          </label>
-          <button type="submit" class="submit-btn">
-            ACCESS PORTAL
-          </button>
-          <div id="error-message" class="error-message"></div>
-        </form>
+        {!passwordConfigured && (
+          <div class="config-message">
+            <p><strong>⚠️ Configuration Required</strong></p>
+            <p>The owners portal password has not been configured.</p>
+            <p>To enable access, set the <code>OWNERS_PASSWORD_HASH</code> environment variable.</p>
+            <p>Run: <code>node scripts/generate-password-hash.js 'your-password'</code></p>
+          </div>
+        )}
+        
+        {passwordConfigured && (
+          <form id="password-form" class="password-form">
+            <label for="password-input">
+              Access code
+              <input 
+                type="password" 
+                id="password-input"
+                name="password"
+                placeholder="Enter access code"
+                class="password-input"
+                autocomplete="off"
+                required
+              />
+            </label>
+            <button type="submit" class="submit-btn">
+              ACCESS PORTAL
+            </button>
+            <div id="error-message" class="error-message"></div>
+          </form>
+        )}
       </div>
     </div>
 
@@ -263,7 +290,7 @@ if (!OWNERS_PASSWORD_HASH || OWNERS_PASSWORD_HASH === 'sha256-placeholder') {
   </div>
 </Layout>
 
-<script define:vars={{ OWNERS_PASSWORD_HASH }}>
+<script define:vars={{ OWNERS_PASSWORD_HASH, passwordConfigured }}>
   // Client-side authentication with password hashing
   const passwordGate = document.getElementById('password-gate');
   const portalContent = document.getElementById('portal-content');
@@ -271,58 +298,74 @@ if (!OWNERS_PASSWORD_HASH || OWNERS_PASSWORD_HASH === 'sha256-placeholder') {
   const passwordInput = document.getElementById('password-input');
   const errorMessage = document.getElementById('error-message');
 
-  // Check if already authenticated
-  const isAuthenticated = sessionStorage.getItem('owners_auth') === 'authenticated';
-  
-  if (isAuthenticated) {
-    showPortal();
-  }
-
-  function showPortal() {
-    if (passwordGate) passwordGate.style.display = 'none';
-    if (portalContent) portalContent.style.display = 'block';
-  }
-
-  // Simple SHA-256 hash function
-  async function sha256(message) {
-    const msgBuffer = new TextEncoder().encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return 'sha256-' + hashHex;
-  }
-
-  passwordForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const password = passwordInput.value;
+  // Only initialize authentication if password is configured
+  if (passwordConfigured) {
+    // Check if already authenticated
+    const isAuthenticated = sessionStorage.getItem('owners_auth') === 'authenticated';
     
-    try {
-      const hash = await sha256(password);
-      
-      if (hash === OWNERS_PASSWORD_HASH) {
-        sessionStorage.setItem('owners_auth', 'authenticated');
-        errorMessage.textContent = '';
-        showPortal();
-      } else {
-        errorMessage.textContent = '❌ Invalid access code';
-        passwordInput.value = '';
-      }
-    } catch (error) {
-      const errorName = error && typeof error === 'object' && 'name' in error
-        ? error.name
-        : typeof error;
+    if (isAuthenticated) {
+      showPortal();
+    }
 
-      // Log a more detailed error for debugging
-      console.error('Auth error:', errorName, error);
+    function showPortal() {
+      if (passwordGate) passwordGate.style.display = 'none';
+      if (portalContent) portalContent.style.display = 'block';
+    }
 
-      // Provide a slightly more specific user-facing message
-      if (error instanceof Error && /crypto|subtle/i.test(error.message || '')) {
-        errorMessage.textContent = '❌ Authentication error: secure crypto functions are not available in this browser.';
-      } else {
-        errorMessage.textContent = '❌ Authentication error: unable to process access code. Please try again.';
+    // Simple SHA-256 hash function
+    async function sha256(message) {
+      try {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return 'sha256-' + hashHex;
+      } catch (error) {
+        console.error('Hashing error:', error);
+        throw error;
       }
     }
-  });
+
+    passwordForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const password = passwordInput?.value;
+      
+      if (!password) {
+        if (errorMessage) errorMessage.textContent = '❌ Please enter an access code';
+        return;
+      }
+      
+      try {
+        const hash = await sha256(password);
+        
+        if (hash === OWNERS_PASSWORD_HASH) {
+          sessionStorage.setItem('owners_auth', 'authenticated');
+          if (errorMessage) errorMessage.textContent = '';
+          showPortal();
+        } else {
+          if (errorMessage) errorMessage.textContent = '❌ Invalid access code';
+          if (passwordInput) passwordInput.value = '';
+        }
+      } catch (error) {
+        const errorName = error && typeof error === 'object' && 'name' in error
+          ? error.name
+          : typeof error;
+
+        // Log a more detailed error for debugging
+        console.error('Auth error:', errorName, error);
+
+        // Provide a slightly more specific user-facing message
+        if (error instanceof Error && /crypto|subtle/i.test(error.message || '')) {
+          if (errorMessage) errorMessage.textContent = '❌ Authentication error: secure crypto functions are not available in this browser.';
+        } else {
+          if (errorMessage) errorMessage.textContent = '❌ Authentication error: unable to process access code. Please try again.';
+        }
+      }
+    });
+  } else {
+    // Password not configured - disable form if it exists
+    console.log('Owners portal password not configured');
+  }
 
   // Terminal functionality
   const terminalInput = document.getElementById('terminal-input');
@@ -534,6 +577,31 @@ if (!OWNERS_PASSWORD_HASH || OWNERS_PASSWORD_HASH === 'sha256-placeholder') {
     color: #ff3333;
     font-weight: bold;
     min-height: 1.5rem;
+  }
+
+  .config-message {
+    background: rgba(255, 165, 0, 0.1);
+    border: 2px solid rgba(255, 165, 0, 0.4);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .config-message p {
+    margin: 0.75rem 0;
+    line-height: 1.6;
+  }
+
+  .config-message code {
+    background: rgba(255, 165, 0, 0.2);
+    color: #ffaa00;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  .config-message strong {
+    color: #ffaa00;
   }
 
   /* Portal Content Styles */
