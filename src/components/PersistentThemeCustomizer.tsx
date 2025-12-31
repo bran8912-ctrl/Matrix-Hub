@@ -420,32 +420,6 @@ export default function PersistentThemeCustomizer() {
           background: var(--theme-primary, #00ff00);
           color: black;
         }
-
-        @media (max-width: 768px) {
-          .customizer-header {
-            padding: 6px 12px;
-          }
-
-          .customizer-title {
-            font-size: 12px;
-          }
-
-          .current-theme-name {
-            font-size: 11px;
-          }
-
-          .customizer-content {
-            padding: 12px;
-          }
-
-          .theme-presets {
-            grid-template-columns: repeat(2, 1fr);
-          }
-
-          .custom-color-controls {
-            grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );

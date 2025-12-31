@@ -192,23 +192,6 @@
   box-shadow: 0 0 10px var(--theme-glow);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .panel {
-    padding: 15px;
-  }
-  
-  .panel-text {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .panel {
-    padding: 10px;
-  }
-}
-
 /* Wallet Component Styles */
 .wallet-connect-btn {
   padding: 0.75rem 1.5rem;

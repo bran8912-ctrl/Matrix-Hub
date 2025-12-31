@@ -474,25 +474,6 @@ export default function PersistentMusicPlayer() {
           color: var(--theme-primary, #00ff00);
           text-decoration: underline;
         }
-
-        @media (max-width: 768px) {
-          .player-header {
-            padding: 6px 12px;
-          }
-
-          .player-title {
-            font-size: 12px;
-          }
-
-          .player-content {
-            padding: 12px;
-          }
-
-          .player-controls button {
-            padding: 8px 12px;
-            font-size: 12px;
-          }
-        }
       `}</style>
     </div>
   );
