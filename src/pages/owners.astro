@@ -5,26 +5,18 @@ export const prerender = true;
 
 // Get password from environment variable at build time
 // Use a hashed version for better security
-// Wrapped in try/catch to prevent build failures if env var is missing
-let OWNERS_PASSWORD_HASH;
+// Safe handling to prevent build failures if env var is missing
+let OWNERS_PASSWORD_HASH = import.meta.env.OWNERS_PASSWORD_HASH;
 let passwordConfigured = false;
 
-try {
-  OWNERS_PASSWORD_HASH = import.meta.env.OWNERS_PASSWORD_HASH;
-  
-  // Check if password is configured properly
-  if (!OWNERS_PASSWORD_HASH || OWNERS_PASSWORD_HASH === 'sha256-placeholder' || OWNERS_PASSWORD_HASH.trim() === '') {
-    console.warn("⚠️ OWNERS_PASSWORD_HASH not configured. Owners portal will display a configuration message.");
-    OWNERS_PASSWORD_HASH = 'sha256-not-configured';
-    passwordConfigured = false;
-  } else {
-    passwordConfigured = true;
-    console.log("✅ Owners portal password hash loaded successfully");
-  }
-} catch (error) {
-  console.error("Failed to load OWNERS_PASSWORD_HASH:", error);
+// Check if password is configured properly
+if (!OWNERS_PASSWORD_HASH || OWNERS_PASSWORD_HASH === 'sha256-placeholder' || OWNERS_PASSWORD_HASH.trim() === '') {
+  console.warn("⚠️ OWNERS_PASSWORD_HASH not configured. Owners portal will display a configuration message.");
   OWNERS_PASSWORD_HASH = 'sha256-not-configured';
   passwordConfigured = false;
+} else {
+  passwordConfigured = true;
+  console.log("✅ Owners portal password hash loaded successfully");
 }
 
 // This page is NOT linked in navigation - accessible only by direct URL
@@ -329,11 +321,6 @@ try {
     passwordForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const password = passwordInput?.value;
-      
-      if (!password) {
-        if (errorMessage) errorMessage.textContent = '❌ Please enter an access code';
-        return;
-      }
       
       try {
         const hash = await sha256(password);
