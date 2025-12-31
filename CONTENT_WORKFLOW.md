@@ -523,7 +523,7 @@ If you encounter issues:
 
 ## Contributing
 
-Improvements to the content workflow are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Improvements to the content workflow are welcome! Please open an issue or pull request on GitHub with your proposed changes.
 
 ---
 
