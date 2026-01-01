@@ -315,12 +315,14 @@ const currentPath = Astro.url.pathname;
       height: 100vh;
       background: rgba(0, 0, 0, 0.98);
       border-right: 2px solid var(--theme-primary, #00ff99);
-      padding: 5rem 0 2rem;
+      padding: 5rem 0 1rem;
       gap: 0;
       justify-content: flex-start;
       transform: translateX(-100%);
       transition: transform 0.3s ease;
       overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
       z-index: 1000;
     }
 
@@ -354,7 +356,7 @@ const currentPath = Astro.url.pathname;
     }
 
     .tab-dropdown[aria-expanded="true"] .dropdown-menu {
-      max-height: 500px;
+      max-height: 1000px;
     }
 
     .dropdown-item {
