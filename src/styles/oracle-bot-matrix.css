@@ -1,0 +1,759 @@
+/* ===================================================================
+   ORACLE BOT - Matrix "Oracle" Character Themed Styling
+   Matrix-Hub.org - The Oracle Avatar & Cyber Wisdom Interface
+   =================================================================== */
+
+/* ===================================================================
+   ROOT VARIABLES - Matrix Oracle Theme
+   =================================================================== */
+:root {
+  /* Oracle Green Palette */
+  --oracle-green-primary: #00ff41;
+  --oracle-green-bright: #00ff00;
+  --oracle-green-dark: #008f11;
+  --oracle-green-glow: rgba(0, 255, 65, 0.6);
+  --oracle-green-soft: rgba(0, 255, 65, 0.15);
+  
+  /* Oracle Dark Backgrounds */
+  --oracle-bg-primary: #0d0208;
+  --oracle-bg-secondary: #1a1a1a;
+  --oracle-bg-tertiary: #0a0e0a;
+  --oracle-bg-overlay: rgba(0, 0, 0, 0.95);
+  
+  /* Oracle Text Colors */
+  --oracle-text-primary: #00ff41;
+  --oracle-text-secondary: #00cc33;
+  --oracle-text-muted: #008f11;
+  --oracle-text-white: #e0e0e0;
+  --oracle-text-warning: #ff0040;
+  
+  /* Oracle Accent Colors */
+  --oracle-accent-red: #ff0040;
+  --oracle-accent-blue: #00d4ff;
+  --oracle-accent-purple: #b026ff;
+  --oracle-accent-yellow: #ffff00;
+  
+  /* Oracle Effects */
+  --oracle-glow-strong: 0 0 30px var(--oracle-green-primary);
+  --oracle-glow-medium: 0 0 20px var(--oracle-green-glow);
+  --oracle-glow-soft: 0 0 10px rgba(0, 255, 65, 0.3);
+  --oracle-shadow-inset: inset 0 0 20px rgba(0, 255, 65, 0.1);
+}
+
+/* ===================================================================
+   ORACLE BOT BUTTON - Floating Trigger
+   =================================================================== */
+#matrixBotButton {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--oracle-bg-tertiary) 0%, var(--oracle-bg-secondary) 100%);
+  border: 2px solid var(--oracle-green-primary);
+  border-radius: 50%;
+  color: var(--oracle-green-primary);
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9998;
+  box-shadow: var(--oracle-glow-medium), 0 8px 24px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s ease;
+  user-select: none;
+  animation: oraclePulse 3s ease-in-out infinite;
+}
+
+#matrixBotButton:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: var(--oracle-glow-strong), 0 12px 32px rgba(0, 0, 0, 0.9);
+  border-color: var(--oracle-green-bright);
+}
+
+#matrixBotButton:active {
+  transform: scale(1.05);
+}
+
+/* Oracle Button Scanline Effect */
+#matrixBotButton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    transparent 40%,
+    rgba(0, 255, 65, 0.1) 45%,
+    rgba(0, 255, 65, 0.2) 50%,
+    rgba(0, 255, 65, 0.1) 55%,
+    transparent 60%
+  );
+  animation: oracleScanline 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes oraclePulse {
+  0%, 100% {
+    box-shadow: var(--oracle-glow-medium), 0 8px 24px rgba(0, 0, 0, 0.8);
+  }
+  50% {
+    box-shadow: var(--oracle-glow-strong), 0 12px 32px rgba(0, 0, 0, 0.9);
+  }
+}
+
+@keyframes oracleScanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* ===================================================================
+   ORACLE BOT WINDOW - Main Container
+   =================================================================== */
+#matrixBotWindow {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 420px;
+  max-height: 640px;
+  background: var(--oracle-bg-secondary);
+  border: 2px solid var(--oracle-green-primary);
+  border-radius: 16px;
+  box-shadow: var(--oracle-glow-medium), 0 16px 48px rgba(0, 0, 0, 0.9);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9999;
+  animation: oracleSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#matrixBotWindow.open {
+  display: flex;
+}
+
+@keyframes oracleSlideIn {
+  from {
+    transform: translateY(50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===================================================================
+   ORACLE HEADER - The Oracle Identity
+   =================================================================== */
+#matrixBotHeader {
+  background: linear-gradient(135deg, #0a0e0a 0%, #1a1a1a 50%, #0a0e0a 100%);
+  padding: 16px;
+  border-bottom: 2px solid var(--oracle-green-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  cursor: move;
+}
+
+/* Oracle Header Glow Effect */
+#matrixBotHeader::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--oracle-green-primary), transparent);
+  box-shadow: 0 0 15px var(--oracle-green-glow);
+  animation: oracleHeaderPulse 2s ease-in-out infinite;
+}
+
+@keyframes oracleHeaderPulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.oracle-header__title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--oracle-green-primary);
+  text-shadow: 0 0 15px var(--oracle-green-glow);
+  letter-spacing: 3px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Courier New', 'Consolas', monospace;
+}
+
+/* Oracle Avatar in Header */
+.oracle-header__title::before {
+  content: '◉';
+  font-size: 24px;
+  animation: oracleAvatarGlow 2s ease-in-out infinite;
+}
+
+@keyframes oracleAvatarGlow {
+  0%, 100% {
+    color: var(--oracle-green-primary);
+    filter: drop-shadow(0 0 8px var(--oracle-green-glow));
+  }
+  50% {
+    color: var(--oracle-green-bright);
+    filter: drop-shadow(0 0 15px var(--oracle-green-primary));
+  }
+}
+
+.oracle-header__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.oracle-header__btn {
+  background: transparent;
+  border: 1px solid var(--oracle-green-primary);
+  color: var(--oracle-green-primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Courier New', 'Consolas', monospace;
+  letter-spacing: 1px;
+}
+
+.oracle-header__btn:hover {
+  background: var(--oracle-green-primary);
+  color: var(--oracle-bg-primary);
+  box-shadow: var(--oracle-glow-soft);
+  transform: translateY(-2px);
+}
+
+.oracle-header__btn:active {
+  transform: translateY(0);
+}
+
+.oracle-header__btn[aria-pressed="true"] {
+  background: var(--oracle-green-primary);
+  color: var(--oracle-bg-primary);
+}
+
+#oracleVoiceSelect {
+  background: var(--oracle-bg-tertiary);
+  border: 1px solid var(--oracle-green-primary);
+  color: var(--oracle-green-primary);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: 'Courier New', 'Consolas', monospace;
+  cursor: pointer;
+  max-width: 140px;
+}
+
+#oracleVoiceSelect:focus {
+  outline: none;
+  box-shadow: var(--oracle-glow-soft);
+}
+
+/* ===================================================================
+   QUICK ACTIONS - Action Chips
+   =================================================================== */
+#oracleQuickActions {
+  padding: 12px 16px;
+  background: var(--oracle-bg-tertiary);
+  border-bottom: 1px solid var(--oracle-green-primary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.oracle-chip {
+  background: var(--oracle-bg-secondary);
+  border: 1px solid var(--oracle-green-primary);
+  color: var(--oracle-green-primary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Courier New', 'Consolas', monospace;
+  white-space: nowrap;
+}
+
+.oracle-chip:hover {
+  background: var(--oracle-green-primary);
+  color: var(--oracle-bg-primary);
+  box-shadow: var(--oracle-glow-soft);
+  transform: scale(1.05);
+}
+
+.oracle-chip:active {
+  transform: scale(1);
+}
+
+/* ===================================================================
+   APPS PANEL
+   =================================================================== */
+#oracleAppsPanel {
+  padding: 16px;
+  background: var(--oracle-bg-tertiary);
+  border-bottom: 1px solid var(--oracle-green-primary);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+#oracleAppsPanel[hidden] {
+  display: none;
+}
+
+.oracle-apps__header {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--oracle-green-primary);
+  margin-bottom: 12px;
+  text-shadow: 0 0 10px var(--oracle-green-glow);
+  letter-spacing: 2px;
+}
+
+.oracle-apps__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.oracle-apps__item {
+  background: var(--oracle-bg-secondary);
+  border: 1px solid var(--oracle-green-primary);
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.2s ease;
+}
+
+.oracle-apps__item:hover {
+  border-color: var(--oracle-green-bright);
+  box-shadow: var(--oracle-glow-soft);
+}
+
+.oracle-apps__name {
+  font-weight: bold;
+  color: var(--oracle-green-primary);
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.oracle-apps__desc {
+  color: var(--oracle-text-muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.oracle-apps__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.oracle-apps__action {
+  background: transparent;
+  border: 1px solid var(--oracle-green-primary);
+  color: var(--oracle-green-primary);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.oracle-apps__action:hover {
+  background: var(--oracle-green-primary);
+  color: var(--oracle-bg-primary);
+}
+
+/* ===================================================================
+   MESSAGES AREA - The Oracle's Wisdom
+   =================================================================== */
+#matrixBotMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--oracle-bg-primary);
+  scrollbar-width: thin;
+  scrollbar-color: var(--oracle-green-primary) var(--oracle-bg-secondary);
+  position: relative;
+}
+
+/* Scanline effect on messages */
+#matrixBotMessages::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 255, 65, 0.02) 50%,
+    transparent 100%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#matrixBotMessages::-webkit-scrollbar {
+  width: 10px;
+}
+
+#matrixBotMessages::-webkit-scrollbar-track {
+  background: var(--oracle-bg-secondary);
+  border-radius: 5px;
+}
+
+#matrixBotMessages::-webkit-scrollbar-thumb {
+  background: var(--oracle-green-primary);
+  border-radius: 5px;
+  box-shadow: 0 0 10px var(--oracle-green-glow);
+}
+
+#matrixBotMessages::-webkit-scrollbar-thumb:hover {
+  background: var(--oracle-green-bright);
+}
+
+/* ===================================================================
+   MESSAGE BUBBLES - Oracle & User
+   =================================================================== */
+.bot-msg {
+  margin-bottom: 16px;
+  animation: messageAppear 0.3s ease-out;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bot-msg__name {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: var(--oracle-text-secondary);
+  letter-spacing: 1px;
+}
+
+.bot-msg--oracle .bot-msg__name {
+  color: var(--oracle-green-primary);
+  text-shadow: 0 0 8px var(--oracle-green-glow);
+}
+
+.bot-msg--oracle .bot-msg__name::before {
+  content: '◉ ';
+  font-size: 14px;
+  animation: oracleAvatarGlow 2s ease-in-out infinite;
+}
+
+.bot-msg--user .bot-msg__name {
+  color: var(--oracle-accent-blue);
+  text-align: right;
+}
+
+.bot-msg > div:last-child {
+  padding: 12px 16px;
+  border-radius: 12px;
+  line-height: 1.6;
+  font-size: 14px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.bot-msg--oracle > div:last-child {
+  background: var(--oracle-bg-secondary);
+  border: 1px solid var(--oracle-green-primary);
+  color: var(--oracle-text-primary);
+  box-shadow: var(--oracle-shadow-inset);
+  margin-right: 40px;
+}
+
+.bot-msg--user > div:last-child {
+  background: linear-gradient(135deg, var(--oracle-green-dark) 0%, var(--oracle-green-primary) 100%);
+  color: var(--oracle-bg-primary);
+  border: 1px solid var(--oracle-green-bright);
+  box-shadow: var(--oracle-glow-soft);
+  margin-left: 40px;
+  text-align: left;
+}
+
+/* Security Warning Messages */
+.bot-msg--oracle.security-warning > div:last-child {
+  border-color: var(--oracle-accent-red);
+  background: rgba(255, 0, 64, 0.1);
+  color: var(--oracle-accent-red);
+  animation: securityWarningPulse 2s ease-in-out infinite;
+}
+
+@keyframes securityWarningPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 0, 64, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 0, 64, 0.6);
+  }
+}
+
+/* ===================================================================
+   INPUT AREA - Asking the Oracle
+   =================================================================== */
+#matrixBotInputArea {
+  padding: 16px;
+  background: var(--oracle-bg-secondary);
+  border-top: 2px solid var(--oracle-green-primary);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+#matrixBotInput {
+  flex: 1;
+  background: var(--oracle-bg-tertiary);
+  border: 1px solid var(--oracle-green-primary);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--oracle-green-primary);
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+#matrixBotInput:focus {
+  outline: none;
+  border-color: var(--oracle-green-bright);
+  box-shadow: var(--oracle-glow-soft);
+}
+
+#matrixBotInput::placeholder {
+  color: var(--oracle-text-muted);
+  font-style: italic;
+}
+
+#matrixBotSend {
+  background: var(--oracle-green-primary);
+  border: none;
+  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  color: var(--oracle-bg-primary);
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px var(--oracle-green-glow);
+}
+
+#matrixBotSend:hover {
+  background: var(--oracle-green-bright);
+  box-shadow: var(--oracle-glow-strong);
+  transform: scale(1.1);
+}
+
+#matrixBotSend:active {
+  transform: scale(1.05);
+}
+
+/* ===================================================================
+   TOAST NOTIFICATIONS
+   =================================================================== */
+#oracleMatrixToasts {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.oracle-toast {
+  background: var(--oracle-bg-secondary);
+  border: 2px solid var(--oracle-green-primary);
+  border-radius: 12px;
+  padding: 16px 20px;
+  min-width: 300px;
+  max-width: 400px;
+  box-shadow: var(--oracle-glow-medium), 0 8px 24px rgba(0, 0, 0, 0.8);
+  pointer-events: all;
+  animation: toastSlideIn 0.3s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.oracle-toast::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--oracle-green-primary);
+  box-shadow: 0 0 10px var(--oracle-green-glow);
+}
+
+.oracle-toast__title {
+  font-weight: bold;
+  color: var(--oracle-green-primary);
+  margin-bottom: 6px;
+  font-size: 14px;
+  text-shadow: 0 0 8px var(--oracle-green-glow);
+  letter-spacing: 2px;
+}
+
+.oracle-toast__body {
+  color: var(--oracle-text-white);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ===================================================================
+   RESPONSIVE DESIGN
+   =================================================================== */
+@media (max-width: 768px) {
+  #matrixBotButton {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+    font-size: 28px;
+  }
+
+  #matrixBotWindow {
+    width: calc(100vw - 32px);
+    max-height: calc(100vh - 120px);
+    bottom: 80px;
+    right: 16px;
+  }
+
+  #oracleMatrixToasts {
+    right: 16px;
+    left: 16px;
+  }
+
+  .oracle-toast {
+    min-width: auto;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  #matrixBotWindow {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 100px);
+    bottom: 76px;
+    right: 8px;
+    border-radius: 12px;
+  }
+
+  #matrixBotHeader {
+    padding: 12px;
+  }
+
+  .oracle-header__title {
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+
+  .oracle-header__btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  #oracleVoiceSelect {
+    max-width: 100px;
+    font-size: 10px;
+  }
+
+  #matrixBotMessages {
+    padding: 12px;
+  }
+
+  .bot-msg--oracle > div:last-child {
+    margin-right: 20px;
+  }
+
+  .bot-msg--user > div:last-child {
+    margin-left: 20px;
+  }
+}
+
+/* ===================================================================
+   ACCESSIBILITY & REDUCED MOTION
+   =================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+*:focus-visible {
+  outline: 2px solid var(--oracle-green-primary);
+  outline-offset: 3px;
+}
+
+/* ===================================================================
+   HIGH CONTRAST MODE
+   =================================================================== */
+@media (prefers-contrast: high) {
+  :root {
+    --oracle-green-primary: #00ff00;
+    --oracle-text-white: #ffffff;
+  }
+  
+  #matrixBotWindow,
+  #matrixBotButton,
+  .oracle-toast {
+    border-width: 3px;
+  }
+}
+
+/* ===================================================================
+   END OF ORACLE BOT MATRIX STYLING
+   =================================================================== */

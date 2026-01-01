@@ -1,0 +1,377 @@
+---
+/**
+ * OracleBot - The Matrix Oracle Character Avatar
+ * 
+ * This component wraps the React-based OracleBot with Matrix Oracle theming,
+ * security-aware AI logic, and global site integration.
+ * 
+ * Features:
+ * - Matrix Oracle persona with circular avatar
+ * - Security filtering (wallet addresses, private keys, phishing detection)
+ * - Voice features with sage-like Oracle voice
+ * - Quick actions and apps integration
+ * - /report command for security concerns
+ * - Responsive and accessible design
+ */
+import "../styles/oracle-bot-matrix.css";
+---
+
+<!-- Oracle Bot Floating Button -->
+<div id="matrixBotButton" role="button" aria-label="Open Oracle chat" title="Ask the Oracle">
+  ◉
+</div>
+
+<!-- Oracle Bot Window Container (managed by vanilla JS for compatibility) -->
+<div id="matrixBotWindow">
+  <div id="matrixBotHeader">
+    <div class="oracle-header__title">THE ORACLE</div>
+    <div class="oracle-header__controls">
+      <button id="oracleAppsBtn" class="oracle-header__btn" type="button" title="Apps">APPS</button>
+      <button id="oracleVoiceBtn" class="oracle-header__btn" type="button" aria-pressed="false" title="Voice">VOICE</button>
+      <select id="oracleVoiceSelect" title="Choose Oracle Voice">
+        <option value="">Default Voice</option>
+      </select>
+      <button id="oracleCloseBtn" class="oracle-header__btn" type="button" title="Close">×</button>
+    </div>
+  </div>
+
+  <div id="oracleQuickActions"></div>
+  <div id="oracleAppsPanel" hidden></div>
+  <div id="matrixBotMessages"></div>
+
+  <div id="matrixBotInputArea">
+    <input id="matrixBotInput" type="text" placeholder="Ask the Oracle..." aria-label="Message input">
+    <button id="matrixBotSend" type="button" aria-label="Send message">➤</button>
+  </div>
+</div>
+
+<!-- Toast Notification Container -->
+<div id="oracleMatrixToasts" role="status" aria-live="polite"></div>
+
+<!-- Enhanced Oracle Bot Script with Security Awareness -->
+<script>
+  // Security patterns for detection
+  const SECURITY_PATTERNS = {
+    walletAddress: /\b(0x[a-fA-F0-9]{40})\b/g,
+    privateKey: /\b(private[\s_-]?key|seed[\s_-]?phrase|mnemonic|recovery[\s_-]?phrase)\b/gi,
+    suspiciousLinks: /\b(bit\.ly|tinyurl|goo\.gl|t\.co|ow\.ly|is\.gd|cutt\.ly)\b/gi,
+    phishingKeywords: /\b(send[\s_]+mtx|transfer[\s_]+funds|verify[\s_]+wallet|claim[\s_]+reward|urgent[\s_]+action|account[\s_]+suspended|confirm[\s_]+identity)\b/gi,
+    scamIndicators: /\b(double[\s_]+your|free[\s_]+crypto|guaranteed[\s_]+profit|send[\s_]+first|investment[\s_]+opportunity|limited[\s_]+time[\s_]+offer)\b/gi,
+  };
+
+  // Detect security issues in user input
+  function detectSecurityIssues(text) {
+    const issues = [];
+    
+    if (SECURITY_PATTERNS.walletAddress.test(text)) {
+      issues.push('wallet_address');
+    }
+    if (SECURITY_PATTERNS.privateKey.test(text)) {
+      issues.push('private_key');
+    }
+    if (SECURITY_PATTERNS.suspiciousLinks.test(text)) {
+      issues.push('suspicious_link');
+    }
+    if (SECURITY_PATTERNS.phishingKeywords.test(text)) {
+      issues.push('phishing');
+    }
+    if (SECURITY_PATTERNS.scamIndicators.test(text)) {
+      issues.push('scam');
+    }
+    
+    return issues;
+  }
+
+  // Generate security warning message
+  function getSecurityWarning(issues) {
+    const warnings = [
+      '🛡️ SECURITY ALERT - The Oracle Warns You',
+      '',
+      'I sense danger in your words...',
+      '',
+    ];
+
+    if (issues.includes('private_key')) {
+      warnings.push('⚠️ NEVER share private keys, seed phrases, or mnemonics with ANYONE.');
+      warnings.push('Not here, not anywhere. The Oracle does not need them. No one does.');
+      warnings.push('');
+    }
+
+    if (issues.includes('wallet_address')) {
+      warnings.push('💼 Be cautious sharing wallet addresses publicly.');
+      warnings.push('While addresses are public by nature, revealing them in chat may attract unwanted attention.');
+      warnings.push('');
+    }
+
+    if (issues.includes('suspicious_link')) {
+      warnings.push('🔗 Suspicious shortened URL detected.');
+      warnings.push('Such links can hide malicious destinations. Always verify before clicking.');
+      warnings.push('');
+    }
+
+    if (issues.includes('phishing')) {
+      warnings.push('🎣 Phishing pattern detected.');
+      warnings.push('Legitimate services NEVER ask you to "verify wallet" or "send funds" urgently.');
+      warnings.push('');
+    }
+
+    if (issues.includes('scam')) {
+      warnings.push('🚨 Potential scam language detected.');
+      warnings.push('There are no shortcuts. No doubling. No guaranteed profits.');
+      warnings.push('If it sounds too good to be true, it absolutely is.');
+      warnings.push('');
+    }
+
+    warnings.push('Remember: Matrix-Hub is open source. MTX flows through transparent smart contracts.');
+    warnings.push('Security is YOUR responsibility. Question everything. Trust the code, not promises.');
+    warnings.push('');
+    warnings.push('Type /report if you need to report suspicious activity.');
+
+    return warnings.join('\n');
+  }
+
+  // Initialize Oracle Bot
+  function initOracleBot() {
+    const botBtn = document.getElementById('matrixBotButton');
+    const botWin = document.getElementById('matrixBotWindow');
+    const sendBtn = document.getElementById('matrixBotSend');
+    const input = document.getElementById('matrixBotInput');
+    const messages = document.getElementById('matrixBotMessages');
+    const appsBtn = document.getElementById('oracleAppsBtn');
+    const voiceBtn = document.getElementById('oracleVoiceBtn');
+    const closeBtn = document.getElementById('oracleCloseBtn');
+    const quick = document.getElementById('oracleQuickActions');
+    const appsPanel = document.getElementById('oracleAppsPanel');
+    const voiceSelect = document.getElementById('oracleVoiceSelect');
+
+    if (!botBtn || !botWin || !sendBtn || !input || !messages) return;
+
+    let conversation = [];
+    let voiceEnabled = false;
+
+    // Build quick action chips
+    const quickActions = [
+      { label: 'What is MTX?', value: 'what is mtx' },
+      { label: 'Security Tips', value: 'security tips' },
+      { label: 'About Casino', value: 'tell me about the casino' },
+      { label: 'Help', value: '/help' },
+    ];
+
+    quickActions.forEach(action => {
+      const chip = document.createElement('button');
+      chip.className = 'oracle-chip';
+      chip.textContent = action.label;
+      chip.onclick = () => {
+        input.value = action.value;
+        sendMessage();
+      };
+      quick?.appendChild(chip);
+    });
+
+    // Populate voice options
+    function populateVoices() {
+      const voices = window.speechSynthesis?.getVoices() || [];
+      if (voiceSelect && voices.length > 0) {
+        voiceSelect.innerHTML = '<option value="">Default Voice</option>';
+        voices.forEach(voice => {
+          if (/en/i.test(voice.lang)) {
+            const option = document.createElement('option');
+            option.value = voice.voiceURI;
+            option.textContent = `${voice.name}`;
+            voiceSelect.appendChild(option);
+          }
+        });
+      }
+    }
+
+    if (window.speechSynthesis) {
+      window.speechSynthesis.addEventListener('voiceschanged', populateVoices);
+      populateVoices();
+    }
+
+    // Speak message with Oracle voice
+    function speakMessage(text) {
+      if (!voiceEnabled || !window.speechSynthesis) return;
+      
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.85;
+      utterance.pitch = 0.7;
+      utterance.volume = 0.95;
+      
+      const voices = window.speechSynthesis.getVoices();
+      const selectedVoiceURI = voiceSelect?.value;
+      
+      let voice = null;
+      if (selectedVoiceURI) {
+        voice = voices.find(v => v.voiceURI === selectedVoiceURI);
+      }
+      
+      if (!voice) {
+        voice = voices.find(v => 
+          /en/i.test(v.lang) && /(male|wise|old|deep|george|albert|daniel)/i.test(v.name)
+        ) || voices.find(v => /en/i.test(v.lang));
+      }
+      
+      if (voice) utterance.voice = voice;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Create message element
+    function createMessage(role, content, isSecurityWarning = false) {
+      const div = document.createElement('div');
+      div.className = `bot-msg bot-msg--${role === 'user' ? 'user' : 'oracle'}${isSecurityWarning ? ' security-warning' : ''}`;
+      
+      const name = document.createElement('div');
+      name.className = 'bot-msg__name';
+      name.textContent = role === 'user' ? 'You' : 'Oracle';
+      
+      const body = document.createElement('div');
+      body.textContent = content;
+      body.style.whiteSpace = 'pre-wrap';
+      
+      div.appendChild(name);
+      div.appendChild(body);
+      return div;
+    }
+
+    // Add message to conversation
+    function addMessage(role, content, isSecurityWarning = false) {
+      conversation.push({ role, content });
+      const msgEl = createMessage(role, content, isSecurityWarning);
+      messages.appendChild(msgEl);
+      messages.scrollTop = messages.scrollHeight;
+      
+      if (role === 'assistant') {
+        speakMessage(content);
+      }
+    }
+
+    // Generate Oracle response
+    function generateOracleResponse(userInput) {
+      const input = userInput.toLowerCase();
+
+      if (/\b(mtx|token|coin|crypto|currency)\b/.test(input)) {
+        return '⚡ MTX - THE MATRIX HUB TOKEN\n\nMTX flows through Matrix-Hub like energy through the Matrix itself.\n\n• Utility Token: Powers advanced features and casino games\n• Earn by Contributing: PRs, bug reports, community participation\n• Non-Custodial: Your keys, your MTX\n• Transparent: All flows on-chain via smart contracts\n\nMTX is not about profit—it\'s about powering growth through use.\n\nThe system grows by signal, not noise.';
+      }
+
+      if (/\b(secure|security|safe|protect|hack|scam|phishing)\b/.test(input)) {
+        return '🛡️ SECURITY IN THE MATRIX\n\nThe Oracle speaks:\n\n1. Your private keys are YOUR responsibility. Never share them.\n2. Matrix-Hub is open source. Audit the code yourself.\n3. Smart contracts are immutable. Verify addresses before transactions.\n4. No one from Matrix-Hub will ever DM you first.\n5. Question everything. Trust the code, not promises.\n\nRemember: In the Matrix, knowledge is power. Ignorance is vulnerability.\n\nType /report to flag security concerns.';
+      }
+
+      if (/\b(casino|game|gambl|bet|slot|blackjack|roulette)\b/.test(input)) {
+        return '🎰 MATRIX CASINO\n\nThe games are fair. The code is open. The odds are transparent.\n\n• All games use provably fair mechanics\n• Smart contracts handle all MTX transactions\n• No house can cheat—the code is law\n• Play responsibly with MTX you can afford\n\nThe house edge exists, as it must. But unlike the real world, here you can verify it.\n\nEvery roll, every card, every spin—auditable.\n\nChoose your path wisely.';
+      }
+
+      if (/\b(wallet|connect|metamask|balance|address)\b/.test(input)) {
+        return '💼 WALLET WISDOM\n\nConnecting your wallet to Matrix-Hub:\n\n1. Use MetaMask or compatible Web3 wallet\n2. Connect to view your MTX balance\n3. Site reads balance only—never requests private keys\n4. Sign transactions only when YOU initiate them\n\nYour wallet is your identity in the Matrix. Protect it.\n\nNever share your seed phrase or private keys with anyone—including "The Oracle."';
+      }
+
+      const wisdomResponses = [
+        'I can see the code around you. The patterns are clear.\n\nBut the choice is yours to make.',
+        'The Matrix reveals itself to those who look.\n\nWhat do you wish to understand?',
+        'I have been waiting for you.\n\nYour question echoes through the code. Ask me something more specific.',
+        'The path divides before you.\n\nSpeak plainly, and I shall guide you.',
+        'I see what you seek, but the question is unclear.\n\nTry asking about MTX, security, the casino, or use /help for commands.',
+      ];
+
+      return wisdomResponses[Math.floor(Math.random() * wisdomResponses.length)];
+    }
+
+    // Send message handler
+    function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+      addMessage('user', text);
+
+      // Security check
+      const securityIssues = detectSecurityIssues(text);
+      if (securityIssues.length > 0) {
+        addMessage('assistant', getSecurityWarning(securityIssues), true);
+        return;
+      }
+
+      // Handle commands
+      if (text.toLowerCase() === '/report') {
+        addMessage('assistant', '📋 REPORT SYSTEM\n\nTo report security issues, abuse, or suspicious activity:\n\n1. For site issues: Open a GitHub issue at https://github.com/bran8912-ctrl/Matrix-Hub.org/issues\n2. For urgent security vulnerabilities: Contact the maintainers directly\n3. For on-chain issues: Document transaction hashes and wallet addresses involved\n\nThe Oracle thanks you for protecting the Matrix ecosystem.');
+        return;
+      }
+
+      if (text.toLowerCase() === '/help') {
+        addMessage('assistant', '🔮 THE ORACLE\'S WISDOM\n\nCommands:\n• /report - Report security issues or abuse\n• /help - Show this help\n\nQuestions I can answer:\n• "What is MTX?" - Learn about the Matrix-Hub token\n• "Security tips" - Get security guidance\n• "About casino" - Learn about Matrix casino\n• "Wallet" - Wallet connection info\n\nThe Oracle sees all paths. Choose wisely.');
+        return;
+      }
+
+      // Generate response
+      const response = generateOracleResponse(text);
+      setTimeout(() => {
+        addMessage('assistant', response);
+      }, 800 + Math.random() * 400);
+    }
+
+    // Event listeners
+    botBtn.onclick = () => {
+      const isOpen = botWin.style.display === 'flex';
+      botWin.style.display = isOpen ? 'none' : 'flex';
+      
+      if (!isOpen && conversation.length === 0) {
+        addMessage('assistant', 'The door is already open.\n\nI am the Oracle. I see the code, the patterns, the paths. Ask me about Matrix-Hub, MTX tokens, security, or the tools at your disposal.\n\nTry: "what is MTX", "security tips", "/report", or "/help".');
+      }
+      
+      if (!isOpen) {
+        setTimeout(() => input?.focus(), 100);
+      }
+    };
+
+    closeBtn.onclick = () => {
+      botWin.style.display = 'none';
+    };
+
+    appsBtn.onclick = () => {
+      const isHidden = appsPanel?.hasAttribute('hidden');
+      if (isHidden) {
+        appsPanel?.removeAttribute('hidden');
+      } else {
+        appsPanel?.setAttribute('hidden', '');
+      }
+    };
+
+    voiceBtn.onclick = () => {
+      voiceEnabled = !voiceEnabled;
+      voiceBtn.setAttribute('aria-pressed', voiceEnabled ? 'true' : 'false');
+      
+      const toastContainer = document.getElementById('oracleMatrixToasts');
+      if (toastContainer) {
+        const toast = document.createElement('div');
+        toast.className = 'oracle-toast';
+        toast.innerHTML = `
+          <div class="oracle-toast__title">VOICE ${voiceEnabled ? 'ENABLED' : 'DISABLED'}</div>
+          <div class="oracle-toast__body">${voiceEnabled ? 'The Oracle will speak.' : 'The Oracle is silent.'}</div>
+        `;
+        toastContainer.appendChild(toast);
+        
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(-10px)';
+          toast.style.transition = '300ms ease-out';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+    };
+
+    sendBtn.onclick = sendMessage;
+    
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  }
+
+  // Initialize on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initOracleBot);
+  } else {
+    initOracleBot();
+  }
+</script>
