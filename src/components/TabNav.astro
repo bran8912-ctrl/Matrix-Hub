@@ -461,17 +461,11 @@ const currentPath = Astro.url.pathname;
       document.querySelectorAll('.tab-button').forEach(b => {
         if (b !== button) {
           b.setAttribute('aria-expanded', 'false');
-          const parentDropdown = b.closest('.tab-dropdown');
-          if (parentDropdown) {
-            parentDropdown.setAttribute('aria-expanded', 'false');
-          }
         }
       });
       
-      // Toggle current dropdown (set on both button and parent)
-      const newExpandedState = (!isExpanded).toString();
-      button.setAttribute('aria-expanded', newExpandedState);
-      dropdown.setAttribute('aria-expanded', newExpandedState);
+      // Toggle current dropdown (only on button, not parent)
+      button.setAttribute('aria-expanded', (!isExpanded).toString());
     });
   });
 
@@ -511,10 +505,6 @@ const currentPath = Astro.url.pathname;
   function closeAllDropdowns() {
     document.querySelectorAll('.tab-button').forEach(btn => {
       btn.setAttribute('aria-expanded', 'false');
-      const parentDropdown = btn.closest('.tab-dropdown');
-      if (parentDropdown) {
-        parentDropdown.setAttribute('aria-expanded', 'false');
-      }
     });
   }
 
@@ -567,7 +557,6 @@ const currentPath = Astro.url.pathname;
         const dropdown = target.closest('.tab-dropdown');
         if (dropdown) {
           target.setAttribute('aria-expanded', 'true');
-          dropdown.setAttribute('aria-expanded', 'true');
           const items = getDropdownItems(dropdown);
           if (items.length > 0) {
             setFocusToMenuItem(items[0]);
@@ -596,7 +585,6 @@ const currentPath = Astro.url.pathname;
           target.setAttribute('aria-expanded', 'true');
           const dropdown = target.closest('.tab-dropdown');
           if (dropdown) {
-            dropdown.setAttribute('aria-expanded', 'true');
             const items = getDropdownItems(dropdown);
             if (items.length > 0) {
               setFocusToMenuItem(items[0]);
