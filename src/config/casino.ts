@@ -7,25 +7,19 @@
 // ⚠️ AFTER DEPLOYMENT: Update environment variables with real contract addresses
 
 // Get contract addresses from environment or use placeholders
-const casinoCoreAddress = typeof process !== 'undefined' && process.env?.CASINO_CORE_ADDRESS 
-  ? process.env.CASINO_CORE_ADDRESS 
-  : "0x0000000000000000000000000000000000000000";
+const getContractAddress = (envVar: string | undefined, fallback = "0x0000000000000000000000000000000000000000"): string => {
+  return (typeof process !== 'undefined' && envVar) ? envVar : fallback;
+};
 
-const casinoReserveAddress = typeof process !== 'undefined' && process.env?.CASINO_RESERVE_ADDRESS 
-  ? process.env.CASINO_RESERVE_ADDRESS 
-  : "0x0000000000000000000000000000000000000000";
-
-const liquidityRouterAddress = typeof process !== 'undefined' && process.env?.LIQUIDITY_ROUTER_ADDRESS 
-  ? process.env.LIQUIDITY_ROUTER_ADDRESS 
-  : "0x0000000000000000000000000000000000000000";
-
-const rngEngineAddress = typeof process !== 'undefined' && process.env?.RNG_ENGINE_ADDRESS 
-  ? process.env.RNG_ENGINE_ADDRESS 
-  : "0x0000000000000000000000000000000000000000";
+const casinoCoreAddress = getContractAddress(process.env?.CASINO_CORE_ADDRESS);
+const casinoReserveAddress = getContractAddress(process.env?.CASINO_RESERVE_ADDRESS);
+const liquidityRouterAddress = getContractAddress(process.env?.LIQUIDITY_ROUTER_ADDRESS);
+const rngEngineAddress = getContractAddress(process.env?.RNG_ENGINE_ADDRESS);
 
 // Validate address format
-const isValidAddress = (address: string): boolean => {
-  return address !== null && address.match(/^0x[a-fA-F0-9]{40}$/) !== null;
+const isValidAddress = (address: string | null | undefined): boolean => {
+  if (!address || typeof address !== 'string') return false;
+  return address.match(/^0x[a-fA-F0-9]{40}$/) !== null;
 };
 
 const isPlaceholder = (address: string): boolean => {
