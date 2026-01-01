@@ -356,7 +356,7 @@ const currentPath = Astro.url.pathname;
       overflow: hidden;
       transition: max-height 0.3s ease;
       background: rgba(0, 255, 153, 0.05);
-      z-index: 1010;
+      z-index: var(--z-index-dropdown);
     }
 
     .tab-dropdown[aria-expanded="true"] .dropdown-menu {
