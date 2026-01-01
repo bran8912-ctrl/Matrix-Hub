@@ -1,11 +1,17 @@
 ---
 import Layout from "../components/Layout.astro";
 import BuyMTX from "../components/BuyMTX.tsx";
+import { MTX } from "../config/mtx";
 
 export const prerender = true;
 
 export const title = "Buy MTX";
 export const navCategory = "mtx-token";
+
+// Check if contract is deployed
+const isDeployed = MTX.isDeployed;
+const contractAddress = MTX.address;
+const uniswapUrl = MTX.uniswapUrl;
 ---
 
 <Layout title="Buy MTX - Matrix Hub">
@@ -15,6 +21,19 @@ export const navCategory = "mtx-token";
       Purchase MTX tokens directly with ETH using our secure direct mint feature, 
       or buy on Uniswap for instant liquidity.
     </p>
+    
+    {!isDeployed && (
+      <div class="deployment-warning">
+        <strong>⚠️ Contract Not Yet Deployed</strong>
+        <p>
+          The MTX token contract has not been deployed to mainnet yet. 
+          The purchase functionality will be available once the contract is deployed.
+        </p>
+        <p>
+          For deployment information, see the <a href="/docs/MTX_Deployment_Guide">MTX Deployment Guide</a>.
+        </p>
+      </div>
+    )}
     
     <!-- Direct Mint Component -->
     <div class="buy-section">
@@ -49,22 +68,27 @@ export const navCategory = "mtx-token";
             <li><strong>Flexibility:</strong> Swap from any ERC-20 token</li>
           </ul>
           <div class="cta">
-            <a 
-              href={`https://app.uniswap.org/#/swap?outputCurrency=0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0&chain=ethereum`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="cta-button uniswap"
-            >
-              Buy on Uniswap →
-            </a>
-          </div>
+            {isDeployed ? (
+              <a 
+                href={uniswapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="cta-button uniswap"
+              >
+                Buy on Uniswap →
+              </a>
+            ) : (
+              <span class="cta-button uniswap disabled">
+                Available After Deployment
+              </span>
+            )}
         </div>
       </div>
 
       <div class="security-notice">
         <h3>🔒 Security & Best Practices</h3>
         <ul>
-          <li><strong>Verify Contract Address:</strong> Always double-check you're interacting with the correct contract: <code>0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</code></li>
+          <li><strong>Verify Contract Address:</strong> Always double-check you're interacting with the correct contract{isDeployed ? `: ${contractAddress}` : ' (will be displayed after deployment)'}</li>
           <li><strong>Network:</strong> Ensure you're on Ethereum Mainnet (ChainID: 1)</li>
           <li><strong>Start Small:</strong> For first-time users, we recommend starting with a small test purchase</li>
           <li><strong>Gas Fees:</strong> Consider current network gas prices before transacting</li>
@@ -126,6 +150,33 @@ export const navCategory = "mtx-token";
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .deployment-warning {
+    background: rgba(255, 153, 0, 0.1);
+    border: 2px solid rgba(255, 153, 0, 0.5);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    text-align: center;
+  }
+
+  .deployment-warning strong {
+    color: #ff9900;
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .deployment-warning p {
+    color: var(--theme-text);
+    margin: 0.5rem 0;
+  }
+
+  .deployment-warning a {
+    color: #ff9900;
+    text-decoration: underline;
   }
 
   .buy-section {
@@ -216,6 +267,18 @@ export const navCategory = "mtx-token";
   .cta-button.uniswap {
     background: #FF007A;
     color: #fff;
+  }
+
+  .cta-button.disabled {
+    background: #666;
+    color: #aaa;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .cta-button.disabled:hover {
+    opacity: 0.5;
+    transform: none;
   }
 
   .cta-button:hover {

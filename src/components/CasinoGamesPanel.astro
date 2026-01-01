@@ -1,5 +1,15 @@
 ---
 import Panel from './Panel.astro';
+import { MTX } from '../config/mtx';
+
+// Check if contracts are deployed
+const mtxDeployed = MTX.isDeployed;
+const casinoCoreAddress = typeof process !== 'undefined' && process.env?.CASINO_CORE_ADDRESS 
+  ? process.env.CASINO_CORE_ADDRESS 
+  : "Pending Deployment";
+const casinoReserveAddress = typeof process !== 'undefined' && process.env?.CASINO_RESERVE_ADDRESS 
+  ? process.env.CASINO_RESERVE_ADDRESS 
+  : "Pending Deployment";
 ---
 
 <Panel title="MTX COIN CASINO" class="casino-panel">
@@ -12,13 +22,24 @@ import Panel from './Panel.astro';
   </div>
   
   <div class="contract-info">
-    <strong>Live Contract Addresses:</strong><br>
+    {!mtxDeployed && (
+      <div class="deployment-warning">
+        <strong>⚠️ Contracts Not Yet Deployed</strong>
+        <p>The MTX Casino contracts have not been deployed to mainnet yet. Casino functionality will be available once contracts are deployed.</p>
+        <p>See <a href="/docs/MTX_Deployment_Guide">MTX Deployment Guide</a> for deployment instructions.</p>
+      </div>
+    )}
+    <strong>Contract Addresses:</strong><br>
     <ul>
-      <li><strong>MTX Token (MatrixHubCoin):</strong> <span class="contract-address">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</span></li>
-      <li><strong>CasinoCore:</strong> <span class="contract-address">0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9</span></li>
-      <li><strong>CasinoReserve:</strong> <span class="contract-address">0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</span></li>
+      <li><strong>MTX Token (MatrixHubCoin):</strong> <span class="contract-address">{mtxDeployed ? MTX.address : "Pending Deployment"}</span></li>
+      <li><strong>CasinoCore:</strong> <span class="contract-address">{casinoCoreAddress}</span></li>
+      <li><strong>CasinoReserve:</strong> <span class="contract-address">{casinoReserveAddress}</span></li>
     </ul>
-    <p style="margin-top: 10px;"><strong>Test Locally:</strong> Connect your wallet to the local Hardhat node and interact with the MTX Casino UI for live contract testing.</p>
+    {mtxDeployed ? (
+      <p style="margin-top: 10px;"><strong>Status:</strong> Connect your wallet to interact with the MTX Casino.</p>
+    ) : (
+      <p style="margin-top: 10px;"><strong>Status:</strong> Awaiting contract deployment. Test locally with Hardhat for development.</p>
+    )}
   </div>
   
   <div class="games-list">
@@ -71,6 +92,33 @@ import Panel from './Panel.astro';
     background: rgba(0,0,0,0.08);
     border-radius: 6px;
     padding: 12px;
+  }
+
+  .deployment-warning {
+    background: rgba(255, 153, 0, 0.1);
+    border: 2px solid rgba(255, 153, 0, 0.5);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .deployment-warning strong {
+    color: #ff9900;
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .deployment-warning p {
+    color: var(--theme-text);
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+
+  .deployment-warning a {
+    color: #ff9900;
+    text-decoration: underline;
   }
   
   .contract-info ul {
