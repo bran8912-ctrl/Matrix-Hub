@@ -250,7 +250,7 @@ export default function PersistentThemeCustomizer() {
         .persistent-theme-customizer {
           position: sticky;
           top: 0;
-          z-index: 999;
+          z-index: var(--z-index-theme-customizer);
           background: var(--theme-bg-panel, rgba(0, 20, 0, 0.95));
           border-bottom: 2px solid var(--theme-primary, #00ff00);
           box-shadow: 0 4px 20px var(--theme-glow, rgba(0, 255, 0, 0.3));

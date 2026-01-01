@@ -323,7 +323,7 @@ export default function PersistentMusicPlayer() {
         .persistent-music-player {
           position: sticky;
           top: 0;
-          z-index: 1000;
+          z-index: var(--z-index-navigation);
           background: var(--theme-bg-panel, rgba(0, 20, 0, 0.95));
           border-bottom: 2px solid var(--theme-primary, #00ff00);
           box-shadow: 0 4px 20px var(--theme-glow, rgba(0, 255, 0, 0.3));
