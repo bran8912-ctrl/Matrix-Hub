@@ -289,6 +289,42 @@ The discovery of these addresses was critical. Using them would have:
 
 ---
 
+## Update: 2026-01-01 - Additional Legacy Files Identified
+
+During a comprehensive review, additional files with outdated Hardhat addresses were identified:
+
+### Legacy Files in public/
+
+1. **public/casino-bundle.js** (1.3 MB pre-built bundle)
+   - Contains Hardhat address `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0` in bundled code
+   - **Status**: Not used by current Astro-based site
+   - **Action**: Added to .gitignore to prevent future updates
+   - **Source**: Built from `src/casino/_legacy/` which is now clean
+
+2. **public/index.html** (static HTML file)
+   - References casino-bundle.js
+   - **Status**: Not used by Astro build (actual homepage is `src/pages/index.astro`)
+   - **Action**: Added to .gitignore
+
+### Resolution
+
+- Created `public/LEGACY_FILES.md` documenting these files
+- Added both files to `.gitignore` to prevent future commits
+- All active source files in `src/` are clean and use `src/config/mtx.ts` for addresses
+- Current Astro build does not use these legacy files
+- **Recommendation**: These files can be safely removed if not needed for backward compatibility
+
+### Verification
+
+All documentation and active code files now either:
+- Use `src/config/mtx.ts` for dynamic contract addresses
+- Show "Pending Deployment" status
+- Link to deployment documentation
+- Display appropriate warnings when contracts are not deployed
+
+---
+
 **Audit Date**: December 29, 2025  
+**Updated**: January 1, 2026  
 **Auditor**: GitHub Copilot Workspace Agent  
-**Status**: ✅ COMPLETE - All Clear for Deployment
+**Status**: ✅ COMPLETE - All Active Files Clear for Deployment
