@@ -307,8 +307,6 @@ const currentPath = Astro.url.pathname;
     }
 
     .tab-list {
-      --mobile-padding-top: 5rem;
-      --mobile-padding-bottom: 1rem;
       flex-direction: column;
       position: fixed;
       top: 0;
@@ -317,14 +315,12 @@ const currentPath = Astro.url.pathname;
       height: 100vh;
       background: rgba(0, 0, 0, 0.98);
       border-right: 2px solid var(--theme-primary, #00ff99);
-      padding: var(--mobile-padding-top) 0 var(--mobile-padding-bottom);
+      padding: 5rem 0 2rem;
       gap: 0;
       justify-content: flex-start;
       transform: translateX(-100%);
       transition: transform 0.3s ease;
       overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
       z-index: 1000;
     }
 
@@ -358,7 +354,7 @@ const currentPath = Astro.url.pathname;
     }
 
     .tab-dropdown[aria-expanded="true"] .dropdown-menu {
-      max-height: calc(100vh - var(--mobile-padding-top) - var(--mobile-padding-bottom));
+      max-height: 500px;
     }
 
     .dropdown-item {
