@@ -99,13 +99,13 @@ const currentPath = Astro.url.pathname;
     border-bottom: 2px solid var(--theme-primary, #00ff99);
     position: sticky;
     top: 0;
-    z-index: var(--z-index-navigation);
+    z-index: 1001;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
 
   .tab-nav-container {
-    max-width: 1152px;
+    max-width: 480px;
     margin: 0 auto;
     padding: 0 1rem;
     position: relative;
@@ -122,7 +122,7 @@ const currentPath = Astro.url.pathname;
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    z-index: var(--z-index-navigation-toggle);
+    z-index: 1003;
   }
 
   .hamburger {
@@ -224,6 +224,7 @@ const currentPath = Astro.url.pathname;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease;
+    z-index: 1010;
   }
 
   .tab-button:hover {
@@ -264,7 +265,7 @@ const currentPath = Astro.url.pathname;
     transform: translateY(-10px);
     transition: all 0.3s ease;
     box-shadow: 0 4px 20px rgba(0, 255, 153, 0.2);
-    z-index: var(--z-index-dropdown);
+    z-index: 1010;
   }
 
   .tab-dropdown:hover .dropdown-menu,
@@ -325,7 +326,7 @@ const currentPath = Astro.url.pathname;
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      z-index: var(--z-index-navigation);
+      z-index: 1001;
     }
 
     .tab-list.open {
@@ -355,6 +356,7 @@ const currentPath = Astro.url.pathname;
       overflow: hidden;
       transition: max-height 0.3s ease;
       background: rgba(0, 255, 153, 0.05);
+      z-index: 1010;
     }
 
     .tab-dropdown[aria-expanded="true"] .dropdown-menu {
