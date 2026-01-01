@@ -59,7 +59,7 @@ const currentPath = Astro.url.pathname;
               </a>
             ) : (
               // Multiple pages - dropdown
-              <div class={`tab-dropdown ${isActiveTab ? 'active-tab' : ''}`} aria-expanded="false">
+              <div class={`tab-dropdown ${isActiveTab ? 'active-tab' : ''}`} data-expanded="false">
                 <button 
                   class="tab-button"
                   aria-haspopup="true"
