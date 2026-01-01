@@ -326,7 +326,7 @@ const currentPath = Astro.url.pathname;
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      z-index: 1001;
+      z-index: var(--z-index-navigation-toggle);
     }
 
     .tab-list.open {
