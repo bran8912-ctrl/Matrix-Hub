@@ -25,7 +25,7 @@ $ node scripts/generate-password-hash.js "MySecureP@ssw0rd123"
 
 Add this to your .env file:
 
-OWNERS_PASSWORD_HASH=sha256-abc123def456...
+OWNERS_PASSWORD_HASH=sha256-5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
 
 ⚠️  Keep this hash secret and never commit it to the repository!
 ```
