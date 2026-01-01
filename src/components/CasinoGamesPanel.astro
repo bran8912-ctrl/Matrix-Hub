@@ -1,15 +1,13 @@
 ---
 import Panel from './Panel.astro';
 import { MTX } from '../config/mtx';
+import { Casino } from '../config/casino';
 
 // Check if contracts are deployed
 const mtxDeployed = MTX.isDeployed;
-const casinoCoreAddress = typeof process !== 'undefined' && process.env?.CASINO_CORE_ADDRESS 
-  ? process.env.CASINO_CORE_ADDRESS 
-  : "Pending Deployment";
-const casinoReserveAddress = typeof process !== 'undefined' && process.env?.CASINO_RESERVE_ADDRESS 
-  ? process.env.CASINO_RESERVE_ADDRESS 
-  : "Pending Deployment";
+const casinoCoreAddress = Casino.contracts.casinoCore.displayAddress;
+const casinoReserveAddress = Casino.contracts.casinoReserve.displayAddress;
+const casinoDeployed = Casino.isFullyDeployed;
 ---
 
 <Panel title="MTX COIN CASINO" class="casino-panel">
@@ -22,11 +20,11 @@ const casinoReserveAddress = typeof process !== 'undefined' && process.env?.CASI
   </div>
   
   <div class="contract-info">
-    {!mtxDeployed && (
+    {!casinoDeployed && (
       <div class="deployment-warning">
         <strong>⚠️ Contracts Not Yet Deployed</strong>
         <p>The MTX Casino contracts have not been deployed to mainnet yet. Casino functionality will be available once contracts are deployed.</p>
-        <p>See <a href="/docs/MTX_Deployment_Guide">MTX Deployment Guide</a> for deployment instructions.</p>
+        <p>See <a href="/docs/MTX_Deployment_Guide.md">MTX Deployment Guide</a> for deployment instructions.</p>
       </div>
     )}
     <strong>Contract Addresses:</strong><br>
@@ -35,7 +33,7 @@ const casinoReserveAddress = typeof process !== 'undefined' && process.env?.CASI
       <li><strong>CasinoCore:</strong> <span class="contract-address">{casinoCoreAddress}</span></li>
       <li><strong>CasinoReserve:</strong> <span class="contract-address">{casinoReserveAddress}</span></li>
     </ul>
-    {mtxDeployed ? (
+    {casinoDeployed ? (
       <p style="margin-top: 10px;"><strong>Status:</strong> Connect your wallet to interact with the MTX Casino.</p>
     ) : (
       <p style="margin-top: 10px;"><strong>Status:</strong> Awaiting contract deployment. Test locally with Hardhat for development.</p>
