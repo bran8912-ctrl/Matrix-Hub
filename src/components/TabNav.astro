@@ -122,7 +122,7 @@ const currentPath = Astro.url.pathname;
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1003;
+    z-index: var(--z-index-nav-toggle, 1003);
   }
 
   .hamburger {
