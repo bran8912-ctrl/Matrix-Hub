@@ -19,12 +19,20 @@ const rngEngineAddress = getContractAddress(process.env?.RNG_ENGINE_ADDRESS);
 // Validate address format
 const isValidAddress = (address: string | null | undefined): boolean => {
   if (!address || typeof address !== 'string') return false;
-  return address.match(/^0x[a-fA-F0-9]{40}$/) !== null;
+  const match = address.match(/^0x[a-fA-F0-9]{40}$/);
+  return match !== null;
 };
 
 const isPlaceholder = (address: string): boolean => {
   return address === "0x0000000000000000000000000000000000000000";
 };
+
+// Helper function to create contract info object
+const createContractInfo = (address: string) => ({
+  address,
+  isDeployed: isValidAddress(address) && !isPlaceholder(address),
+  displayAddress: (isValidAddress(address) && !isPlaceholder(address)) ? address : "Pending Deployment"
+});
 
 // Check deployment status
 const casinoCoreDeployed = isValidAddress(casinoCoreAddress) && !isPlaceholder(casinoCoreAddress);
@@ -48,20 +56,8 @@ export const Casino = {
       isDeployed: casinoReserveDeployed,
       displayAddress: casinoReserveDeployed ? casinoReserveAddress : "Pending Deployment"
     },
-    liquidityRouter: {
-      address: liquidityRouterAddress,
-      isDeployed: isValidAddress(liquidityRouterAddress) && !isPlaceholder(liquidityRouterAddress),
-      displayAddress: (isValidAddress(liquidityRouterAddress) && !isPlaceholder(liquidityRouterAddress)) 
-        ? liquidityRouterAddress 
-        : "Pending Deployment"
-    },
-    rngEngine: {
-      address: rngEngineAddress,
-      isDeployed: isValidAddress(rngEngineAddress) && !isPlaceholder(rngEngineAddress),
-      displayAddress: (isValidAddress(rngEngineAddress) && !isPlaceholder(rngEngineAddress)) 
-        ? rngEngineAddress 
-        : "Pending Deployment"
-    }
+    liquidityRouter: createContractInfo(liquidityRouterAddress),
+    rngEngine: createContractInfo(rngEngineAddress)
   },
   isFullyDeployed: allContractsDeployed,
   chainId: 1, // Ethereum Mainnet

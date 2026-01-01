@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   }
 
   // Check if casino is deployed
-  if (CASINO_CORE_ADDRESS === "0x0000000000000000000000000000000000000000") {
+  if (!Casino.contracts.casinoCore.isDeployed) {
     return res.status(503).json({ 
       error: "Casino contract not deployed yet. Please deploy contracts first.",
       deploymentGuide: "/docs/DEPLOYMENT_QUICK_START.md"
