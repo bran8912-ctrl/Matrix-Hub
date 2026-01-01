@@ -291,3 +291,31 @@
   outline: 2px solid #FF007A;
   outline-offset: 2px;
 }
+
+/* Deployment Warning Styles - Shared across components */
+.deployment-warning {
+  background: rgba(255, 153, 0, 0.1);
+  border: 2px solid rgba(255, 153, 0, 0.5);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 800px;
+  text-align: center;
+}
+
+.deployment-warning strong {
+  color: #ff9900;
+  font-size: 1.2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.deployment-warning p {
+  color: var(--theme-text);
+  margin: 0.5rem 0;
+}
+
+.deployment-warning a {
+  color: #ff9900;
+  text-decoration: underline;
+}

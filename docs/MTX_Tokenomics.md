@@ -1,10 +1,11 @@
 # MTX Tokenomics
 
 ## Contract Information
-- **Address**: `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`
-- **Network**: Ethereum Mainnet (ChainID: 1)
+- **Status**: ⚠️ **Pending Deployment** - Contract not yet deployed to mainnet
+- **Network**: Ethereum Mainnet (ChainID: 1) - Target network for deployment
 - **Symbol**: MTX
 - **Decimals**: 18
+- **Deployment Guide**: See [MTX Deployment Guide](./MTX_Deployment_Guide.md) for instructions
 
 ## Supply
 - Fixed Max Supply

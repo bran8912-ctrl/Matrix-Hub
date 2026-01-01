@@ -4,11 +4,10 @@
 // See: docs/DEPLOYMENT_QUICK_START.md for deployment instructions
 
 import { ethers } from "ethers";
+import { Casino } from "../../config/casino";
 
-// ⚠️ PLACEHOLDER - Update after deploying CasinoCore contract
-// The address below (0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9) is a Hardhat local testnet
-// default address and will NOT work on any live network!
-const CASINO_CORE_ADDRESS = process.env.CASINO_CORE_ADDRESS || "0x0000000000000000000000000000000000000000";
+// Use casino config for contract address
+const CASINO_CORE_ADDRESS = Casino.contracts.casinoCore.address;
 
 const CASINO_CORE_ABI = [
   // Add relevant ABI entries for bet placement and payout after deployment
@@ -21,7 +20,7 @@ export default async function handler(req, res) {
   }
 
   // Check if casino is deployed
-  if (CASINO_CORE_ADDRESS === "0x0000000000000000000000000000000000000000") {
+  if (!Casino.contracts.casinoCore.isDeployed) {
     return res.status(503).json({ 
       error: "Casino contract not deployed yet. Please deploy contracts first.",
       deploymentGuide: "/docs/DEPLOYMENT_QUICK_START.md"

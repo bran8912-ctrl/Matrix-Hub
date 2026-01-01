@@ -1,5 +1,13 @@
 ---
 import Panel from './Panel.astro';
+import { MTX } from '../config/mtx';
+import { Casino } from '../config/casino';
+
+// Check if contracts are deployed
+const mtxDeployed = MTX.isDeployed;
+const casinoCoreAddress = Casino.contracts.casinoCore.displayAddress;
+const casinoReserveAddress = Casino.contracts.casinoReserve.displayAddress;
+const casinoDeployed = Casino.isFullyDeployed;
 ---
 
 <Panel title="MTX COIN CASINO" class="casino-panel">
@@ -12,13 +20,24 @@ import Panel from './Panel.astro';
   </div>
   
   <div class="contract-info">
-    <strong>Live Contract Addresses:</strong><br>
+    {!casinoDeployed && (
+      <div class="deployment-warning">
+        <strong>⚠️ Contracts Not Yet Deployed</strong>
+        <p>The MTX Casino contracts have not been deployed to mainnet yet. Casino functionality will be available once contracts are deployed.</p>
+        <p>See <a href="/docs/MTX_Deployment_Guide">MTX Deployment Guide</a> for deployment instructions.</p>
+      </div>
+    )}
+    <strong>Contract Addresses:</strong><br>
     <ul>
-      <li><strong>MTX Token (MatrixHubCoin):</strong> <span class="contract-address">0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</span></li>
-      <li><strong>CasinoCore:</strong> <span class="contract-address">0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9</span></li>
-      <li><strong>CasinoReserve:</strong> <span class="contract-address">0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9</span></li>
+      <li><strong>MTX Token (MatrixHubCoin):</strong> <span class="contract-address">{mtxDeployed ? MTX.address : "Pending Deployment"}</span></li>
+      <li><strong>CasinoCore:</strong> <span class="contract-address">{casinoCoreAddress}</span></li>
+      <li><strong>CasinoReserve:</strong> <span class="contract-address">{casinoReserveAddress}</span></li>
     </ul>
-    <p style="margin-top: 10px;"><strong>Test Locally:</strong> Connect your wallet to the local Hardhat node and interact with the MTX Casino UI for live contract testing.</p>
+    {casinoDeployed ? (
+      <p style="margin-top: 10px;"><strong>Status:</strong> Connect your wallet to interact with the MTX Casino.</p>
+    ) : (
+      <p style="margin-top: 10px;"><strong>Status:</strong> Awaiting contract deployment. Test locally with Hardhat for development.</p>
+    )}
   </div>
   
   <div class="games-list">

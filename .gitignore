@@ -17,6 +17,10 @@ content-workflow-errors.log
 public/public-feed.json
 public/content-analytics.json
 
+# legacy files with outdated contract addresses
+public/casino-bundle.js
+public/index.html
+
 
 # environment variables
 .env

@@ -4,11 +4,14 @@ This document describes the MTX wallet integration components and utilities adde
 
 ## MTX Contract Information
 
-- **Contract Address**: `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`
-- **Network**: Ethereum Mainnet (ChainID: 1)
+- **Status**: ⚠️ **Pending Deployment** - Contract not yet deployed to mainnet
+- **Network**: Ethereum Mainnet (ChainID: 1) - Target network for deployment
 - **Symbol**: MTX
 - **Decimals**: 18
 - **Name**: Matrix Hub Coin
+- **Deployment Guide**: See [MTX Deployment Guide](./MTX_Deployment_Guide.md) for deployment instructions
+
+> **Note**: The contract address will be updated here once deployment is complete. Currently using placeholder address in configuration.
 
 ## Components
 
