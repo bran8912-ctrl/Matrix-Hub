@@ -35,6 +35,38 @@ OWNERS_PASSWORD_HASH=sha256-5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11
 2. Rebuild the site with `npm run build`
 3. Deploy the site
 
+**⚠️ IMPORTANT SECURITY WARNINGS:**
+
+This script generates a password hash for **client-side authentication only**. Be aware of these critical limitations:
+
+🔴 **This is NOT secure against determined attackers:**
+- The password hash is embedded in the static site's HTML/JavaScript
+- Anyone can view the page source and see the hash
+- Authentication can be bypassed using browser developer tools
+- SHA-256 is a fast hash, making brute-force attacks feasible
+- There is NO server-side enforcement
+
+✅ **This authentication is suitable for:**
+- Hiding content from casual visitors
+- Preventing accidental discovery
+- Blocking search engine crawlers
+- Development/testing environments
+
+❌ **Do NOT use this for:**
+- Protecting truly sensitive or confidential data
+- Production systems with security requirements
+- Compliance-regulated access control
+- Multi-user access management
+- Anything requiring legal/financial security
+
+🔒 **For truly secure access control**, you need:
+- Server-side authentication (SSR with auth middleware)
+- Services like Netlify Identity, Auth0, or Clerk
+- Backend API with JWT tokens
+- Proper password hashing (bcrypt, argon2)
+
+**Only YOU should have the password**. Never share it or commit it to version control.
+
 **Documentation:**
 - See [docs/OWNERS_PORTAL_AUTH.md](../docs/OWNERS_PORTAL_AUTH.md) for complete setup instructions
 - See `.env.example` for configuration template
