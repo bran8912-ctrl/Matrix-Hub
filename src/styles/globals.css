@@ -14,6 +14,12 @@
   
   /* Audio-reactive UI pulse (0..1) */
   --matrix-bass: 0;
+  
+  /* Z-Index Hierarchy - Centralized stacking context management */
+  --z-index-theme-customizer: 999;
+  --z-index-navigation: 1000;
+  --z-index-navigation-toggle: 1001;
+  --z-index-dropdown: 1010;
 }
 
 .theme-cyber-purple {

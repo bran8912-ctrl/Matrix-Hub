@@ -99,7 +99,7 @@ const currentPath = Astro.url.pathname;
     border-bottom: 2px solid var(--theme-primary, #00ff99);
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: var(--z-index-navigation-toggle);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
@@ -122,7 +122,7 @@ const currentPath = Astro.url.pathname;
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1001;
+    z-index: var(--z-index-nav-toggle, 1003);
   }
 
   .hamburger {
@@ -224,6 +224,7 @@ const currentPath = Astro.url.pathname;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease;
+    z-index: var(--z-index-dropdown);
   }
 
   .tab-button:hover {
@@ -325,7 +326,7 @@ const currentPath = Astro.url.pathname;
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      z-index: 1000;
+      z-index: var(--z-index-navigation-toggle);
     }
 
     .tab-list.open {
@@ -355,6 +356,7 @@ const currentPath = Astro.url.pathname;
       overflow: hidden;
       transition: max-height 0.3s ease;
       background: rgba(0, 255, 153, 0.05);
+      z-index: var(--z-index-dropdown);
     }
 
     .tab-dropdown[aria-expanded="true"] .dropdown-menu {
