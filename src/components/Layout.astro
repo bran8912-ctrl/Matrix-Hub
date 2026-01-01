@@ -6,6 +6,7 @@ import TabNav from "./TabNav.astro";
 import MatrixRain from "./MatrixRain.astro";
 import PersistentThemeCustomizer from "./PersistentThemeCustomizer.tsx";
 import PersistentMusicPlayer from "./PersistentMusicPlayer.tsx";
+import OracleBot from "./OracleBot.astro";
 
 interface Props {
   title: string;
@@ -76,5 +77,8 @@ const { title } = Astro.props;
 
     <div id="oracleMatrixToasts"></div>
     <script type="module" src="/oracle/oracle-secretary.js"></script>
+    
+    <!-- New Matrix-themed Oracle Bot -->
+    <OracleBot />
   </body>
 </html>
