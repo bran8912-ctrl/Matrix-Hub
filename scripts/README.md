@@ -1,6 +1,43 @@
-# Deployment Scripts
+# Scripts
 
-This directory contains scripts for deploying and managing Matrix Hub smart contracts.
+This directory contains scripts for deploying and managing Matrix Hub smart contracts, as well as utility scripts for configuration and administration.
+
+## Utility Scripts
+
+### `generate-password-hash.js`
+Generates a SHA-256 hash for the Owners Portal password authentication.
+
+**Usage:**
+```bash
+node scripts/generate-password-hash.js "your-secure-password"
+```
+
+**Purpose:**
+- Creates a secure hash for protecting the `/owners` portal
+- Hash is stored in environment variables and embedded at build time
+- Enables client-side authentication without exposing the actual password
+
+**Example:**
+```bash
+$ node scripts/generate-password-hash.js "MySecureP@ssw0rd123"
+
+✅ Password hash generated successfully!
+
+Add this to your .env file:
+
+OWNERS_PASSWORD_HASH=sha256-abc123def456...
+
+⚠️  Keep this hash secret and never commit it to the repository!
+```
+
+**Next Steps:**
+1. Copy the generated hash to your `.env` file
+2. Rebuild the site with `npm run build`
+3. Deploy the site
+
+**Documentation:**
+- See [docs/OWNERS_PORTAL_AUTH.md](../docs/OWNERS_PORTAL_AUTH.md) for complete setup instructions
+- See `.env.example` for configuration template
 
 ## Main Deployment Scripts
 
