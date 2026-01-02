@@ -209,8 +209,20 @@ import "../styles/oracle-bot-matrix.css";
     const appsPanel = document.getElementById('oracleAppsPanel');
     const voiceSelect = document.getElementById('oracleVoiceSelect');
 
-    if (!botBtn || !botWin || !sendBtn || !input || !messages) return;
+    const missingRequiredElements: string[] = [];
+    if (!botBtn) missingRequiredElements.push('matrixBotButton');
+    if (!botWin) missingRequiredElements.push('matrixBotWindow');
+    if (!sendBtn) missingRequiredElements.push('matrixBotSend');
+    if (!input) missingRequiredElements.push('matrixBotInput');
+    if (!messages) missingRequiredElements.push('matrixBotMessages');
 
+    if (missingRequiredElements.length > 0) {
+      console.error(
+        '[OracleBot] Failed to initialize: required DOM elements not found:',
+        missingRequiredElements
+      );
+      return;
+    }
     let conversation = [];
     let voiceEnabled = false;
 
