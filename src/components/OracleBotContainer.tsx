@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // Security patterns to detect
 const SECURITY_PATTERNS = {
   walletAddress: /\b(0x[a-fA-F0-9]{40})\b/g,
-  privateKey: /\b(private[\s_-]?key|seed[\s_-]?phrase|mnemonic)\b/gi,
+  privateKey: /\b(private[\s_\-]?key|seed[\s_\-]?phrase|mnemonic)\b/gi,
   suspiciousLinks: /\b(bit\.ly|tinyurl|goo\.gl|t\.co|ow\.ly|is\.gd)\b/gi,
   phishingKeywords: /\b(send[\s_]+mtx|transfer[\s_]+funds|verify[\s_]+wallet|claim[\s_]+reward|urgent[\s_]+action|account[\s_]+suspended)\b/gi,
   scamIndicators: /\b(double[\s_]+your|free[\s_]+crypto|guaranteed[\s_]+profit|send[\s_]+first)\b/gi,
