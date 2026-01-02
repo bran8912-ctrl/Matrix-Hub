@@ -51,34 +51,37 @@ import "../styles/oracle-bot-matrix.css";
 <!-- Enhanced Oracle Bot Script with Security Awareness -->
 <script>
   // Security patterns for detection
-  const SECURITY_PATTERNS = {
+  const SECURITY_PATTERNS = Object.freeze({
     walletAddress: /\b(0x[a-fA-F0-9]{40})\b/g,
     privateKey: /\b(private[\s_-]?key|seed[\s_-]?phrase|mnemonic|recovery[\s_-]?phrase)\b/gi,
     suspiciousLinks: /\b(bit\.ly|tinyurl|goo\.gl|t\.co|ow\.ly|is\.gd|cutt\.ly)\b/gi,
     phishingKeywords: /\b(send[\s_]+mtx|transfer[\s_]+funds|verify[\s_]+wallet|claim[\s_]+reward|urgent[\s_]+action|account[\s_]+suspended|confirm[\s_]+identity)\b/gi,
     scamIndicators: /\b(double[\s_]+your|free[\s_]+crypto|guaranteed[\s_]+profit|send[\s_]+first|investment[\s_]+opportunity|limited[\s_]+time[\s_]+offer)\b/gi,
-  };
+  });
+
+  // Map regex keys to standardized issue identifiers
+  const SECURITY_ISSUE_KEYS = Object.freeze({
+    walletAddress: 'wallet_address',
+    privateKey: 'private_key',
+    suspiciousLinks: 'suspicious_link',
+    phishingKeywords: 'phishing',
+    scamIndicators: 'scam',
+  });
 
   // Detect security issues in user input
   function detectSecurityIssues(text) {
     const issues = [];
-    
-    if (SECURITY_PATTERNS.walletAddress.test(text)) {
-      issues.push('wallet_address');
+
+    for (const [patternKey, pattern] of Object.entries(SECURITY_PATTERNS)) {
+      // Ensure RegExp with global flags does not carry state between calls
+      const regex = new RegExp(pattern.source, pattern.flags);
+      if (regex.test(text)) {
+        const issueKey = SECURITY_ISSUE_KEYS[patternKey];
+        if (issueKey) {
+          issues.push(issueKey);
+        }
+      }
     }
-    if (SECURITY_PATTERNS.privateKey.test(text)) {
-      issues.push('private_key');
-    }
-    if (SECURITY_PATTERNS.suspiciousLinks.test(text)) {
-      issues.push('suspicious_link');
-    }
-    if (SECURITY_PATTERNS.phishingKeywords.test(text)) {
-      issues.push('phishing');
-    }
-    if (SECURITY_PATTERNS.scamIndicators.test(text)) {
-      issues.push('scam');
-    }
-    
     return issues;
   }
 
