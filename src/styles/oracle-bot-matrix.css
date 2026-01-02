@@ -38,6 +38,11 @@
   --oracle-glow-medium: 0 0 20px var(--oracle-green-glow);
   --oracle-glow-soft: 0 0 10px rgba(0, 255, 65, 0.3);
   --oracle-shadow-inset: inset 0 0 20px rgba(0, 255, 65, 0.1);
+  
+  /* Z-Index Layers - Systematic approach for Oracle components */
+  --oracle-z-button: 100;
+  --oracle-z-window: 101;
+  --oracle-z-toast: 102;
 }
 
 /* ===================================================================
@@ -58,11 +63,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 9998;
+  z-index: var(--oracle-z-button);
   box-shadow: var(--oracle-glow-medium), 0 8px 24px rgba(0, 0, 0, 0.8);
   transition: all 0.3s ease;
   user-select: none;
   animation: oraclePulse 3s ease-in-out infinite;
+  will-change: transform, box-shadow;
 }
 
 #matrixBotButton:hover {
@@ -130,7 +136,7 @@
   display: none;
   flex-direction: column;
   overflow: hidden;
-  z-index: 9999;
+  z-index: var(--oracle-z-window);
   animation: oracleSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -390,29 +396,19 @@
   flex: 1;
   overflow-y: auto;
   padding: 16px;
-  background: var(--oracle-bg-primary);
+  /* Scanline effect baked into background for better scroll performance */
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 255, 65, 0.02) 50%,
+      transparent 100%
+    ),
+    var(--oracle-bg-primary);
+  background-size: 100% 4px, auto;
   scrollbar-width: thin;
   scrollbar-color: var(--oracle-green-primary) var(--oracle-bg-secondary);
   position: relative;
-}
-
-/* Scanline effect on messages */
-#matrixBotMessages::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0, 255, 65, 0.02) 50%,
-    transparent 100%
-  );
-  background-size: 100% 4px;
-  pointer-events: none;
-  z-index: 1;
 }
 
 #matrixBotMessages::-webkit-scrollbar {
@@ -591,7 +587,7 @@
   position: fixed;
   top: 24px;
   right: 24px;
-  z-index: 10000;
+  z-index: var(--oracle-z-toast);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -647,6 +643,13 @@
   color: var(--oracle-text-white);
   font-size: 13px;
   line-height: 1.5;
+}
+
+/* Toast removal animation */
+.oracle-toast--removing {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
 }
 
 /* ===================================================================
@@ -724,12 +727,18 @@
    ACCESSIBILITY & REDUCED MOTION
    =================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  /* Scope animation disabling to Oracle bot components only */
+  #matrixBotWindow *,
+  #matrixBotWindow *::before,
+  #matrixBotWindow *::after,
+  #matrixBotButton,
+  #matrixBotButton::before,
+  #matrixBotButton::after,
+  #oracleMatrixToasts *,
+  #oracleMatrixToasts *::before,
+  #oracleMatrixToasts *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }
 
