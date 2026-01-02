@@ -85,54 +85,116 @@ import "../styles/oracle-bot-matrix.css";
     return issues;
   }
 
-  // Generate security warning message
-  function getSecurityWarning(issues) {
-    const warnings = [
-      '🛡️ SECURITY ALERT - The Oracle Warns You',
-      '',
-      'I sense danger in your words...',
-      '',
-    ];
+  // Generate security warning message (exposed via a shared global utility)
+  function registerSecurityWarningUtility() {
+    // Handle environments where `window` is not available (e.g., SSR)
+    if (typeof window === 'undefined') {
+      return function getSecurityWarning(issues) {
+        const warnings = [
+          '🛡️ SECURITY ALERT - The Oracle Warns You',
+          '',
+          'I sense danger in your words...',
+          '',
+        ];
 
-    if (issues.includes('private_key')) {
-      warnings.push('⚠️ NEVER share private keys, seed phrases, or mnemonics with ANYONE.');
-      warnings.push('Not here, not anywhere. The Oracle does not need them. No one does.');
-      warnings.push('');
+        if (issues.includes('private_key')) {
+          warnings.push('⚠️ NEVER share private keys, seed phrases, or mnemonics with ANYONE.');
+          warnings.push('Not here, not anywhere. The Oracle does not need them. No one does.');
+          warnings.push('');
+        }
+
+        if (issues.includes('wallet_address')) {
+          warnings.push('💼 Be cautious sharing wallet addresses publicly.');
+          warnings.push('While addresses are public by nature, revealing them in chat may attract unwanted attention.');
+          warnings.push('');
+        }
+
+        if (issues.includes('suspicious_link')) {
+          warnings.push('🔗 Suspicious shortened URL detected.');
+          warnings.push('Such links can hide malicious destinations. Always verify before clicking.');
+          warnings.push('');
+        }
+
+        if (issues.includes('phishing')) {
+          warnings.push('🎣 Phishing pattern detected.');
+          warnings.push('Legitimate services NEVER ask you to "verify wallet" or "send funds" urgently.');
+          warnings.push('');
+        }
+
+        if (issues.includes('scam')) {
+          warnings.push('🚨 Potential scam language detected.');
+          warnings.push('There are no shortcuts. No doubling. No guaranteed profits.');
+          warnings.push('If it sounds too good to be true, it absolutely is.');
+          warnings.push('');
+        }
+
+        warnings.push('Remember: Matrix-Hub is open source. MTX flows through transparent smart contracts.');
+        warnings.push('Security is YOUR responsibility. Question everything. Trust the code, not promises.');
+        warnings.push('');
+        warnings.push('Type /report if you need to report suspicious activity.');
+
+        return warnings.join('\n');
+      };
     }
 
-    if (issues.includes('wallet_address')) {
-      warnings.push('💼 Be cautious sharing wallet addresses publicly.');
-      warnings.push('While addresses are public by nature, revealing them in chat may attract unwanted attention.');
-      warnings.push('');
+    // Ensure a global namespace for shared Oracle utilities
+    if (!window.MatrixHubOracle) {
+      window.MatrixHubOracle = {};
     }
 
-    if (issues.includes('suspicious_link')) {
-      warnings.push('🔗 Suspicious shortened URL detected.');
-      warnings.push('Such links can hide malicious destinations. Always verify before clicking.');
-      warnings.push('');
+    if (typeof window.MatrixHubOracle.getSecurityWarning !== 'function') {
+      window.MatrixHubOracle.getSecurityWarning = function getSecurityWarning(issues) {
+        const warnings = [
+          '🛡️ SECURITY ALERT - The Oracle Warns You',
+          '',
+          'I sense danger in your words...',
+          '',
+        ];
+
+        if (issues.includes('private_key')) {
+          warnings.push('⚠️ NEVER share private keys, seed phrases, or mnemonics with ANYONE.');
+          warnings.push('Not here, not anywhere. The Oracle does not need them. No one does.');
+          warnings.push('');
+        }
+
+        if (issues.includes('wallet_address')) {
+          warnings.push('💼 Be cautious sharing wallet addresses publicly.');
+          warnings.push('While addresses are public by nature, revealing them in chat may attract unwanted attention.');
+          warnings.push('');
+        }
+
+        if (issues.includes('suspicious_link')) {
+          warnings.push('🔗 Suspicious shortened URL detected.');
+          warnings.push('Such links can hide malicious destinations. Always verify before clicking.');
+          warnings.push('');
+        }
+
+        if (issues.includes('phishing')) {
+          warnings.push('🎣 Phishing pattern detected.');
+          warnings.push('Legitimate services NEVER ask you to "verify wallet" or "send funds" urgently.');
+          warnings.push('');
+        }
+
+        if (issues.includes('scam')) {
+          warnings.push('🚨 Potential scam language detected.');
+          warnings.push('There are no shortcuts. No doubling. No guaranteed profits.');
+          warnings.push('If it sounds too good to be true, it absolutely is.');
+          warnings.push('');
+        }
+
+        warnings.push('Remember: Matrix-Hub is open source. MTX flows through transparent smart contracts.');
+        warnings.push('Security is YOUR responsibility. Question everything. Trust the code, not promises.');
+        warnings.push('');
+        warnings.push('Type /report if you need to report suspicious activity.');
+
+        return warnings.join('\n');
+      };
     }
 
-    if (issues.includes('phishing')) {
-      warnings.push('🎣 Phishing pattern detected.');
-      warnings.push('Legitimate services NEVER ask you to "verify wallet" or "send funds" urgently.');
-      warnings.push('');
-    }
-
-    if (issues.includes('scam')) {
-      warnings.push('🚨 Potential scam language detected.');
-      warnings.push('There are no shortcuts. No doubling. No guaranteed profits.');
-      warnings.push('If it sounds too good to be true, it absolutely is.');
-      warnings.push('');
-    }
-
-    warnings.push('Remember: Matrix-Hub is open source. MTX flows through transparent smart contracts.');
-    warnings.push('Security is YOUR responsibility. Question everything. Trust the code, not promises.');
-    warnings.push('');
-    warnings.push('Type /report if you need to report suspicious activity.');
-
-    return warnings.join('\n');
+    return window.MatrixHubOracle.getSecurityWarning;
   }
 
+  const getSecurityWarning = registerSecurityWarningUtility();
   // Initialize Oracle Bot
   function initOracleBot() {
     const botBtn = document.getElementById('matrixBotButton');
