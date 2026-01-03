@@ -1,0 +1,81 @@
+name: Run Scripts on Demand
+
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: 'Script to run'
+        required: true
+        type: choice
+        options:
+          - 'content:scan'
+          - 'content:generate'
+          - 'content:analytics'
+          - 'content:help'
+          - 'build'
+          - 'compile'
+          - 'test'
+      # NOTE:
+      # - The `content:watch` script exists in package.json but is intentionally
+      #   excluded from these workflow_dispatch options because watch mode is
+      #   designed for local development, runs indefinitely, and would keep CI
+      #   jobs from completing.
+      upload_artifacts:
+        description: 'Upload artifacts after run'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  run-script:
+    name: Run ${{ inputs.script }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run selected script
+        run: |
+          echo "## 🚀 Running Script: ${{ inputs.script }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          npm run ${{ inputs.script }} 2>&1 | tee script-output.txt
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat script-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload artifacts
+        if: inputs.upload_artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: script-output-${{ replace(inputs.script, ':', '-') }}-${{ github.run_number }}
+          path: |
+            script-output.txt
+            public/public-feed.json
+            public/content-analytics.json
+            content-workflow-errors.log
+            dist/
+            artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
+      
+      - name: Summary
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Script execution completed" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ inputs.upload_artifacts }}" == "true" ]; then
+            echo "📦 Artifacts uploaded and available for download" >> $GITHUB_STEP_SUMMARY
+          fi
