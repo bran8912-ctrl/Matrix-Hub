@@ -55,7 +55,7 @@ jobs:
         if: inputs.upload_artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: script-output-${{ inputs.script }}-${{ github.run_number }}
+          name: script-output-${{ replace(inputs.script, ':', '-') }}-${{ github.run_number }}
           path: |
             script-output.txt
             public/public-feed.json
