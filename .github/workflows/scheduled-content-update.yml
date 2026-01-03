@@ -1,0 +1,114 @@
+name: Scheduled Content Updates
+
+on:
+  # Run daily at 2 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  update-content:
+    name: Update Content Feeds and Analytics
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Scan content
+        run: |
+          echo "## 📅 Scheduled Content Update - $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔍 Content Scan" >> $GITHUB_STEP_SUMMARY
+          npm run content:scan 2>&1 | tee scan-output.txt
+          
+          TOTAL_FILES=$(grep -oP '✅ Scan complete: \K\d+' scan-output.txt || echo "Unknown")
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Files processed:** $TOTAL_FILES" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Generate feeds
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📝 Generate Public Feed" >> $GITHUB_STEP_SUMMARY
+          npm run content:generate
+          
+          if [ -f "public/public-feed.json" ]; then
+            FEED_SIZE=$(du -h public/public-feed.json | cut -f1)
+            echo "- **Feed size:** $FEED_SIZE" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Generate analytics
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Generate Analytics" >> $GITHUB_STEP_SUMMARY
+          npm run content:analytics 2>&1 | tee analytics-output.txt
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -A 10 "📊 Summary:" analytics-output.txt >> $GITHUB_STEP_SUMMARY || echo "Analytics summary not available" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check for errors
+        run: |
+          if [ -f "content-workflow-errors.log" ]; then
+            ERROR_COUNT=$(wc -l < content-workflow-errors.log)
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### ⚠️ Errors Detected" >> $GITHUB_STEP_SUMMARY
+            echo "- **Error count:** $ERROR_COUNT lines" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "$ERROR_COUNT" -gt "0" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "**Recent errors:**" >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              head -20 content-workflow-errors.log >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### ✅ No Errors" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Upload generated files
+        uses: actions/upload-artifact@v4
+        with:
+          name: scheduled-content-update-${{ github.run_number }}
+          path: |
+            public/public-feed.json
+            public/content-analytics.json
+            content-workflow-errors.log
+          if-no-files-found: ignore
+          retention-days: 30
+      
+      - name: Create Issue on Failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🚨 Scheduled Content Update Failed';
+            const body = `The scheduled content update workflow failed on ${new Date().toISOString()}
+            
+            **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            Please investigate and fix any issues.
+            
+            ---
+            *This issue was automatically created by the scheduled content update workflow.*`;
+            
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['automated', 'content-workflow', 'bug']
+            });
