@@ -61,7 +61,8 @@ try {
   } catch (retryError) {
     console.error('✗ Tests failed');
     console.error('  This may be due to network restrictions, compilation issues, or test failures.');
-    console.error('  In CI environments, ensure artifacts/ and cache/ are committed or cached.');
+    console.error('  In CI environments, ensure artifacts/ and cache/ are available via CI caching or pre-build steps.');
+    console.error('  If you choose to commit these directories, update .gitignore accordingly to match that workflow.');
     process.exit(1);
   }
 }
