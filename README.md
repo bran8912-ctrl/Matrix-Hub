@@ -38,6 +38,8 @@ Matrix-Hub features a Casino section where users can:
 ✔ No dependency on hype cycles
 # Matrix Hub
 
+[![.github/workflows/run-scripts.yml](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/run-scripts.yml/badge.svg?branch=Hub10)](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/run-scripts.yml)
+
 > MATRIX HUB :: ONLINE  
 > NODE STATUS: ACTIVE  
 > ACCESS LAYER: OPEN
