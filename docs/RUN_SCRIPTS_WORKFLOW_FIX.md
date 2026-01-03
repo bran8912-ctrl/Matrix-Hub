@@ -66,7 +66,7 @@ All workflow scripts now execute successfully:
 ## Future Enhancements
 
 1. **Add Real Contract Tests**: Replace placeholder tests with actual contract tests
-2. **Workflow Caching**: Add caching for `artifacts/` and `cache/` in workflow
+2. **Workflow Optimization**: Periodically review caching and artifact strategies to keep CI fast and reliable
 3. **Parallel Testing**: Run different test suites in parallel
 4. **Coverage Reports**: Add test coverage reporting
 
