@@ -86,7 +86,7 @@ Automatically validates content quality on PRs:
 - Posts results as PR comment
 - Uploads error logs
 
-### 6. Deploy Astro Site to GitHub Pages (`jekyll-gh-pages.yml`)
+### 6. Deploy Astro Site to GitHub Pages (`astro-gh-pages.yml`)
 
 **Triggers:** Push to Hub10 branch, Manual
 
