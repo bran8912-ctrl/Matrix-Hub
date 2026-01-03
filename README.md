@@ -517,6 +517,57 @@ Matrix-Hub includes a powerful content management workflow for marketing, analyt
 
 📚 **Full Documentation:** See [CONTENT_WORKFLOW.md](CONTENT_WORKFLOW.md) for detailed usage instructions, examples, troubleshooting, and advanced features.
 
+---
+
+## GitHub Actions & CI
+
+Matrix-Hub includes GitHub Actions workflows for automated script execution and deployment.
+
+### Run Scripts Workflow
+
+The `run-scripts.yml` workflow allows you to manually trigger any npm script via GitHub Actions:
+
+1. Go to **Actions** → **Run Scripts on Demand** in your GitHub repository
+2. Click **Run workflow**
+3. Select the script to run from the dropdown
+4. Optionally choose whether to upload artifacts
+
+**Available Scripts:**
+- `content:scan` - ✅ Works in CI
+- `content:generate` - ✅ Works in CI
+- `content:analytics` - ✅ Works in CI
+- `content:help` - ✅ Works in CI
+- `build` - ✅ Works in CI
+- `compile` - ⚠️ May fail in CI (requires Solidity compiler download)
+- `test` - ⚠️ May fail in CI (requires Solidity compiler download)
+
+### CI Troubleshooting
+
+**Issue: `compile` or `test` scripts fail in CI**
+
+**Cause:** These scripts use Hardhat, which needs to download the Solidity compiler from the internet. Some CI environments have network restrictions or the download may fail.
+
+**Solutions:**
+1. **For compile:** Pre-compiled artifacts are committed to the `artifacts/` directory and can be used directly
+2. **For test:** No test files currently exist in the project
+3. **Workaround:** Run these scripts locally before deploying rather than in CI
+
+**Issue: `npm ci` fails**
+
+**Cause:** Missing or corrupted `package-lock.json` file.
+
+**Solution:** 
+```bash
+rm package-lock.json
+npm install
+git add package-lock.json
+git commit -m "Regenerate package-lock.json"
+```
+
+**Node.js Version:** The workflows use Node.js v20. Ensure your local environment matches for consistent results.
+
+---
+
 ## Developing Locally
 
 | Prerequisites                                                                |

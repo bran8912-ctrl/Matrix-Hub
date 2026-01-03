@@ -40,21 +40,36 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
       
       - name: Install dependencies
         run: npm ci
       
       - name: Run selected script
+        id: run_script
+        continue-on-error: true
         run: |
           echo "## 🚀 Running Script: ${{ inputs.script }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           npm run ${{ inputs.script }} 2>&1 | tee script-output.txt
+          EXIT_CODE=$?
           echo "" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat script-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+          
+          # Note for compile/test failures
+          if [ "${{ inputs.script }}" == "compile" ] || [ "${{ inputs.script }}" == "test" ]; then
+            if [ $EXIT_CODE -ne 0 ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "⚠️ **Note:** The \`${{ inputs.script }}\` script requires downloading the Solidity compiler." >> $GITHUB_STEP_SUMMARY
+              echo "This may fail in CI environments with network restrictions." >> $GITHUB_STEP_SUMMARY
+              echo "Pre-compiled artifacts are available in the \`artifacts/\` directory." >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+          
+          exit $EXIT_CODE
       
       - name: Upload artifacts
         if: inputs.upload_artifacts
@@ -75,7 +90,11 @@ jobs:
         run: |
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Script execution completed" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.run_script.outcome }}" == "success" ]; then
+            echo "✅ Script execution completed successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Script execution completed with errors" >> $GITHUB_STEP_SUMMARY
+          fi
           if [ "${{ inputs.upload_artifacts }}" == "true" ]; then
             echo "📦 Artifacts uploaded and available for download" >> $GITHUB_STEP_SUMMARY
           fi
