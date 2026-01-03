@@ -531,6 +531,7 @@ The `run-scripts.yml` workflow allows you to manually trigger any npm script via
 2. Click **Run workflow**
 3. Select the script to run from the dropdown
 4. Optionally choose whether to upload artifacts
+5. Click **Run workflow** button to start
 
 **Available Scripts:**
 - `content:scan` - ✅ Works in CI
@@ -540,6 +541,8 @@ The `run-scripts.yml` workflow allows you to manually trigger any npm script via
 - `build` - ✅ Works in CI
 - `compile` - ⚠️ May fail in CI (requires Solidity compiler download)
 - `test` - ⚠️ May fail in CI (requires Solidity compiler download)
+
+**Note:** The workflow will complete successfully even if compile/test scripts fail due to network restrictions. Check the workflow summary for detailed output and any informative error messages.
 
 ### CI Troubleshooting
 
@@ -563,6 +566,12 @@ npm install
 git add package-lock.json
 git commit -m "Regenerate package-lock.json"
 ```
+
+**Issue: Workflow shows "failed" status**
+
+**Cause:** A script encountered a genuine error (not compile/test network issues).
+
+**Solution:** Check the workflow summary for detailed error messages. The compile/test scripts are designed to succeed even when they can't download the compiler, so only genuine errors will cause workflow failure.
 
 **Node.js Version:** The workflows use Node.js v20. Ensure your local environment matches for consistent results.
 
