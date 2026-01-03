@@ -53,6 +53,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           # Run the script and capture exit code (allow failures)
+          set -o pipefail
           npm run ${{ inputs.script }} 2>&1 | tee script-output.txt || EXIT_CODE=$?
           EXIT_CODE=${EXIT_CODE:-0}
           

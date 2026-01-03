@@ -581,7 +581,7 @@ git commit -m "Regenerate package-lock.json"
 
 | Prerequisites                                                                |
 | :--------------------------------------------------------------------------- |
-| [Node.js](https://nodejs.org/) v18.14+                                       |
+| [Node.js](https://nodejs.org/) v20+ (recommended to match CI environment)    |
 | (optional) [nvm](https://github.com/nvm-sh/nvm) for Node version management  |
 | [Supabase account](https://supabase.com/)                                    |
 
