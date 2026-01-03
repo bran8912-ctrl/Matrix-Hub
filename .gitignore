@@ -52,6 +52,7 @@ cache/
 artifacts/
 deployments/
 typechain-types/
+gasReporterOutput.json
 
 # Security & Private Keys
 *.key
