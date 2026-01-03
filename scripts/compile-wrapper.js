@@ -26,7 +26,8 @@ const hasArtifacts = existsSync(artifactsDir);
 if (hasArtifacts) {
   console.log('✓ Compiled contract artifacts already exist');
   console.log('  Location:', artifactsDir);
-  console.log('  Skipping compilation (use --force to recompile)');
+  console.log('  Skipping compilation');
+  console.log('  Note: Delete artifacts/ directory to force recompilation');
   process.exit(0);
 }
 
