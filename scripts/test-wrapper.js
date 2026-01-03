@@ -24,7 +24,8 @@ const projectRoot = path.resolve(__dirname, '..');
 const testDir = path.join(projectRoot, 'test');
 if (!existsSync(testDir)) {
   console.error('✗ Test directory not found:', testDir);
-  console.error('  Create test/ directory with test files to run tests.');
+  console.error('  Hardhat expects your test files in a test/ directory (e.g. Mocha/Chai tests).');
+  console.error('  Create a test/ directory and add at least one test file, for example test/placeholder.test.js.');
   process.exit(1);
 }
 
