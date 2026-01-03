@@ -1,0 +1,694 @@
+{
+  "generated": "2026-01-03T02:33:05.183Z",
+  "totalFiles": 70,
+  "categories": {
+    "other": 42,
+    "page": 17,
+    "content": 2,
+    "documentation": 9
+  },
+  "recentUpdates": [
+    {
+      "path": "src/pages/leaderboards.astro",
+      "title": "leaderboards",
+      "modified": "2026-01-03T02:32:42.829Z"
+    },
+    {
+      "path": "src/pages/mtx-contract.astro",
+      "title": "mtx-contract",
+      "modified": "2026-01-03T02:32:42.829Z"
+    },
+    {
+      "path": "src/pages/owners.astro",
+      "title": "owners",
+      "modified": "2026-01-03T02:32:42.829Z"
+    },
+    {
+      "path": "src/pages/staking.astro",
+      "title": "staking",
+      "modified": "2026-01-03T02:32:42.829Z"
+    },
+    {
+      "path": "src/pages/wallet.astro",
+      "title": "wallet",
+      "modified": "2026-01-03T02:32:42.829Z"
+    },
+    {
+      "path": "src/pages/buy-mtx.astro",
+      "title": "buy-mtx",
+      "modified": "2026-01-03T02:32:42.828Z"
+    },
+    {
+      "path": "src/pages/casino.astro",
+      "title": "casino",
+      "modified": "2026-01-03T02:32:42.828Z"
+    },
+    {
+      "path": "src/pages/content-feed.astro",
+      "title": "content-feed",
+      "modified": "2026-01-03T02:32:42.828Z"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "title": "index",
+      "modified": "2026-01-03T02:32:42.828Z"
+    },
+    {
+      "path": "src/pages/docs/casino-architecture.astro",
+      "title": "casino-architecture",
+      "modified": "2026-01-03T02:32:42.828Z"
+    }
+  ],
+  "content": [
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "title": "CODE_OF_CONDUCT",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.788Z",
+      "wordCount": 144
+    },
+    {
+      "path": "CONTENT_WORKFLOW.md",
+      "title": "CONTENT_WORKFLOW",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.789Z",
+      "wordCount": 1601
+    },
+    {
+      "path": "CONTRACT_DETAILS_AUDIT.md",
+      "title": "CONTRACT_DETAILS_AUDIT",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.789Z",
+      "wordCount": 1420
+    },
+    {
+      "path": "CONTRIBUTORS.md",
+      "title": "CONTRIBUTORS",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.789Z",
+      "wordCount": 97
+    },
+    {
+      "path": "DEPLOYMENT_COMPLETE.md",
+      "title": "DEPLOYMENT_COMPLETE",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.789Z",
+      "wordCount": 1058
+    },
+    {
+      "path": "FINAL_IMPLEMENTATION_REPORT.md",
+      "title": "FINAL_IMPLEMENTATION_REPORT",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.789Z",
+      "wordCount": 1238
+    },
+    {
+      "path": "IMPLEMENTATION_SUMMARY.md",
+      "title": "IMPLEMENTATION_SUMMARY",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.789Z",
+      "wordCount": 965
+    },
+    {
+      "path": "MATRIX-HUB-TOOLS.md",
+      "title": "MATRIX-HUB-TOOLS",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.789Z",
+      "wordCount": 1904
+    },
+    {
+      "path": "README.md",
+      "title": "README",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.789Z",
+      "wordCount": 2354
+    },
+    {
+      "path": "USAGE.md",
+      "title": "USAGE",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.789Z",
+      "wordCount": 471
+    },
+    {
+      "path": "docs/CODE_OF_CONDUCT.md",
+      "title": "CODE_OF_CONDUCT",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.798Z",
+      "wordCount": 157
+    },
+    {
+      "path": "docs/CONTRIBUTORS.md",
+      "title": "CONTRIBUTORS",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.798Z",
+      "wordCount": 112
+    },
+    {
+      "path": "docs/DEPLOYMENT_CHECKLIST.md",
+      "title": "DEPLOYMENT_CHECKLIST",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.798Z",
+      "wordCount": 835
+    },
+    {
+      "path": "docs/DEPLOYMENT_INDEX.md",
+      "title": "DEPLOYMENT_INDEX",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.798Z",
+      "wordCount": 716
+    },
+    {
+      "path": "docs/DEPLOYMENT_QUICK_START.md",
+      "title": "DEPLOYMENT_QUICK_START",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.798Z",
+      "wordCount": 536
+    },
+    {
+      "path": "docs/DEPLOYMENT_SUMMARY.md",
+      "title": "DEPLOYMENT_SUMMARY",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.798Z",
+      "wordCount": 1071
+    },
+    {
+      "path": "docs/ETHEREUM_MIGRATION_SUMMARY.md",
+      "title": "ETHEREUM_MIGRATION_SUMMARY",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.798Z",
+      "wordCount": 1136
+    },
+    {
+      "path": "docs/MTX_Casino_Architecture.md",
+      "title": "MTX_Casino_Architecture",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 54
+    },
+    {
+      "path": "docs/MTX_Casino_Disclaimer.md",
+      "title": "MTX_Casino_Disclaimer",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 60
+    },
+    {
+      "path": "docs/MTX_Casino_Flow_Diagrams.md",
+      "title": "MTX_Casino_Flow_Diagrams",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 53
+    },
+    {
+      "path": "docs/MTX_Casino_Game_Math.md",
+      "title": "MTX_Casino_Game_Math",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 55
+    },
+    {
+      "path": "docs/MTX_Casino_Games.md",
+      "title": "MTX_Casino_Games",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 66
+    },
+    {
+      "path": "docs/MTX_Casino_Overview.md",
+      "title": "MTX_Casino_Overview",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 99
+    },
+    {
+      "path": "docs/MTX_Casino_Provably_Fair.md",
+      "title": "MTX_Casino_Provably_Fair",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 57
+    },
+    {
+      "path": "docs/MTX_Casino_Responsible_Play.md",
+      "title": "MTX_Casino_Responsible_Play",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 49
+    },
+    {
+      "path": "docs/MTX_DAO_Governance.md",
+      "title": "MTX_DAO_Governance",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 48
+    },
+    {
+      "path": "docs/MTX_Deployment_Guide.md",
+      "title": "MTX_Deployment_Guide",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 844
+    },
+    {
+      "path": "docs/MTX_Disclaimer.md",
+      "title": "MTX_Disclaimer",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 45
+    },
+    {
+      "path": "docs/MTX_Provably_Fair.md",
+      "title": "MTX_Provably_Fair",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 45
+    },
+    {
+      "path": "docs/MTX_Responsible_Play.md",
+      "title": "MTX_Responsible_Play",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 39
+    },
+    {
+      "path": "docs/MTX_Tokenomics.md",
+      "title": "MTX_Tokenomics",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 361
+    },
+    {
+      "path": "docs/MTX_Wallet_Integration.md",
+      "title": "MTX_Wallet_Integration",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 1135
+    },
+    {
+      "path": "docs/MTX_Whitepaper.md",
+      "title": "MTX_Whitepaper",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 54
+    },
+    {
+      "path": "docs/OWNERS_PORTAL_AUTH.md",
+      "title": "OWNERS_PORTAL_AUTH",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 890
+    },
+    {
+      "path": "docs/QUICK_DEPLOY.md",
+      "title": "QUICK_DEPLOY",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 222
+    },
+    {
+      "path": "docs/SEPOLIA_DEPLOYMENT.md",
+      "title": "SEPOLIA_DEPLOYMENT",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.799Z",
+      "wordCount": 983
+    },
+    {
+      "path": "public/LEGACY_FILES.md",
+      "title": "LEGACY_FILES",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.810Z",
+      "wordCount": 257
+    },
+    {
+      "path": "scripts/README.md",
+      "title": "README",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.824Z",
+      "wordCount": 917
+    },
+    {
+      "path": "docs/music/LICENSE.md",
+      "title": "LICENSE",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.806Z",
+      "wordCount": 318
+    },
+    {
+      "path": "docs/music/SUBMIT_MUSIC.md",
+      "title": "SUBMIT_MUSIC",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.806Z",
+      "wordCount": 110
+    },
+    {
+      "path": "public/music/LICENSE.md",
+      "title": "LICENSE",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.822Z",
+      "wordCount": 302
+    },
+    {
+      "path": "public/music/SUBMIT_MUSIC.md",
+      "title": "SUBMIT_MUSIC",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.822Z",
+      "wordCount": 91
+    },
+    {
+      "path": "src/pages/buy-mtx.astro",
+      "title": "buy-mtx",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 807
+    },
+    {
+      "path": "src/pages/casino.astro",
+      "title": "casino",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 224
+    },
+    {
+      "path": "src/pages/content-feed.astro",
+      "title": "content-feed",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 735
+    },
+    {
+      "path": "src/pages/index.astro",
+      "title": "index",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 196
+    },
+    {
+      "path": "src/pages/leaderboards.astro",
+      "title": "leaderboards",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.829Z",
+      "wordCount": 775
+    },
+    {
+      "path": "src/pages/mtx-contract.astro",
+      "title": "mtx-contract",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.829Z",
+      "wordCount": 503
+    },
+    {
+      "path": "src/pages/owners.astro",
+      "title": "owners",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.829Z",
+      "wordCount": 2406
+    },
+    {
+      "path": "src/pages/staking.astro",
+      "title": "staking",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.829Z",
+      "wordCount": 720
+    },
+    {
+      "path": "src/pages/wallet.astro",
+      "title": "wallet",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.829Z",
+      "wordCount": 284
+    },
+    {
+      "path": "src/content/guides/guide-connect-supabase.md",
+      "title": "Set up Supabase database",
+      "description": "",
+      "category": "content",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.827Z",
+      "wordCount": 460
+    },
+    {
+      "path": "src/content/guides/guide-fetch-data.md",
+      "title": "Fetching Data from Supabase",
+      "description": "",
+      "category": "content",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.827Z",
+      "wordCount": 44
+    },
+    {
+      "path": "src/pages/docs/casino-architecture.astro",
+      "title": "casino-architecture",
+      "description": "",
+      "category": "documentation",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 172
+    },
+    {
+      "path": "src/pages/docs/casino-game-math.astro",
+      "title": "casino-game-math",
+      "description": "",
+      "category": "documentation",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 173
+    },
+    {
+      "path": "src/pages/docs/casino-games.astro",
+      "title": "casino-games",
+      "description": "",
+      "category": "documentation",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 172
+    },
+    {
+      "path": "src/pages/docs/dao-governance.astro",
+      "title": "dao-governance",
+      "description": "",
+      "category": "documentation",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 172
+    },
+    {
+      "path": "src/pages/docs/disclaimer.astro",
+      "title": "disclaimer",
+      "description": "",
+      "category": "documentation",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 171
+    },
+    {
+      "path": "src/pages/docs/mtx-tokenomics.astro",
+      "title": "mtx-tokenomics",
+      "description": "",
+      "category": "documentation",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 172
+    },
+    {
+      "path": "src/pages/docs/mtx-whitepaper.astro",
+      "title": "mtx-whitepaper",
+      "description": "",
+      "category": "documentation",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 172
+    },
+    {
+      "path": "src/pages/docs/provably-fair-system.astro",
+      "title": "provably-fair-system",
+      "description": "",
+      "category": "documentation",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 173
+    },
+    {
+      "path": "src/pages/docs/responsible-play.astro",
+      "title": "responsible-play",
+      "description": "",
+      "category": "documentation",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 172
+    },
+    {
+      "path": "src/pages/games/casino/blackjack.astro",
+      "title": "blackjack",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 21
+    },
+    {
+      "path": "src/pages/games/casino/crash.astro",
+      "title": "crash",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 194
+    },
+    {
+      "path": "src/pages/games/casino/dice.astro",
+      "title": "dice",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 21
+    },
+    {
+      "path": "src/pages/games/casino/index.astro",
+      "title": "index",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 380
+    },
+    {
+      "path": "src/pages/games/casino/mines.astro",
+      "title": "mines",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 21
+    },
+    {
+      "path": "src/pages/games/casino/plinko.astro",
+      "title": "plinko",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 21
+    },
+    {
+      "path": "src/pages/games/casino/roulette.astro",
+      "title": "roulette",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 21
+    },
+    {
+      "path": "src/pages/games/casino/slots.astro",
+      "title": "slots",
+      "description": "",
+      "category": "page",
+      "tags": [],
+      "modified": "2026-01-03T02:32:42.828Z",
+      "wordCount": 21
+    }
+  ]
+}
