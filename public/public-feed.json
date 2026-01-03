@@ -1,13 +1,18 @@
 {
-  "generated": "2026-01-03T03:32:17.841Z",
-  "totalFiles": 70,
+  "generated": "2026-01-03T03:34:38.484Z",
+  "totalFiles": 71,
   "categories": {
-    "other": 42,
+    "other": 43,
     "page": 17,
     "content": 2,
     "documentation": 9
   },
   "recentUpdates": [
+    {
+      "path": "docs/RUN_SCRIPTS_WORKFLOW_FIX.md",
+      "title": "RUN_SCRIPTS_WORKFLOW_FIX",
+      "modified": "2026-01-03T03:34:10.452Z"
+    },
     {
       "path": "src/pages/owners.astro",
       "title": "owners",
@@ -51,11 +56,6 @@
     {
       "path": "src/pages/mtx-contract.astro",
       "title": "mtx-contract",
-      "modified": "2026-01-03T03:27:01.042Z"
-    },
-    {
-      "path": "src/pages/docs/casino-architecture.astro",
-      "title": "casino-architecture",
       "modified": "2026-01-03T03:27:01.042Z"
     }
   ],
@@ -374,6 +374,15 @@
       "tags": [],
       "modified": "2026-01-03T03:27:01.013Z",
       "wordCount": 222
+    },
+    {
+      "path": "docs/RUN_SCRIPTS_WORKFLOW_FIX.md",
+      "title": "RUN_SCRIPTS_WORKFLOW_FIX",
+      "description": "",
+      "category": "other",
+      "tags": [],
+      "modified": "2026-01-03T03:34:10.452Z",
+      "wordCount": 414
     },
     {
       "path": "docs/SEPOLIA_DEPLOYMENT.md",
