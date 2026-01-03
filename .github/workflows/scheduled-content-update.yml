@@ -36,7 +36,8 @@ jobs:
           echo "### 🔍 Content Scan" >> $GITHUB_STEP_SUMMARY
           npm run content:scan 2>&1 | tee scan-output.txt
           
-          TOTAL_FILES=$(grep -oP '✅ Scan complete: \K\d+' scan-output.txt || echo "Unknown")
+          TOTAL_FILES=$(awk '/✅ Scan complete:/ { for (i = 1; i <= NF; i++) if ($i ~ /^[0-9]+$/) { print $i; exit } }' scan-output.txt)
+          TOTAL_FILES=${TOTAL_FILES:-Unknown}
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Files processed:** $TOTAL_FILES" >> $GITHUB_STEP_SUMMARY
       
