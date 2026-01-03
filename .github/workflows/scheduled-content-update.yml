@@ -12,6 +12,9 @@ jobs:
   update-content:
     name: Update Content Feeds and Analytics
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
     
     steps:
       - name: Checkout code

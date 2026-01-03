@@ -26,6 +26,8 @@ jobs:
   validate-deployment:
     name: Validate Deployment Request
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Check confirmation
@@ -45,6 +47,8 @@ jobs:
     name: Compile Contracts
     runs-on: ubuntu-latest
     needs: validate-deployment
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
@@ -78,6 +82,8 @@ jobs:
     name: Deployment Information
     runs-on: ubuntu-latest
     needs: [validate-deployment, compile-contracts]
+    permissions:
+      contents: read
     
     steps:
       - name: Display deployment info
