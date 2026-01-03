@@ -50,20 +50,28 @@ try {
   console.log('✓ Tests completed successfully');
   process.exit(0);
 } catch (error) {
-  // If --no-compile fails, try with normal compile (may succeed in environments with network)
-  console.log('\nRetrying with automatic compilation...');
-  try {
-    execSync('npx hardhat test', {
-      cwd: projectRoot,
-      stdio: 'inherit'
-    });
-    console.log('✓ Tests completed successfully');
-    process.exit(0);
-  } catch (retryError) {
-    console.error('✗ Tests failed');
-    console.error('  This may be due to network restrictions, compilation issues, or test failures.');
-    console.error('  In CI environments, ensure artifacts/ and cache/ are available via CI caching or pre-build steps.');
-    console.error('  If you choose to commit these directories, update .gitignore accordingly to match that workflow.');
+  // Only retry with automatic compilation if we don't have artifacts yet.
+  // If artifacts already exist, a retry is unlikely to help and just re-runs failing tests.
+  if (!hasArtifacts) {
+    console.log('\nNo contract artifacts detected. Retrying with automatic compilation...');
+    try {
+      execSync('npx hardhat test', {
+        cwd: projectRoot,
+        stdio: 'inherit'
+      });
+      console.log('✓ Tests completed successfully');
+      process.exit(0);
+    } catch (retryError) {
+      console.error('✗ Tests failed after retry with automatic compilation');
+      console.error('  This may be due to network restrictions, compilation issues, or test failures.');
+      console.error('  In CI environments, ensure artifacts/ and cache/ are available via CI caching or pre-build steps.');
+      console.error('  If you choose to commit these directories, update .gitignore accordingly to match that workflow.');
+      process.exit(1);
+    }
+  } else {
+    console.error('✗ Tests failed with existing contract artifacts present.');
+    console.error('  Skipping retry with automatic compilation because artifacts already exist.');
+    console.error('  Investigate test failures in the output above.');
     process.exit(1);
   }
 }
