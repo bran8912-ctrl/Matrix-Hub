@@ -32,7 +32,8 @@ jobs:
     steps:
       - name: Check confirmation
         run: |
-          if [ "${{ inputs.network }}" == "mainnet" ] && [ "${{ inputs.confirm }}" != "DEPLOY" ]; then
+          NORMALIZED_CONFIRM=$(echo "${{ inputs.confirm }}" | tr '[:lower:]' '[:upper:]' | xargs)
+          if [ "${{ inputs.network }}" == "mainnet" ] && [ "$NORMALIZED_CONFIRM" != "DEPLOY" ]; then
             echo "❌ Mainnet deployment requires confirmation" >> $GITHUB_STEP_SUMMARY
             echo "Please type 'DEPLOY' in the confirmation field" >> $GITHUB_STEP_SUMMARY
             exit 1
