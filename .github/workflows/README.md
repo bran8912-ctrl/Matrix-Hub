@@ -95,6 +95,7 @@ Deploys the Astro site to GitHub Pages:
 - Uploads to GitHub Pages
 - Deploys to production
 
+_Note: The `jekyll-gh-pages.yml` workflow is a pre-existing GitHub Pages deployment pipeline and is **not** added or modified by this PR._
 ## Running Workflows
 
 ### From GitHub UI
