@@ -47,14 +47,15 @@ All workflow scripts now execute successfully:
 
 | Script | Status | Notes |
 |--------|--------|-------|
-| `content:scan` | ✅ | Scans 70 content files |
-| `content:generate` | ✅ | Generates public feed JSON |
+| `content:scan` | ✅ | Scans content files |
+| `content:generate` | ✅ | Generates public feed JSON files |
 | `content:analytics` | ✅ | Generates analytics report |
 | `content:help` | ✅ | Displays help message |
 | `build` | ✅ | Builds Astro site (26 pages in ~5.6s) |
 | `compile` | ✅ | Uses existing artifacts or compiles |
 | `test` | ✅ | Runs tests successfully (2 passing) |
 
+> Note: The number of content files and generated JSON entries may change as new content is added.
 ## CI/CD Benefits
 
 1. **Faster Builds**: Compilation is skipped when artifacts exist
