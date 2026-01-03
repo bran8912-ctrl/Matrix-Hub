@@ -15,6 +15,11 @@ on:
           - 'build'
           - 'compile'
           - 'test'
+      # NOTE:
+      # - The `content:watch` script exists in package.json but is intentionally
+      #   excluded from these workflow_dispatch options because watch mode is
+      #   designed for local development, runs indefinitely, and would keep CI
+      #   jobs from completing.
       upload_artifacts:
         description: 'Upload artifacts after run'
         required: false
