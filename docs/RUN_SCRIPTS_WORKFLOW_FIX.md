@@ -79,7 +79,7 @@ The workflow should now succeed for all script options:
 
 ## Technical Notes
 
-- Artifacts are already tracked in git (committed before .gitignore)
+- Artifacts are not tracked in git because `artifacts/` is listed in `.gitignore`; CI workflows rely on generated artifacts, caching, or uploaded build outputs instead of committing them
 - ES module syntax required for all test files
 - Hardhat uses Mocha/Chai for testing
 - Node.js 18+ required for all scripts
