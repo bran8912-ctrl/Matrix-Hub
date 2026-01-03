@@ -56,6 +56,7 @@ All workflow scripts now execute successfully:
 | `test` | ✅ | Runs tests successfully (2 passing) |
 
 > Note: The number of content files and generated JSON entries may change as new content is added.
+
 ## CI/CD Benefits
 
 1. **Faster Builds**: Compilation is skipped when artifacts exist

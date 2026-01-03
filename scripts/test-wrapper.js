@@ -29,12 +29,31 @@ if (!existsSync(testDir)) {
   process.exit(1);
 }
 
-// Check if artifacts exist
+// Check if artifacts exist and validate they contain actual JSON files
 const artifactsDir = path.join(projectRoot, 'artifacts', 'contracts');
-const hasArtifacts = existsSync(artifactsDir);
+let hasArtifacts = existsSync(artifactsDir);
+
+// Verify artifacts are not empty - check for actual contract JSON files
+if (hasArtifacts) {
+  const { readdirSync } = await import('fs');
+  try {
+    const files = readdirSync(artifactsDir, { recursive: true });
+    const jsonFiles = files.filter(f => typeof f === 'string' && f.endsWith('.json'));
+    
+    if (jsonFiles.length === 0) {
+      console.warn('⚠ Warning: Artifacts directory exists but contains no JSON files');
+      hasArtifacts = false;
+    } else {
+      console.log(`✓ Found ${jsonFiles.length} contract artifact file(s)`);
+    }
+  } catch (err) {
+    console.warn('⚠ Could not verify artifacts:', err.message);
+    hasArtifacts = false;
+  }
+}
 
 if (!hasArtifacts) {
-  console.warn('⚠ Warning: Contract artifacts not found');
+  console.warn('⚠ Warning: Contract artifacts not found or invalid');
   console.warn('  Some tests may fail if they depend on compiled contracts.');
   console.warn('  Run `npm run compile` first if contract tests are needed.');
 }
