@@ -103,4 +103,4 @@ Found handlers: "default"
 [2m04:36:56[22m [32m✓ Completed in 557ms.
 [39m
 [2m04:36:56[22m [34m[build][39m 26 page(s) built in [1m5.83s[22m
-[2m04:36:56[22m [34m[build][39m [1mComplete![22m
+NOTE: Do not commit build logs to this repository. Use local logs or CI artifacts (e.g., GitHub Actions artifacts) instead of storing build output in `script-output.txt`.
