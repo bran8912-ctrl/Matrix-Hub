@@ -3,16 +3,19 @@
 // ⚠️ WARNING: This file needs to be updated with actual deployed contract addresses
 // See: docs/DEPLOYMENT_QUICK_START.md for deployment instructions
 
-import { ethers } from "ethers";
-import { Casino } from "../../config/casino";
+// Note: ethers and Casino are imported but not used yet (pending contract deployment)
+// import { ethers } from "ethers";
+// import { Casino } from "../../config/casino";
 
+// Note: CASINO_CORE_ADDRESS and CASINO_CORE_ABI are defined but not used yet
+// These will be used once the casino contracts are deployed
 // Use casino config for contract address
-const CASINO_CORE_ADDRESS = Casino.contracts.casinoCore.address;
+// const CASINO_CORE_ADDRESS = Casino.contracts.casinoCore.address;
 
-const CASINO_CORE_ABI = [
-  // Add relevant ABI entries for bet placement and payout after deployment
-  // Example: "function placeBet(uint256 amount, bytes calldata gameData) external"
-];
+// const CASINO_CORE_ABI = [
+//   // Add relevant ABI entries for bet placement and payout after deployment
+//   // Example: "function placeBet(uint256 amount, bytes calldata gameData) external"
+// ];
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -27,15 +30,18 @@ export default async function handler(req, res) {
     });
   }
 
-  const { gameId, betAmount, gameData, walletAddress } = req.body;
+  // Note: Request body parameters are parsed but not used yet (pending contract deployment)
+  // const { gameId, betAmount, gameData, walletAddress } = req.body;
 
   // Connect to Polygon network (not local Hardhat)
-  const rpcUrl = process.env.POLYGON_RPC_URL || "https://polygon-rpc.com/";
-  const provider = new ethers.JsonRpcProvider(rpcUrl);
+  // Note: provider is defined but not used yet (pending contract deployment)
+  // const rpcUrl = process.env.POLYGON_RPC_URL || "https://polygon-rpc.com/";
+  // const provider = new ethers.JsonRpcProvider(rpcUrl);
   
   // Note: In production, you'll need proper wallet/signer setup
   // For server-side transactions, use a secure key management system
-  const casinoCore = new ethers.Contract(CASINO_CORE_ADDRESS, CASINO_CORE_ABI, provider);
+  // Note: casinoCore is defined but not used yet (pending contract deployment)
+  // const casinoCore = new ethers.Contract(CASINO_CORE_ADDRESS, CASINO_CORE_ABI, provider);
 
   try {
     // Example: call a bet function (update ABI and call as needed)

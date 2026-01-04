@@ -57,20 +57,23 @@ try {
       </div>
 
       {feedError ? (
-        <!-- Error State -->
-        <div class="bg-yellow-900/20 border border-yellow-600 rounded-lg p-8 text-center">
-          <div class="text-6xl mb-4">⚠️</div>
-          <h2 class="text-2xl font-semibold mb-2 text-yellow-400">Feed Not Available</h2>
-          <p class="text-gray-300 mb-4">{feedError}</p>
-          <div class="bg-gray-800 rounded p-4 text-left font-mono text-sm">
-            <div class="text-cyan-400"># Generate the content feed:</div>
-            <div class="text-white">npm run content:generate</div>
+        <div>
+          <!-- Error State -->
+          <div class="bg-yellow-900/20 border border-yellow-600 rounded-lg p-8 text-center">
+            <div class="text-6xl mb-4">⚠️</div>
+            <h2 class="text-2xl font-semibold mb-2 text-yellow-400">Feed Not Available</h2>
+            <p class="text-gray-300 mb-4">{feedError}</p>
+            <div class="bg-gray-800 rounded p-4 text-left font-mono text-sm">
+              <div class="text-cyan-400"># Generate the content feed:</div>
+              <div class="text-white">npm run content:generate</div>
+            </div>
           </div>
         </div>
       ) : feedData ? (
-        <!-- Feed Content -->
-        <div class="space-y-8">
-          <!-- Stats Overview -->
+        <div>
+          <!-- Feed Content -->
+          <div class="space-y-8">
+            <!-- Stats Overview -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-gradient-to-br from-cyan-900/30 to-cyan-800/20 border border-cyan-700 rounded-lg p-6">
               <div class="text-cyan-400 text-sm font-semibold uppercase mb-2">Total Content</div>
@@ -183,7 +186,7 @@ try {
               <div class="text-cyan-400"># Fetch the feed</div>
               <div class="text-white">curl https://matrix-hub.org/public-feed.json</div>
               <div class="mt-3 text-cyan-400"># Use in JavaScript</div>
-              <div class="text-white">const feed = await fetch('/public-feed.json').then(r => r.json());</div>
+              <div class="text-white">const feed = await fetch('/public-feed.json').then(r ={'>'} r.json());</div>
               <div class="mt-3 text-cyan-400"># Access in Python</div>
               <div class="text-white">import requests</div>
               <div class="text-white">feed = requests.get('https://matrix-hub.org/public-feed.json').json()</div>
@@ -229,13 +232,16 @@ try {
                 Read the full documentation →
               </a>
             </div>
+            </div>
           </div>
         </div>
       ) : (
-        <!-- Loading State -->
-        <div class="text-center py-12">
-          <div class="text-6xl mb-4">⏳</div>
-          <p class="text-gray-400">Loading feed data...</p>
+        <div>
+          <!-- Loading State -->
+          <div class="text-center py-12">
+            <div class="text-6xl mb-4">⏳</div>
+            <p class="text-gray-400">Loading feed data...</p>
+          </div>
         </div>
       )}
     </div>

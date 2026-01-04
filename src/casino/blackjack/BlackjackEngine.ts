@@ -72,7 +72,7 @@ export class BlackjackEngine {
       this.createCard(hash.slice(12, 16)),
     ];
 
-    let playerScore = this.calculateScore(playerHand);
+    const playerScore = this.calculateScore(playerHand);
     let dealerScore = this.calculateScore(dealerHand);
 
     // Check for blackjacks

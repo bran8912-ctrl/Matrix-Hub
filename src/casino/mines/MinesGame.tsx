@@ -59,8 +59,8 @@ export default function MinesGame({ walletAddress, mtxBalance, onBetPlaced }: Mi
       const result = MinesEngine.revealCell(gameState, cellIndex, betAmount);
       setLastResult(result);
       setGameState({ ...gameState });
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'An error occurred');
     }
   }
 
@@ -78,8 +78,8 @@ export default function MinesGame({ walletAddress, mtxBalance, onBetPlaced }: Mi
         payout,
       });
       setGameState({ ...gameState });
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'An error occurred');
     }
   }
 

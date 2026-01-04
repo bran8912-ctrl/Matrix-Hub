@@ -27,7 +27,8 @@ const ORACLE_RESPONSES = {
 
 // Check if message contains sensitive information
 const detectSecurityIssue = (text: string): string | null => {
-  const lowerText = text.toLowerCase();
+  // Note: lowerText is not used in current implementation but reserved for future checks
+  // const lowerText = text.toLowerCase();
   
   if (SECURITY_PATTERNS.privateKey.test(text)) {
     return "⚠️ CRITICAL: Never share private keys or seed phrases! The Oracle has blocked this message for your protection.";

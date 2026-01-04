@@ -643,7 +643,7 @@ function init() {
       messages.appendChild(createMessageEl("assistant", reply));
       messages.scrollTop = messages.scrollHeight;
       speakIfEnabled(state, reply);
-    } catch (e) {
+    } catch (_e) {
       typingDiv.remove();
       const msg = "Connection error. Try again.";
       conversation.push({ role: "assistant", content: msg });

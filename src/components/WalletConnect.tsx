@@ -31,7 +31,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
   const [tier, setTier] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [provider, setProvider] = useState<any>(null);
+  const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   // State declarations for locked and lockUntil already exist, remove duplicates.
 
   const getTier = (bal: number): string => {
@@ -50,7 +50,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
     }
     try {
       // wallet_watchAsset requires direct ethereum object access (not through ethers provider)
-      const ethereum = (window as any).ethereum;
+      const ethereum = (window as { ethereum?: unknown }).ethereum;
       if (!ethereum) {
         setError('MetaMask or compatible wallet not found.');
         return;
@@ -101,7 +101,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
       if (onWalletChange) {
         onWalletChange({ address: userAddress, balance: formatted });
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to connect wallet.');
     }
     setLoading(false);
@@ -146,7 +146,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
       if (onWalletChange) {
         onWalletChange({ address, balance: formatted });
       }
-    } catch (err) {
+    } catch (_err) {
       setError('MTX deduction failed.');
     }
     setLoading(false);
