@@ -71,6 +71,8 @@ jobs:
             tail -100 eslint-output.txt >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
+        # Note: continue-on-error is true to not break existing code with pre-existing issues.
+        # Consider setting to false once the codebase is cleaned up.
         continue-on-error: true
 
       - name: Solidity Linting

@@ -21,7 +21,6 @@ export default [
       '*.config.js',
       '*.config.ts',
       '*.config.cjs',
-      'hardhat.config.cjs',
     ],
   },
 
