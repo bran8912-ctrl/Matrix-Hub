@@ -55,7 +55,6 @@ jobs:
             -Dsonar.organization=YOUR_SONARCLOUD_ORGANIZATION
             -Dsonar.sources=src,contracts,scripts
             -Dsonar.exclusions=**/*.astro,public/**,dist/**,supabase/**,node_modules/**,docs/**,cache/**,artifacts/**,typechain-types/**,.astro/**
-            -Dsonar.tests=test
             -Dsonar.javascript.node.maxspace=4096
             -Dsonar.typescript.node.maxspace=4096
           projectBaseDir: .
