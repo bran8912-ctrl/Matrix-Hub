@@ -1,17 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-/**
- * @title CasinoReserve - Casino Reserve for Matrix Hub
- * @author Matrix-Hub Team
- * @notice Holds MTX reserves for casino payouts on Ethereum
- * @dev Manages reserve balance and payout distribution
- * 
- * Network: Ethereum Mainnet (Chain ID: 1)
- * Currency: ETH
- * Token: MTX (Matrix Hub Coin)
- */
-
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
@@ -25,6 +14,9 @@ contract CasinoReserve {
     error NotAuthorized();
     error InsufficientReserve();
     error MTXTransferFailed();
+    error ZeroAddress();
+    error ZeroAmount();
+    error ExceedsReserveCap();
 
     /// @notice MTX token contract
     IERC20 public mtx;
@@ -54,6 +46,9 @@ contract CasinoReserve {
      * @param _casinoCore Address of CasinoCore contract
      */
     constructor(address _mtx, uint256 _reserveCap, address _casinoCore) {
+        if (_mtx == address(0)) revert ZeroAddress();
+        if (_casinoCore == address(0)) revert ZeroAddress();
+        if (_reserveCap == 0) revert ZeroAmount();
         mtx = IERC20(_mtx); // MTX Token address on Ethereum - set from deployed MatrixHubCoin
         reserveCap = _reserveCap;
         casinoCore = _casinoCore;
@@ -61,10 +56,12 @@ contract CasinoReserve {
 
     /**
      * @notice Deposit MTX coins to reserve
-     * @dev Only callable by CasinoCore
+     * @dev Only callable by CasinoCore, enforces reserve cap
      * @param amount Amount of MTX to deposit
      */
     function deposit(uint256 amount) external onlyCasinoCore {
+        if (amount == 0) revert ZeroAmount();
+        if (reserveBalance + amount > reserveCap) revert ExceedsReserveCap();
         reserveBalance += amount;
     }
 
@@ -75,6 +72,8 @@ contract CasinoReserve {
      * @param amount Amount of MTX to pay
      */
     function payWinner(address player, uint256 amount) external onlyCasinoCore {
+        if (player == address(0)) revert ZeroAddress();
+        if (amount == 0) revert ZeroAmount();
         if (reserveBalance < amount) revert InsufficientReserve();
         reserveBalance -= amount;
         if (!mtx.transfer(player, amount)) revert MTXTransferFailed();

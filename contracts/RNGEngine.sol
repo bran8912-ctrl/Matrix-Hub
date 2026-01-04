@@ -2,23 +2,16 @@
 pragma solidity ^0.8.20;
 
 /**
- * @title RNGEngine - Random Number Generator for Matrix Hub Casino
- * @author Matrix-Hub Team
- * @notice Provably fair random number generator for casino games on Ethereum
- * @dev Uses server seed commitment and client seed for verifiable randomness
- * 
- * Network: Ethereum Mainnet (Chain ID: 1)
- * Currency: ETH
- * Token: MTX (Matrix Hub Coin)
- */
-
-/**
  * @title RNGEngine
  * @author Matrix-Hub Team
  * @notice Provably fair random number generator for casino games on Ethereum
  * @dev Uses server seed commitment and client seed for verifiable randomness
  */
 contract RNGEngine {
+    // Custom errors for gas efficiency
+    error NotAuthorized();
+    error ClientSeedNotSet();
+
     /// @notice Server seed hash for commitment
     bytes32 public serverSeedHash;
     
@@ -28,22 +21,63 @@ contract RNGEngine {
     /// @notice Nonce for unique random values
     uint256 public nonce;
 
+    /// @notice Casino core contract authorized to call resolve
+    address public casinoCore;
+
+    /// @notice Owner address for administrative functions
+    address public owner;
+
+    /**
+     * @notice Constructor initializes RNG with casino core address
+     * @param _casinoCore Address of CasinoCore contract
+     */
+    constructor(address _casinoCore) {
+        casinoCore = _casinoCore;
+        owner = msg.sender;
+    }
+
+    /**
+     * @notice Modifier to restrict access to owner only
+     */
+    modifier onlyOwner() {
+        if (msg.sender != owner) revert NotAuthorized();
+        _;
+    }
+
+    /**
+     * @notice Modifier to restrict access to CasinoCore only
+     */
+    modifier onlyCasinoCore() {
+        if (msg.sender != casinoCore) revert NotAuthorized();
+        _;
+    }
+
+    /**
+     * @notice Set client seed for randomness
+     * @dev Should be called by player to ensure provable fairness
+     * @param _clientSeed Client-provided seed
+     */
+    function setClientSeed(bytes32 _clientSeed) external {
+        clientSeed = _clientSeed;
+    }
+
     /**
      * @notice Commit server seed hash
-     * @dev Server commits hash before game starts
+     * @dev Only owner can commit to prevent manipulation
      * @param hash Hash of server seed
      */
-    function commitServerSeed(bytes32 hash) external {
+    function commitServerSeed(bytes32 hash) external onlyOwner {
         serverSeedHash = hash;
     }
 
     /**
      * @notice Resolve game outcome
-     * @dev Generates random result and increments nonce
+     * @dev Only callable by CasinoCore, generates random result and increments nonce
      * @param gameData Encoded game data
      * @return True if player wins, false otherwise
      */
-    function resolve(bytes calldata gameData) external returns (bool) {
+    function resolve(bytes calldata gameData) external onlyCasinoCore returns (bool) {
+        if (clientSeed == bytes32(0)) revert ClientSeedNotSet();
         bytes32 result = keccak256(abi.encodePacked(serverSeedHash, clientSeed, nonce, gameData));
         ++nonce;
         return interpretResult(result);
