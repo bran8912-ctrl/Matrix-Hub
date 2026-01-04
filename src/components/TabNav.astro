@@ -493,7 +493,8 @@ const currentPath = Astro.url.pathname;
   // https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
   
   const menuItems = Array.from(document.querySelectorAll('.tab-link, .tab-button'));
-  let currentFocusIndex = -1;
+  // Note: currentFocusIndex is defined but not used in current implementation
+  // const currentFocusIndex = -1;
 
   // Helper: Get all focusable items in a dropdown menu
   function getDropdownItems(dropdown) {

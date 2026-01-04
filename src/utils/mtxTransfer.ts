@@ -60,7 +60,7 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
     let amountInWei;
     try {
       amountInWei = parseUnits(normalizedAmount, decimals);
-    } catch (err: any) {
+    } catch (_err: unknown) {
       // Handle invalid amount format (e.g., scientific notation, multiple decimals)
       throw new Error(
         'Amount format is invalid. Please enter a plain decimal number (e.g., "10.5").'
@@ -84,9 +84,10 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
     
     // Return transaction hash
     return receipt.hash;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Handle specific error cases
-    if (error.code === 'ACTION_REJECTED') {
+    const err = error as { code?: string; message?: string };
+    if (err.code === 'ACTION_REJECTED') {
       throw new Error('Transaction rejected by user.');
     }
     
@@ -120,9 +121,10 @@ export async function ensureEthereum(): Promise<void> {
           method: 'wallet_switchEthereumChain',
           params: [{ chainId: `0x${MTX.chainId.toString(16)}` }],
         });
-      } catch (switchError: any) {
+      } catch (switchError: unknown) {
         // This error code indicates the chain has not been added to MetaMask
-        if (switchError.code === 4902) {
+        const err = switchError as { code?: number };
+        if (err.code === 4902) {
           // Try to add the network
           try {
             await window.ethereum.request({
@@ -135,7 +137,7 @@ export async function ensureEthereum(): Promise<void> {
                 blockExplorerUrls: MTX.blockExplorerUrls,
               }],
             });
-          } catch (addError: any) {
+          } catch (_addError: unknown) {
             throw new Error(
               `Failed to add ${MTX.chainName} network to wallet. Please add it manually.`
             );
@@ -145,7 +147,8 @@ export async function ensureEthereum(): Promise<void> {
         }
       }
     }
-  } catch (error: any) {
-    throw new Error(`Network check failed: ${error.message || 'Unknown error'}`);
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    throw new Error(`Network check failed: ${err.message || 'Unknown error'}`);
   }
 }

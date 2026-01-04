@@ -60,7 +60,7 @@ try {
   });
   console.log('✓ Compilation successful');
   process.exit(0);
-} catch (error) {
+} catch (_error) {
   console.error('✗ Compilation failed');
   console.error('  This may be due to network restrictions or missing dependencies.');
   console.error('  In CI environments, configure your workflow to cache the artifacts/ and cache/ directories.');

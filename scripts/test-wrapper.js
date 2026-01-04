@@ -68,7 +68,7 @@ try {
   });
   console.log('✓ Tests completed successfully');
   process.exit(0);
-} catch (error) {
+} catch (_error) {
   // Only retry with automatic compilation if we don't have artifacts yet.
   // If artifacts already exist, a retry is unlikely to help and just re-runs failing tests.
   if (!hasArtifacts) {
@@ -80,7 +80,7 @@ try {
       });
       console.log('✓ Tests completed successfully');
       process.exit(0);
-    } catch (retryError) {
+    } catch (_retryError) {
       console.error('✗ Tests failed after retry with automatic compilation');
       console.error('  This may be due to network restrictions, compilation issues, or test failures.');
       console.error('  In CI environments, ensure artifacts/ and cache/ are available via CI caching or pre-build steps.');

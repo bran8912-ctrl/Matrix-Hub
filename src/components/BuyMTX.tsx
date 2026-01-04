@@ -99,12 +99,13 @@ const BuyMTX: React.FC = () => {
       } else {
         setError('Transaction failed. Please try again.');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error buying MTX:', err);
       
-      if (err.code === 4001) {
+      const error = err as { code?: number; message?: string };
+      if (error.code === 4001) {
         setError('Transaction rejected by user.');
-      } else if (err.message?.includes('insufficient funds')) {
+      } else if (error.message?.includes('insufficient funds')) {
         setError('Insufficient ETH balance for this transaction.');
       } else if (err.message?.includes('Exceeds max supply')) {
         setError('Purchase would exceed max MTX supply. Try a smaller amount.');
