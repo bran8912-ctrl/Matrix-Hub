@@ -24,9 +24,6 @@ This directory contains documentation from the Node.js Release Working Group, ex
 ### Configuration
 - **.editorconfig** - Editor configuration (placed in project root)
 
-### Meeting Notes Directory
-- **meetings/** - 88 markdown files containing Node.js Release Working Group meeting notes from 2015-2025
-
 ## File Placement Rationale
 
 All files from the zip have been placed in `/docs/nodejs-release/` to:
@@ -53,11 +50,11 @@ The `.editorconfig` file was placed in the project root because:
 - Verify the `.editorconfig` settings align with Matrix-Hub.org coding standards
 
 ## File Count Summary
-- Total files extracted: 98
-- Meeting notes: 88 files (2015-2025)
+- Total files in this directory: 10
 - Documentation files: 6 files
 - Scripts/Assets: 3 files
 - Configuration: 1 file (placed in root)
+- Meeting notes: Removed per maintainer request
 
 ## Source
 Original file: `Release-main.zip`
