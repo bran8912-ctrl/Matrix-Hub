@@ -48,7 +48,7 @@ jobs:
         run: npm run build
 
       - name: Compile smart contracts
-        run: npx hardhat compile
+        run: npm run compile
 
       # ========================================================
       #
