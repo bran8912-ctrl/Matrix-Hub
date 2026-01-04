@@ -6,7 +6,7 @@
 # SLSA Provenance workflow for Matrix-Hub.org
 # Generates SLSA Level 3 provenance for reproducible, verifiable builds
 # Builds: Astro static site (npm run build) + Smart contracts (npx hardhat compile)
-# Outputs provenance for: /dist and /contracts/artifacts
+# Outputs provenance for: /dist and /artifacts
 # 
 # This workflow satisfies level 3 for the provenance requirements - see https://slsa.dev/spec/v0.1/requirements
 # The project is an initiative of the OpenSSF (openssf.org) and is developed at
@@ -68,7 +68,7 @@ jobs:
             find dist -type f >> "$tempfile"
           fi
           
-          # List all files in contracts/artifacts/ directory (Hardhat contract compilation output)
+          # List all files in artifacts/ directory (Hardhat contract compilation output)
           if [ -d "artifacts" ]; then
             find artifacts -type f -name "*.json" >> "$tempfile"
           fi
