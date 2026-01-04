@@ -28,7 +28,7 @@ contract MatrixHubCoin is ERC20, Ownable {
     // Custom errors for gas efficiency
     error ZeroAddress();
     error ZeroAmount();
-    error MintingPaused();
+    error MintingIsPaused();
     error ExceedsMaxSupply();
     error InvalidRate();
     error WithdrawalFailed();
@@ -95,7 +95,7 @@ contract MatrixHubCoin is ERC20, Ownable {
      * @dev Shared logic for buyMTX and receive
      */
     function _buyMTXInternal() private {
-        if (mintingPaused) revert MintingPaused();
+        if (mintingPaused) revert MintingIsPaused();
         if (msg.value == 0) revert ZeroAmount();
         
         // Calculate MTX to mint
