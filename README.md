@@ -577,6 +577,8 @@ git commit -m "Regenerate package-lock.json"
 
 **Node.js Version:** The workflows use Node.js v20. Ensure your local environment matches for consistent results.
 
+> **⚠️ Important:** Node.js v18.20.8 is not supported by Hardhat. If you're using Node.js v18, please upgrade to v20 or use a version manager like `nvm` to switch versions. Hardhat requires Node.js v18.15.0 or later for v18, or v20+ is recommended.
+
 ---
 
 ## Developing Locally

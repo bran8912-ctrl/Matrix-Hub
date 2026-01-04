@@ -2,6 +2,8 @@
 
 In this guide we’ll create a Supabase project, configure access, and fill the database with data.
 
+
+> **⚠️ Important Node.js Version:** This project requires Node.js v20+. Node.js v18.20.8 is not supported by Hardhat. If you're using Node.js v18, please upgrade to v20 or use a version manager like `nvm` to switch versions. Hardhat requires Node.js v18.15.0 or later for v18, but v20+ is recommended for full compatibility.
 ## Set up Supabase database
 
 1. Create Supabase account at [Supabase.com](https://supabase.com).
