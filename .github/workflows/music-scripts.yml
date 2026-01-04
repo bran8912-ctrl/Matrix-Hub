@@ -1,0 +1,177 @@
+name: Music Track Scripts
+
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: 'Music script to run'
+        required: true
+        type: choice
+        options:
+          - 'scrape-mixkit-tracks'
+          - 'parse-mixkit-tracks'
+          - 'test-tracks'
+          - 'test-corsproxy-tracks'
+          - 'test-fma-tracks'
+          - 'test-pixabay-tracks'
+
+jobs:
+  run-music-script:
+    name: Run ${{ inputs.script }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+      
+      - name: Run scrape-mixkit-tracks
+        if: inputs.script == 'scrape-mixkit-tracks'
+        run: |
+          echo "## 🎵 Scrape Mixkit Tracks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Scraping ambient music tracks from Mixkit..." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          python scripts/scrape_mixkit_tracks.py | tee scrape-output.txt
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Output:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat scrape-output.txt || echo "No output captured"
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "matrix_tracks_snippet.txt" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Track data generated successfully" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Run parse-mixkit-tracks
+        if: inputs.script == 'parse-mixkit-tracks'
+        run: |
+          echo "## 📝 Parse Mixkit Tracks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Create a sample file for testing if it doesn't exist
+          if [ ! -f "/tmp/matrix_new_tracks.txt" ]; then
+            echo "ℹ️ Creating sample track file for testing..." >> $GITHUB_STEP_SUMMARY
+            mkdir -p /tmp
+            echo "Track 1 | Artist 1 | https://example.com/track1.mp3" > /tmp/matrix_new_tracks.txt
+            echo "Track 2 | Artist 2 | https://example.com/track2.mp3" >> /tmp/matrix_new_tracks.txt
+          fi
+          
+          python scripts/parse_mixkit_tracks.py | tee parse-output.txt
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Parsed Tracks:" >> $GITHUB_STEP_SUMMARY
+          echo '```javascript' >> $GITHUB_STEP_SUMMARY
+          cat parse-output.txt || echo "No output captured"
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Setup Node.js for track testing
+        if: startsWith(inputs.script, 'test-')
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install Node dependencies for track testing
+        if: startsWith(inputs.script, 'test-')
+        run: npm ci
+      
+      - name: Run test-tracks
+        if: inputs.script == 'test-tracks'
+        run: |
+          echo "## 🧪 Test Music Tracks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Testing music track URLs from index.html..." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check if docs/index.html exists
+          if [ -f "docs/index.html" ]; then
+            python scripts/test_tracks.py | tee test-tracks-output.txt || true
+            
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Test Results:" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat test-tracks-output.txt || echo "No output captured"
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ docs/index.html not found. Skipping track tests." >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Run test-corsproxy-tracks
+        if: inputs.script == 'test-corsproxy-tracks'
+        run: |
+          echo "## 🔗 Test CORS Proxy Tracks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          python scripts/test_corsproxy_tracks.py | tee test-corsproxy-output.txt || true
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Results:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat test-corsproxy-output.txt || echo "No output captured"
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Run test-fma-tracks
+        if: inputs.script == 'test-fma-tracks'
+        run: |
+          echo "## 🎼 Test Free Music Archive Tracks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          python scripts/test_fma_tracks.py | tee test-fma-output.txt || true
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Results:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat test-fma-output.txt || echo "No output captured"
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Run test-pixabay-tracks
+        if: inputs.script == 'test-pixabay-tracks'
+        run: |
+          echo "## 🎨 Test Pixabay Tracks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          python scripts/test_pixabay_tracks.py | tee test-pixabay-output.txt || true
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Results:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat test-pixabay-output.txt || echo "No output captured"
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: music-script-output-${{ inputs.script }}-${{ github.run_number }}
+          path: |
+            scrape-output.txt
+            parse-output.txt
+            test-tracks-output.txt
+            test-corsproxy-output.txt
+            test-fma-output.txt
+            test-pixabay-output.txt
+            matrix_tracks_snippet.txt
+          if-no-files-found: ignore
+          retention-days: 7
+      
+      - name: Summary
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Music script completed" >> $GITHUB_STEP_SUMMARY
+          echo "📦 Results available in artifacts" >> $GITHUB_STEP_SUMMARY

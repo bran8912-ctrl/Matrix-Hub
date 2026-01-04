@@ -1,0 +1,107 @@
+name: Utility Scripts
+
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: 'Utility script to run'
+        required: true
+        type: choice
+        options:
+          - 'generate-password-hash'
+          - 'get-matrix-music'
+          - 'fix-casino-deploy'
+      password:
+        description: 'Password for hash generation (only for generate-password-hash)'
+        required: false
+        type: string
+
+jobs:
+  run-utility:
+    name: Run ${{ inputs.script }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run generate-password-hash
+        if: inputs.script == 'generate-password-hash'
+        run: |
+          echo "## 🔐 Generate Password Hash" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -z "${{ inputs.password }}" ]; then
+            echo "⚠️ **Warning:** No password provided. Using example password for demonstration." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            PASSWORD="example-password"
+          else
+            PASSWORD="${{ inputs.password }}"
+          fi
+          
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          node scripts/generate-password-hash.js "$PASSWORD" | tee password-hash-output.txt
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ **Security Notice:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Keep the generated hash secure" >> $GITHUB_STEP_SUMMARY
+          echo "- Never commit passwords or hashes to the repository" >> $GITHUB_STEP_SUMMARY
+          echo "- Use GitHub Secrets for production deployments" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Run get-matrix-music
+        if: inputs.script == 'get-matrix-music'
+        run: |
+          echo "## 🎵 Download Matrix Music Assets" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          chmod +x scripts/get-matrix-music.sh
+          ./scripts/get-matrix-music.sh | tee music-download-output.txt
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Downloaded Files:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          ls -lh public/music/ 2>/dev/null || echo "No files downloaded"
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Run fix-casino-deploy
+        if: inputs.script == 'fix-casino-deploy'
+        run: |
+          echo "## 🎰 Fix Casino Deploy" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          chmod +x scripts/fix-casino-deploy.sh
+          cat scripts/fix-casino-deploy.sh | tee fix-output.txt
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ **Note:** This is a minimal script. Review the content above." >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: utility-script-output-${{ inputs.script }}-${{ github.run_number }}
+          path: |
+            password-hash-output.txt
+            music-download-output.txt
+            fix-output.txt
+            public/music/
+          if-no-files-found: ignore
+          retention-days: 7
+      
+      - name: Summary
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Utility script completed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "📦 Artifacts available for download" >> $GITHUB_STEP_SUMMARY

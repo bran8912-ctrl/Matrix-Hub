@@ -116,6 +116,65 @@ Deploys the Astro site to GitHub Pages:
 - Deploys to production
 
 _Note: The `jekyll-gh-pages.yml` workflow is a pre-existing GitHub Pages deployment pipeline and is **not** added or modified by this PR._
+
+### 8. Utility Scripts (`utility-scripts.yml`)
+
+**Triggers:** Manual only (workflow_dispatch)
+
+Runs utility scripts for password generation, music downloads, and deployment fixes:
+
+**Available Scripts:**
+- `generate-password-hash` - Generate SHA-256 hash for Owners Portal authentication
+  - Optional parameter: `password` - Password to hash (uses example if not provided)
+  - ⚠️ Security Notice: Never commit passwords or hashes to the repository
+- `get-matrix-music` - Download Matrix Hub music assets from royalty-free sources
+  - Downloads music files to `public/music/`
+  - Creates credits and playlist files
+- `fix-casino-deploy` - Display casino deployment fix utility script content
+
+**How to Use:**
+1. Go to the "Actions" tab in GitHub
+2. Select "Utility Scripts"
+3. Click "Run workflow"
+4. Choose the utility script you want to run
+5. For `generate-password-hash`, optionally enter a password
+6. Click "Run workflow"
+
+**Artifacts Generated:**
+- Script output files
+- Downloaded music files (for `get-matrix-music`)
+
+### 9. Music Track Scripts (`music-scripts.yml`)
+
+**Triggers:** Manual only (workflow_dispatch)
+
+Runs Python scripts for scraping, parsing, and testing music tracks:
+
+**Available Scripts:**
+- `scrape-mixkit-tracks` - Scrape ambient music tracks from Mixkit
+  - Requires: Python with `requests` and `beautifulsoup4`
+  - Generates: `matrix_tracks_snippet.txt` with track data
+- `parse-mixkit-tracks` - Parse Mixkit track data into JavaScript objects
+  - Reads from `/tmp/matrix_new_tracks.txt`
+  - Outputs JavaScript-formatted track objects
+- `test-tracks` - Test music track URLs from `docs/index.html`
+  - Validates track URLs are accessible
+  - Checks HTTP status and content type
+- `test-corsproxy-tracks` - Test CORS proxy track URLs
+- `test-fma-tracks` - Test Free Music Archive track URLs
+- `test-pixabay-tracks` - Test Pixabay track URLs
+
+**How to Use:**
+1. Go to the "Actions" tab in GitHub
+2. Select "Music Track Scripts"
+3. Click "Run workflow"
+4. Choose the music script you want to run
+5. Click "Run workflow"
+
+**Artifacts Generated:**
+- Script output files
+- Generated track data files
+
 ## Running Workflows
 
 ### From GitHub UI
