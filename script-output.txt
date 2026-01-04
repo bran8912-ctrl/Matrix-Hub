@@ -2,105 +2,105 @@
 > astro-supabase-starter@0.0.1 build
 > astro build
 
-[2m04:36:50[22m [34m[content][39m Syncing content
-[2m04:36:51[22m [34m[content][39m Synced content
-[2m04:36:51[22m [34m[types][39m Generated [2m724ms[22m
-[2m04:36:51[22m [34m[build][39m output: [34m"static"[39m
-[2m04:36:51[22m [34m[build][39m mode: [34m"static"[39m
-�[2m04:36:51�[22m �[34m[build]�[39m directory: �[34m./dist/�[39m
-[2m04:36:51[22m [34m[build][39m Collecting build info...
-[2m04:36:51[22m [34m[build][39m [32m✓ Completed in 750ms.[39m
-[2m04:36:51[22m [34m[build][39m Building static entrypoints...
-[2m04:36:53[22m [34m[vite][39m [32m✓ built in 1.93s[39m
-[2m04:36:53[22m [34m[build][39m [32m✓ Completed in 1.96s.[39m
+04:36:50 [content] Syncing content
+04:36:51 [content] Synced content
+04:36:51 [types] Generated 724ms
+04:36:51 [build] output: "static"
+04:36:51 [build] mode: "static"
+04:36:51 [build] directory: ./dist/
+04:36:51 [build] Collecting build info...
+04:36:51 [build] ✓ Completed in 750ms.
+04:36:51 [build] Building static entrypoints...
+04:36:53 [vite] ✓ built in 1.93s
+04:36:53 [build] ✓ Completed in 1.96s.
 
-[42m[30m building client (vite) [39m[49m
-[2m04:36:53[22m [34m[vite][39m transforming...
-[2m04:36:55[22m [34m[vite][39m [32m✓[39m 197 modules transformed.
-[2m04:36:55[22m [34m[vite][39m rendering chunks...
-[2m04:36:55[22m [34m[vite][39m computing gzip size...
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mjsx-runtime.D_zvdyIk.js                                       [39m[1m[2m  0.73 kB[22m[1m[22m[2m │ gzip:   0.46 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mmtx.DNYbbw1G.js                                               [39m[1m[2m  1.46 kB[22m[1m[22m[2m │ gzip:   0.36 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mCasinoGameWrapper.BCZ3mjo7.js                                 [39m[1m[2m  1.96 kB[22m[1m[22m[2m │ gzip:   0.90 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mWallet.DitUjo9O.js                                            [39m[1m[2m  4.27 kB[22m[1m[22m[2m │ gzip:   1.76 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mDealScanner.astro_astro_type_script_index_0_lang.BmQj41YZ.js  [39m[1m[2m  5.03 kB[22m[1m[22m[2m │ gzip:   2.39 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mBuyMTX.odZIaSW_.js                                            [39m[1m[2m  5.10 kB[22m[1m[22m[2m │ gzip:   1.98 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mWalletConnect.BY1gcTxZ.js                                     [39m[1m[2m  5.60 kB[22m[1m[22m[2m │ gzip:   1.95 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mindex.JXKNaeUN.js                                             [39m[1m[2m  7.98 kB[22m[1m[22m[2m │ gzip:   3.10 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mPersistentThemeCustomizer.tiU9pw0A.js                         [39m[1m[2m 10.93 kB[22m[1m[22m[2m │ gzip:   2.75 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mPersistentMusicPlayer.DsXTsqBZ.js                             [39m[1m[2m 13.46 kB[22m[1m[22m[2m │ gzip:   3.32 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mOracleBotContainer.Byy4Nb9X.js                                [39m[1m[2m 18.05 kB[22m[1m[22m[2m │ gzip:   5.01 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mclient.CH8bs1hX.js                                            [39m[1m[2m186.62 kB[22m[1m[22m[2m │ gzip:  58.54 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mmtx.Cc3VX6DG.js                                               [39m[1m[2m259.64 kB[22m[1m[22m[2m │ gzip:  96.53 kB[22m
-[2m04:36:55[22m [34m[vite][39m [2mdist/[22m[2m_astro/[22m[36mindex.B2oqzfqa.js                                             [39m[1m[2m494.74 kB[22m[1m[22m[2m │ gzip: 216.89 kB[22m
-[2m04:36:55[22m [34m[vite][39m [32m✓ built in 2.54s[39m
+ building client (vite) 
+04:36:53 [vite] transforming...
+04:36:55 [vite] ✓ 197 modules transformed.
+04:36:55 [vite] rendering chunks...
+04:36:55 [vite] computing gzip size...
+04:36:55 [vite] dist/_astro/jsx-runtime.D_zvdyIk.js                                         0.73 kB │ gzip:   0.46 kB
+04:36:55 [vite] dist/_astro/mtx.DNYbbw1G.js                                                 1.46 kB │ gzip:   0.36 kB
+04:36:55 [vite] dist/_astro/CasinoGameWrapper.BCZ3mjo7.js                                   1.96 kB │ gzip:   0.90 kB
+04:36:55 [vite] dist/_astro/Wallet.DitUjo9O.js                                              4.27 kB │ gzip:   1.76 kB
+04:36:55 [vite] dist/_astro/DealScanner.astro_astro_type_script_index_0_lang.BmQj41YZ.js    5.03 kB │ gzip:   2.39 kB
+04:36:55 [vite] dist/_astro/BuyMTX.odZIaSW_.js                                              5.10 kB │ gzip:   1.98 kB
+04:36:55 [vite] dist/_astro/WalletConnect.BY1gcTxZ.js                                       5.60 kB │ gzip:   1.95 kB
+04:36:55 [vite] dist/_astro/index.JXKNaeUN.js                                               7.98 kB │ gzip:   3.10 kB
+04:36:55 [vite] dist/_astro/PersistentThemeCustomizer.tiU9pw0A.js                          10.93 kB │ gzip:   2.75 kB
+04:36:55 [vite] dist/_astro/PersistentMusicPlayer.DsXTsqBZ.js                              13.46 kB │ gzip:   3.32 kB
+04:36:55 [vite] dist/_astro/OracleBotContainer.Byy4Nb9X.js                                 18.05 kB │ gzip:   5.01 kB
+04:36:55 [vite] dist/_astro/client.CH8bs1hX.js                                            186.62 kB │ gzip:  58.54 kB
+04:36:55 [vite] dist/_astro/mtx.Cc3VX6DG.js                                               259.64 kB │ gzip:  96.53 kB
+04:36:55 [vite] dist/_astro/index.B2oqzfqa.js                                             494.74 kB │ gzip: 216.89 kB
+04:36:55 [vite] ✓ built in 2.54s
 
-[42m[30m generating static routes [39m[49m
-[2m04:36:55[22m [35mλ[39m src/pages/api/daily-drops.ts
-[2m04:36:55[22m   [34m└─[39m [2m/api/daily-drops[22m [2m(+3ms)[22m 
-[2m04:36:55[22m [35mλ[39m src/pages/api/place-bet.js
-[2m04:36:55[22m   [34m└─[39m [2m/api/place-bet[22m[33m[1m04:36:55[22m [WARN] [router][39m No API Route handler exists for the method "GET" for the route "/api/place-bet".
+ generating static routes 
+04:36:55 λ src/pages/api/daily-drops.ts
+04:36:55   └─ /api/daily-drops (+3ms) 
+04:36:55 λ src/pages/api/place-bet.js
+04:36:55   └─ /api/place-bet04:36:55 [WARN] [router] No API Route handler exists for the method "GET" for the route "/api/place-bet".
 Found handlers: "default"
 
- [2m(+1ms)[22m [33m(file not created, response body was empty)[39m
+ (+1ms) (file not created, response body was empty)
 ⚠️  MTX: Using placeholder address. Deploy contract to get legitimate address.
     Run: npm run deploy:mainnet or npm run deploy:sepolia
-[2m04:36:55[22m [32m▶[39m src/pages/buy-mtx.astro
-[2m04:36:55[22m   [34m└─[39m [2m/buy-mtx/index.html[22m [2m(+33ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/casino.astro
-[2m04:36:55[22m   [34m└─[39m [2m/casino/index.html[22m [2m(+10ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/content-feed.astro
-[2m04:36:55[22m   [34m└─[39m [2m/content-feed/index.html[22m [2m(+8ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/docs/casino-architecture.astro
-[2m04:36:55[22m   [34m└─[39m [2m/docs/casino-architecture/index.html[22m [2m(+8ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/docs/casino-game-math.astro
-[2m04:36:55[22m   [34m└─[39m [2m/docs/casino-game-math/index.html[22m [2m(+6ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/docs/casino-games.astro
-[2m04:36:55[22m   [34m└─[39m [2m/docs/casino-games/index.html[22m [2m(+8ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/docs/dao-governance.astro
-[2m04:36:55[22m   [34m└─[39m [2m/docs/dao-governance/index.html[22m [2m(+5ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/docs/disclaimer.astro
-[2m04:36:55[22m   [34m└─[39m [2m/docs/disclaimer/index.html[22m [2m(+5ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/docs/mtx-tokenomics.astro
-[2m04:36:55[22m   [34m└─[39m [2m/docs/mtx-tokenomics/index.html[22m [2m(+5ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/docs/mtx-whitepaper.astro
-[2m04:36:55[22m   [34m└─[39m [2m/docs/mtx-whitepaper/index.html[22m [2m(+5ms)[22m 
-[2m04:36:55[22m [32m▶[39m src/pages/docs/provably-fair-system.astro
-[2m04:36:55[22m   [34m└─[39m [2m/docs/provably-fair-system/index.html[22m [2m(+6ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/docs/responsible-play.astro
-[2m04:36:56[22m   [34m└─[39m [2m/docs/responsible-play/index.html[22m [2m(+4ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/games/casino/blackjack.astro
-[2m04:36:56[22m   [34m└─[39m [2m/games/casino/blackjack/index.html[22m [2m(+7ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/games/casino/crash.astro
-[2m04:36:56[22m   [34m└─[39m [2m/games/casino/crash/index.html[22m [2m(+6ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/games/casino/dice.astro
-[2m04:36:56[22m   [34m└─[39m [2m/games/casino/dice/index.html[22m [2m(+6ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/games/casino/mines.astro
-[2m04:36:56[22m   [34m└─[39m [2m/games/casino/mines/index.html[22m [2m(+5ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/games/casino/plinko.astro
-[2m04:36:56[22m   [34m└─[39m [2m/games/casino/plinko/index.html[22m [2m(+8ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/games/casino/roulette.astro
-[2m04:36:56[22m   [34m└─[39m [2m/games/casino/roulette/index.html[22m [2m(+5ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/games/casino/slots.astro
-[2m04:36:56[22m   [34m└─[39m [2m/games/casino/slots/index.html[22m [2m(+5ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/games/casino/index.astro
-[2m04:36:56[22m   [34m└─[39m [2m/games/casino/index.html[22m [2m(+4ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/leaderboards.astro
-[2m04:36:56[22m   [34m└─[39m [2m/leaderboards/index.html[22m [2m(+6ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/mtx-contract.astro
-[2m04:36:56[22m   [34m└─[39m [2m/mtx-contract/index.html[22m [2m(+6ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/owners.astro
-[2m04:36:56[22m   [34m└─[39m [2m/owners/index.html[22m⚠️ OWNERS_PASSWORD_HASH not configured. Owners portal will display a configuration message.
- [2m(+5ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/staking.astro
-[2m04:36:56[22m   [34m└─[39m [2m/staking/index.html[22m [2m(+4ms)[22m 
-[2m04:36:56[22m [32m▶[39m src/pages/wallet.astro
-[2m04:36:56[22m   [34m└─[39m [2m/wallet/index.html[22m [2m(+5ms)[22m 
+04:36:55 ▶ src/pages/buy-mtx.astro
+04:36:55   └─ /buy-mtx/index.html (+33ms) 
+04:36:55 ▶ src/pages/casino.astro
+04:36:55   └─ /casino/index.html (+10ms) 
+04:36:55 ▶ src/pages/content-feed.astro
+04:36:55   └─ /content-feed/index.html (+8ms) 
+04:36:55 ▶ src/pages/docs/casino-architecture.astro
+04:36:55   └─ /docs/casino-architecture/index.html (+8ms) 
+04:36:55 ▶ src/pages/docs/casino-game-math.astro
+04:36:55   └─ /docs/casino-game-math/index.html (+6ms) 
+04:36:55 ▶ src/pages/docs/casino-games.astro
+04:36:55   └─ /docs/casino-games/index.html (+8ms) 
+04:36:55 ▶ src/pages/docs/dao-governance.astro
+04:36:55   └─ /docs/dao-governance/index.html (+5ms) 
+04:36:55 ▶ src/pages/docs/disclaimer.astro
+04:36:55   └─ /docs/disclaimer/index.html (+5ms) 
+04:36:55 ▶ src/pages/docs/mtx-tokenomics.astro
+04:36:55   └─ /docs/mtx-tokenomics/index.html (+5ms) 
+04:36:55 ▶ src/pages/docs/mtx-whitepaper.astro
+04:36:55   └─ /docs/mtx-whitepaper/index.html (+5ms) 
+04:36:55 ▶ src/pages/docs/provably-fair-system.astro
+04:36:55   └─ /docs/provably-fair-system/index.html (+6ms) 
+04:36:56 ▶ src/pages/docs/responsible-play.astro
+04:36:56   └─ /docs/responsible-play/index.html (+4ms) 
+04:36:56 ▶ src/pages/games/casino/blackjack.astro
+04:36:56   └─ /games/casino/blackjack/index.html (+7ms) 
+04:36:56 ▶ src/pages/games/casino/crash.astro
+04:36:56   └─ /games/casino/crash/index.html (+6ms) 
+04:36:56 ▶ src/pages/games/casino/dice.astro
+04:36:56   └─ /games/casino/dice/index.html (+6ms) 
+04:36:56 ▶ src/pages/games/casino/mines.astro
+04:36:56   └─ /games/casino/mines/index.html (+5ms) 
+04:36:56 ▶ src/pages/games/casino/plinko.astro
+04:36:56   └─ /games/casino/plinko/index.html (+8ms) 
+04:36:56 ▶ src/pages/games/casino/roulette.astro
+04:36:56   └─ /games/casino/roulette/index.html (+5ms) 
+04:36:56 ▶ src/pages/games/casino/slots.astro
+04:36:56   └─ /games/casino/slots/index.html (+5ms) 
+04:36:56 ▶ src/pages/games/casino/index.astro
+04:36:56   └─ /games/casino/index.html (+4ms) 
+04:36:56 ▶ src/pages/leaderboards.astro
+04:36:56   └─ /leaderboards/index.html (+6ms) 
+04:36:56 ▶ src/pages/mtx-contract.astro
+04:36:56   └─ /mtx-contract/index.html (+6ms) 
+04:36:56 ▶ src/pages/owners.astro
+04:36:56   └─ /owners/index.html⚠️ OWNERS_PASSWORD_HASH not configured. Owners portal will display a configuration message.
+ (+5ms) 
+04:36:56 ▶ src/pages/staking.astro
+04:36:56   └─ /staking/index.html (+4ms) 
+04:36:56 ▶ src/pages/wallet.astro
+04:36:56   └─ /wallet/index.html (+5ms) 
 ⚠️  Casino: Using placeholder addresses. Deploy contracts to get legitimate addresses.
     Run: npm run deploy:mainnet:casino
-[2m04:36:56[22m [32m▶[39m src/pages/index.astro
-[2m04:36:56[22m   [34m└─[39m [2m/index.html[22m [2m(+6ms)[22m 
-[2m04:36:56[22m [32m✓ Completed in 557ms.
-[39m
-[2m04:36:56[22m [34m[build][39m 26 page(s) built in [1m5.83s[22m
+04:36:56 ▶ src/pages/index.astro
+04:36:56   └─ /index.html (+6ms) 
+04:36:56 ✓ Completed in 557ms.
+
+04:36:56 [build] 26 page(s) built in 5.83s
 NOTE: Do not commit build logs to this repository. Use local logs or CI artifacts (e.g., GitHub Actions artifacts) instead of storing build output in `script-output.txt`.
