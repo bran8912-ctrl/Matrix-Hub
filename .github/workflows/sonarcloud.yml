@@ -49,10 +49,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
         with:
           # Additional arguments for the SonarScanner CLI
-          # TODO: Fill in your SonarCloud project key and organization
+          # TODO: Replace the placeholders below with your actual SonarCloud project key and organization
           args: >
-            -Dsonar.projectKey=
-            -Dsonar.organization=
+            -Dsonar.projectKey=YOUR_SONARCLOUD_PROJECT_KEY
+            -Dsonar.organization=YOUR_SONARCLOUD_ORGANIZATION
             -Dsonar.sources=src,contracts,scripts
             -Dsonar.exclusions=**/*.astro,public/**,dist/**,supabase/**,node_modules/**,docs/**,cache/**,artifacts/**,typechain-types/**,.astro/**
             -Dsonar.tests=test
