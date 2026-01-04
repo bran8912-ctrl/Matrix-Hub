@@ -607,6 +607,19 @@ To use this template, you’ll need to set up and seed a new Supabase database.
 npm run dev
 ```
 
+3. Code quality and linting:
+
+The project includes comprehensive code quality tools that run automatically in CI:
+
+```bash
+npm run lint              # Run ESLint on JavaScript/TypeScript/Astro files
+npm run lint:fix          # Auto-fix ESLint issues where possible
+npm run lint:contracts    # Run Solhint on Solidity contracts
+npm run typecheck         # Run TypeScript type checking
+```
+
+These scripts match the checks performed by the Code Quality Analysis workflow.
+
 If you prefer to emulate a production-like environment locally, use your host's recommended tooling (for example, Vercel CLI or Render's local runner).
 
 ## Support
