@@ -1,3 +1,14 @@
+# This workflow has been replaced by code-quality.yml
+# 
+# The new workflow provides similar functionality without requiring SonarCloud:
+# - TypeScript type checking with @astrojs/check
+# - ESLint for JavaScript/TypeScript code quality
+# - Solhint for Solidity contract linting
+# - Smart contract compilation
+#
+# To re-enable SonarCloud, remove this header and rename the file back to sonarcloud.yml,
+# then configure the SONAR_TOKEN secret and update the project key and organization.
+#
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support

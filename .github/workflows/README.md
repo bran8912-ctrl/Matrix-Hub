@@ -86,7 +86,27 @@ Automatically validates content quality on PRs:
 - Posts results as PR comment
 - Uploads error logs
 
-### 6. Deploy Astro Site to GitHub Pages (`astro-gh-pages.yml`)
+### 6. Code Quality Analysis (`code-quality.yml`)
+
+**Triggers:** Push to Hub10 branch, Pull Requests, Manual
+
+Runs comprehensive code quality checks without requiring external services:
+
+**Quality Checks:**
+- 🔍 **TypeScript Type Checking**: Validates types with `@astrojs/check`
+- 🔎 **ESLint Analysis**: Checks JavaScript/TypeScript/Astro code quality
+- 🔐 **Solidity Linting**: Validates smart contracts with Solhint
+- 🔨 **Contract Compilation**: Ensures contracts compile successfully
+
+**Features:**
+- No external service dependencies (replaces SonarCloud)
+- Detailed job summaries with actionable feedback
+- Continues on non-critical errors to provide full feedback
+- Memory-optimized for large codebases
+
+**Note:** This workflow replaces the previous `sonarcloud.yml` workflow, eliminating the need for external service tokens and signup.
+
+### 7. Deploy Astro Site to GitHub Pages (`astro-gh-pages.yml`)
 
 **Triggers:** Push to Hub10 branch, Manual
 
@@ -131,6 +151,7 @@ Add these to your README to show workflow status:
 
 ```markdown
 ![CI](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/ci.yml/badge.svg)
+![Code Quality](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/code-quality.yml/badge.svg)
 ![Content Validation](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/content-validation.yml/badge.svg)
 ![Deploy to GitHub Pages](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/jekyll-gh-pages.yml/badge.svg)
 ```
