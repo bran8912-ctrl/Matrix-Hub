@@ -7,7 +7,7 @@
 [2m04:36:51[22m [34m[types][39m Generated [2m724ms[22m
 [2m04:36:51[22m [34m[build][39m output: [34m"static"[39m
 [2m04:36:51[22m [34m[build][39m mode: [34m"static"[39m
-[2m04:36:51[22m [34m[build][39m directory: [34m/home/runner/work/Matrix-Hub.org/Matrix-Hub.org/dist/[39m
+�[2m04:36:51�[22m �[34m[build]�[39m directory: �[34m./dist/�[39m
 [2m04:36:51[22m [34m[build][39m Collecting build info...
 [2m04:36:51[22m [34m[build][39m [32m✓ Completed in 750ms.[39m
 [2m04:36:51[22m [34m[build][39m Building static entrypoints...
