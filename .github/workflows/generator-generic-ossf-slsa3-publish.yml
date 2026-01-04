@@ -3,8 +3,12 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-# This workflow lets you generate SLSA provenance file for your project.
-# The generation satisfies level 3 for the provenance requirements - see https://slsa.dev/spec/v0.1/requirements
+# SLSA Provenance workflow for Matrix-Hub.org
+# Generates SLSA Level 3 provenance for reproducible, verifiable builds
+# Builds: Astro static site (npm run build) + Smart contracts (npx hardhat compile)
+# Outputs provenance for: /dist and /artifacts
+# 
+# This workflow satisfies level 3 for the provenance requirements - see https://slsa.dev/spec/v0.1/requirements
 # The project is an initiative of the OpenSSF (openssf.org) and is developed at
 # https://github.com/slsa-framework/slsa-github-generator.
 # The provenance file can be verified using https://github.com/slsa-framework/slsa-verifier.
@@ -23,25 +27,32 @@ jobs:
       digests: ${{ steps.hash.outputs.digests }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
 
       # ========================================================
       #
-      # Step 1: Build your artifacts.
+      # Step 1: Build Matrix-Hub.org artifacts
       #
       # ========================================================
-      - name: Build artifacts
-        run: |
-            # These are some amazing artifacts.
-            echo "artifact1" > artifact1
-            echo "artifact2" > artifact2
+      - name: Build Astro static site
+        run: npm run build
+
+      - name: Compile smart contracts
+        run: npm run compile
 
       # ========================================================
       #
-      # Step 2: Add a step to generate the provenance subjects
-      #         as shown below. Update the sha256 sum arguments
-      #         to include all binaries that you generate
-      #         provenance for.
+      # Step 2: Generate provenance subjects for verifiable builds
       #
       # ========================================================
       - name: Generate subject for provenance
@@ -49,10 +60,29 @@ jobs:
         run: |
           set -euo pipefail
 
-          # List the artifacts the provenance will refer to.
-          files=$(ls artifact*)
-          # Generate the subjects (base64 encoded).
-          echo "hashes=$(sha256sum $files | base64 -w0)" >> "${GITHUB_OUTPUT}"
+          # Create temporary file list
+          tempfile=$(mktemp)
+          
+          # List all files in dist/ directory (Astro static site output)
+          if [ -d "dist" ]; then
+            find dist -type f -print0 >> "$tempfile"
+          fi
+          
+          # List all files in artifacts/ directory (Hardhat contract compilation output)
+          if [ -d "artifacts" ]; then
+            find artifacts -type f -name "*.json" -print0 >> "$tempfile"
+          fi
+          
+          # Generate SHA256 hashes for all artifacts
+          if [ -s "$tempfile" ]; then
+            echo "digests=$(xargs -0 sha256sum < "$tempfile" | base64 -w0)" >> "${GITHUB_OUTPUT}"
+          else
+            echo "Error: No artifacts found to generate provenance for"
+            exit 1
+          fi
+          
+          # Cleanup
+          rm "$tempfile"
 
   provenance:
     needs: [build]
@@ -63,4 +93,4 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.4.0
     with:
       base64-subjects: "${{ needs.build.outputs.digests }}"
-      upload-assets: true # Optional: Upload to a new release
+      upload-assets: true # Upload to release when triggered by release event
