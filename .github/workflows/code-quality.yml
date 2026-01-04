@@ -1,0 +1,124 @@
+# Code Quality Workflow for Matrix-Hub.org
+# Replaces SonarCloud with self-hosted linting and type checking
+# Scans TypeScript, JavaScript, Astro, and Solidity code for quality and security issues
+# Matches project structure: /src, /contracts, /scripts
+# Excludes: .astro files (linted separately), /public, /dist, /supabase, /node_modules, /docs
+
+name: Code Quality Analysis
+
+on:
+  push:
+    branches: [ "Hub10" ]
+  pull_request:
+    branches: [ "Hub10" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full clone for better analysis
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript Type Checking
+        id: typecheck
+        run: |
+          echo "## 🔍 TypeScript Type Checking" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if npm run typecheck 2>&1 | tee typecheck-output.txt; then
+            echo "✅ **Type checking passed!**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Type checking failed!**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat typecheck-output.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+        continue-on-error: false
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: ESLint Analysis
+        id: eslint
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔎 ESLint Code Quality" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if npm run lint 2>&1 | tee eslint-output.txt; then
+            echo "✅ **ESLint passed with no errors!**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **ESLint found issues:**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -100 eslint-output.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+        continue-on-error: true
+
+      - name: Solidity Linting
+        id: solhint
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔐 Solidity Contract Linting" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if npm run lint:contracts 2>&1 | tee solhint-output.txt; then
+            echo "✅ **Solidity linting passed!**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Solidity linting found issues:**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat solhint-output.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+        continue-on-error: true
+
+      - name: Compile smart contracts
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔨 Smart Contract Compilation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if npm run compile 2>&1 | tee compile-output.txt; then
+            echo "✅ **Contract compilation successful!**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Contract compilation failed!**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -50 compile-output.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: Final Summary
+        if: always()
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Analysis Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All code quality checks have been executed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Scanned:**" >> $GITHUB_STEP_SUMMARY
+          echo "- TypeScript/JavaScript files in \`src/\`, \`scripts/\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Solidity contracts in \`contracts/\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Astro components" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Excluded:** \`public/\`, \`dist/\`, \`node_modules/\`, \`docs/\`, build artifacts" >> $GITHUB_STEP_SUMMARY

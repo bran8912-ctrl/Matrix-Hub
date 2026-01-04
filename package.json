@@ -24,7 +24,11 @@
     "content:generate": "node content-workflow.js generate",
     "content:watch": "node content-workflow.js watch",
     "content:analytics": "node content-workflow.js analytics",
-    "content:help": "node content-workflow.js help"
+    "content:help": "node content-workflow.js help",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:contracts": "solhint 'contracts/**/*.sol'",
+    "typecheck": "astro check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -62,13 +66,22 @@
     "@types/mocha": "^10.0.10",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
     "chai": "^4.5.0",
     "dotenv": "^17.2.3",
+    "eslint": "^9.39.2",
+    "eslint-plugin-astro": "^1.5.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^17.0.0",
     "hardhat": "^2.22.0",
     "hardhat-gas-reporter": "^2.3.0",
+    "solhint": "^6.0.2",
     "solidity-coverage": "^0.8.17",
     "tailwindcss": "^4.0.1",
     "ts-node": "^10.9.2",
-    "typechain": "^8.3.2"
+    "typechain": "^8.3.2",
+    "typescript-eslint": "^8.51.0"
   }
 }
