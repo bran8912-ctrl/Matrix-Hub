@@ -41,7 +41,6 @@ jobs:
 
       - name: Compile smart contracts
         run: npx hardhat compile
-        continue-on-error: true  # Allow workflow to continue even if contracts fail to compile
 
       - name: Analyze with SonarCloud
         uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
