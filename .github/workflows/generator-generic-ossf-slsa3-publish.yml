@@ -65,17 +65,17 @@ jobs:
           
           # List all files in dist/ directory (Astro static site output)
           if [ -d "dist" ]; then
-            find dist -type f >> "$tempfile"
+            find dist -type f -print0 >> "$tempfile"
           fi
           
           # List all files in artifacts/ directory (Hardhat contract compilation output)
           if [ -d "artifacts" ]; then
-            find artifacts -type f -name "*.json" >> "$tempfile"
+            find artifacts -type f -name "*.json" -print0 >> "$tempfile"
           fi
           
           # Generate SHA256 hashes for all artifacts
           if [ -s "$tempfile" ]; then
-            echo "digests=$(sha256sum $(cat "$tempfile") | base64 -w0)" >> "${GITHUB_OUTPUT}"
+            echo "digests=$(xargs -0 sha256sum < "$tempfile" | base64 -w0)" >> "${GITHUB_OUTPUT}"
           else
             echo "Error: No artifacts found to generate provenance for"
             exit 1
