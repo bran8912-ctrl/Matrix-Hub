@@ -86,17 +86,6 @@ jobs:
           cat parse-output.txt || echo "No output captured"
           echo '```' >> $GITHUB_STEP_SUMMARY
       
-      - name: Setup Node.js for track testing
-        if: startsWith(inputs.script, 'test-')
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
-      - name: Install Node dependencies for track testing
-        if: startsWith(inputs.script, 'test-')
-        run: npm ci
-      
       - name: Run test-tracks
         if: inputs.script == 'test-tracks'
         run: |
