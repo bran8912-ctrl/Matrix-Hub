@@ -13,6 +13,9 @@ yarn-error.log*
 pnpm-debug.log*
 content-workflow-errors.log
 
+# utility script outputs
+*-output.txt
+
 # content workflow generated files
 public/public-feed.json
 public/content-analytics.json
