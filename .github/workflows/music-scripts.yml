@@ -10,6 +10,7 @@ on:
         options:
           - 'scrape-mixkit-tracks'
           - 'parse-mixkit-tracks'
+          - 'scrape-and-parse-mixkit'
           - 'test-tracks'
           - 'test-corsproxy-tracks'
           - 'test-fma-tracks'
@@ -60,6 +61,11 @@ jobs:
           if [ -f "matrix_tracks_snippet.txt" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "✅ Track data generated successfully" >> $GITHUB_STEP_SUMMARY
+            
+            # Also create the pipe-delimited format for parse script
+            mkdir -p /tmp
+            sed 's/{ title: "\([^"]*\)", artist: "\([^"]*\)", url: "\([^"]*\)" },/\1 | \2 | \3/g' matrix_tracks_snippet.txt > /tmp/matrix_new_tracks.txt
+            echo "ℹ️ Also created /tmp/matrix_new_tracks.txt for use with parse-mixkit-tracks" >> $GITHUB_STEP_SUMMARY
           fi
       
       - name: Run parse-mixkit-tracks
@@ -85,6 +91,40 @@ jobs:
           echo '```javascript' >> $GITHUB_STEP_SUMMARY
           cat parse-output.txt || echo "No output captured"
           echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Run scrape-and-parse-mixkit (chained)
+        if: inputs.script == 'scrape-and-parse-mixkit'
+        run: |
+          echo "## 🎵📝 Scrape and Parse Mixkit Tracks (Chained)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Step 1: Scrape
+          echo "### Step 1: Scraping tracks from Mixkit..." >> $GITHUB_STEP_SUMMARY
+          python scripts/scrape_mixkit_tracks.py | tee scrape-output.txt
+          
+          if [ -f "matrix_tracks_snippet.txt" ]; then
+            echo "✅ Scrape completed successfully" >> $GITHUB_STEP_SUMMARY
+            
+            # Convert to pipe-delimited format
+            mkdir -p /tmp
+            sed 's/{ title: "\([^"]*\)", artist: "\([^"]*\)", url: "\([^"]*\)" },/\1 | \2 | \3/g' matrix_tracks_snippet.txt > /tmp/matrix_new_tracks.txt
+            
+            # Step 2: Parse
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Step 2: Parsing track data..." >> $GITHUB_STEP_SUMMARY
+            python scripts/parse_mixkit_tracks.py | tee parse-output.txt
+            
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Parsed Tracks:" >> $GITHUB_STEP_SUMMARY
+            echo '```javascript' >> $GITHUB_STEP_SUMMARY
+            cat parse-output.txt || echo "No output captured"
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Scrape and parse completed successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Scrape failed - cannot proceed to parse" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
       
       - name: Run test-tracks
         if: inputs.script == 'test-tracks'
