@@ -39,7 +39,7 @@ Matrix-Hub features a Casino section where users can:
 # Matrix Hub
 
 [![.github/workflows/run-scripts.yml](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/run-scripts.yml/badge.svg?branch=Hub10)](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/run-scripts.yml)
-[![Code Quality Analysis](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/code-quality.yml/badge.svg)](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/code-quality.yml)
+[![Code Quality Analysis](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/code-quality.yml/badge.svg?branch=Hub10)](https://github.com/bran8912-ctrl/Matrix-Hub.org/actions/workflows/code-quality.yml)
 
 > MATRIX HUB :: ONLINE  
 > NODE STATUS: ACTIVE  
