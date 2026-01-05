@@ -11,10 +11,8 @@ on:
           - 'generate-password-hash'
           - 'get-matrix-music'
           - 'fix-casino-deploy'
-      password:
-        description: 'Password for hash generation (only for generate-password-hash)'
-        required: false
-        type: string
+      # ⚠️ Do not pass passwords via workflow_dispatch inputs.
+      # For generate-password-hash, run the script locally instead of using this workflow.
 
 jobs:
   run-utility:
@@ -41,24 +39,24 @@ jobs:
         run: |
           echo "## 🔐 Generate Password Hash" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ **Security Warning:** This workflow uses an example password for demonstration only." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**To generate a real password hash:**" >> $GITHUB_STEP_SUMMARY
+          echo "1. Run the script locally: \`node scripts/generate-password-hash.js \"your-password\"\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. Never pass real passwords through workflow inputs (they appear in logs)" >> $GITHUB_STEP_SUMMARY
+          echo "3. Store the hash in GitHub Secrets for production use" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           
-          if [ -z "${{ inputs.password }}" ]; then
-            echo "⚠️ **Warning:** No password provided. Using example password for demonstration." >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            PASSWORD="example-password"
-          else
-            PASSWORD="${{ inputs.password }}"
-          fi
+          PASSWORD="example-password-for-demonstration"
+          node scripts/generate-password-hash.js "$PASSWORD" > password-hash-output.txt
           
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          node scripts/generate-password-hash.js "$PASSWORD" | tee password-hash-output.txt
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          
+          echo "✅ Example hash generated and saved to artifact 'password-hash-output.txt'" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "⚠️ **Security Notice:**" >> $GITHUB_STEP_SUMMARY
-          echo "- Keep the generated hash secure" >> $GITHUB_STEP_SUMMARY
           echo "- Never commit passwords or hashes to the repository" >> $GITHUB_STEP_SUMMARY
-          echo "- Use GitHub Secrets for production deployments" >> $GITHUB_STEP_SUMMARY
+          echo "- SHA-256 is fast and vulnerable to brute-force attacks" >> $GITHUB_STEP_SUMMARY
+          echo "- For production, consider using bcrypt, scrypt, or Argon2" >> $GITHUB_STEP_SUMMARY
+          echo "- This is intended for client-side authentication only (not truly secure)" >> $GITHUB_STEP_SUMMARY
       
       - name: Run get-matrix-music
         if: inputs.script == 'get-matrix-music'
@@ -82,10 +80,10 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           chmod +x scripts/fix-casino-deploy.sh
-          cat scripts/fix-casino-deploy.sh | tee fix-output.txt
+          ./scripts/fix-casino-deploy.sh | tee fix-output.txt
           
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "ℹ️ **Note:** This is a minimal script. Review the content above." >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ **Note:** This is a placeholder utility script." >> $GITHUB_STEP_SUMMARY
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -95,7 +93,8 @@ jobs:
             password-hash-output.txt
             music-download-output.txt
             fix-output.txt
-            public/music/
+            public/music/CREDITS.txt
+            public/music/matrix-hub.m3u
           if-no-files-found: ignore
           retention-days: 7
       
