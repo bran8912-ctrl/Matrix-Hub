@@ -1,0 +1,37 @@
+{
+  "generated": "2026-01-03T02:27:31.101Z",
+  "summary": {
+    "totalFiles": 70,
+    "totalWords": 32372,
+    "totalSize": 287883,
+    "avgWordsPerFile": 462
+  },
+  "categories": {
+    "other": {
+      "count": 42,
+      "totalWords": 22969,
+      "avgWords": 547
+    },
+    "page": {
+      "count": 17,
+      "totalWords": 7350,
+      "avgWords": 432
+    },
+    "content": {
+      "count": 2,
+      "totalWords": 504,
+      "avgWords": 252
+    },
+    "documentation": {
+      "count": 9,
+      "totalWords": 1549,
+      "avgWords": 172
+    }
+  },
+  "tagCloud": {},
+  "contentHealth": {
+    "filesWithoutTitles": 68,
+    "filesWithoutDescriptions": 70,
+    "filesWithoutTags": 70
+  }
+}
