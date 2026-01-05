@@ -15,8 +15,6 @@ content-workflow-errors.log
 
 # utility script outputs
 *-output.txt
-password-hash-output.txt
-fix-output.txt
 
 # content workflow generated files
 public/public-feed.json
