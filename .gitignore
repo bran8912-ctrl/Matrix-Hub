@@ -53,7 +53,7 @@ supabase/.temp
 # Hardhat
 cache/
 artifacts/
-deployments/
+# deployments/ - NOT ignored, needed for frontend integration
 typechain-types/
 gasReporterOutput.json
 
