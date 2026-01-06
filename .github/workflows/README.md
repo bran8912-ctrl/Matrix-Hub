@@ -60,6 +60,10 @@ Automatically updates content feeds and analytics daily:
 
 **Triggers:** Manual only (workflow_dispatch)
 
+⚠️ **DEPRECATED:** This workflow is for reference only. Use the new workflows instead:
+- For testnet: Use `deploy-contracts-testnet.yml`
+- For mainnet: Use **manual deployment** (see `DEPLOYMENT_GUIDE.md`)
+
 Guided workflow for deploying smart contracts:
 
 **Safety Features:**
@@ -74,6 +78,58 @@ Guided workflow for deploying smart contracts:
 - `confirm`: Must type "DEPLOY" for mainnet deployments
 
 **Note:** This workflow compiles contracts and provides deployment instructions. Actual deployment requires setting up secrets (see below).
+
+### 4a. Contract Deployment - Testnet (`deploy-contracts-testnet.yml`)
+
+**Triggers:** Manual only (workflow_dispatch)
+
+**NEW:** Comprehensive automated workflow for testnet deployments of MTX token, casino contracts, and token distribution.
+
+**Features:**
+- ✅ Automated deployment to Sepolia testnet
+- ✅ Sequential deployment: MTX → Casino → Distribution
+- ✅ Artifact uploads with deployment JSON files
+- ✅ Detailed deployment summaries
+- ✅ Safety checks and validations
+- 🔒 **Testnet-only** - Mainnet is blocked
+
+**Deployment Types:**
+- `mtx-only` - Deploy only MTX token contract
+- `casino-only` - Deploy only casino contracts (requires existing MTX deployment)
+- `distribute-only` - Distribute tokens only (requires both deployments)
+- `full-deployment` - Complete deployment sequence (recommended)
+
+**Networks:**
+- `sepolia` - Sepolia testnet (recommended for testing)
+- `localhost` - Local Hardhat network
+
+**Required Secrets:**
+- `TESTNET_PRIVATE_KEY`: Deployer wallet private key (testnet only)
+- `SEPOLIA_RPC_URL`: RPC endpoint for Sepolia
+- `ETHERSCAN_API_KEY`: For contract verification (optional)
+
+**Artifacts Generated:**
+- `mtx-deployment-{network}-{run_number}` - MTX deployment info and logs
+- `casino-deployment-{network}-{run_number}` - Casino deployment info and logs
+- `mtx-distribution-{network}-{run_number}` - Distribution info and logs
+- `compiled-contracts-{run_number}` - Compiled contract artifacts
+
+**How to Use:**
+1. Go to the "Actions" tab in GitHub
+2. Select "Contract Deployment - Testnet"
+3. Click "Run workflow"
+4. Choose deployment type (recommend `full-deployment` for first run)
+5. Choose network (`sepolia` recommended)
+6. Optionally skip compilation if using cached artifacts
+7. Click "Run workflow"
+8. Monitor progress and download artifacts when complete
+
+**Output Files:**
+- `deployments/mtx-sepolia.json` - MTX contract address and metadata
+- `deployments/casino-sepolia.json` - Casino contract addresses and metadata
+- `deployments/mtx-distribution-sepolia.json` - Distribution records
+
+See `DEPLOYMENT_GUIDE.md` for complete deployment documentation.
 
 ### 5. Content Validation (`content-validation.yml`)
 
