@@ -24,9 +24,10 @@ With **Option B** implementation (no initial minting), the MTX token contract st
 
 | Allocation | Amount | Purpose | Percentage |
 |------------|--------|---------|------------|
+| **Developer Wallet** | 2,000,000 MTX | Initial development allocation + 2% of bet winnings | 2% |
 | **CasinoReserve** | 20,000,000 MTX | Casino operations and payouts | 20% |
 | **LiquidityRouter** | 10,000,000 MTX | Initial DEX liquidity (Uniswap) | 10% |
-| **Public (buyMTX)** | 70,000,000 MTX | Direct mint purchases at 1 ETH = 100k MTX | 70% |
+| **Public (buyMTX)** | 68,000,000 MTX | Direct mint purchases at 1 ETH = 100k MTX | 68% |
 | **TOTAL** | **100,000,000 MTX** | | **100%** |
 
 ---
@@ -42,14 +43,41 @@ With **Option B** implementation (no initial minting), the MTX token contract st
 4. ✅ "No dependency on hype cycles" - Value from utility, not speculation
 5. ✅ "MTX is useful on-site, not theoretical" - Real utility drives demand
 
-### Why 70% Public Access?
+### Developer Allocation (2M MTX - NEW)
+
+**Purpose**: Development and ongoing maintenance rewards
+
+- **Initial Allocation**: 2,000,000 MTX (2% of total supply)
+- **Ongoing Revenue**: 2% of all casino bet winnings (configured in CasinoCore)
+- **Usage**:
+  - Platform development and maintenance
+  - Infrastructure costs
+  - Team compensation
+  - Future development initiatives
+- **Dual Income Model**: 
+  - Initial allocation for immediate needs
+  - Ongoing percentage ensures sustainable funding
+
+**From CasinoCore Contract:**
+```solidity
+uint256 public devPercent = 2;  // 2% of every bet goes to dev wallet
+```
+
+Every casino bet is split:
+- 85% - Payouts to winners
+- 10% - Liquidity (DEX)
+- 3% - Casino reserve
+- **2% - Developer wallet** ✅
+
+### Why 68% Public Access?
 
 The README emphasizes:
 > "USERS → Engage with modules → EARN MTX"
 > "**1. EARN** → Users accumulate MTX through platform engagement"
 
 **Our Distribution Reflects This:**
-- **70% available via direct mint** - Ensures ample supply for genuine users
+- **68% available via direct mint** - Ensures ample supply for genuine users
+- **2% developer allocation** - Sustainable development funding
 - **Low ecosystem pre-allocation** - Casino grows from house edge, not pre-mine
 - **Earn-focused** - Users get MTX through usage, not token distribution
 - **No "team allocation"** - Aligns with anti-hype philosophy
@@ -92,11 +120,11 @@ Casino should be self-sustaining through house edge, not reliant on large pre-al
 > "DEX provides access, not promises"  
 > "Growth comes from usage"
 
-### Public buyMTX (70M MTX - Increased)
+### Public buyMTX (68M MTX - Adjusted)
 
-**Previous**: 40M MTX  
-**Now**: 70M MTX  
-**Why**: Aligns with "direct mint as primary onboarding" philosophy
+**Previous**: 70M MTX  
+**Now**: 68M MTX  
+**Why**: 2% allocated to developer wallet for sustainable development
 
 - **Purpose**: Fair public distribution
 - **Usage**:
@@ -147,6 +175,58 @@ Reserve: Receives 1 MTX from CasinoCore periodically
 ```
 
 This creates a **sustainable loop** without large pre-allocations.
+
+---
+
+## Developer Revenue Model (Dual Income Stream)
+
+### Initial Allocation: 2M MTX (2%)
+- **Purpose**: Bootstrap development, infrastructure, and team compensation
+- **One-time allocation** at deployment via `mintToEcosystem()`
+- **Transparent**: On-chain allocation visible to all
+
+### Ongoing Revenue: 2% of Casino Bets
+- **Continuous income** from casino operations
+- **Automatically distributed** via CasinoCore smart contract
+- **Scales with usage**: More bets = more dev revenue
+
+### Revenue Split Example
+
+When a user places a 100 MTX bet in the casino:
+
+| Allocation | Amount | Percentage |
+|------------|--------|------------|
+| Winner Payout | 85 MTX | 85% |
+| DEX Liquidity | 10 MTX | 10% |
+| Casino Reserve | 3 MTX | 3% |
+| **Developer Wallet** | **2 MTX** | **2%** ✅ |
+
+**From CasinoCore.sol:**
+```solidity
+uint256 public devPercent = 2;
+
+function placeBet(uint256 amount, bytes calldata gameData) external {
+    ...
+    uint256 devAmount = amount * devPercent / 100;
+    if (devAmount > 0) {
+        if (!mtx.transfer(dev, devAmount)) revert DevPaymentFailed();
+    }
+    ...
+}
+```
+
+### Why This Model Works
+
+1. **Sustainable Funding**: Ongoing revenue ensures long-term development
+2. **Usage Aligned**: Developer benefits when platform succeeds
+3. **Fair Initial Allocation**: 2% upfront covers immediate needs
+4. **Transparent**: All payments on-chain and auditable
+5. **No Excessive Pre-mine**: Small initial allocation, earn through utility
+
+**Total Developer Compensation:**
+- Initial: 2,000,000 MTX (2% of supply)
+- Ongoing: 2% of all casino bets (perpetual)
+- **Aligned with project success** ✅
 
 ---
 
@@ -204,16 +284,21 @@ node scripts/distribute_mtx.js --network mainnet
 This script will:
 1. Load deployment addresses from `deployments/` directory
 2. Verify current supply and max supply
-3. Mint 20M MTX to CasinoReserve
-4. Mint 10M MTX to LiquidityRouter
-5. Save distribution info for audit trail
-6. Display transaction hashes
+3. Mint 2M MTX to Developer Wallet (2% of supply)
+4. Mint 20M MTX to CasinoReserve
+5. Mint 10M MTX to LiquidityRouter
+6. Save distribution info for audit trail
+7. Display transaction hashes
 
 ### Step 3: Verify Distributions
 
 Check on Etherscan that each contract received correct amount:
 
 ```bash
+# Check Developer Wallet balance
+cast call <MTX_ADDRESS> "balanceOf(address)(uint256)" <DEVELOPER_WALLET>
+# Should be: 2,000,000,000,000,000,000,000,000 (2M * 10^18)
+
 # Check CasinoReserve balance  
 cast call <MTX_ADDRESS> "balanceOf(address)(uint256)" <CASINO_RESERVE_ADDRESS>
 # Should be: 20,000,000,000,000,000,000,000,000 (20M * 10^18)
@@ -224,7 +309,7 @@ cast call <MTX_ADDRESS> "balanceOf(address)(uint256)" <LIQUIDITY_ROUTER_ADDRESS>
 
 # Check total supply
 cast call <MTX_ADDRESS> "totalSupply()(uint256)"
-# Should be: 30,000,000,000,000,000,000,000,000 (30M * 10^18)
+# Should be: 32,000,000,000,000,000,000,000,000 (32M * 10^18)
 ```
 
 ---
@@ -263,8 +348,9 @@ Example liquidity ratios:
 After distribution, casino can begin operations:
 
 ```bash
-# CasinoCore has 10M MTX for operations
-# CasinoReserve has 30M MTX for payouts
+# Developer Wallet has 2M MTX (2% initial allocation)
+# CasinoReserve has 20M MTX for payouts
+# Developer also receives 2% of all casino bets
 # Games can now accept bets and pay winners
 ```
 
@@ -376,11 +462,12 @@ node scripts/distribute_mtx.js --network sepolia
 - [ ] MTX deployed to Sepolia
 - [ ] Casino contracts deployed to Sepolia
 - [ ] Distribution executed successfully
-- [ ] CasinoCore has 10M MTX
-- [ ] CasinoReserve has 30M MTX
-- [ ] LiquidityRouter has 20M MTX
-- [ ] Total supply is 60M MTX
+- [ ] Developer Wallet has 2M MTX
+- [ ] CasinoReserve has 20M MTX
+- [ ] LiquidityRouter has 10M MTX
+- [ ] Total supply is 32M MTX
 - [ ] Casino games functional
+- [ ] Developer receives 2% of bet winnings
 - [ ] Reserve can pay winners
 - [ ] DEX liquidity added successfully
 - [ ] No errors or reverts
@@ -394,7 +481,8 @@ node scripts/distribute_mtx.js --network sepolia
 - [ ] All contracts deployed to mainnet
 - [ ] All contracts verified on Etherscan
 - [ ] Owner wallet has sufficient ETH for gas (~0.01 ETH)
-- [ ] Distribution amounts confirmed (10M, 30M, 20M)
+- [ ] Distribution amounts confirmed (2M dev, 20M reserve, 10M liquidity)
+- [ ] Developer wallet address confirmed
 - [ ] Testnet testing completed successfully
 - [ ] Team ready to monitor transactions
 
@@ -413,13 +501,14 @@ node scripts/distribute_mtx.js --network mainnet
 ### Post-Distribution Checklist
 
 - [ ] All 3 transactions confirmed
-- [ ] CasinoCore balance = 10M MTX
-- [ ] CasinoReserve balance = 30M MTX
-- [ ] LiquidityRouter balance = 20M MTX
-- [ ] Total supply = 60M MTX
+- [ ] Developer Wallet balance = 2M MTX
+- [ ] CasinoReserve balance = 20M MTX
+- [ ] LiquidityRouter balance = 10M MTX
+- [ ] Total supply = 32M MTX
 - [ ] Distribution JSON file created
 - [ ] All transactions visible on Etherscan
 - [ ] No errors in any transaction
+- [ ] Developer receives 2% on first test bet
 
 ---
 
@@ -429,17 +518,18 @@ If you need different amounts, edit `scripts/distribute_mtx.js`:
 
 ```javascript
 const DISTRIBUTIONS = {
-  casinoCore: hre.ethers.parseEther("10000000"),      // Change as needed
-  casinoReserve: hre.ethers.parseEther("30000000"),   // Change as needed
-  liquidityRouter: hre.ethers.parseEther("20000000"), // Change as needed
+  developerWallet: hre.ethers.parseEther("2000000"),   // 2M MTX (2%)
+  casinoReserve: hre.ethers.parseEther("20000000"),    // 20M MTX (20%)
+  liquidityRouter: hre.ethers.parseEther("10000000"),  // 10M MTX (10%)
 };
 ```
 
 **Constraints**:
 - Total must not exceed 100M MTX
-- Consider leaving sufficient supply for public buyMTX
-- Reserve should be largest allocation for safety
+- Consider leaving sufficient supply for public buyMTX (currently 68M)
+- Reserve should be adequately sized for casino operations
 - Liquidity should be adequate for DEX trading
+- Developer allocation funds ongoing development
 
 ---
 
@@ -502,17 +592,23 @@ A: Reserve should be sized appropriately. Monitor levels and pause games if rese
 ## Summary
 
 1. **Deploy** MTX and casino contracts
-2. **Distribute** 60M MTX to ecosystem contracts  
+2. **Distribute** 32M MTX to ecosystem contracts (2M dev + 20M reserve + 10M liquidity)
 3. **Add** DEX liquidity from LiquidityRouter
 4. **Enable** casino operations
-5. **Open** buyMTX() for public access to remaining 40M MTX
+5. **Open** buyMTX() for public access to remaining 68M MTX
 
 This ensures:
-- ✅ Casino has operational funds
+- ✅ Developer has sustainable funding (2% initial + 2% ongoing)
+- ✅ Casino has operational liquidity
 - ✅ Reserve has safety buffer
 - ✅ DEX has trading liquidity  
-- ✅ Public has fair access
+- ✅ Public has fair access (68% supply)
 - ✅ Total supply capped at 100M MTX
+
+**Developer Revenue Model:**
+- **Initial**: 2M MTX (2% of supply) at deployment
+- **Ongoing**: 2% of all casino bets (perpetual income)
+- **Total alignment**: Developer succeeds when platform succeeds
 
 ---
 

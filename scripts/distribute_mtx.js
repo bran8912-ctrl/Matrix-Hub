@@ -65,24 +65,33 @@ async function main() {
   // Distribution amounts (adjust as needed)
   // Strategy: Prioritize public access via buyMTX (direct mint)
   // Smaller ecosystem allocations to match "earn through usage" philosophy
+  // Developer gets 2% of initial supply + 2% of bet winnings (configured in CasinoCore)
   const DISTRIBUTIONS = {
-    casinoReserve: hre.ethers.parseEther("20000000"),   // 20M MTX for casino reserves
-    liquidityRouter: hre.ethers.parseEther("10000000"), // 10M MTX for initial DEX liquidity
-    // Total: 30M MTX (30% for ecosystem)
-    // Remaining: 70M MTX (70% for public via direct mint at 1 ETH = 100k MTX)
+    developerWallet: hre.ethers.parseEther("2000000"),   // 2M MTX (2% of supply) for development
+    casinoReserve: hre.ethers.parseEther("20000000"),    // 20M MTX for casino reserves
+    liquidityRouter: hre.ethers.parseEther("10000000"),  // 10M MTX for initial DEX liquidity
+    // Total: 32M MTX (32% for ecosystem + dev)
+    // Remaining: 68M MTX (68% for public via direct mint at 1 ETH = 100k MTX)
   };
 
+  // Developer wallet address (should match dev address in CasinoCore deployment)
+  const DEVELOPER_WALLET = casinoDeployment.dev || process.env.DEVELOPER_WALLET || "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3";
+
   console.log("📊 Distribution Plan:");
+  console.log("   Developer Wallet:", hre.ethers.formatEther(DISTRIBUTIONS.developerWallet), "MTX (2% initial + 2% bet winnings)");
   console.log("   CasinoReserve:   ", hre.ethers.formatEther(DISTRIBUTIONS.casinoReserve), "MTX (Casino operations)");
   console.log("   LiquidityRouter: ", hre.ethers.formatEther(DISTRIBUTIONS.liquidityRouter), "MTX (DEX liquidity)");
   console.log("   --------------------------------------------------");
-  const total = DISTRIBUTIONS.casinoReserve + DISTRIBUTIONS.liquidityRouter;
-  console.log("   Total Ecosystem: ", hre.ethers.formatEther(total), "MTX (30%)");
-  console.log("   Public (buyMTX): 70,000,000 MTX (70% - via direct mint)");
+  const total = DISTRIBUTIONS.developerWallet + DISTRIBUTIONS.casinoReserve + DISTRIBUTIONS.liquidityRouter;
+  console.log("   Total Ecosystem: ", hre.ethers.formatEther(total), "MTX (32%)");
+  console.log("   Public (buyMTX): 68,000,000 MTX (68% - via direct mint)");
   console.log("");
   console.log("   📝 Philosophy: Prioritize public access via direct mint");
+  console.log("      Developer: 2% initial allocation + 2% of all bet winnings");
   console.log("      Casino funds from house edge, not pre-allocation");
   console.log("      Users earn MTX through engagement, not token distribution");
+  console.log("");
+  console.log("   🔧 Developer Wallet Address:", DEVELOPER_WALLET);
   console.log("");
 
   // Confirm distribution
@@ -121,18 +130,34 @@ async function main() {
 
   const distributions = [];
 
+  // Distribute to Developer Wallet (2% of supply)
+  if (DEVELOPER_WALLET) {
+    console.log("💰 Distributing to Developer Wallet...");
+    const tx1 = await MTX.mintToEcosystem(DEVELOPER_WALLET, DISTRIBUTIONS.developerWallet);
+    console.log("   Transaction:", tx1.hash);
+    await tx1.wait();
+    console.log("   ✅ Confirmed");
+    distributions.push({
+      contract: "DeveloperWallet",
+      address: DEVELOPER_WALLET,
+      amount: hre.ethers.formatEther(DISTRIBUTIONS.developerWallet),
+      txHash: tx1.hash
+    });
+    console.log("");
+  }
+
   // Distribute to CasinoReserve
   if (casinoDeployment.casinoReserve) {
     console.log("💰 Distributing to CasinoReserve...");
-    const tx1 = await MTX.mintToEcosystem(casinoDeployment.casinoReserve, DISTRIBUTIONS.casinoReserve);
-    console.log("   Transaction:", tx1.hash);
-    await tx1.wait();
+    const tx2 = await MTX.mintToEcosystem(casinoDeployment.casinoReserve, DISTRIBUTIONS.casinoReserve);
+    console.log("   Transaction:", tx2.hash);
+    await tx2.wait();
     console.log("   ✅ Confirmed");
     distributions.push({
       contract: "CasinoReserve",
       address: casinoDeployment.casinoReserve,
       amount: hre.ethers.formatEther(DISTRIBUTIONS.casinoReserve),
-      txHash: tx1.hash
+      txHash: tx2.hash
     });
     console.log("");
   }
@@ -140,15 +165,15 @@ async function main() {
   // Distribute to LiquidityRouter
   if (casinoDeployment.liquidityRouter) {
     console.log("💰 Distributing to LiquidityRouter...");
-    const tx2 = await MTX.mintToEcosystem(casinoDeployment.liquidityRouter, DISTRIBUTIONS.liquidityRouter);
-    console.log("   Transaction:", tx2.hash);
-    await tx2.wait();
+    const tx3 = await MTX.mintToEcosystem(casinoDeployment.liquidityRouter, DISTRIBUTIONS.liquidityRouter);
+    console.log("   Transaction:", tx3.hash);
+    await tx3.wait();
     console.log("   ✅ Confirmed");
     distributions.push({
       contract: "LiquidityRouter",
       address: casinoDeployment.liquidityRouter,
       amount: hre.ethers.formatEther(DISTRIBUTIONS.liquidityRouter),
-      txHash: tx2.hash
+      txHash: tx3.hash
     });
     console.log("");
   }
@@ -199,14 +224,16 @@ async function main() {
   // Next steps
   console.log("📋 Next Steps:");
   console.log("1. Verify distributions on block explorer");
-  console.log("2. Add DEX liquidity from LiquidityRouter allocation (10M MTX)");
-  console.log("3. Casino operates from reserve (20M MTX)");
-  console.log("4. Casino replenishes reserve from house edge profits");
-  console.log("5. Public accesses remaining 70M MTX via buyMTX() at 1 ETH = 100k MTX");
-  console.log("6. Users earn MTX through platform engagement (usage milestones, contributions)");
+  console.log("2. Developer receives 2M MTX (2% initial) + 2% of all bet winnings");
+  console.log("3. Add DEX liquidity from LiquidityRouter allocation (10M MTX)");
+  console.log("4. Casino operates from reserve (20M MTX)");
+  console.log("5. Casino replenishes reserve from house edge profits");
+  console.log("6. Public accesses remaining 68M MTX via buyMTX() at 1 ETH = 100k MTX");
+  console.log("7. Users earn MTX through platform engagement (usage milestones, contributions)");
   console.log("");
   console.log("💡 Philosophy: Earn-focused, not distribution-focused");
-  console.log("   - 70% supply available via direct mint (low friction onboarding)");
+  console.log("   - 68% supply available via direct mint (low friction onboarding)");
+  console.log("   - 2% developer allocation (initial + ongoing bet revenue)");
   console.log("   - Casino funded minimally, grows from house edge");
   console.log("   - Users earn through engagement, not airdrops");
   console.log("");
