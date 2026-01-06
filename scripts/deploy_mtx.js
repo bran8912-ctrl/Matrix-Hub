@@ -15,9 +15,9 @@ async function main() {
   console.log("Account balance:", hre.ethers.formatEther(balance), "ETH");
   
   // Deploy parameters
-  const initialSupply = "100000000"; // 100M MTX
+  const maxSupply = "100000000"; // 100M MTX maximum supply cap
   // Owner address (user's MetaMask address from requirements)
-  // This address will own the contract and receive the initial supply
+  // This address will own the contract (NO initial minting - gradual distribution via buyMTX)
   // Verified address format: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
   const initialOwner = "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3";
   
@@ -29,17 +29,19 @@ async function main() {
   }
   
   console.log("\nDeployment parameters:");
-  console.log("- Initial Supply:", initialSupply, "MTX");
-  console.log("- Initial Owner:", initialOwner);
+  console.log("- Maximum Supply Cap:", maxSupply, "MTX");
+  console.log("- Initial Minting: NONE (gradual distribution via buyMTX)");
+  console.log("- Contract Owner:", initialOwner);
   console.log("- Token Name: Matrix-HubCoin");
   console.log("- Token Symbol: MTX");
   console.log("- Decimals: 18");
   console.log("- Network: Ethereum Mainnet (Chain ID: 1)");
+  console.log("- Distribution Method: ETH purchases at 1 ETH = 100,000 MTX");
   
   // Deploy contract
   console.log("\nDeploying MatrixHubCoin contract...");
   const MTX = await hre.ethers.getContractFactory("MatrixHubCoin");
-  const mtx = await MTX.deploy(initialSupply, initialOwner);
+  const mtx = await MTX.deploy(maxSupply, initialOwner);
   
   await mtx.waitForDeployment();
   const contractAddress = await mtx.getAddress();
@@ -63,7 +65,8 @@ async function main() {
     deployer: deployer.address,
     owner: initialOwner,
     deploymentTime: new Date().toISOString(),
-    initialSupply: initialSupply,
+    maxSupply: maxSupply,
+    initialMinting: "NONE - gradual distribution via buyMTX",
     transactionHash: deployTx ? deployTx.hash : null,
     blockNumber: deployTx ? deployTx.blockNumber : null
   };

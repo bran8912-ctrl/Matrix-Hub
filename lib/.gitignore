@@ -1,0 +1,7 @@
+# Ignore OpenZeppelin's development dependencies
+openzeppelin-contracts/node_modules/
+openzeppelin-contracts/package-lock.json
+
+# Keep the contracts source and documentation
+!openzeppelin-contracts/contracts/
+!openzeppelin-contracts/docs/

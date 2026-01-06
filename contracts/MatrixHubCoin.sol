@@ -62,16 +62,17 @@ contract MatrixHubCoin is ERC20, Ownable {
     event Withdrawal(address indexed recipient, uint256 indexed amount);
 
     /**
-     * @notice Constructor sets the initial owner and mints the total supply to owner
+     * @notice Constructor sets the initial owner and maximum supply cap
      * @dev Initializes ERC20 with name "Matrix-HubCoin" and symbol "MTX"
-     * @param initialSupply The initial supply in whole tokens (e.g., 100000000 for 100M MTX)
-     * @param initialOwner The address that will own the contract and receive initial supply
+     * @dev NO initial minting - tokens distributed gradually through buyMTX() function
+     * @param maxSupply The maximum supply cap in whole tokens (e.g., 100000000 for 100M MTX)
+     * @param initialOwner The address that will own the contract
      */
-    constructor(uint256 initialSupply, address initialOwner) ERC20("Matrix-HubCoin", "MTX") Ownable(initialOwner) {
+    constructor(uint256 maxSupply, address initialOwner) ERC20("Matrix-HubCoin", "MTX") Ownable(initialOwner) {
         if (initialOwner == address(0)) revert ZeroAddress();
-        if (initialSupply == 0) revert ZeroAmount();
-        MAX_SUPPLY = initialSupply * 10 ** decimals();
-        _mint(initialOwner, MAX_SUPPLY);
+        if (maxSupply == 0) revert ZeroAmount();
+        MAX_SUPPLY = maxSupply * 10 ** decimals();
+        // NO initial minting - supply distributed through buyMTX() purchases
     }
 
     /**
@@ -144,6 +145,22 @@ contract MatrixHubCoin is ERC20, Ownable {
         if (!success) revert WithdrawalFailed();
         
         emit Withdrawal(recipient, balance);
+    }
+
+    /**
+     * @notice Owner-controlled mint for ecosystem contracts (Casino, Reserve, Liquidity)
+     * @dev Only callable by contract owner, respects MAX_SUPPLY cap
+     * @dev Use this to allocate MTX to Casino, CasinoReserve, and other ecosystem contracts
+     * @param to Address to receive the minted MTX (typically a contract)
+     * @param amount Amount of MTX to mint
+     */
+    function mintToEcosystem(address to, uint256 amount) external onlyOwner {
+        if (to == address(0)) revert ZeroAddress();
+        if (amount == 0) revert ZeroAmount();
+        if (totalSupply() + amount > MAX_SUPPLY) revert ExceedsMaxSupply();
+        
+        _mint(to, amount);
+        emit MTXPurchased(to, 0, amount); // Use 0 ETH to indicate owner mint
     }
 
     /**
