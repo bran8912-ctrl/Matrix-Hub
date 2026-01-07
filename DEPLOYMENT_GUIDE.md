@@ -100,7 +100,7 @@ The scripts **must** be run in this order:
    ETHERSCAN_API_KEY="your-etherscan-api-key"
    
    # Developer Wallet (receives 2% MTX allocation)
-   DEVELOPER_WALLET="0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+   DEVELOPER_WALLET="0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
    ```
 
    ⚠️ **Security Warning:** Never commit `.env` file or share private keys!
@@ -192,7 +192,7 @@ Account balance: 1.5 ETH
 Deployment parameters:
 - Maximum Supply Cap: 100000000 MTX
 - Initial Minting: NONE (gradual distribution via buyMTX)
-- Contract Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- Contract Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 
 ✅ MTX Token deployed successfully!
 Contract Address: 0x...
@@ -369,7 +369,7 @@ After deployment, verify all contracts on Etherscan:
 
 ```bash
 # Verify MTX token
-npx hardhat verify --network mainnet <MTX_ADDRESS> "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npx hardhat verify --network mainnet <MTX_ADDRESS> "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 
 # Verify RNGEngine
 npx hardhat verify --network mainnet <RNG_ADDRESS>
