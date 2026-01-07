@@ -64,7 +64,7 @@ Account balance: 0.5 ETH
 
 Deployment parameters:
 - Initial Supply: 100000000 MTX
-- Initial Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- Initial Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 - Token Name: Matrix-HubCoin
 - Token Symbol: MTX
 - Decimals: 18
@@ -73,7 +73,7 @@ Deploying MatrixHubCoin contract...
 
 ✅ MTX Token deployed successfully!
 Contract Address: 0xYOUR_CONTRACT_ADDRESS
-Contract Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+Contract Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 Transaction Hash: 0xYOUR_TX_HASH
 
 📄 Deployment info saved to: deployments/mtx-sepolia.json
@@ -85,7 +85,7 @@ Transaction Hash: 0xYOUR_TX_HASH
 
 ### Step 2: Verify on Etherscan
 ```bash
-npm run verify:sepolia 0xYOUR_CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:sepolia 0xYOUR_CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 Replace `0xYOUR_CONTRACT_ADDRESS` with your actual deployed address.
@@ -102,7 +102,7 @@ Visit the Etherscan URL and confirm:
 - ✅ Contract name: MatrixHubCoin
 - ✅ Symbol: MTX
 - ✅ Total supply: 100,000,000 MTX
-- ✅ Owner address: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- ✅ Owner address: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 
 ## 📚 Documentation Available
 
@@ -139,7 +139,7 @@ The deployment script will use these fixed parameters:
 | Parameter | Value |
 |-----------|-------|
 | **Initial Supply** | 100,000,000 MTX |
-| **Owner Address** | 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3 |
+| **Owner Address** | 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077 |
 | **Token Name** | Matrix-HubCoin |
 | **Token Symbol** | MTX |
 | **Decimals** | 18 |
@@ -219,7 +219,7 @@ After successful deployment, you'll have:
      "chainId": 11155111,
      "contractAddress": "0x...",
      "deployer": "0x...",
-     "owner": "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3",
+     "owner": "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077",
      "deploymentTime": "2025-12-30T...",
      "initialSupply": "100000000",
      "transactionHash": "0x...",
@@ -259,7 +259,7 @@ npm run deploy:sepolia
 
 Then verify with:
 ```bash
-npm run verify:sepolia YOUR_CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:sepolia YOUR_CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 ---

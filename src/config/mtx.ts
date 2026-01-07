@@ -7,7 +7,7 @@
 // ⚠️ AFTER DEPLOYMENT: Update this file with the real contract address
 // For production, set MTX_CONTRACT_ADDRESS in environment variables
 // Exchange Rate: 1 ETH = 100,000 MTX (configured in contract)
-// Initial Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+// Initial Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 
 // Get contract address from environment or use placeholder
 const contractAddress = typeof process !== 'undefined' && process.env?.MTX_CONTRACT_ADDRESS 
@@ -40,7 +40,7 @@ export const MTX = {
   rpcUrls: ["https://eth.llamarpc.com"],
   blockExplorerUrls: ["https://etherscan.io/"],
   // Contract owner for verification and management
-  owner: "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3",
+  owner: "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077",
   isDeployed: isValidAddress && !isPlaceholder,
   get blockExplorerUrl() {
     return `${this.blockExplorerUrls[0]}address/${this.address}`;

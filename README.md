@@ -467,7 +467,7 @@ npm run deploy:mainnet
 
 - **Network**: Ethereum Mainnet (ChainID: 1)
 - **Contract Address**: *To be updated after deployment*
-- **Contract Owner**: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- **Contract Owner**: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 - **Symbol**: MTX
 - **Decimals**: 18
 - **Block Explorer**: Etherscan

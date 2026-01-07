@@ -80,7 +80,7 @@ npm run compile
 npm run deploy:sepolia
 
 # Verify (replace CONTRACT_ADDRESS)
-npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 ### Deploy to Mainnet (After Testing)
@@ -89,7 +89,7 @@ npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b
 npm run deploy:mainnet
 
 # Verify (replace CONTRACT_ADDRESS)
-npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 ## 🎯 What You Need
@@ -187,7 +187,7 @@ npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b
 - Ensure sufficient test ETH
 
 **Q: How do I verify the contract?**
-- Use: `npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"`
+- Use: `npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"`
 - See: [Verification Guide](SEPOLIA_DEPLOYMENT.md#step-4-verify-contract-on-etherscan)
 
 ## 🎯 Quick Navigation

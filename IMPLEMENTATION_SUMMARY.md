@@ -23,7 +23,7 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 - Owner can adjust ETH→MTX exchange rate
 - Owner can withdraw collected ETH
 - User-callable burn function
-- Initial owner address: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- Initial owner address: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 
 #### CasinoCore.sol - Casino Management
 - Accepts MTX ERC-20 token for bets
