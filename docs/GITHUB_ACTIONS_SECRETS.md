@@ -23,7 +23,7 @@ All workflows use the following secrets. You must configure these in your reposi
 - **Usage**: 
   - `MAINNET_PRIVATE_KEY`: Used for mainnet contract deployments
   - `TESTNET_PRIVATE_KEY`: Used for testnet (Sepolia) contract deployments
-- **How it works**: Workflows map these to the `PRIVATE_KEY` environment variable that hardhat expects
+- **How it works**: Workflows map these to the `PRIVATE_KEY` environment variable that Hardhat expects
 - **Security**: Use burner wallets, NEVER your main wallet
 - **Format**: 64-character hexadecimal string (without 0x prefix)
 - **Example**: `1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef`
@@ -85,7 +85,7 @@ All workflows use the following secrets. You must configure these in your reposi
 ### Step 2: Add Repository Secrets
 
 1. Click **New repository secret** button
-2. Enter the secret **Name** (must match exactly, e.g., `PRIVATE_KEY`)
+2. Enter the secret **Name** (must match exactly, e.g., `MAINNET_PRIVATE_KEY`)
 3. Enter the secret **Value** (the actual sensitive data)
 4. Click **Add secret**
 
