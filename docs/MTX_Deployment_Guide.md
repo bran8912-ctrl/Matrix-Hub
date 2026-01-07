@@ -72,7 +72,7 @@ npm run deploy:mainnet
 The script will output:
 ```
 MTX deployed to: 0xYourActualContractAddress
-Contract Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+Contract Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 ```
 
 **SAVE THIS ADDRESS IMMEDIATELY!**
@@ -81,7 +81,7 @@ Contract Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
 
 ```bash
 # Verify the contract (replace with your actual address and constructor args)
-npm run verify:mainnet 0xYourActualContractAddress "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:mainnet 0xYourActualContractAddress "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 This will make the contract publicly verifiable on Etherscan.

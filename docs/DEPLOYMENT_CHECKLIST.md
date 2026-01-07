@@ -23,7 +23,7 @@ Use this checklist to ensure you have everything ready before deploying the MTX 
 ### Contract Configuration
 - [ ] Review deployment parameters in `scripts/deploy_mtx.js`
   - Initial Supply: 100,000,000 MTX
-  - Owner Address: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+  - Owner Address: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 - [ ] Confirm owner address is correct and accessible
 
 ### Compilation
@@ -40,7 +40,7 @@ Use this checklist to ensure you have everything ready before deploying the MTX 
 - [ ] Deployment info saved to `deployments/mtx-sepolia.json`
 
 ### Verify Contract
-- [ ] Run: `npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"`
+- [ ] Run: `npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"`
 - [ ] Verification successful on Sepolia Etherscan
 - [ ] Contract source code visible on Etherscan
 - [ ] Green checkmark appears on Etherscan
@@ -79,7 +79,7 @@ Use this checklist to ensure you have everything ready before deploying the MTX 
 - [ ] Deployment info saved to `deployments/mtx-mainnet.json`
 
 ### Verify on Mainnet
-- [ ] Run: `npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"`
+- [ ] Run: `npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"`
 - [ ] Verification successful on Mainnet Etherscan
 - [ ] Contract source code visible
 - [ ] Green checkmark on Etherscan
@@ -136,7 +136,7 @@ npm run compile
 npm run deploy:sepolia
 
 # 4. Verify (replace CONTRACT_ADDRESS)
-npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 ### Mainnet Deployment
@@ -145,7 +145,7 @@ npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b
 npm run deploy:mainnet
 
 # 2. Verify (replace CONTRACT_ADDRESS)
-npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 ## Troubleshooting

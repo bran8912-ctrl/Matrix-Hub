@@ -47,7 +47,7 @@ This PR integrates OpenZeppelin contracts package into the repository following 
 2. ✅ **Ownership and Access Control**
    - Ownable implementation correct
    - Owner-only functions properly restricted
-   - Owner address validated: `0x58e7893356002ac8f8f612f7b3d29d8b181d85b3`
+   - Owner address validated: `0x9fb4bb44d8d962d695fc93b3dc15f1b287391077`
 
 3. ✅ **Pause Functionality**
    - Minting pause control implemented

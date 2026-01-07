@@ -60,6 +60,10 @@ Automatically updates content feeds and analytics daily:
 
 **Triggers:** Manual only (workflow_dispatch)
 
+⚠️ **DEPRECATED:** This workflow is for reference only. Use the new workflows instead:
+- For testnet: Use `deploy-contracts-testnet.yml`
+- For mainnet: Use **manual deployment** (see `DEPLOYMENT_GUIDE.md`)
+
 Guided workflow for deploying smart contracts:
 
 **Safety Features:**
@@ -75,7 +79,115 @@ Guided workflow for deploying smart contracts:
 
 **Note:** This workflow compiles contracts and provides deployment instructions. Actual deployment requires setting up secrets (see below).
 
-### 5. Content Validation (`content-validation.yml`)
+### 4a. Contract Deployment - Testnet (`deploy-contracts-testnet.yml`)
+
+**Triggers:** Manual only (workflow_dispatch)
+
+**NEW:** Comprehensive automated workflow for testnet deployments of MTX token, casino contracts, and token distribution.
+
+**Features:**
+- ✅ Automated deployment to Sepolia testnet
+- ✅ Sequential deployment: MTX → Casino → Distribution
+- ✅ Artifact uploads with deployment JSON files
+- ✅ Detailed deployment summaries
+- ✅ Safety checks and validations
+- 🔒 **Testnet-only** - Mainnet is blocked
+
+**Deployment Types:**
+- `mtx-only` - Deploy only MTX token contract
+- `casino-only` - Deploy only casino contracts (requires existing MTX deployment)
+- `distribute-only` - Distribute tokens only (requires both deployments)
+- `full-deployment` - Complete deployment sequence (recommended)
+
+**Networks:**
+- `sepolia` - Sepolia testnet (recommended for testing)
+- `localhost` - Local Hardhat network
+
+**Required Secrets:**
+- `TESTNET_PRIVATE_KEY`: Deployer wallet private key (testnet only)
+- `SEPOLIA_RPC_URL`: RPC endpoint for Sepolia
+- `ETHERSCAN_API_KEY`: For contract verification (optional)
+
+**Artifacts Generated:**
+- `mtx-deployment-{network}-{run_number}` - MTX deployment info and logs
+- `casino-deployment-{network}-{run_number}` - Casino deployment info and logs
+- `mtx-distribution-{network}-{run_number}` - Distribution info and logs
+- `compiled-contracts-{run_number}` - Compiled contract artifacts
+
+**How to Use:**
+1. Go to the "Actions" tab in GitHub
+2. Select "Contract Deployment - Testnet"
+3. Click "Run workflow"
+4. Choose deployment type (recommend `full-deployment` for first run)
+5. Choose network (`sepolia` recommended)
+6. Optionally skip compilation if using cached artifacts
+7. Click "Run workflow"
+8. Monitor progress and download artifacts when complete
+
+**Output Files:**
+- `deployments/mtx-sepolia.json` - MTX contract address and metadata
+- `deployments/casino-sepolia.json` - Casino contract addresses and metadata
+- `deployments/mtx-distribution-sepolia.json` - Distribution records
+
+See `DEPLOYMENT_GUIDE.md` for complete deployment documentation.
+
+### 4b. Contract Deployment - Mainnet (`deploy-contracts-mainnet.yml`)
+
+**Triggers:** Manual only (workflow_dispatch)
+
+**🚨 CRITICAL:** Protected mainnet deployment workflow with multiple safeguards.
+
+**Features:**
+- ✅ Automated deployment to Ethereum mainnet
+- ✅ Multiple confirmation requirements before execution
+- ✅ Sequential deployment: MTX → Casino → Distribution
+- ✅ Artifact uploads with 90-day retention
+- ✅ Detailed deployment summaries
+- 🔒 **Requires two confirmation strings to prevent accidents**
+
+**Required Confirmations:**
+1. **confirmation_string:** Must type `DEPLOY-TO-MAINNET-CONFIRMED`
+2. **double_check:** Must type `I-UNDERSTAND-THIS-IS-IRREVERSIBLE`
+
+**Deployment Types:**
+- `mtx-only` - Deploy only MTX token contract
+- `casino-only` - Deploy only casino contracts (requires existing MTX deployment)
+- `distribute-only` - Distribute tokens only (requires both deployments)
+- `full-deployment` - Complete deployment sequence (recommended)
+
+**Required Secrets:**
+- `MAINNET_PRIVATE_KEY`: Deployer wallet private key (mainnet)
+- `MAINNET_RPC_URL`: RPC endpoint for Ethereum mainnet
+- `ETHERSCAN_API_KEY`: For contract verification
+
+**Security Features:**
+- ⚠️ Requires exact confirmation strings (case-insensitive)
+- ⚠️ Fails immediately if confirmations don't match
+- ⚠️ Separate secrets for mainnet (never use testnet keys)
+- ⚠️ 90-day artifact retention for critical mainnet deployments
+- ⚠️ Detailed post-deployment action checklist
+
+**Artifacts Generated:**
+- `mtx-deployment-mainnet-{run_number}` - MTX deployment info and logs (90 days)
+- `casino-deployment-mainnet-{run_number}` - Casino deployment info and logs (90 days)
+- `mtx-distribution-mainnet-{run_number}` - Distribution info and logs (90 days)
+- `compiled-contracts-mainnet-{run_number}` - Compiled contract artifacts (7 days)
+
+**How to Use:**
+1. Go to the "Actions" tab in GitHub
+2. Select "Contract Deployment - Mainnet (Protected)"
+3. Click "Run workflow"
+4. Choose deployment type
+5. Type `DEPLOY-TO-MAINNET-CONFIRMED` in confirmation field
+6. Type `I-UNDERSTAND-THIS-IS-IRREVERSIBLE` in double-check field
+7. Click "Run workflow"
+8. **IMMEDIATELY** download and backup all artifacts after completion
+9. Verify contracts on Etherscan
+10. Test thoroughly before announcing
+
+**⚠️  WARNING:** This deploys to mainnet with real funds. Transactions are irreversible. Always test on Sepolia first.
+
+### 6. Content Validation (`content-validation.yml`)
 
 **Triggers:** Pull Requests that change content files
 
@@ -86,7 +198,7 @@ Automatically validates content quality on PRs:
 - Posts results as PR comment
 - Uploads error logs
 
-### 6. Code Quality Analysis (`code-quality.yml`)
+### 7. Code Quality Analysis (`code-quality.yml`)
 
 **Triggers:** Push to Hub10 branch, Pull Requests, Manual
 
@@ -106,7 +218,7 @@ Runs comprehensive code quality checks without requiring external services:
 
 **Note:** This workflow replaces the previous `sonarcloud.yml` workflow, eliminating the need for external service tokens and signup.
 
-### 7. Deploy Astro Site to GitHub Pages (`astro-gh-pages.yml`)
+### 8. Deploy Astro Site to GitHub Pages (`astro-gh-pages.yml`)
 
 **Triggers:** Push to Hub10 branch, Manual
 
@@ -117,7 +229,7 @@ Deploys the Astro site to GitHub Pages:
 
 _Note: The `jekyll-gh-pages.yml` workflow is a pre-existing GitHub Pages deployment pipeline and is **not** added or modified by this PR._
 
-### 8. Utility Scripts (`utility-scripts.yml`)
+### 9. Utility Scripts (`utility-scripts.yml`)
 
 **Triggers:** Manual only (workflow_dispatch)
 
@@ -145,7 +257,7 @@ Runs utility scripts for password generation, music downloads, and deployment fi
 - Script output files
 - Metadata files (credits, playlists) for music downloads
 
-### 9. Music Track Scripts (`music-scripts.yml`)
+### 10. Music Track Scripts (`music-scripts.yml`)
 
 **Triggers:** Manual only (workflow_dispatch)
 

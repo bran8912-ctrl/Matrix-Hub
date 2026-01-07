@@ -96,10 +96,10 @@ npm run deploy:mainnet
 ### Verification Commands
 ```bash
 # Verify on Sepolia Etherscan
-npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 
 # Verify on Mainnet Etherscan
-npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 ### Supporting Commands
@@ -123,7 +123,7 @@ The deployment will create:
 | **Symbol** | MTX |
 | **Decimals** | 18 |
 | **Initial Supply** | 100,000,000 MTX |
-| **Owner Address** | 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3 |
+| **Owner Address** | 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077 |
 | **Network** | Sepolia (ChainID: 11155111) |
 | **Contract** | MatrixHubCoin.sol |
 

@@ -74,7 +74,7 @@ npm run deploy:sepolia
 This will:
 1. Connect to Sepolia testnet
 2. Deploy the MatrixHubCoin contract
-3. Mint 100M MTX to the owner address: `0x58e7893356002ac8f8f612f7b3d29d8b181d85b3`
+3. Mint 100M MTX to the owner address: `0x9fb4bb44d8d962d695fc93b3dc15f1b287391077`
 4. Save deployment info to `deployments/mtx-sepolia.json`
 
 **Expected output:**
@@ -86,7 +86,7 @@ Account balance: 1.0 ETH
 
 Deployment parameters:
 - Initial Supply: 100000000 MTX
-- Initial Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- Initial Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 - Token Name: MatrixHubCoin
 - Token Symbol: MTX
 - Decimals: 18
@@ -96,7 +96,7 @@ Deploying MatrixHubCoin contract...
 
 ✅ MTX Token deployed successfully!
 Contract Address: 0xYourContractAddress
-Contract Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+Contract Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 Transaction Hash: 0xYourTxHash
 Block Number: 12345
 
@@ -104,7 +104,7 @@ Block Number: 12345
 
 📋 Next Steps:
 1. Verify contract on Etherscan:
-   npx hardhat verify --network sepolia 0xYourContractAddress "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+   npx hardhat verify --network sepolia 0xYourContractAddress "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 
 2. Update src/config/mtx.ts with the contract address:
    address: "0xYourContractAddress"
@@ -123,7 +123,7 @@ Block Number: 12345
 After deployment, verify the contract to make it publicly readable:
 
 ```bash
-npm run verify:sepolia 0xYourContractAddress "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:sepolia 0xYourContractAddress "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 Replace `0xYourContractAddress` with your actual deployed contract address.
@@ -186,7 +186,7 @@ export const MTX = {
 - Make sure `ETHERSCAN_API_KEY` is set in `.env`
 - Verify the API key is valid (check https://etherscan.io/myapikey)
 - Wait 1-2 minutes after deployment before verifying
-- Ensure constructor arguments match exactly: `"100000000"` and `"0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"`
+- Ensure constructor arguments match exactly: `"100000000"` and `"0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"`
 
 ### "Error: already verified"
 - Contract was already verified successfully
@@ -208,7 +208,7 @@ export const MTX = {
 - **Symbol**: MTX
 - **Decimals**: 18
 - **Initial Supply**: 100,000,000 MTX
-- **Initial Owner**: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- **Initial Owner**: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 
 ## After Deployment
 
