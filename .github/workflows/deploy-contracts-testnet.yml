@@ -124,7 +124,7 @@ jobs:
       - name: Deploy MTX Token to ${{ inputs.network }}
         env:
           PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
-          SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+          SEPOLIA_RPC_URL: ${{ inputs.network == 'sepolia' && secrets.SEPOLIA_RPC_URL || '' }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
         run: |
           echo "## 🚀 Deploying MTX Token" >> $GITHUB_STEP_SUMMARY
@@ -194,7 +194,7 @@ jobs:
       - name: Deploy Casino Contracts to ${{ inputs.network }}
         env:
           PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
-          SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+          SEPOLIA_RPC_URL: ${{ inputs.network == 'sepolia' && secrets.SEPOLIA_RPC_URL || '' }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
         run: |
           echo "## 🎰 Deploying Casino Contracts" >> $GITHUB_STEP_SUMMARY
@@ -271,7 +271,7 @@ jobs:
       - name: Distribute MTX to Ecosystem
         env:
           PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
-          SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+          SEPOLIA_RPC_URL: ${{ inputs.network == 'sepolia' && secrets.SEPOLIA_RPC_URL || '' }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
         run: |
           echo "## 💰 Distributing MTX Tokens" >> $GITHUB_STEP_SUMMARY
