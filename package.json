@@ -2,6 +2,13 @@
   "name": "astro-supabase-starter",
   "type": "module",
   "version": "0.0.1",
+  "//": "NOTE: Several deprecated npm packages are in use. These should be replaced in a future maintenance PR:",
+  "//deprecated": [
+    "inflight - used transitively, update parent packages",
+    "lodash.isequal - used transitively, update parent packages",
+    "glob (various versions) - used transitively, update parent packages",
+    "web3modal@1.9.12 - direct dependency, consider upgrading to web3modal v3 or replacing with @web3modal/wagmi"
+  ],
   "scripts": {
     "deploy:testnet:mtx": "hardhat run scripts/deploy_mtx.js --network sepolia",
     "deploy:testnet:casino": "hardhat run scripts/deploy_casino.js --network sepolia",
