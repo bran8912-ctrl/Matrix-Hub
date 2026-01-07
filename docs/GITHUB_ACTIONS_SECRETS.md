@@ -132,16 +132,20 @@ For local development, secrets are NOT used. Instead:
    cp .env.example .env
    ```
 
-2. Replace the `${{ secrets.* }}` placeholders with actual values:
+2. Replace the placeholder values with actual credentials:
    ```bash
    # Before (in .env.example)
-   PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}
+   PRIVATE_KEY=your_private_key_here_without_0x_prefix
+   ETHERSCAN_API_KEY=your_etherscan_api_key_here
    
    # After (in your local .env)
-   PRIVATE_KEY=your_actual_private_key_here
+   PRIVATE_KEY=1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+   ETHERSCAN_API_KEY=ABC123XYZ456DEF789
    ```
 
 3. **NEVER commit your `.env` file!** It's protected by `.gitignore`.
+
+**Note**: The `.env.example` file contains descriptive placeholder values that are safe to commit. These placeholders (like `your_private_key_here_without_0x_prefix`) remind you what type of value to add. For GitHub Actions, you'll configure the actual secrets in repository settings using names like `MAINNET_PRIVATE_KEY` and `TESTNET_PRIVATE_KEY`.
 
 ## Security Best Practices
 
