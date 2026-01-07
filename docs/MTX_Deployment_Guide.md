@@ -31,16 +31,24 @@ The recommended deployment target is:
 npm install
 
 # Set up environment variables
+# For GitHub Actions: Configure secrets in repository settings
+# See: docs/GITHUB_ACTIONS_SECRETS.md for detailed instructions
+# For local development: Copy .env.example and configure values
 cp .env.example .env
 ```
 
-Edit `.env` file:
+**For Local Development** - Edit `.env` file:
 ```
 MAINNET_RPC_URL=https://eth.llamarpc.com
 PRIVATE_KEY=YOUR_DEPLOYER_PRIVATE_KEY_HERE
 ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY
 MTX_CONTRACT_ADDRESS=  # Leave empty until deployed
 ```
+
+**For GitHub Actions** - Configure repository secrets:
+- Go to Repository Settings → Secrets and variables → Actions
+- Add: `MAINNET_PRIVATE_KEY`, `MAINNET_RPC_URL`, `ETHERSCAN_API_KEY`
+- See [GitHub Actions Secrets Setup](./GITHUB_ACTIONS_SECRETS.md) for complete guide
 
 **⚠️ CRITICAL SECURITY**:
 - **NEVER** commit your `.env` file! It's protected by `.gitignore`.
