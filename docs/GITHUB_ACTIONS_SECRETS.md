@@ -18,12 +18,16 @@ All workflows use the following secrets. You must configure these in your reposi
 
 ### Deployment Secrets
 
-#### `PRIVATE_KEY` or `MAINNET_PRIVATE_KEY`
-- **Description**: Private key for deploying smart contracts (without 0x prefix)
-- **Usage**: Contract deployment to mainnet and testnet
-- **Security**: Use a burner wallet, NEVER your main wallet
+#### `MAINNET_PRIVATE_KEY` and `TESTNET_PRIVATE_KEY`
+- **Description**: Private keys for deploying smart contracts (without 0x prefix)
+- **Usage**: 
+  - `MAINNET_PRIVATE_KEY`: Used for mainnet contract deployments
+  - `TESTNET_PRIVATE_KEY`: Used for testnet (Sepolia) contract deployments
+- **How it works**: Workflows map these to the `PRIVATE_KEY` environment variable that hardhat expects
+- **Security**: Use burner wallets, NEVER your main wallet
 - **Format**: 64-character hexadecimal string (without 0x prefix)
 - **Example**: `1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef`
+- **Important**: Keep mainnet and testnet keys separate for security
 
 #### `MAINNET_RPC_URL`
 - **Description**: Ethereum Mainnet RPC endpoint URL
@@ -91,7 +95,8 @@ After adding all required secrets, you should see them listed under "Repository 
 
 Example list:
 ```
-PRIVATE_KEY                  Updated 2 days ago
+MAINNET_PRIVATE_KEY         Updated 2 days ago
+TESTNET_PRIVATE_KEY         Updated 2 days ago
 MAINNET_RPC_URL             Updated 2 days ago
 SEPOLIA_RPC_URL             Updated 2 days ago
 ETHERSCAN_API_KEY           Updated 2 days ago
@@ -108,13 +113,15 @@ GitHub Actions workflows automatically inject secrets using this syntax:
 ```yaml
 - name: Deploy Contract
   env:
-    PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+    PRIVATE_KEY: ${{ secrets.MAINNET_PRIVATE_KEY }}  # For mainnet
+    # OR
+    PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}  # For testnet
     MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
     ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
   run: npx hardhat run scripts/deploy_mtx.js --network mainnet
 ```
 
-The `${{ secrets.SECRET_NAME }}` syntax tells GitHub Actions to inject the secret value at runtime.
+The workflows map `MAINNET_PRIVATE_KEY` or `TESTNET_PRIVATE_KEY` to the `PRIVATE_KEY` environment variable that Hardhat expects.
 
 ## Local Development
 
