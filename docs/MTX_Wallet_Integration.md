@@ -13,14 +13,57 @@ This document describes the MTX wallet integration components and utilities adde
 
 > **Note**: The contract address will be updated here once deployment is complete. Currently using placeholder address in configuration.
 
+## Wallet Connection - Reown AppKit (formerly Web3Modal v3)
+
+Matrix Hub uses [Reown AppKit](https://docs.reown.com/appkit) (formerly Web3Modal v3) for wallet connections. This provides a modern, user-friendly interface for connecting various Ethereum wallets.
+
+### Migration from Web3Modal v1
+
+As of January 2026, Matrix Hub has migrated from web3modal v1.9.12 to Reown AppKit v1.8.16. Key changes:
+
+- **New Package**: `@reown/appkit` and `@reown/appkit-adapter-ethers`
+- **React Hooks**: Components use `useAppKit`, `useAppKitAccount`, and `useAppKitProvider` hooks
+- **Global State**: AppKitProvider wraps the application for shared wallet state
+- **WalletConnect Project ID**: Required for production use (get from https://cloud.reown.com)
+
+### Configuration
+
+The wallet configuration is split across two files:
+
+**src/config/appkit.ts** - Core configuration:
+```typescript
+export const projectId = import.meta.env.PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID_HERE'
+export const metadata = {
+  name: 'Matrix Hub',
+  description: 'Matrix Hub - Tools, Modules, and MTX Token Ecosystem',
+  url: 'https://matrix-hub.org',
+  icons: ['https://matrix-hub.org/favicon.ico']
+}
+```
+
+**src/components/AppKitProvider.tsx** - Provider component:
+- Initializes AppKit modal on client side only
+- Configures Ethereum mainnet connection
+- Sets dark theme with Matrix Hub branding
+
+### Environment Variables
+
+Add to your `.env` file:
+
+```bash
+PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id_here
+```
+
+Get a free project ID from [Reown Cloud](https://cloud.reown.com) (formerly WalletConnect Cloud).
+
 ## Components
 
 ### Wallet.jsx
 
-A React island component that provides wallet connection and MTX token balance management.
+A React island component that provides wallet connection and MTX token balance management using Reown AppKit.
 
 **Features:**
-- Connect Ethereum wallet via Web3Modal
+- Connect Ethereum wallet via Reown AppKit modal
 - Display connected wallet address
 - Display MTX token balance
 - Add MTX token to wallet (EIP-747)
@@ -29,14 +72,25 @@ A React island component that provides wallet connection and MTX token balance m
 - Automatic network switching to Ethereum mainnet
 - Handle account and network changes
 
+**Implementation:**
+```typescript
+import { useAppKitProvider, useAppKitAccount, useAppKit } from '@reown/appkit/react'
+
+const { address, isConnected } = useAppKitAccount()
+const { walletProvider } = useAppKitProvider('eip155')
+const { open } = useAppKit()
+```
+
 **Usage in Astro pages:**
 ```astro
 ---
 import Wallet from "../components/Wallet.jsx";
 ---
 
-<Wallet client:load />
+<Wallet client:only="react" />
 ```
+
+> **Note**: Must use `client:only="react"` to avoid SSR issues with AppKit hooks.
 
 ### BuyMTX.tsx
 
@@ -283,5 +337,41 @@ Requires:
 ## Dependencies
 
 - ethers.js v6.16.0
-- web3modal v1.9.12
+- @reown/appkit v1.8.16
+- @reown/appkit-adapter-ethers v1.8.16
 - React 19.2.3
+
+## Migration Notes
+
+### From Web3Modal v1 to Reown AppKit
+
+**Breaking Changes:**
+1. **Package Name**: `web3modal` → `@reown/appkit` + `@reown/appkit-adapter-ethers`
+2. **Initialization**: No longer use `new Web3Modal()` - use React hooks instead
+3. **Project ID**: WalletConnect Project ID now required
+4. **SSR Compatibility**: Components must use `client:only="react"` in Astro
+
+**Code Changes:**
+```typescript
+// Old (web3modal v1)
+import Web3Modal from 'web3modal';
+const web3Modal = new Web3Modal();
+const connection = await web3Modal.connect();
+
+// New (Reown AppKit)
+import { useAppKit, useAppKitAccount, useAppKitProvider } from '@reown/appkit/react'
+const { open } = useAppKit()
+const { address, isConnected } = useAppKitAccount()
+const { walletProvider } = useAppKitProvider('eip155')
+```
+
+**Benefits of Migration:**
+- Modern, responsive UI with better UX
+- Support for more wallets out of the box
+- Better mobile wallet support
+- Active maintenance and updates
+- Improved TypeScript support
+
+### Deprecated Dependencies
+
+See [DEPRECATED_DEPENDENCIES.md](./DEPRECATED_DEPENDENCIES.md) for information about transitive deprecated dependencies (inflight, lodash.isequal, glob) that need parent package updates.
