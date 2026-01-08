@@ -40,7 +40,7 @@ import path from 'path';
 const EXCLUDED_PATHS = [
   '**/api/**',        // API routes
   '**/_.astro/**',      // Astro files starting with underscore
-  '**/_.md**',         // Markdown files starting with underscore
+  '**/_.md',         // Markdown files starting with underscore
   '**/owners.astro',  // Owners portal - direct URL access only
 ];
 
