@@ -39,8 +39,8 @@ import path from 'path';
 // Paths and files to exclude from navigation
 const EXCLUDED_PATHS = [
   '**/api/**',        // API routes
-  '**/_*.astro',      // Astro files starting with underscore
-  '**/_*.md',         // Markdown files starting with underscore
+  '**/_.astro/**',      // Astro files starting with underscore
+  '**/_.md**',         // Markdown files starting with underscore
   '**/owners.astro',  // Owners portal - direct URL access only
 ];
 
