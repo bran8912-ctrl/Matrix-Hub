@@ -7,6 +7,7 @@ import MatrixRain from "./MatrixRain.astro";
 import PersistentThemeCustomizer from "./PersistentThemeCustomizer.tsx";
 import PersistentMusicPlayer from "./PersistentMusicPlayer.tsx";
 import OracleBot from "./OracleBot.astro";
+import AppKitProvider from "./AppKitProvider.tsx";
 
 interface Props {
   title: string;
@@ -35,8 +36,10 @@ const { title } = Astro.props;
   </head>
   <body>
     <MatrixRain />
-    <PersistentThemeCustomizer client:load />
-    <PersistentMusicPlayer client:load />
+    <AppKitProvider client:only="react">
+      <PersistentThemeCustomizer client:only="react" />
+      <PersistentMusicPlayer client:only="react" />
+    </AppKitProvider>
     <TabNav />
     <Header />
     <main class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-8">
