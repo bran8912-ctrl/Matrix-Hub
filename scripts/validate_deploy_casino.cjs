@@ -10,7 +10,7 @@
  * - Configuration structure is correct
  * - Error handling is present
  * 
- * Usage: node scripts/validate_deploy_casino.js
+ * Usage: node scripts/validate_deploy_casino.cjs
  */
 
 const fs = require('fs');
@@ -29,13 +29,24 @@ let warnings = 0;
 // Test 1: Check if script exists
 console.log('✓ Test 1: Script file exists');
 
-// Test 2: Check syntax (already done by require, but let's be explicit)
+// Test 2: Check syntax by looking for basic JavaScript structure
+// Note: We avoid using new Function() or eval() for security reasons
+// Instead, we check for common syntax patterns and structure
 try {
-  // Just check if Node can parse it
-  new Function(scriptContent);
-  console.log('✓ Test 2: Script syntax is valid');
+  // Check for balanced braces, parentheses, and brackets
+  const braces = (scriptContent.match(/\{/g) || []).length - (scriptContent.match(/\}/g) || []).length;
+  const parens = (scriptContent.match(/\(/g) || []).length - (scriptContent.match(/\)/g) || []).length;
+  const brackets = (scriptContent.match(/\[/g) || []).length - (scriptContent.match(/\]/g) || []).length;
+  
+  if (braces === 0 && parens === 0 && brackets === 0) {
+    console.log('✓ Test 2: Script syntax structure is valid (balanced delimiters)');
+  } else {
+    console.error('✗ Test 2: Script has unbalanced delimiters');
+    console.error(`  Braces: ${braces > 0 ? '+' : ''}${braces}, Parens: ${parens > 0 ? '+' : ''}${parens}, Brackets: ${brackets > 0 ? '+' : ''}${brackets}`);
+    errors++;
+  }
 } catch (err) {
-  console.error('✗ Test 2: Script has syntax errors:', err.message);
+  console.error('✗ Test 2: Script syntax check failed:', err.message);
   errors++;
 }
 

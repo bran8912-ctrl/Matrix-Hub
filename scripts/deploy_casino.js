@@ -281,9 +281,7 @@ async function main() {
     // Additional Info
     notes: {
       casinoReserveSetup: "CasinoReserve deployed with temporary casinoCore address (deployer). Update required.",
-      liquidityRouterSetup: TEMP_DEX_POOL === deployer.address 
-        ? "LiquidityRouter deployed with temporary DEX pool address (deployer). Update after creating Uniswap pool."
-        : "LiquidityRouter deployed with configured DEX pool address.",
+      liquidityRouterSetup: `LiquidityRouter deployed with DEX pool address: ${TEMP_DEX_POOL}. Verify this is the correct production pool address and update after creating the final Uniswap pool if necessary.`,
       reserveFunding: "CasinoReserve must be funded with MTX tokens before casino operations can begin."
     }
   };
