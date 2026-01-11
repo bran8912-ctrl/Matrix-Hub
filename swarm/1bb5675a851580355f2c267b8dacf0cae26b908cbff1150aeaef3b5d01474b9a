@@ -1,0 +1,412 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_mtx",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_liquidity",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_reserve",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_rng",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_minBet",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_maxBet",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_dev",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_governance",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "BetAboveMaximum",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "BetBelowMinimum",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "DevPaymentFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidPercentageSum",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotGovernance",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "TransferFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "dev",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "devPercent",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "governance",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "liquidity",
+				"outputs": [
+					{
+						"internalType": "contract ILiquidityRouter",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "liquidityPercent",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "maxBet",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "minBet",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "mtx",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "payoutPercent",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "gameData",
+						"type": "bytes"
+					}
+				],
+				"name": "placeBet",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reserve",
+				"outputs": [
+					{
+						"internalType": "contract ICasinoReserve",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reservePercent",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rng",
+				"outputs": [
+					{
+						"internalType": "contract IRNGEngine",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "payout",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "liquidity_",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reserve_",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dev_",
+						"type": "uint256"
+					}
+				],
+				"name": "updatePercentages",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Matrix-Hub Team",
+			"details": "Uses MTX token for all operations and integrates with external modules",
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"details": "Sets up all contract integrations and parameters",
+					"params": {
+						"_dev": "Developer address for fee collection",
+						"_governance": "Governance address for parameter updates",
+						"_liquidity": "Address of LiquidityRouter contract",
+						"_maxBet": "Maximum bet amount in MTX (with 18 decimals)",
+						"_minBet": "Minimum bet amount in MTX (with 18 decimals)",
+						"_mtx": "Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Ethereum",
+						"_reserve": "Address of CasinoReserve contract",
+						"_rng": "Address of RNGEngine contract"
+					}
+				},
+				"placeBet(uint256,bytes)": {
+					"details": "User must approve CasinoCore for MTX spend before calling",
+					"params": {
+						"amount": "Bet amount in MTX",
+						"gameData": "Encoded game data for RNG"
+					}
+				},
+				"updatePercentages(uint256,uint256,uint256,uint256)": {
+					"details": "Only callable by governance, percentages must sum to 100",
+					"params": {
+						"dev_": "Percentage allocated to dev",
+						"liquidity_": "Percentage allocated to liquidity",
+						"payout": "Percentage allocated to payouts",
+						"reserve_": "Percentage allocated to reserve"
+					}
+				}
+			},
+			"title": "CasinoCore",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"constructor": {
+					"notice": "Constructor initializes casino with required contract addresses"
+				},
+				"dev()": {
+					"notice": "Developer address"
+				},
+				"devPercent()": {
+					"notice": "Percentage allocated to dev"
+				},
+				"governance()": {
+					"notice": "Governance address"
+				},
+				"liquidity()": {
+					"notice": "Liquidity router contract"
+				},
+				"liquidityPercent()": {
+					"notice": "Percentage allocated to liquidity"
+				},
+				"maxBet()": {
+					"notice": "Maximum bet amount"
+				},
+				"minBet()": {
+					"notice": "Minimum bet amount"
+				},
+				"mtx()": {
+					"notice": "MTX token contract"
+				},
+				"payoutPercent()": {
+					"notice": "Percentage allocated to payouts"
+				},
+				"placeBet(uint256,bytes)": {
+					"notice": "Place a bet in the casino"
+				},
+				"reserve()": {
+					"notice": "Casino reserve contract"
+				},
+				"reservePercent()": {
+					"notice": "Percentage allocated to reserve"
+				},
+				"rng()": {
+					"notice": "Random number generator contract"
+				},
+				"updatePercentages(uint256,uint256,uint256,uint256)": {
+					"notice": "Update percentage allocations"
+				}
+			},
+			"notice": "Main casino contract managing bets, payouts, and game logic on Ethereum",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/CasinoCore.sol": "CasinoCore"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
+				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
+			]
+		},
+		"contracts/CasinoCore.sol": {
+			"keccak256": "0x5ea2cdf540e9d7bf7376cf678a1258228a3192319a8f09ba1cdac1f599fa1ea4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f10cce9caf616ab336cae27e95507b8628b961182df0c956517c98085f1c2745",
+				"dweb:/ipfs/Qmf68bYTUvEeVU7wwJxUaN1jcfHmiyJe8vBaQ8C9tcZraa"
+			]
+		}
+	},
+	"version": 1
+}
