@@ -1,0 +1,267 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_casinoCore",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "ClientSeedNotSet",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotAuthorized",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "casinoCore",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "clientSeed",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "hash",
+						"type": "bytes32"
+					}
+				],
+				"name": "commitServerSeed",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "nonce",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "gameData",
+						"type": "bytes"
+					}
+				],
+				"name": "resolve",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "seed",
+						"type": "bytes32"
+					}
+				],
+				"name": "revealServerSeed",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "serverSeedHash",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "_clientSeed",
+						"type": "bytes32"
+					}
+				],
+				"name": "setClientSeed",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Matrix-Hub Team",
+			"details": "Uses server seed commitment and client seed for verifiable randomness",
+			"kind": "dev",
+			"methods": {
+				"commitServerSeed(bytes32)": {
+					"details": "Only owner can commit to prevent manipulation",
+					"params": {
+						"hash": "Hash of server seed"
+					}
+				},
+				"constructor": {
+					"params": {
+						"_casinoCore": "Address of CasinoCore contract"
+					}
+				},
+				"resolve(bytes)": {
+					"details": "Only callable by CasinoCore, generates random result and increments nonce",
+					"params": {
+						"gameData": "Encoded game data"
+					},
+					"returns": {
+						"_0": "True if player wins, false otherwise"
+					}
+				},
+				"revealServerSeed(bytes32)": {
+					"details": "Allows verification that server didn't cheat",
+					"params": {
+						"seed": "Original server seed"
+					},
+					"returns": {
+						"_0": "True if seed matches committed hash"
+					}
+				},
+				"setClientSeed(bytes32)": {
+					"details": "Should be called by player to ensure provable fairness",
+					"params": {
+						"_clientSeed": "Client-provided seed"
+					}
+				}
+			},
+			"title": "RNGEngine",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"casinoCore()": {
+					"notice": "Casino core contract authorized to call resolve"
+				},
+				"clientSeed()": {
+					"notice": "Client seed for randomness"
+				},
+				"commitServerSeed(bytes32)": {
+					"notice": "Commit server seed hash"
+				},
+				"constructor": {
+					"notice": "Constructor initializes RNG with casino core address"
+				},
+				"nonce()": {
+					"notice": "Nonce for unique random values"
+				},
+				"owner()": {
+					"notice": "Owner address for administrative functions"
+				},
+				"resolve(bytes)": {
+					"notice": "Resolve game outcome"
+				},
+				"revealServerSeed(bytes32)": {
+					"notice": "Reveal server seed to verify fairness"
+				},
+				"serverSeedHash()": {
+					"notice": "Server seed hash for commitment"
+				},
+				"setClientSeed(bytes32)": {
+					"notice": "Set client seed for randomness"
+				}
+			},
+			"notice": "Provably fair random number generator for casino games on Ethereum",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/RNGEngine.sol": "RNGEngine"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/RNGEngine.sol": {
+			"keccak256": "0x1b819071f9fcda321a64e8e5280e8bb8dd4d940fe482edaf912e80a1ecbe6ea5",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c468ffc2fa445e4d2943a9c18bec072ea718fe5176f135c82142d6fe79ee59ec",
+				"dweb:/ipfs/QmNsFG9JVLHhPpFigX3T9gx9Zt8z4YCZiuzxUT7emkEPa3"
+			]
+		}
+	},
+	"version": 1
+}
