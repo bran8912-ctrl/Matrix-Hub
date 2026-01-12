@@ -53,8 +53,8 @@ const EXCLUDED_PATHS = [
   // Development & Debug Files
   '**/_*.{astro,md,mdx,ts,tsx}',  // Files starting with underscore (draft/internal)
   '**/_.{astro,md,mdx,tsx}/**',   // Directories starting with underscore
-  '**/?debug*',                   // Debug pages
-  '**/?test*',                    // Test pages
+  '**/debug*',                    // Debug pages
+  '**/test*',                     // Test pages
   
   // System & Configuration
   '**/sitemap*',                  // Sitemap (auto-generated, not for nav)
