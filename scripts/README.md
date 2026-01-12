@@ -92,7 +92,7 @@ npm run deploy:mainnet
 
 **Configuration:**
 - Initial Supply: 100,000,000 MTX
-- Initial Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- Initial Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 - Token Name: Matrix-HubCoin
 - Token Symbol: MTX
 - Decimals: 18
@@ -316,7 +316,7 @@ npm run deploy:sepolia
 ### 4. Verify Contract
 
 ```bash
-npm run verify:sepolia YOUR_CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:sepolia YOUR_CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 Replace `YOUR_CONTRACT_ADDRESS` with the deployed contract address.
@@ -337,7 +337,7 @@ npm run deploy:mainnet
 ### 7. Verify on Mainnet
 
 ```bash
-npm run verify:mainnet YOUR_CONTRACT_ADDRESS "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:mainnet YOUR_CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 ## Networks

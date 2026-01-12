@@ -2,11 +2,48 @@
   "name": "astro-supabase-starter",
   "type": "module",
   "version": "0.0.1",
+  "//": "NOTE: Several deprecated npm packages are used transitively by dependencies:",
+  "//deprecated-transitive": {
+    "inflight@1.0.6": {
+      "description": "Deprecated. Used transitively by glob (versions 5.x, 7.x, 8.x)",
+      "parentPackages": [
+        "hardhat@2.28.0 -> mocha@10.8.2 -> glob@8.1.0",
+        "solhint@6.0.2 -> glob@8.1.0",
+        "solidity-coverage@0.8.17 -> globby@10.0.2 -> glob@7.2.3",
+        "solidity-coverage@0.8.17 -> sc-istanbul@0.4.6 -> glob@5.0.15",
+        "solidity-coverage@0.8.17 -> shelljs@0.8.5 -> glob@7.2.3",
+        "typechain@8.3.2 -> glob@7.1.7"
+      ],
+      "resolution": "Update hardhat, solhint, solidity-coverage, and typechain to versions that use glob@9+ or alternatives"
+    },
+    "lodash.isequal@4.5.0": {
+      "description": "Deprecated. Use require('node:util').isDeepStrictEqual instead",
+      "parentPackages": [
+        "@nomicfoundation/hardhat-ethers@3.1.3"
+      ],
+      "resolution": "Update @nomicfoundation/hardhat-ethers to version that removes lodash.isequal dependency"
+    },
+    "glob (versions 5.x, 7.x, 8.x)": {
+      "description": "Glob versions prior to v9 are no longer supported",
+      "parentPackages": [
+        "hardhat@2.28.0 -> mocha@10.8.2 -> glob@8.1.0",
+        "solhint@6.0.2 -> glob@8.1.0",
+        "solidity-coverage@0.8.17 -> various -> glob@7.2.3, glob@5.0.15",
+        "typechain@8.3.2 -> glob@7.1.7"
+      ],
+      "resolution": "Update parent packages to versions using glob@9+ or alternatives like fast-glob"
+    }
+  },
+  "//notes": [
+    "Run 'npm ls inflight lodash.isequal glob' to see full dependency tree",
+    "These transitive dependencies cannot be directly patched without updating parent packages",
+    "Consider upgrading hardhat, solhint, solidity-coverage, typechain, and @nomicfoundation/* packages in future maintenance"
+  ],
   "scripts": {
-    "deploy:sepolia:casino": "node scripts/deploy_casino.js sepolia",
-    "deploy:mainnet:casino": "node scripts/deploy_casino.js mainnet",
-    "deploy:sepolia:mtx": "node scripts/deploy_mtx.js sepolia",
-    "deploy:mainnet:mtx": "node scripts/deploy_mtx.js mainnet",
+    "deploy:testnet:mtx": "hardhat run scripts/deploy_mtx.js --network sepolia",
+    "deploy:testnet:casino": "hardhat run scripts/deploy_casino.js --network sepolia",
+    "deploy:testnet:distribute": "hardhat run scripts/distribute_mtx.js --network sepolia",
+    "deploy:testnet:full": "npm run deploy:testnet:mtx && npm run deploy:testnet:casino && npm run deploy:testnet:distribute",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
@@ -46,7 +83,8 @@
     "sharp": "^0.34.5",
     "typescript": "^5.6.3",
     "vite": "^7.3.0",
-    "web3modal": "^1.9.12"
+    "@reown/appkit": "^1.8.16",
+    "@reown/appkit-adapter-ethers": "^1.8.16"
   },
   "devDependencies": {
     "@astrojs/node": "^9.5.1",

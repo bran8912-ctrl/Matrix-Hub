@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserProvider, Contract, formatUnits } from 'ethers';
-import Web3Modal from 'web3modal';
+import { useAppKitProvider, useAppKitAccount, useAppKit } from '@reown/appkit/react'
 import { MTX } from '../config/mtx';
 import mtxAbi from '../abi/mtx.json';
 import { ensureEthereum } from '../utils/mtxTransfer';
@@ -8,7 +8,7 @@ import { ensureEthereum } from '../utils/mtxTransfer';
 /**
  * Wallet component - React island for wallet connection and MTX balance display
  * Features:
- * - Connect wallet button
+ * - Connect wallet button (using Reown AppKit)
  * - Display connected address
  * - Display MTX token balance
  * - Add MTX to wallet button (EIP-747)
@@ -16,50 +16,15 @@ import { ensureEthereum } from '../utils/mtxTransfer';
  * - Automatic network switching
  */
 const Wallet = () => {
+  const { address, isConnected } = useAppKitAccount()
+  const { walletProvider } = useAppKitProvider('eip155')
+  const { open } = useAppKit()
+  
   // State management
-  const [address, setAddress] = useState('');
   const [balance, setBalance] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [provider, setProvider] = useState(null);
-
-  /**
-   * Connect wallet using Web3Modal
-   * Automatically ensures correct network after connection
-   */
-  const connectWallet = async () => {
-    setError('');
-    setLoading(true);
-
-    try {
-      // Initialize Web3Modal and connect
-      const web3Modal = new Web3Modal({
-        cacheProvider: false,
-        providerOptions: {},
-      });
-      
-      const connection = await web3Modal.connect();
-      const ethersProvider = new BrowserProvider(connection);
-      
-      // Ensure we're on the correct Ethereum network
-      await ensureEthereum();
-      
-      setProvider(ethersProvider);
-      
-      // Get signer and user address
-      const signer = await ethersProvider.getSigner();
-      const userAddress = await signer.getAddress();
-      setAddress(userAddress);
-      
-      // Fetch MTX balance
-      await fetchBalance(ethersProvider, userAddress);
-    } catch (err) {
-      console.error('Wallet connection error:', err);
-      setError(err.message || 'Failed to connect wallet. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   /**
    * Fetch MTX token balance for the connected address
@@ -76,6 +41,34 @@ const Wallet = () => {
       setError('Failed to fetch MTX balance.');
     }
   }, []);
+
+  /**
+   * Fetch balance when wallet is connected
+   */
+  useEffect(() => {
+    const updateBalance = async () => {
+      if (!isConnected || !address || !walletProvider) {
+        setBalance(null)
+        setProvider(null)
+        return
+      }
+
+      try {
+        const ethersProvider = new BrowserProvider(walletProvider)
+        setProvider(ethersProvider)
+        
+        // Ensure we're on the correct network
+        await ensureEthereum()
+        
+        await fetchBalance(ethersProvider, address)
+      } catch (err) {
+        console.error('Error setting up wallet:', err)
+        setError(err.message || 'Failed to set up wallet connection.')
+      }
+    }
+
+    updateBalance()
+  }, [isConnected, address, walletProvider, fetchBalance])
 
   /**
    * Add MTX token to user's wallet using EIP-747 (wallet_watchAsset)
@@ -118,12 +111,10 @@ const Wallet = () => {
   const handleAccountsChanged = useCallback(async (accounts) => {
     if (accounts.length === 0) {
       // User disconnected wallet
-      setAddress('');
       setBalance(null);
       setProvider(null);
     } else if (accounts[0] !== address) {
       // User switched to a different account
-      setAddress(accounts[0]);
       if (provider) {
         await fetchBalance(provider, accounts[0]);
       }
@@ -170,10 +161,10 @@ const Wallet = () => {
         MTX Wallet
       </h3>
 
-      {!address ? (
+      {!isConnected || !address ? (
         // Not connected - show connect button
         <button
-          onClick={connectWallet}
+          onClick={() => open()}
           disabled={loading}
           className="wallet-connect-btn"
         >

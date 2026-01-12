@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserProvider, formatUnits, parseUnits, Contract } from 'ethers';
-import Web3Modal from 'web3modal';
+import { useAppKitProvider, useAppKitAccount, useAppKit } from '@reown/appkit/react'
 import { MTX } from '../config/mtx';
 
 // Deployed MTX token contract address and ABI
@@ -26,13 +26,17 @@ interface WalletConnectProps {
 }
 
 const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
-  const [address, setAddress] = useState<string>('');
+  const { address, isConnected } = useAppKitAccount()
+  const { walletProvider } = useAppKitProvider('eip155')
+  const { open } = useAppKit()
+  
   const [balance, setBalance] = useState<number | null>(null);
   const [tier, setTier] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
-  // State declarations for locked and lockUntil already exist, remove duplicates.
+  const [provider, setProvider] = useState<BrowserProvider | null>(null);
+  const [locked, setLocked] = useState<number>(0);
+  const [lockUntil, setLockUntil] = useState<number>(0);
 
   const getTier = (bal: number): string => {
     for (let i = TIERS.length - 1; i >= 0; i--) {
@@ -40,6 +44,40 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
     }
     return 'Bronze'; 
   };
+
+  // Fetch MTX balance when wallet is connected
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (!isConnected || !address || !walletProvider) {
+        setBalance(null)
+        setTier('')
+        setProvider(null)
+        return
+      }
+
+      try {
+        const ethersProvider = new BrowserProvider(walletProvider)
+        setProvider(ethersProvider)
+        
+        const token = new Contract(MTX_TOKEN_ADDRESS, MTX_TOKEN_ABI, ethersProvider)
+        const rawBalance = await token.balanceOf(address)
+        const decimals = await token.decimals()
+        const formatted = parseFloat(formatUnits(rawBalance, decimals))
+        
+        setBalance(formatted)
+        setTier(getTier(formatted))
+        
+        if (onWalletChange) {
+          onWalletChange({ address, balance: formatted })
+        }
+      } catch (err) {
+        console.error('Error fetching balance:', err)
+        setError('Failed to fetch MTX balance')
+      }
+    }
+
+    fetchBalance()
+  }, [isConnected, address, walletProvider, onWalletChange])
 
   // MTX: Add MTX token to wallet using wallet_watchAsset (EIP-747)
   const addTokenToWallet = async (): Promise<void> => {
@@ -50,7 +88,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
     }
     try {
       // wallet_watchAsset requires direct ethereum object access (not through ethers provider)
-      const ethereum = (window as { ethereum?: unknown }).ethereum;
+      const ethereum = (window as any).ethereum;
       if (!ethereum) {
         setError('MetaMask or compatible wallet not found.');
         return;
@@ -78,33 +116,6 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
       console.error('Failed to add token:', err);
       setError('Failed to add MTX token to wallet.');
     }
-  };
-
-  const connectWallet = async (): Promise<void> => {
-    setError('');
-    setLoading(true);
-    try {
-      const web3Modal = new Web3Modal();
-      const connection = await web3Modal.connect();
-      const _provider = new BrowserProvider(connection);
-      setProvider(_provider);
-      const signer = await _provider.getSigner();
-      const userAddress = await signer.getAddress();
-      setAddress(userAddress);
-      // Get MTX balance
-      const token = new Contract(MTX_TOKEN_ADDRESS, MTX_TOKEN_ABI, _provider);
-      const rawBalance = await token.balanceOf(userAddress);
-      const decimals = await token.decimals();
-      const formatted = parseFloat(formatUnits(rawBalance, decimals));
-      setBalance(formatted);
-      setTier(getTier(formatted));
-      if (onWalletChange) {
-        onWalletChange({ address: userAddress, balance: formatted });
-      }
-    } catch (_err) {
-      setError('Failed to connect wallet.');
-    }
-    setLoading(false);
   };
 
   // Deduct MTX for premium features with burn
@@ -153,8 +164,6 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
   };
 
   // Lock/Unlock MTX for tier access (simulated client-side)
-  const [locked, setLocked] = useState<number>(0);
-  const [lockUntil, setLockUntil] = useState<number>(0);
   const lockMTX = async (amount: number, days: number = 30): Promise<void> => {
     setError('');
     if (!provider || !address) {
@@ -189,7 +198,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
   return (
     <div style={{ padding: '1rem', border: '1px solid #333', borderRadius: '8px', background: '#181818', color: '#fff', maxWidth: 320 }}>
       <h3>Wallet Connect</h3>
-      {address ? (
+      {isConnected && address ? (
         <>
           <div><strong>Address:</strong> {address.slice(0, 6)}...{address.slice(-4)}</div>
           <div><strong>MTX Balance:</strong> {balance !== null ? balance : 'Loading...'}</div>
@@ -271,7 +280,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
           </div>
         </>
       ) : (
-        <button onClick={connectWallet} disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem', background: '#00ff99', color: '#181818', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+        <button onClick={() => open()} disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem', background: '#00ff99', color: '#181818', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
           {loading ? 'Connecting...' : 'Connect Wallet'}
         </button>
       )}

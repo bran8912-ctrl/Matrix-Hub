@@ -1,0 +1,258 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_mtx",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_reserveCap",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_casinoCore",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "ExceedsReserveCap",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InsufficientReserve",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "MTXTransferFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotAuthorized",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroAddress",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroAmount",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "casinoCore",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "deposit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "mtx",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "player",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "payWinner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reserveBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reserveCap",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reserveHealth",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Matrix-Hub Team",
+			"details": "Manages reserve balance and payout distribution",
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"details": "Sets up reserve parameters and CasinoCore integration",
+					"params": {
+						"_casinoCore": "Address of CasinoCore contract",
+						"_mtx": "Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Ethereum",
+						"_reserveCap": "Maximum reserve capacity in MTX"
+					}
+				},
+				"deposit(uint256)": {
+					"details": "Only callable by CasinoCore, enforces reserve cap",
+					"params": {
+						"amount": "Amount of MTX to deposit"
+					}
+				},
+				"payWinner(address,uint256)": {
+					"details": "Only callable by CasinoCore",
+					"params": {
+						"amount": "Amount of MTX to pay",
+						"player": "Address of the player to pay"
+					}
+				},
+				"reserveHealth()": {
+					"details": "Returns current reserve balance",
+					"returns": {
+						"_0": "Current reserve balance"
+					}
+				}
+			},
+			"title": "CasinoReserve",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"casinoCore()": {
+					"notice": "CasinoCore contract address"
+				},
+				"constructor": {
+					"notice": "Constructor initializes reserve with MTX token address"
+				},
+				"deposit(uint256)": {
+					"notice": "Deposit MTX coins to reserve"
+				},
+				"mtx()": {
+					"notice": "MTX token contract"
+				},
+				"payWinner(address,uint256)": {
+					"notice": "Pay winner in MTX coins"
+				},
+				"reserveBalance()": {
+					"notice": "Current reserve balance"
+				},
+				"reserveCap()": {
+					"notice": "Maximum reserve capacity"
+				},
+				"reserveHealth()": {
+					"notice": "Check reserve health"
+				}
+			},
+			"notice": "Holds MTX reserves for casino payouts on Ethereum",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/CasinoReserve.sol": "CasinoReserve"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
+				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
+			]
+		},
+		"contracts/CasinoReserve.sol": {
+			"keccak256": "0xcf32eb9922aa78f037e174fb29a3848007edcae47dc058c87024d214d205fd04",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://89c919008a4e25b8d1ce88e493017e0c19143221a0dafa73c4e019e648e50d38",
+				"dweb:/ipfs/QmWmB95KhqP8eRTZPYLpkQN2PPgPEF1G6Gihm2XKLik7D1"
+			]
+		}
+	},
+	"version": 1
+}

@@ -82,7 +82,7 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
 ### 1.3 Contract Review
 
 - [ ] **Review MatrixHubCoin.sol**
-  - Constructor parameters: initialSupply = "100000000", initialOwner = "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+  - Constructor parameters: initialSupply = "100000000", initialOwner = "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
   - Verify owner address is correct
   - Confirm initial supply (100M MTX)
   - Review all functions for expected behavior
@@ -159,7 +159,7 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
 
 - [ ] **Verify Contract Source**
   ```bash
-  npx hardhat verify --network sepolia <CONTRACT_ADDRESS> "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+  npx hardhat verify --network sepolia <CONTRACT_ADDRESS> "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
   ```
   
 - [ ] **Confirm Verification Success**
@@ -304,7 +304,7 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
 Deployment Date/Time: ___________________________
 Network: Ethereum Mainnet (Chain ID: 1)
 Contract Address: ___________________________
-Owner Address: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+Owner Address: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 Deployer Address: ___________________________
 Transaction Hash: ___________________________
 Block Number: ___________________________
@@ -327,7 +327,7 @@ Initial Supply: 100,000,000 MTX
 
 - [ ] **Verify Contract Source Code**
   ```bash
-  npx hardhat verify --network mainnet <CONTRACT_ADDRESS> "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+  npx hardhat verify --network mainnet <CONTRACT_ADDRESS> "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
   ```
 
 - [ ] **Confirm Verification**
@@ -353,7 +353,7 @@ Initial Supply: 100,000,000 MTX
   - `decimals()` = 18 ✓
   - `totalSupply()` = 100,000,000,000,000,000,000,000,000 (100M * 10^18) ✓
   - `balanceOf(owner)` = full initial supply ✓
-  - `owner()` = 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3 ✓
+  - `owner()` = 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077 ✓
   - `ethToMtxRate()` = 100000 ✓
   - `mintingPaused()` = false ✓
   - `MAX_SUPPLY()` = 100,000,000,000,000,000,000,000,000 ✓
@@ -414,7 +414,7 @@ Initial Supply: 100,000,000 MTX
   Date: <DATE>
   Contract: <ADDRESS>
   Network: Ethereum Mainnet
-  Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+  Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
   Initial Supply: 100,000,000 MTX
   Etherscan: https://etherscan.io/address/<ADDRESS>
   ```
@@ -630,7 +630,7 @@ Initial Supply: 100,000,000 MTX
 
 ### Contact Information
 
-- **Contract Owner**: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- **Contract Owner**: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 - **Repository**: https://github.com/bran8912-ctrl/Matrix-Hub.org
 - **Documentation**: See docs/ directory
 

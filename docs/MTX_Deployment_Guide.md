@@ -31,16 +31,24 @@ The recommended deployment target is:
 npm install
 
 # Set up environment variables
+# For GitHub Actions: Configure secrets in repository settings
+# See: docs/GITHUB_ACTIONS_SECRETS.md for detailed instructions
+# For local development: Copy .env.example and configure values
 cp .env.example .env
 ```
 
-Edit `.env` file:
+**For Local Development** - Edit `.env` file:
 ```
 MAINNET_RPC_URL=https://eth.llamarpc.com
 PRIVATE_KEY=YOUR_DEPLOYER_PRIVATE_KEY_HERE
 ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY
 MTX_CONTRACT_ADDRESS=  # Leave empty until deployed
 ```
+
+**For GitHub Actions** - Configure repository secrets:
+- Go to Repository Settings → Secrets and variables → Actions
+- Add: `MAINNET_PRIVATE_KEY`, `MAINNET_RPC_URL`, `ETHERSCAN_API_KEY`
+- See [GitHub Actions Secrets Setup](./GITHUB_ACTIONS_SECRETS.md) for complete guide
 
 **⚠️ CRITICAL SECURITY**:
 - **NEVER** commit your `.env` file! It's protected by `.gitignore`.
@@ -72,7 +80,7 @@ npm run deploy:mainnet
 The script will output:
 ```
 MTX deployed to: 0xYourActualContractAddress
-Contract Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+Contract Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 ```
 
 **SAVE THIS ADDRESS IMMEDIATELY!**
@@ -81,7 +89,7 @@ Contract Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
 
 ```bash
 # Verify the contract (replace with your actual address and constructor args)
-npm run verify:mainnet 0xYourActualContractAddress "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
+npm run verify:mainnet 0xYourActualContractAddress "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
 This will make the contract publicly verifiable on Etherscan.

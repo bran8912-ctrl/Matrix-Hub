@@ -57,7 +57,11 @@ Set the required environment variables so the site can access your Supabase proj
 - `SUPABASE_DATABASE_URL` (or `SUPABASE_URL`)
 - `SUPABASE_ANON_KEY`
 
-For local development, add these values to a `.env` file. For production, add them in your hosting provider's environment settings.
+**For GitHub Actions deployments**: Configure these as repository secrets. See [GitHub Actions Secrets Setup](docs/GITHUB_ACTIONS_SECRETS.md) for detailed instructions.
+
+**For local development**: Add these values to a `.env` file (copy from `.env.example` and replace the placeholder values). 
+
+**For production hosting**: Add them in your hosting provider's environment settings.
 
 ![Configure Supabase access](/public/images/guides/supabase-connect-oauth.png)
 

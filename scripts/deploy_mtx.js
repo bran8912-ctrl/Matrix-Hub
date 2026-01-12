@@ -18,8 +18,8 @@ async function main() {
   const maxSupply = "100000000"; // 100M MTX maximum supply cap
   // Owner address (user's MetaMask address from requirements)
   // This address will own the contract (NO initial minting - gradual distribution via buyMTX)
-  // Verified address format: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
-  const initialOwner = "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3";
+  // Verified address format: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
+  const initialOwner = "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077";
   
   // Validate owner address
   if (!initialOwner || !initialOwner.match(/^0x[a-fA-F0-9]{40}$/)) {

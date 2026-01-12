@@ -1,10 +1,14 @@
-name: Smart Contract Deployment
+name: Smart Contract Deployment (LEGACY)
+
+# ⚠️ WARNING: This workflow is for reference only
+# For testnet deployments, use: deploy-contracts-testnet.yml
+# For mainnet deployments, use MANUAL deployment only (see DEPLOYMENT_GUIDE.md)
 
 on:
   workflow_dispatch:
     inputs:
       network:
-        description: 'Network to deploy to'
+        description: 'Network to deploy to (MAINNET DEPLOYMENTS MUST BE MANUAL)'
         required: true
         type: choice
         options:
@@ -58,7 +62,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
       
       - name: Install dependencies
@@ -89,7 +93,22 @@ jobs:
     steps:
       - name: Display deployment info
         run: |
-          echo "## 📋 Deployment Information" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚨 DEPRECATION NOTICE" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This workflow is **deprecated** and for reference only." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Recommended Workflows" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Testnet Deployments:** Use \`deploy-contracts-testnet.yml\` workflow" >> $GITHUB_STEP_SUMMARY
+          echo "- **Mainnet Deployments:** Use **MANUAL** deployment only" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📖 Documentation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See \`DEPLOYMENT_GUIDE.md\` for complete deployment instructions." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📋 Deployment Information (Legacy)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "⚠️ **IMPORTANT:** This is a manual deployment workflow" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -98,22 +117,25 @@ jobs:
           echo "To complete the deployment, you need to:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "1. Set up deployment secrets in repository settings:" >> $GITHUB_STEP_SUMMARY
-          echo "   - \`PRIVATE_KEY\`: Deployer wallet private key" >> $GITHUB_STEP_SUMMARY
-          echo "   - \`INFURA_API_KEY\` or \`ALCHEMY_API_KEY\`: RPC provider key" >> $GITHUB_STEP_SUMMARY
+          echo "   - \`PRIVATE_KEY\`: Deployer wallet private key (testnet)" >> $GITHUB_STEP_SUMMARY
+          echo "   - \`TESTNET_PRIVATE_KEY\`: Deployer wallet private key (testnet - recommended)" >> $GITHUB_STEP_SUMMARY
+          echo "   - \`SEPOLIA_RPC_URL\`: RPC provider URL for Sepolia" >> $GITHUB_STEP_SUMMARY
           echo "   - \`ETHERSCAN_API_KEY\`: For contract verification" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "2. Update \`hardhat.config.js\` with network configurations" >> $GITHUB_STEP_SUMMARY
+          echo "2. Update \`hardhat.config.cjs\` with network configurations" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "3. Run the deployment script:" >> $GITHUB_STEP_SUMMARY
+          echo "3. Run the deployment script locally (recommended for mainnet):" >> $GITHUB_STEP_SUMMARY
           echo "   \`\`\`bash" >> $GITHUB_STEP_SUMMARY
           echo "   npm run deploy:${{ inputs.network }}:${{ inputs.contract }}" >> $GITHUB_STEP_SUMMARY
           echo "   \`\`\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Security Notice" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔒 Security Notice" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚠️ **MAINNET DEPLOYMENTS MUST BE DONE MANUALLY**" >> $GITHUB_STEP_SUMMARY
           echo "- Never commit private keys to the repository" >> $GITHUB_STEP_SUMMARY
           echo "- Always verify contract addresses after deployment" >> $GITHUB_STEP_SUMMARY
           echo "- For mainnet deployments, use a hardware wallet or secure key management" >> $GITHUB_STEP_SUMMARY
+          echo "- Test thoroughly on testnet before mainnet deployment" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

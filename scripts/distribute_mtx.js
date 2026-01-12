@@ -75,7 +75,7 @@ async function main() {
   };
 
   // Developer wallet address (should match dev address in CasinoCore deployment)
-  const DEVELOPER_WALLET = casinoDeployment.dev || process.env.DEVELOPER_WALLET || "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3";
+  const DEVELOPER_WALLET = casinoDeployment.dev || process.env.DEVELOPER_WALLET || "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077";
 
   console.log("📊 Distribution Plan:");
   console.log("   Developer Wallet:", hre.ethers.formatEther(DISTRIBUTIONS.developerWallet), "MTX (2% initial + 2% bet winnings)");

@@ -419,7 +419,10 @@ New to Matrix-Hub? Here's how to get started with MTX:
 # Install dependencies
 npm install
 
-# Set up environment variables (add private key and Etherscan API key)
+# Set up environment variables
+# For GitHub Actions deployment: Configure secrets in repository settings
+# See: docs/GITHUB_ACTIONS_SECRETS.md for detailed instructions
+# For local development: Copy .env.example and add your values
 cp .env.example .env
 nano .env
 
@@ -433,6 +436,7 @@ npm run deploy:mainnet
 ```
 
 **Deployment Documentation**:
+- 🔐 [GitHub Actions Secrets Setup](docs/GITHUB_ACTIONS_SECRETS.md) - Configure secrets for automated deployment
 - 🚀 [Quick Deploy Guide](docs/QUICK_DEPLOY.md) - Get started in 5 minutes
 - 📋 [Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md) - Pre-deployment checklist
 - 📖 [Sepolia Deployment Guide](docs/SEPOLIA_DEPLOYMENT.md) - Detailed testnet deployment
@@ -467,7 +471,7 @@ npm run deploy:mainnet
 
 - **Network**: Ethereum Mainnet (ChainID: 1)
 - **Contract Address**: *To be updated after deployment*
-- **Contract Owner**: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+- **Contract Owner**: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 - **Symbol**: MTX
 - **Decimals**: 18
 - **Block Explorer**: Etherscan

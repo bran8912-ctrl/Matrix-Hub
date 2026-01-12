@@ -63,7 +63,7 @@ constructor(uint256 maxSupply, address initialOwner)
 **Deployment Parameters**:
 - Maximum Supply Cap: 100,000,000 MTX (100M tokens max)
 - Initial Total Supply: 0 MTX (no initial minting)
-- Contract Owner: `0x58e7893356002ac8f8f612f7b3d29d8b181d85b3`
+- Contract Owner: `0x9fb4bb44d8d962d695fc93b3dc15f1b287391077`
 - Token Name: "Matrix-HubCoin"
 - Token Symbol: "MTX"
 - Decimals: 18 (standard)
@@ -288,7 +288,7 @@ export const MTX = {
   decimals: 18,
   chainId: 1, // Ethereum Mainnet
   ethToMtxRate: 100000,
-  owner: "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3",
+  owner: "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077",
   isDeployed: isValidAddress && !isPlaceholder,
   // ... rest of config
 };

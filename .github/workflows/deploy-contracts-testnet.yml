@@ -1,0 +1,355 @@
+name: Contract Deployment - Testnet
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_type:
+        description: 'Deployment type'
+        required: true
+        type: choice
+        options:
+          - 'mtx-only'
+          - 'casino-only'
+          - 'distribute-only'
+          - 'full-deployment'
+      network:
+        description: 'Network (testnets only)'
+        required: true
+        type: choice
+        options:
+          - 'sepolia'
+          - 'localhost'
+      skip_compilation:
+        description: 'Skip contract compilation (use cached artifacts)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  validate-network:
+    name: Validate Network Configuration
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Validate testnet-only
+        run: |
+          echo "## 🔒 Network Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This workflow is **restricted to testnets only**." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Selected Network:** \`${{ inputs.network }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment Type:** \`${{ inputs.deployment_type }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Network validation passed - testnet confirmed" >> $GITHUB_STEP_SUMMARY
+          
+          # Ensure only testnet or localhost
+          if [[ "${{ inputs.network }}" != "sepolia" && "${{ inputs.network }}" != "localhost" ]]; then
+            echo "❌ ERROR: Only sepolia or localhost networks are allowed" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+  compile-contracts:
+    name: Compile Smart Contracts
+    runs-on: ubuntu-latest
+    needs: validate-network
+    if: ${{ inputs.skip_compilation == false }}
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Compile contracts
+        run: |
+          echo "## 🔨 Compiling Smart Contracts" >> $GITHUB_STEP_SUMMARY
+          npm run compile
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Compilation successful" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload compiled contracts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-contracts-${{ github.run_number }}
+          path: |
+            artifacts/
+            cache/
+          retention-days: 7
+
+  deploy-mtx:
+    name: Deploy MTX Token
+    runs-on: ubuntu-latest
+    needs: [validate-network, compile-contracts]
+    if: |
+      always() && 
+      needs.validate-network.result == 'success' &&
+      (needs.compile-contracts.result == 'success' || needs.compile-contracts.result == 'skipped') &&
+      (inputs.deployment_type == 'mtx-only' || inputs.deployment_type == 'full-deployment')
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download compiled contracts
+        if: ${{ inputs.skip_compilation == false }}
+        uses: actions/download-artifact@v4
+        with:
+          name: compiled-contracts-${{ github.run_number }}
+      
+      - name: Create deployments directory
+        run: mkdir -p deployments
+      
+      - name: Deploy MTX Token to ${{ inputs.network }}
+        env:
+          PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
+          SEPOLIA_RPC_URL: ${{ inputs.network == 'sepolia' && secrets.SEPOLIA_RPC_URL || '' }}
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        run: |
+          echo "## 🚀 Deploying MTX Token" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** ${{ inputs.network }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          npx hardhat run scripts/deploy_mtx.js --network ${{ inputs.network }} | tee deploy_mtx_output.log
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment Output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -20 deploy_mtx_output.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload MTX deployment artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtx-deployment-${{ inputs.network }}-${{ github.run_number }}
+          path: |
+            deployments/mtx-${{ inputs.network }}.json
+            deploy_mtx_output.log
+          retention-days: 30
+
+  deploy-casino:
+    name: Deploy Casino Contracts
+    runs-on: ubuntu-latest
+    needs: [validate-network, compile-contracts, deploy-mtx]
+    if: |
+      always() && 
+      needs.validate-network.result == 'success' &&
+      (needs.compile-contracts.result == 'success' || needs.compile-contracts.result == 'skipped') &&
+      (needs.deploy-mtx.result == 'success' || inputs.deployment_type == 'casino-only') &&
+      (inputs.deployment_type == 'casino-only' || inputs.deployment_type == 'full-deployment')
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download compiled contracts
+        if: ${{ inputs.skip_compilation == false }}
+        uses: actions/download-artifact@v4
+        with:
+          name: compiled-contracts-${{ github.run_number }}
+      
+      - name: Download MTX deployment
+        if: inputs.deployment_type == 'full-deployment'
+        uses: actions/download-artifact@v4
+        with:
+          name: mtx-deployment-${{ inputs.network }}-${{ github.run_number }}
+          path: deployments/
+      
+      - name: Create deployments directory
+        run: mkdir -p deployments
+      
+      - name: Deploy Casino Contracts to ${{ inputs.network }}
+        env:
+          PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
+          SEPOLIA_RPC_URL: ${{ inputs.network == 'sepolia' && secrets.SEPOLIA_RPC_URL || '' }}
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        run: |
+          echo "## 🎰 Deploying Casino Contracts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** ${{ inputs.network }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          npx hardhat run scripts/deploy_casino.js --network ${{ inputs.network }} | tee deploy_casino_output.log
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment Output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -30 deploy_casino_output.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload Casino deployment artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: casino-deployment-${{ inputs.network }}-${{ github.run_number }}
+          path: |
+            deployments/casino-${{ inputs.network }}.json
+            deploy_casino_output.log
+          retention-days: 30
+
+  distribute-mtx:
+    name: Distribute MTX Tokens
+    runs-on: ubuntu-latest
+    needs: [validate-network, compile-contracts, deploy-mtx, deploy-casino]
+    if: |
+      always() && 
+      needs.validate-network.result == 'success' &&
+      (needs.compile-contracts.result == 'success' || needs.compile-contracts.result == 'skipped') &&
+      ((needs.deploy-mtx.result == 'success' && needs.deploy-casino.result == 'success') || inputs.deployment_type == 'distribute-only') &&
+      (inputs.deployment_type == 'distribute-only' || inputs.deployment_type == 'full-deployment')
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download compiled contracts
+        if: ${{ inputs.skip_compilation == false }}
+        uses: actions/download-artifact@v4
+        with:
+          name: compiled-contracts-${{ github.run_number }}
+      
+      - name: Download MTX deployment
+        if: inputs.deployment_type == 'full-deployment'
+        uses: actions/download-artifact@v4
+        with:
+          name: mtx-deployment-${{ inputs.network }}-${{ github.run_number }}
+          path: deployments/
+      
+      - name: Download Casino deployment
+        if: inputs.deployment_type == 'full-deployment'
+        uses: actions/download-artifact@v4
+        with:
+          name: casino-deployment-${{ inputs.network }}-${{ github.run_number }}
+          path: deployments/
+      
+      - name: Create deployments directory
+        run: mkdir -p deployments
+      
+      - name: Distribute MTX to Ecosystem
+        env:
+          PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
+          SEPOLIA_RPC_URL: ${{ inputs.network == 'sepolia' && secrets.SEPOLIA_RPC_URL || '' }}
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        run: |
+          echo "## 💰 Distributing MTX Tokens" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** ${{ inputs.network }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          npx hardhat run scripts/distribute_mtx.js --network ${{ inputs.network }} | tee distribute_mtx_output.log
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Distribution Output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -40 distribute_mtx_output.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload Distribution artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtx-distribution-${{ inputs.network }}-${{ github.run_number }}
+          path: |
+            deployments/mtx-distribution-${{ inputs.network }}.json
+            distribute_mtx_output.log
+          retention-days: 30
+
+  deployment-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [validate-network, deploy-mtx, deploy-casino, distribute-mtx]
+    if: always()
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Generate deployment summary
+        run: |
+          echo "# 📋 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** \`${{ inputs.network }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment Type:** \`${{ inputs.deployment_type }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Run Number:** #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## Job Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Network Validation | ${{ needs.validate-network.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| MTX Deployment | ${{ needs.deploy-mtx.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Casino Deployment | ${{ needs.deploy-casino.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| MTX Distribution | ${{ needs.distribute-mtx.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 📦 Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Download deployment artifacts from the workflow run page:" >> $GITHUB_STEP_SUMMARY
+          echo "- Deployment JSON files in \`deployments/\` directory" >> $GITHUB_STEP_SUMMARY
+          echo "- Deployment output logs" >> $GITHUB_STEP_SUMMARY
+          echo "- Contract artifacts (if compiled)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## ⚠️ Important Notes" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ This was a **testnet deployment**" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 Verify all contract addresses before proceeding" >> $GITHUB_STEP_SUMMARY
+          echo "- 📄 Check deployment artifacts for transaction details" >> $GITHUB_STEP_SUMMARY
+          echo "- 🧪 Test all contracts thoroughly before mainnet deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "## 🚀 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download and review deployment artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "2. Verify contracts on block explorer (if Etherscan API key was set)" >> $GITHUB_STEP_SUMMARY
+          echo "3. Test contract functionality on testnet" >> $GITHUB_STEP_SUMMARY
+          echo "4. Update frontend configuration with new contract addresses" >> $GITHUB_STEP_SUMMARY
+          echo "5. **For mainnet:** Follow manual deployment procedures (see DEPLOYMENT_GUIDE.md)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Matrix-Hub.org** - Signal Over Noise 🌟" >> $GITHUB_STEP_SUMMARY
