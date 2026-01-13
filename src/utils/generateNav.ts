@@ -37,11 +37,30 @@ import path from 'path';
 // const __dirname = path.dirname(__filename);
 
 // Paths and files to exclude from navigation
+// These exclusions hide at-risk content, private portals, and internal infrastructure
 const EXCLUDED_PATHS = [
-  '**/api/**',        // API routes
-  '**/_.astro/**',      // Astro files starting with underscore
-  '**/_.md',         // Markdown files starting with underscore
-  '**/owners.astro',  // Owners portal - direct URL access only
+  // API Routes & Backend Infrastructure
+  '**/api/**',                    // API endpoints (handled separately from navigation)
+  '**/api.{astro,ts,js,tsx,jsx}', // API files in pages root
+  
+  // Private & Admin Portals
+  '**/owners.astro',              // Owners portal - direct URL access only
+  '**/admin/**',                  // Admin section
+  '**/admin.{astro,ts,tsx}',      // Admin pages
+  '**/internal/**',               // Internal use only
+  '**/private/**',                // Private content
+  
+  // Development & Debug Files
+  '**/_*.{astro,md,mdx,ts,tsx}',  // Files starting with underscore (draft/internal)
+  '**/_.{astro,md,mdx,tsx}/**',   // Directories starting with underscore
+  '**/debug*',                    // Debug pages
+  '**/test*',                     // Test pages
+  
+  // System & Configuration
+  '**/sitemap*',                  // Sitemap (auto-generated, not for nav)
+  '**/robots*',                   // Robots.txt (auto-generated)
+  '**/config/**',                 // Configuration pages
+  '**/settings/**',               // Settings (if user-restricted)
 ];
 
 interface PageMetadata {
