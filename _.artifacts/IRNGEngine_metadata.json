@@ -1,0 +1,89 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "bytes",
+						"name": "gameData",
+						"type": "bytes"
+					}
+				],
+				"name": "resolve",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Matrix-Hub Team",
+			"kind": "dev",
+			"methods": {
+				"resolve(bytes)": {
+					"params": {
+						"gameData": "Encoded game data"
+					},
+					"returns": {
+						"_0": "True if player wins, false otherwise"
+					}
+				}
+			},
+			"title": "IRNGEngine",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"resolve(bytes)": {
+					"notice": "Resolve game outcome based on game data"
+				}
+			},
+			"notice": "Interface for random number generation",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/CasinoCore.sol": "IRNGEngine"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
+				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
+			]
+		},
+		"contracts/CasinoCore.sol": {
+			"keccak256": "0x5ea2cdf540e9d7bf7376cf678a1258228a3192319a8f09ba1cdac1f599fa1ea4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f10cce9caf616ab336cae27e95507b8628b961182df0c956517c98085f1c2745",
+				"dweb:/ipfs/Qmf68bYTUvEeVU7wwJxUaN1jcfHmiyJe8vBaQ8C9tcZraa"
+			]
+		}
+	},
+	"version": 1
+}

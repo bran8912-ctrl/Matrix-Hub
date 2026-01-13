@@ -30,12 +30,9 @@ import matter from 'gray-matter';
 import chokidar from 'chokidar';
 import fs from 'fs/promises';
 import path from 'path';
-// Note: fileURLToPath is not needed in current implementation
-// import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url';
 
-// Note: __filename and __dirname are defined but not used in current implementation
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
 
 // Configuration - can be overridden via environment variables
 const CONFIG = {

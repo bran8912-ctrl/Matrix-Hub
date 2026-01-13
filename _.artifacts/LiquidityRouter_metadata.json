@@ -1,0 +1,155 @@
+{
+	"compiler": {
+		"version": "0.8.31+commit.fd3a2265"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_mtx",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_dexPool",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "MTXTransferFromFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroAddress",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroAmount",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "addLiquidity",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "dexPool",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "mtx",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Matrix-Hub Team",
+			"details": "Routes liquidity to DEX pool",
+			"kind": "dev",
+			"methods": {
+				"addLiquidity(uint256)": {
+					"details": "User must approve this contract to spend 'amount' MTX before calling",
+					"params": {
+						"amount": "Amount of MTX to add to liquidity"
+					}
+				},
+				"constructor": {
+					"details": "Sets up integration with DEX",
+					"params": {
+						"_dexPool": "Address of Uniswap V2/V3 pool for MTX/ETH",
+						"_mtx": "Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Ethereum"
+					}
+				}
+			},
+			"title": "LiquidityRouter",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"addLiquidity(uint256)": {
+					"notice": "Add liquidity to the DEX pool"
+				},
+				"constructor": {
+					"notice": "Constructor initializes router with MTX token and DEX pool"
+				},
+				"dexPool()": {
+					"notice": "DEX pool address"
+				},
+				"mtx()": {
+					"notice": "MTX token contract"
+				}
+			},
+			"notice": "Manages liquidity for MTX/ETH pool on Ethereum DEX (Uniswap)",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/LiquidityRouter.sol": "LiquidityRouter"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
+				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
+			]
+		},
+		"contracts/LiquidityRouter.sol": {
+			"keccak256": "0xd755320e429e26e466bd8c230aaf34a7e281fe1f3307f0ea9cd7566586cfd4a8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f184f147c6c641939a0db81bf9691088ec607db208c7a834c8c7778650de4e38",
+				"dweb:/ipfs/QmfGxZABd5xy9zVETj7EdbcbA1qHruLPctAD8aV4S5wFy6"
+			]
+		}
+	},
+	"version": 1
+}
