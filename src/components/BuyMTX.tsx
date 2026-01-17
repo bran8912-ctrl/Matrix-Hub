@@ -4,34 +4,34 @@ import { MTX } from '../config/mtx';
 import mtxAbi from '../abi/mtx.json';
 
 /**
- * BuyMTX Component - Direct ETH→MTX mint interface
+ * BuyMTX Component - Direct MATIC→MTX mint interface
  * 
  * Features:
- * - Shows current ETH to MTX exchange rate
- * - Input field for ETH amount
+ * - Shows current MATIC to MTX exchange rate
+ * - Input field for MATIC amount
  * - Calculates and displays MTX amount to receive
- * - Buy button that sends ETH to contract
+ * - Buy button that sends MATIC to contract
  * - Transaction status feedback
  * - Security messaging and guidance
  * 
- * Network: Ethereum Mainnet
+ * Network: Polygon Mainnet
  */
 const BuyMTX: React.FC = () => {
-  const [ethAmount, setEthAmount] = useState('0.01');
+  const [maticAmount, setMaticAmount] = useState('1.0');
   const [mtxAmount, setMtxAmount] = useState('0');
-  const [rate, setRate] = useState(MTX.ethToMtxRate);
+  const [rate, setRate] = useState(MTX.maticToMtxRate);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [txHash, setTxHash] = useState('');
   const [mintingPaused, setMintingPaused] = useState(false);
 
-  // Calculate MTX amount whenever ETH amount or rate changes
+  // Calculate MTX amount whenever MATIC amount or rate changes
   useEffect(() => {
-    const eth = parseFloat(ethAmount) || 0;
-    const mtx = eth * rate;
+    const matic = parseFloat(maticAmount) || 0;
+    const mtx = matic * rate;
     setMtxAmount(mtx.toFixed(4));
-  }, [ethAmount, rate]);
+  }, [maticAmount, rate]);
 
   // Fetch current rate and minting status from contract
   useEffect(() => {
@@ -43,7 +43,7 @@ const BuyMTX: React.FC = () => {
         const mtxContract = new Contract(MTX.address, mtxAbi, provider);
         
         // Fetch rate
-        const contractRate = await mtxContract.ethToMtxRate();
+        const contractRate = await mtxContract.maticToMtxRate();
         setRate(Number(contractRate));
         
         // Fetch minting status
@@ -63,18 +63,18 @@ const BuyMTX: React.FC = () => {
     setTxHash('');
     
     if (!window.ethereum) {
-      setError('Ethereum wallet not found. Please install MetaMask or a compatible wallet.');
+      setError('Polygon wallet not found. Please install MetaMask or a compatible wallet.');
       return;
     }
 
-    const eth = parseFloat(ethAmount);
-    if (!eth || eth <= 0) {
-      setError('Please enter a valid ETH amount greater than 0');
+    const matic = parseFloat(maticAmount);
+    if (!matic || matic <= 0) {
+      setError('Please enter a valid MATIC amount greater than 0');
       return;
     }
 
     if (mintingPaused) {
-      setError('Direct minting is currently paused. Please use Uniswap instead.');
+      setError('Direct minting is currently paused. Please use QuickSwap instead.');
       return;
     }
 
@@ -86,7 +86,7 @@ const BuyMTX: React.FC = () => {
       const mtxContract = new Contract(MTX.address, mtxAbi, signer);
 
       // Send transaction to buyMTX function
-      const tx = await mtxContract.buyMTX({ value: parseEther(ethAmount) });
+      const tx = await mtxContract.buyMTX({ value: parseEther(maticAmount) });
       
       setSuccess(`Transaction sent! Waiting for confirmation...`);
       setTxHash(tx.hash);
@@ -106,7 +106,7 @@ const BuyMTX: React.FC = () => {
       if (error.code === 4001) {
         setError('Transaction rejected by user.');
       } else if (error.message?.includes('insufficient funds')) {
-        setError('Insufficient ETH balance for this transaction.');
+        setError('Insufficient MATIC balance for this transaction.');
       } else if (err.message?.includes('Exceeds max supply')) {
         setError('Purchase would exceed max MTX supply. Try a smaller amount.');
       } else {
@@ -148,7 +148,7 @@ const BuyMTX: React.FC = () => {
           Current Rate
         </div>
         <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#00ff99' }}>
-          1 ETH = {rate} MTX
+          1 MATIC = {rate} MTX
         </div>
       </div>
 
@@ -160,12 +160,12 @@ const BuyMTX: React.FC = () => {
           fontSize: '0.875rem',
           color: '#aaa'
         }}>
-          ETH Amount
+          MATIC Amount
         </label>
         <input
           type="number"
-          value={ethAmount}
-          onChange={(e) => setEthAmount(e.target.value)}
+          value={maticAmount}
+          onChange={(e) => setMaticAmount(e.target.value)}
           step="0.001"
           min="0"
           disabled={loading || mintingPaused}
@@ -216,7 +216,7 @@ const BuyMTX: React.FC = () => {
           transition: 'opacity 0.2s'
         }}
       >
-        {loading ? 'Processing...' : mintingPaused ? 'Minting Paused' : 'Buy MTX with ETH'}
+        {loading ? 'Processing...' : mintingPaused ? 'Minting Paused' : 'Buy MTX with MATIC'}
       </button>
 
       {/* Status Messages */}
@@ -289,7 +289,7 @@ const BuyMTX: React.FC = () => {
           borderRadius: '4px',
           color: '#ffaa00'
         }}>
-          <strong>⚠️ Important:</strong> Ensure you're on the correct network (Ethereum Mainnet). 
+          <strong>⚠️ Important:</strong> Ensure you're on the correct network (Polygon Mainnet). 
           Always verify the contract address before sending ETH.
         </div>
       </div>

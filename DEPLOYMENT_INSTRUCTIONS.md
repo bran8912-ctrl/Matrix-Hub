@@ -5,7 +5,8 @@
 ✅ **Cleanup Complete** - All unnecessary files have been removed
 ✅ **Build Verified** - Site builds successfully with all pages rendering
 ✅ **Contracts Ready** - Smart contracts compiled and artifacts available
-⚠️ **Deployment Pending** - Contracts need to be deployed to blockchain network
+✅ **Network Changed** - Migrated from Polygon to Polygon for lower gas costs
+⚠️ **Deployment Pending** - Contracts need to be deployed to Polygon network
 
 ## Files Removed (Phase 1)
 
@@ -70,41 +71,41 @@ Each game uses dedicated components in `/src/casino/<game>/`:
    PRIVATE_KEY=your_private_key_here
    
    # RPC endpoints
-   MAINNET_RPC_URL=https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY
-   SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/YOUR_KEY
+   POLYGON_RPC_URL=https://eth-polygon.g.alchemy.com/v2/YOUR_KEY
+   SEPOLIA_RPC_URL=https://eth-amoy.g.alchemy.com/v2/YOUR_KEY
    
-   # Etherscan API key for verification
-   ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY
+   # Polygonscan API key for verification
+   MATICERSCAN_API_KEY=YOUR_MATICERSCAN_API_KEY
    ```
 
 3. **Fund Deployer Wallet**
-   - For Sepolia: Get testnet ETH from https://sepoliafaucet.com/
-   - For Mainnet: Ensure 0.5+ ETH for gas fees
+   - For Amoy: Get testnet MATIC from https://amoyfaucet.com/
+   - For Mainnet: Ensure 0.5+ MATIC for gas fees
 
 ### Step-by-Step Deployment
 
 #### Step 1: Deploy MTX Token (if not already deployed)
 
 ```bash
-# Test on Sepolia first
+# Test on Amoy first
 npm run deploy:testnet:mtx
 
-# After testing, deploy to mainnet
-npx hardhat run scripts/deploy_mtx.js --network mainnet
+# After testing, deploy to polygon
+npx hardhat run scripts/deploy_mtx.js --network polygon
 ```
 
 **Expected Output:**
 - Contract address saved to `deployments/mtx-<network>.json`
-- Verify on Etherscan using provided verification command
+- Verify on Polygonscan using provided verification command
 
 #### Step 2: Deploy Casino Contracts
 
 ```bash
-# Deploy all casino contracts (Sepolia)
+# Deploy all casino contracts (Amoy)
 npm run deploy:testnet:casino
 
-# Or for mainnet (after thorough testing)
-npx hardhat run scripts/deploy_casino.js --network mainnet
+# Or for polygon (after thorough testing)
+npx hardhat run scripts/deploy_casino.js --network polygon
 ```
 
 **Deploys:**
@@ -135,24 +136,24 @@ LIQUIDITY_ROUTER_ADDRESS=0x...
 RNG_ENGINE_ADDRESS=0x...
 ```
 
-#### Step 4: Verify Contracts on Etherscan
+#### Step 4: Verify Contracts on Polygonscan
 
 The deployment script will output verification commands. Example:
 
 ```bash
 # RNGEngine (no constructor args)
-npx hardhat verify --network sepolia <RNG_ADDRESS>
+npx hardhat verify --network amoy <RNG_ADDRESS>
 
 # CasinoReserve
-npx hardhat verify --network sepolia <RESERVE_ADDRESS> \
+npx hardhat verify --network amoy <RESERVE_ADDRESS> \
   "<MTX_ADDRESS>" "<RESERVE_CAP>" "<TEMP_CASINO_CORE>"
 
 # LiquidityRouter
-npx hardhat verify --network sepolia <LIQUIDITY_ADDRESS> \
+npx hardhat verify --network amoy <LIQUIDITY_ADDRESS> \
   "<MTX_ADDRESS>" "<TEMP_DEX_POOL>"
 
 # CasinoCore
-npx hardhat verify --network sepolia <CASINO_CORE_ADDRESS> \
+npx hardhat verify --network amoy <CASINO_CORE_ADDRESS> \
   "<MTX_ADDRESS>" "<LIQUIDITY_ADDRESS>" "<RESERVE_ADDRESS>" "<RNG_ADDRESS>" \
   "<MIN_BET>" "<MAX_BET>" "<DEV_ADDRESS>" "<GOVERNANCE_ADDRESS>"
 ```
@@ -165,9 +166,9 @@ npx hardhat verify --network sepolia <CASINO_CORE_ADDRESS> \
    # Recommended: 100,000+ MTX for initial liquidity
    ```
 
-2. **Create Uniswap Pool**
-   - Visit https://app.uniswap.org/
-   - Create MTX/ETH liquidity pool
+2. **Create QuickSwap Pool**
+   - Visit https://app.quickswap.org/
+   - Create MTX/MATIC liquidity pool
    - Note the pool address
    - Update LiquidityRouter with pool address
 
@@ -177,11 +178,11 @@ npx hardhat verify --network sepolia <CASINO_CORE_ADDRESS> \
 
 ### Testing Checklist
 
-Before mainnet deployment:
+Before polygon deployment:
 
-- [ ] All contracts deployed successfully on Sepolia
-- [ ] All contracts verified on Sepolia Etherscan
-- [ ] Frontend connects to Sepolia contracts
+- [ ] All contracts deployed successfully on Amoy
+- [ ] All contracts verified on Amoy Polygonscan
+- [ ] Frontend connects to Amoy contracts
 - [ ] Test placing bets on all games
 - [ ] Test winning payouts
 - [ ] Test liquidity routing
@@ -253,7 +254,7 @@ npm run preview
    - Reserve cap enforcement
 
 4. **LiquidityRouter.sol**
-   - DEX integration for MTX/ETH swaps
+   - DEX integration for MTX/MATIC swaps
    - Routing logic for liquidity pools
 
 5. **RNGEngine.sol**
@@ -295,17 +296,17 @@ All contracts pre-compiled in `_.artifacts/` directory:
 - [ ] MTX token deployed
 - [ ] Casino contracts deployed
 - [ ] Frontend config updated with addresses
-- [ ] Contracts verified on Etherscan
+- [ ] Contracts verified on Polygonscan
 - [ ] Reserve funded with MTX
-- [ ] Uniswap pool created
+- [ ] QuickSwap pool created
 
 ## Next Steps
 
 1. **Configure Environment**
    - Set up `.env` with private key and RPC URLs
-   - Fund deployer wallet with sufficient ETH
+   - Fund deployer wallet with sufficient MATIC
 
-2. **Deploy to Sepolia Testnet**
+2. **Deploy to Amoy Testnet**
    - Test full deployment flow
    - Verify all contracts
    - Test frontend integration
@@ -317,7 +318,7 @@ All contracts pre-compiled in `_.artifacts/` directory:
    - Verify economic models
 
 4. **Deploy to Mainnet**
-   - Only after thorough Sepolia testing
+   - Only after thorough Amoy testing
    - Follow checklist above
    - Monitor initial transactions
    - Be prepared for emergency response

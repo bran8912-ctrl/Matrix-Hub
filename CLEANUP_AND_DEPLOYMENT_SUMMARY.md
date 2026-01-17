@@ -105,8 +105,8 @@ Successfully completed Phase 1 (Cleanup), Phase 2 (Verification), and Phase 3 (T
 Contract deployment requires:
 - ❌ Private key for deployer wallet (not available in CI environment)
 - ❌ RPC endpoint URLs (Alchemy/Infura)
-- ❌ Etherscan API key for verification
-- ❌ Funded wallet with ETH for gas fees
+- ❌ Polygonscan API key for verification
+- ❌ Funded wallet with MATIC for gas fees
 
 **These must be configured locally or in secure CI secrets before deployment can proceed.**
 
@@ -120,10 +120,10 @@ Contract deployment requires:
 - ✅ Comprehensive deployment guide (`CASINO_DEPLOYMENT_GUIDE.md`)
 
 **Post-Deployment Steps Documented:**
-- Contract verification on Etherscan
+- Contract verification on Polygonscan
 - Frontend configuration update
 - Reserve funding
-- Uniswap pool creation
+- QuickSwap pool creation
 - Testing checklist
 
 ---
@@ -300,15 +300,15 @@ src/pages/games/casino/slots.astro
 
 ### Pending Actions ⚠️
 - [ ] Configure environment variables (.env)
-- [ ] Fund deployer wallet with ETH
-- [ ] Deploy MTX token to Sepolia testnet
-- [ ] Deploy casino contracts to Sepolia
+- [ ] Fund deployer wallet with MATIC
+- [ ] Deploy MTX token to Amoy testnet
+- [ ] Deploy casino contracts to Amoy
 - [ ] Test all contracts on testnet
-- [ ] Verify contracts on Etherscan
+- [ ] Verify contracts on Polygonscan
 - [ ] Update frontend config with addresses
 - [ ] Test full integration on testnet
 - [ ] Security audit (recommended)
-- [ ] Deploy to mainnet
+- [ ] Deploy to polygon
 - [ ] Go live
 
 ---
@@ -379,9 +379,9 @@ All preserved and relevant:
 1. **Set up deployment environment**
    - Create/fund deployer wallet
    - Configure RPC endpoints (Alchemy/Infura)
-   - Set up Etherscan API key
+   - Set up Polygonscan API key
 
-2. **Deploy to Sepolia testnet**
+2. **Deploy to Amoy testnet**
    - Deploy MTX token
    - Deploy casino contracts
    - Verify all contracts
@@ -401,7 +401,7 @@ All preserved and relevant:
    - Check for vulnerabilities
 
 ### Before Mainnet Launch
-1. ✅ Complete Sepolia testing
+1. ✅ Complete Amoy testing
 2. ✅ Security audit passed
 3. ✅ Gas optimization verified
 4. ✅ Economic models validated
@@ -410,11 +410,11 @@ All preserved and relevant:
 7. ✅ Monitoring tools ready
 
 ### Production Launch
-1. Deploy to Ethereum mainnet
-2. Verify all contracts on Etherscan
+1. Deploy to Polygon polygon
+2. Verify all contracts on Polygonscan
 3. Update production frontend
 4. Fund casino reserve with MTX
-5. Create Uniswap liquidity pool
+5. Create QuickSwap liquidity pool
 6. Announce launch
 7. Monitor initial activity
 
@@ -423,7 +423,7 @@ All preserved and relevant:
 ## Recommendations
 
 ### Short Term
-1. **Prioritize Sepolia deployment** - Test everything on testnet first
+1. **Prioritize Amoy deployment** - Test everything on testnet first
 2. **Security audit** - Get professional review of smart contracts
 3. **Load testing** - Ensure casino can handle concurrent users
 4. **Documentation** - Expand user guides for casino games
@@ -437,7 +437,7 @@ All preserved and relevant:
 ### Long Term
 1. **DAO governance** - Implement community governance
 2. **Partnerships** - Integrate with other Web3 projects
-3. **Liquidity mining** - Incentivize MTX/ETH pool
+3. **Liquidity mining** - Incentivize MTX/MATIC pool
 4. **Marketing** - Build community and user base
 
 ---

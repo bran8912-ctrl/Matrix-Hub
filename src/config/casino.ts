@@ -1,8 +1,8 @@
 // Casino Contract Configuration
-// Network: Ethereum Mainnet (Chain ID: 1)
+// Network: Polygon Mainnet (Chain ID: 137)
 //
 // DEPLOYMENT STATUS: Contracts must be deployed to get legitimate addresses
-// Use: npm run deploy:mainnet:casino (after MTX token is deployed)
+// Use: npm run deploy:polygon:casino (after MTX token is deployed)
 // 
 // ⚠️ AFTER DEPLOYMENT: Update environment variables with real contract addresses
 
@@ -41,7 +41,7 @@ const allContractsDeployed = casinoCoreDeployed && casinoReserveDeployed;
 
 if (!allContractsDeployed) {
   console.warn("⚠️  Casino: Using placeholder addresses. Deploy contracts to get legitimate addresses.");
-  console.warn("    Run: npm run deploy:mainnet:casino");
+  console.warn("    Run: npm run deploy:polygon:casino");
 }
 
 export const Casino = {
@@ -60,6 +60,6 @@ export const Casino = {
     rngEngine: createContractInfo(rngEngineAddress)
   },
   isFullyDeployed: allContractsDeployed,
-  chainId: 1, // Ethereum Mainnet
-  chainName: "Ethereum"
+  chainId: 137, // Polygon Mainnet
+  chainName: "Polygon"
 };

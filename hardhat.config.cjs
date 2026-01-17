@@ -13,17 +13,18 @@ module.exports = {
     }
   },
   networks: {
-    // Ethereum Mainnet - PRIMARY NETWORK
-    mainnet: {
-      url: process.env.MAINNET_RPC_URL || "https://eth.llamarpc.com",
+    // Polygon Mainnet - PRIMARY NETWORK
+    polygon: {
+      url: process.env.POLYGON_RPC_URL || "https://polygon-rpc.com/",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 1
+      chainId: 137,
+      gasPrice: 50000000000 // 50 gwei - adjust based on network conditions
     },
-    // Ethereum Sepolia Testnet (recommended for testing)
-    sepolia: {
-      url: process.env.SEPOLIA_RPC_URL || "https://rpc.sepolia.org/",
+    // Polygon Amoy Testnet (recommended for testing)
+    amoy: {
+      url: process.env.AMOY_RPC_URL || "https://rpc-amoy.polygon.technology/",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 11155111
+      chainId: 80002
     },
     // Localhost for development
     localhost: {
@@ -33,11 +34,11 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      mainnet: process.env.ETHERSCAN_API_KEY || "",
-      sepolia: process.env.ETHERSCAN_API_KEY || ""
+      polygon: process.env.POLYGONSCAN_API_KEY || "",
+      polygonAmoy: process.env.POLYGONSCAN_API_KEY || ""
     }
   },
-  // Validate Etherscan API key is set for contract verification
+  // Validate Polygonscan API key is set for contract verification
   paths: {
     sources: "./contracts",
     tests: "./test",
