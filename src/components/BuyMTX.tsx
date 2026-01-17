@@ -290,7 +290,7 @@ const BuyMTX: React.FC = () => {
           color: '#ffaa00'
         }}>
           <strong>⚠️ Important:</strong> Ensure you're on the correct network (Polygon Mainnet). 
-          Always verify the contract address before sending ETH.
+          Always verify the contract address before sending MATIC.
         </div>
       </div>
     </div>

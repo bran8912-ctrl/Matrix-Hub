@@ -410,7 +410,7 @@ All preserved and relevant:
 7. ✅ Monitoring tools ready
 
 ### Production Launch
-1. Deploy to Polygon polygon
+1. Deploy to Polygon mainnet
 2. Verify all contracts on Polygonscan
 3. Update production frontend
 4. Fund casino reserve with MTX

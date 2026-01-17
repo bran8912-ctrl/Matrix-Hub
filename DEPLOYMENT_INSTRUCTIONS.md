@@ -5,7 +5,7 @@
 ✅ **Cleanup Complete** - All unnecessary files have been removed
 ✅ **Build Verified** - Site builds successfully with all pages rendering
 ✅ **Contracts Ready** - Smart contracts compiled and artifacts available
-✅ **Network Changed** - Migrated from Polygon to Polygon for lower gas costs
+✅ **Network Changed** - Migrated from Ethereum to Polygon for lower gas costs
 ⚠️ **Deployment Pending** - Contracts need to be deployed to Polygon network
 
 ## Files Removed (Phase 1)
@@ -71,11 +71,11 @@ Each game uses dedicated components in `/src/casino/<game>/`:
    PRIVATE_KEY=your_private_key_here
    
    # RPC endpoints
-   POLYGON_RPC_URL=https://eth-polygon.g.alchemy.com/v2/YOUR_KEY
-   SEPOLIA_RPC_URL=https://eth-amoy.g.alchemy.com/v2/YOUR_KEY
+   POLYGON_RPC_URL=https://polygon-mainnet.g.alchemy.com/v2/YOUR_KEY
+   AMOY_RPC_URL=https://polygon-amoy.g.alchemy.com/v2/YOUR_KEY
    
    # Polygonscan API key for verification
-   MATICERSCAN_API_KEY=YOUR_MATICERSCAN_API_KEY
+   POLYGONSCAN_API_KEY=YOUR_POLYGONSCAN_API_KEY
    ```
 
 3. **Fund Deployer Wallet**
