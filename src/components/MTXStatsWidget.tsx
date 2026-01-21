@@ -11,7 +11,7 @@ interface Stats {
   circulatingSupply: string;
   burnedSupply: string;
   mintingPaused: boolean;
-  ethToMtxRate: number;
+  maticToMtxRate: number;
 }
 
 /**
@@ -53,7 +53,7 @@ const MTXStatsWidget: React.FC<MTXStatsWidgetProps> = ({
           circulatingSupply: data.circulatingSupply,
           burnedSupply: data.burnedSupply,
           mintingPaused: data.mintingPaused,
-          ethToMtxRate: data.ethToMtxRate,
+          maticToMtxRate: data.maticToMtxRate,
         });
       } else {
         throw new Error('Failed to fetch stats from API');
@@ -67,7 +67,7 @@ const MTXStatsWidget: React.FC<MTXStatsWidgetProps> = ({
         circulatingSupply: 'Loading...',
         burnedSupply: '0',
         mintingPaused: false,
-        ethToMtxRate: MTX.ethToMtxRate,
+        maticToMtxRate: MTX.maticToMtxRate,
       });
       
       setError('Unable to fetch live stats');
@@ -266,7 +266,7 @@ const MTXStatsWidget: React.FC<MTXStatsWidgetProps> = ({
               fontWeight: 'bold',
               color: '#ffaa00'
             }}>
-              1 ETH = {formatNumber(stats.ethToMtxRate.toString())} MTX
+              1 MATIC = {formatNumber(stats.maticToMtxRate.toString())} MTX
             </span>
           </div>
 
@@ -331,7 +331,7 @@ const MTXStatsWidget: React.FC<MTXStatsWidgetProps> = ({
                   borderRadius: '4px'
                 }}
               >
-                Uniswap ↗
+                QuickSwap ↗
               </a>
             </div>
           )}

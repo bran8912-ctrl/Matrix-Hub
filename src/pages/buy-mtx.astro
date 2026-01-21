@@ -18,8 +18,8 @@ const uniswapUrl = MTX.uniswapUrl;
   <div class="buy-mtx-page">
     <h1 class="page-title">Buy MTX</h1>
     <p class="page-description">
-      Purchase MTX tokens directly with ETH using our secure direct mint feature, 
-      or buy on Uniswap for instant liquidity.
+      Purchase MTX tokens directly with MATIC using our secure direct mint feature, 
+      or buy on QuickSwap for instant liquidity.
     </p>
     
     {!isDeployed && (
@@ -47,7 +47,7 @@ const uniswapUrl = MTX.uniswapUrl;
         <div class="option-card">
           <h3>🚀 Direct Mint (Recommended for Onboarding)</h3>
           <ul>
-            <li><strong>Fixed Rate:</strong> 1 ETH = 100,000 MTX</li>
+            <li><strong>Fixed Rate:</strong> 1 MATIC = 1,000 MTX</li>
             <li><strong>Lower Gas:</strong> Single transaction, lower fees</li>
             <li><strong>Instant:</strong> Immediate MTX minting to your wallet</li>
             <li><strong>Perfect For:</strong> Small purchases, first-time users</li>
@@ -59,7 +59,7 @@ const uniswapUrl = MTX.uniswapUrl;
         </div>
 
         <div class="option-card">
-          <h3>💱 Uniswap DEX (Public Market)</h3>
+          <h3>💱 QuickSwap DEX (Public Market)</h3>
           <ul>
             <li><strong>Market Rate:</strong> Pricing based on liquidity pool</li>
             <li><strong>High Liquidity:</strong> Swap any amount instantly</li>
@@ -75,7 +75,7 @@ const uniswapUrl = MTX.uniswapUrl;
                 rel="noopener noreferrer"
                 class="cta-button uniswap"
               >
-                Buy on Uniswap →
+                Buy on QuickSwap →
               </a>
             ) : (
               <span class="cta-button uniswap disabled">
@@ -90,7 +90,7 @@ const uniswapUrl = MTX.uniswapUrl;
         <h3>🔒 Security & Best Practices</h3>
         <ul>
           <li><strong>Verify Contract Address:</strong> Always double-check you're interacting with the correct contract{isDeployed ? `: ${contractAddress}` : ' (will be displayed after deployment)'}</li>
-          <li><strong>Network:</strong> Ensure you're on Ethereum Mainnet (ChainID: 1)</li>
+          <li><strong>Network:</strong> Ensure you're on Polygon (Chain ID: 137)</li>
           <li><strong>Start Small:</strong> For first-time users, we recommend starting with a small test purchase</li>
           <li><strong>Gas Fees:</strong> Consider current network gas prices before transacting</li>
           <li><strong>Wallet Security:</strong> Never share your private keys or seed phrase</li>
@@ -100,16 +100,16 @@ const uniswapUrl = MTX.uniswapUrl;
       <div class="testnet-notice">
         <h3>🧪 Testnet Information</h3>
         <p>
-          If you're testing on a testnet (e.g., Sepolia, Goerli), make sure to:
+          If you're testing on a testnet (e.g., Amoy), make sure to:
         </p>
         <ul>
-          <li>Use testnet ETH (get from faucets)</li>
+          <li>Use testnet MATIC (get from faucets)</li>
           <li>Verify you're on the correct testnet network</li>
           <li>Note that testnet MTX has no real value</li>
           <li>Testnet contract addresses may differ from mainnet</li>
         </ul>
         <p class="warning">
-          ⚠️ <strong>Always verify network and contract address before sending real ETH!</strong>
+          ⚠️ <strong>Always verify network and contract address before sending real MATIC!</strong>
         </p>
       </div>
 

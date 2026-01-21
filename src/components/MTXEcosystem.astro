@@ -9,19 +9,19 @@ import { MTX } from '../config/mtx';
     <div class="deployment-warning">
       <h4>⚠️ Deployment Required</h4>
       <p>
-        The MTX token contract must be deployed to Ethereum Mainnet before the platform can be used.
+        The MTX token contract must be deployed to Polygon before the platform can be used.
         See <a href="/docs/DEPLOYMENT_QUICK_START.md">Deployment Guide</a> for instructions.
       </p>
     </div>
   )}
 
   <div class="panel-text">
-    <strong>MTX</strong> is the key token powering Matrix-Hub on Ethereum Mainnet.<br>
+    <strong>MTX</strong> is the key token powering Matrix-Hub on Polygon.<br>
     Earn, spend, burn, and lock MTX to unlock features, access premium tools, and participate in the Casino.
   </div>
   
   <ul class="mtx-features">
-    <li><span class="feature-label">Buy MTX:</span> Direct mint with ETH or purchase on Uniswap DEX</li>
+    <li><span class="feature-label">Buy MTX:</span> Direct mint with MATIC or purchase on QuickSwap DEX</li>
     <li><span class="feature-label">Earn MTX:</span> Usage milestones, bug reports, GitHub actions, community testing</li>
     <li><span class="feature-label">Spend MTX:</span> Premium tools, priority execution, experimental modules, Casino games</li>
     <li><span class="feature-label">Burn MTX:</span> A % of premium spending is burned to keep supply healthy</li>
@@ -39,7 +39,7 @@ import { MTX } from '../config/mtx';
     <div class="info-grid">
       <div class="info-item">
         <span class="info-label">Network:</span>
-        <span class="info-value">Ethereum Mainnet (ChainID: 1)</span>
+        <span class="info-value">Polygon (ChainID: 137)</span>
       </div>
       <div class="info-item">
         <span class="info-label">Contract Address:</span>
@@ -59,7 +59,7 @@ import { MTX } from '../config/mtx';
       </div>
       <div class="info-item">
         <span class="info-label">Block Explorer:</span>
-        <span class="info-value">Etherscan</span>
+        <span class="info-value">PolygonScan</span>
       </div>
     </div>
   </div>
@@ -71,7 +71,7 @@ import { MTX } from '../config/mtx';
         Buy MTX (Direct Mint)
       </a>
       <a href={MTX.uniswapUrl} target="_blank" rel="noopener noreferrer" class="cta-btn secondary" class:list={[{disabled: !MTX.isDeployed}]}>
-        Buy on Uniswap
+        Buy on QuickSwap
       </a>
       <a href="/wallet" class="cta-btn tertiary">Connect Wallet</a>
     </div>

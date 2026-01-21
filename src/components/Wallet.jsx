@@ -58,7 +58,7 @@ const Wallet = () => {
         setProvider(ethersProvider)
         
         // Ensure we're on the correct network
-        await ensureEthereum()
+        await ensureEthereum() // Ensure we're on the correct network (Polygon)
         
         await fetchBalance(ethersProvider, address)
       } catch (err) {
@@ -77,7 +77,7 @@ const Wallet = () => {
     setError('');
     
     if (!window.ethereum) {
-      setError('Ethereum wallet not found.');
+      setError('Polygon wallet not found.');
       return;
     }
 
@@ -214,14 +214,14 @@ const Wallet = () => {
               Add MTX to Wallet
             </button>
 
-            {/* Buy MTX on Uniswap Button */}
+            {/* Buy MTX on QuickSwap Button */}
             <a
               href={MTX.uniswapUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="wallet-uniswap-btn"
             >
-              Buy MTX on Uniswap
+              Buy MTX on QuickSwap
             </a>
 
             {/* Buy MTX Direct Mint Button */}
