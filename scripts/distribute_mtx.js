@@ -25,7 +25,7 @@ async function main() {
   
   // Check deployer balance
   const balance = await hre.ethers.provider.getBalance(deployer.address);
-  console.log("Account balance:", hre.ethers.formatEther(balance), "ETH");
+  console.log("Account balance:", hre.ethers.formatEther(balance), "MATIC");
   console.log("");
 
   // Load MTX contract address from deployment
@@ -71,7 +71,7 @@ async function main() {
     casinoReserve: hre.ethers.parseEther("20000000"),    // 20M MTX for casino reserves
     liquidityRouter: hre.ethers.parseEther("10000000"),  // 10M MTX for initial DEX liquidity
     // Total: 32M MTX (32% for ecosystem + dev)
-    // Remaining: 68M MTX (68% for public via direct mint at 1 ETH = 100k MTX)
+    // Remaining: 68M MTX (68% for public via direct mint at 1 MATIC = 1,000 MTX)
   };
 
   // Developer wallet address (should match dev address in CasinoCore deployment)
@@ -84,7 +84,7 @@ async function main() {
   console.log("   --------------------------------------------------");
   const total = DISTRIBUTIONS.developerWallet + DISTRIBUTIONS.casinoReserve + DISTRIBUTIONS.liquidityRouter;
   console.log("   Total Ecosystem: ", hre.ethers.formatEther(total), "MTX (32%)");
-  console.log("   Public (buyMTX): 68,000,000 MTX (68% - via direct mint)");
+  console.log("   Public (buyMTX): 68,000,000 MTX (68% - via direct mint at 1 MATIC = 1,000 MTX)");
   console.log("");
   console.log("   📝 Philosophy: Prioritize public access via direct mint");
   console.log("      Developer: 2% initial allocation + 2% of all bet winnings");
@@ -228,7 +228,7 @@ async function main() {
   console.log("3. Add DEX liquidity from LiquidityRouter allocation (10M MTX)");
   console.log("4. Casino operates from reserve (20M MTX)");
   console.log("5. Casino replenishes reserve from house edge profits");
-  console.log("6. Public accesses remaining 68M MTX via buyMTX() at 1 ETH = 100k MTX");
+  console.log("6. Public accesses remaining 68M MTX via buyMTX() at 1 MATIC = 1,000 MTX");
   console.log("7. Users earn MTX through platform engagement (usage milestones, contributions)");
   console.log("");
   console.log("💡 Philosophy: Earn-focused, not distribution-focused");
@@ -240,14 +240,14 @@ async function main() {
 
   // Explorer URLs
   if (hre.network.name === "mainnet") {
-    console.log("🔍 View on Etherscan:");
+    console.log("🔍 View on Polygonscan:");
     distributions.forEach(d => {
-      console.log(`   ${d.contract}: https://etherscan.io/tx/${d.txHash}`);
+      console.log(`   ${d.contract}: https://polygonscan.com/tx/${d.txHash}`);
     });
-  } else if (hre.network.name === "sepolia") {
-    console.log("🔍 View on Sepolia Etherscan:");
+  } else if (hre.network.name === "amoy") {
+    console.log("🔍 View on Amoy Polygonscan:");
     distributions.forEach(d => {
-      console.log(`   ${d.contract}: https://sepolia.etherscan.io/tx/${d.txHash}`);
+      console.log(`   ${d.contract}: https://amoy.polygonscan.com/tx/${d.txHash}`);
     });
   }
   console.log("");

@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
-  console.log("Starting MTX Token Deployment to Ethereum Mainnet...");
+  console.log("Starting MTX Token Deployment to Polygon...");
   console.log("Network:", hre.network.name);
   
   // Get deployer account
@@ -12,7 +12,7 @@ async function main() {
   
   // Check deployer balance
   const balance = await hre.ethers.provider.getBalance(deployer.address);
-  console.log("Account balance:", hre.ethers.formatEther(balance), "ETH");
+  console.log("Account balance:", hre.ethers.formatEther(balance), "MATIC");
   
   // Deploy parameters
   const maxSupply = "100000000"; // 100M MTX maximum supply cap
@@ -24,7 +24,7 @@ async function main() {
   // Validate owner address
   if (!initialOwner || !initialOwner.match(/^0x[a-fA-F0-9]{40}$/)) {
     console.error("❌ Error: Invalid owner address format");
-    console.error("   Expected: 40-character hex string (Ethereum address)");
+    console.error("   Expected: 40-character hex string (Polygon address)");
     process.exit(1);
   }
   
@@ -35,8 +35,8 @@ async function main() {
   console.log("- Token Name: Matrix-HubCoin");
   console.log("- Token Symbol: MTX");
   console.log("- Decimals: 18");
-  console.log("- Network: Ethereum Mainnet (Chain ID: 1)");
-  console.log("- Distribution Method: ETH purchases at 1 ETH = 100,000 MTX");
+  console.log("- Network: Polygon Mainnet (Chain ID: 137)");
+  console.log("- Distribution Method: MATIC purchases at 1 MATIC = 1,000 MTX");
   
   // Deploy contract
   console.log("\nDeploying MatrixHubCoin contract...");
@@ -83,31 +83,31 @@ async function main() {
   // Print next steps
   console.log("\n📋 Next Steps:");
   
-  // Check if Etherscan API key is set for verification
-  if (!process.env.ETHERSCAN_API_KEY && hre.network.name !== "localhost") {
-    console.log("\n⚠️  WARNING: ETHERSCAN_API_KEY not set in environment");
+  // Check if Polygonscan API key is set for verification
+  if (!process.env.POLYGONSCAN_API_KEY && hre.network.name !== "localhost") {
+    console.log("\n⚠️  WARNING: POLYGONSCAN_API_KEY not set in environment");
     console.log("   Contract verification will fail without it.");
-    console.log("   Get your API key from: https://etherscan.io/myapikey");
+    console.log("   Get your API key from: https://polygonscan.com/myapikey");
     console.log("");
   }
   
-  console.log("1. Verify contract on Etherscan:");
-  console.log(`   npx hardhat verify --network ${hre.network.name} ${contractAddress} "${initialSupply}" "${initialOwner}"`);
+  console.log("1. Verify contract on Polygonscan:");
+  console.log(`   npx hardhat verify --network ${hre.network.name} ${contractAddress} "${maxSupply}" "${initialOwner}"`);
   console.log("\n2. Update src/config/mtx.ts with the contract address:");
   console.log(`   address: "${contractAddress}"`);
-  console.log("\n3. Add liquidity to Uniswap (ETH/MTX pair)");
+  console.log("\n3. Add liquidity to QuickSwap (MATIC/MTX pair)");
   console.log("\n4. Test the contract thoroughly before announcing");
   
   // Get network explorer URL
   let explorerUrl = "";
-  if (hre.network.name === "mainnet") {
-    explorerUrl = `https://etherscan.io/address/${contractAddress}`;
-  } else if (hre.network.name === "sepolia") {
-    explorerUrl = `https://sepolia.etherscan.io/address/${contractAddress}`;
+  if (hre.network.name === "polygon") {
+    explorerUrl = `https://polygonscan.com/address/${contractAddress}`;
+  } else if (hre.network.name === "amoy") {
+    explorerUrl = `https://amoy.polygonscan.com/address/${contractAddress}`;
   }
   
   if (explorerUrl) {
-    console.log("\n🔍 View on Etherscan:", explorerUrl);
+    console.log("\n🔍 View on Polygonscan:", explorerUrl);
   }
 }
 

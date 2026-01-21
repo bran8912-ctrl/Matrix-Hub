@@ -1,7 +1,7 @@
 /**
  * Casino Contracts Deployment Script
  * 
- * This script automates the deployment of the Matrix-Hub casino contracts to Ethereum networks.
+ * This script automates the deployment of the Matrix-Hub casino contracts to Polygon networks.
  * It deploys CasinoCore, CasinoReserve, LiquidityRouter, and RNGEngine contracts with proper
  * configuration and saves deployment information for frontend integration.
  * 
@@ -9,11 +9,11 @@
  * - MTX token must be deployed first (run deploy_mtx.js)
  * - Environment variables configured in .env:
  *   - PRIVATE_KEY: Deployer's private key
- *   - MAINNET_RPC_URL or SEPOLIA_RPC_URL: RPC endpoint
- *   - ETHERSCAN_API_KEY: For contract verification (optional)
+ *   - MAINNET_RPC_URL or AMOY_RPC_URL: RPC endpoint
+ *   - POLYGONSCAN_API_KEY: For contract verification (optional)
  * 
  * USAGE:
- *   npx hardhat run scripts/deploy_casino.js --network sepolia
+ *   npx hardhat run scripts/deploy_casino.js --network amoy
  *   npx hardhat run scripts/deploy_casino.js --network mainnet
  * 
  * OUTPUT:
@@ -89,7 +89,7 @@ function loadMtxDeployment() {
   if (!fs.existsSync(mtxDeploymentFile)) {
     console.error("\n❌ Error: MTX token not deployed yet!");
     console.error("   Deploy MTX first using one of these commands:");
-    console.error("   - npm run deploy:sepolia:mtx");
+    console.error("   - npm run deploy:amoy:mtx");
     console.error("   - npm run deploy:mainnet:mtx");
     console.error("   - npx hardhat run scripts/deploy_mtx.js --network <network>");
     throw new Error("MTX token not deployed");
@@ -163,10 +163,10 @@ async function main() {
   
   // Step 3: Check Balance
   const balance = await hre.ethers.provider.getBalance(deployer.address);
-  console.log("   Balance:", hre.ethers.formatEther(balance), "ETH");
+  console.log("   Balance:", hre.ethers.formatEther(balance), "MATIC");
   
   if (balance === 0n) {
-    console.warn("\n⚠️  Warning: Deployer balance is 0 ETH!");
+    console.warn("\n⚠️  Warning: Deployer balance is 0 MATIC!");
     console.warn("   Deployment will fail. Please fund the deployer account.");
   }
   
@@ -215,7 +215,7 @@ async function main() {
   console.log("   ⚠️  Update after deployment using CasinoReserve contract");
   
   // Deploy 3: LiquidityRouter (depends on MTX and DEX pool)
-  // Note: DEX pool address is set to deployer temporarily until Uniswap pool is created
+  // Note: DEX pool address is set to deployer temporarily until QuickSwap pool is created
   console.log("\n3️⃣  LiquidityRouter");
   const { address: liquidityAddress } = await deployContract(
     "LiquidityRouter",
@@ -223,7 +223,7 @@ async function main() {
   );
   if (TEMP_DEX_POOL === deployer.address) {
     console.log("   ⚠️  DEX pool address is temporary (deployer)");
-    console.log("   ⚠️  Update after creating Uniswap MTX/ETH pool");
+    console.log("   ⚠️  Update after creating QuickSwap MTX/MATIC pool");
   }
   
   // Deploy 4: CasinoCore (depends on all previous contracts)
@@ -281,7 +281,7 @@ async function main() {
     // Additional Info
     notes: {
       casinoReserveSetup: "CasinoReserve deployed with temporary casinoCore address (deployer). Update required.",
-      liquidityRouterSetup: `LiquidityRouter deployed with DEX pool address: ${TEMP_DEX_POOL}. Verify this is the correct production pool address and update after creating the final Uniswap pool if necessary.`,
+      liquidityRouterSetup: `LiquidityRouter deployed with DEX pool address: ${TEMP_DEX_POOL}. Verify this is the correct production pool address and update after creating the final QuickSwap pool if necessary.`,
       reserveFunding: "CasinoReserve must be funded with MTX tokens before casino operations can begin."
     }
   };
@@ -302,9 +302,9 @@ async function main() {
   console.log(`   CasinoCore Address: ${casinoCoreAddress}`);
   
   if (TEMP_DEX_POOL === deployer.address) {
-    console.log("\n2. Create Uniswap liquidity pool for MTX/ETH:");
-    console.log("   a. Visit https://app.uniswap.org/");
-    console.log("   b. Create a new MTX/ETH pool");
+    console.log("\n2. Create QuickSwap liquidity pool for MTX/MATIC:");
+    console.log("   a. Visit https://quickswap.exchange/");
+    console.log("   b. Create a new MTX/MATIC pool");
     console.log("   c. Note the pool address");
     console.log("   d. Update LiquidityRouter with the pool address");
   }
@@ -316,7 +316,7 @@ async function main() {
   
   console.log("\n🔍 Contract Verification (Optional but Recommended):");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log("\nVerify contracts on Etherscan for transparency:");
+  console.log("\nVerify contracts on Polygonscan for transparency:");
   console.log(`\n  npx hardhat verify --network ${hre.network.name} ${rngAddress}`);
   console.log(`\n  npx hardhat verify --network ${hre.network.name} ${reserveAddress} \\`);
   console.log(`    "${MTX_ADDRESS}" "${RESERVE_CAP}" "${tempCasinoCore}"`);
@@ -355,11 +355,11 @@ async function main() {
   let explorerName = "Block Explorer";
   
   if (hre.network.name === "mainnet") {
-    explorerUrl = `https://etherscan.io/address/${casinoCoreAddress}`;
-    explorerName = "Etherscan";
-  } else if (hre.network.name === "sepolia") {
-    explorerUrl = `https://sepolia.etherscan.io/address/${casinoCoreAddress}`;
-    explorerName = "Sepolia Etherscan";
+    explorerUrl = `https://polygonscan.com/address/${casinoCoreAddress}`;
+    explorerName = "Polygonscan";
+  } else if (hre.network.name === "amoy") {
+    explorerUrl = `https://amoy.polygonscan.com/address/${casinoCoreAddress}`;
+    explorerName = "Amoy Polygonscan";
   } else if (hre.network.name === "localhost" || hre.network.name === "hardhat") {
     explorerUrl = "http://localhost:8545";
     explorerName = "Local Network";
@@ -399,11 +399,11 @@ main()
     console.error("\n1. Check that your .env file is configured correctly:");
     console.error("   - PRIVATE_KEY is set");
     console.error("   - RPC URL is valid and accessible");
-    console.error("\n2. Verify deployer account has sufficient ETH:");
+    console.error("\n2. Verify deployer account has sufficient MATIC:");
     console.error("   - Gas fees are required for contract deployment");
     console.error("   - Check balance on block explorer");
     console.error("\n3. Ensure MTX token is deployed:");
-    console.error("   - Run: npm run deploy:sepolia:mtx (for testnet)");
+    console.error("   - Run: npm run deploy:amoy:mtx (for testnet)");
     console.error("   - Or: npm run deploy:mainnet:mtx (for mainnet)");
     console.error("\n4. Verify network configuration in hardhat.config.cjs");
     console.error("\n5. Check RPC endpoint is responding:");
