@@ -22,7 +22,7 @@ All workflows use the following secrets. You must configure these in your reposi
 - **Description**: Private keys for deploying smart contracts (without 0x prefix)
 - **Usage**: 
   - `MAINNET_PRIVATE_KEY`: Used for mainnet contract deployments
-  - `TESTNET_PRIVATE_KEY`: Used for testnet (Sepolia) contract deployments
+  - `TESTNET_PRIVATE_KEY`: Used for testnet (Amoy) contract deployments
 - **How it works**: Workflows map these to the `PRIVATE_KEY` environment variable that Hardhat expects
 - **Security**: Use burner wallets, NEVER your main wallet
 - **Format**: 64-character hexadecimal string (without 0x prefix)
@@ -30,22 +30,22 @@ All workflows use the following secrets. You must configure these in your reposi
 - **Important**: Keep mainnet and testnet keys separate for security
 
 #### `MAINNET_RPC_URL`
-- **Description**: Ethereum Mainnet RPC endpoint URL
-- **Usage**: Connect to Ethereum mainnet for deployments
+- **Description**: Polygon RPC endpoint URL
+- **Usage**: Connect to Polygon for deployments
 - **Recommended**: `https://eth.llamarpc.com` or your preferred provider
 - **Alternative**: Alchemy, Infura, or QuickNode RPC URLs
 
 #### `SEPOLIA_RPC_URL`
-- **Description**: Ethereum Sepolia Testnet RPC endpoint URL
-- **Usage**: Connect to Sepolia testnet for testing
-- **Recommended**: `https://rpc.sepolia.org/`
-- **Alternative**: Any Sepolia RPC provider
+- **Description**: Polygon Amoy Testnet RPC endpoint URL
+- **Usage**: Connect to Amoy testnet for testing
+- **Recommended**: `https://rpc-amoy.polygon.technology/`
+- **Alternative**: Any Amoy RPC provider
 
 #### `ETHERSCAN_API_KEY`
-- **Description**: API key for verifying contracts on Etherscan
+- **Description**: API key for verifying contracts on Polygonscan
 - **Usage**: Automatic contract verification after deployment
-- **Get From**: https://etherscan.io/myapikey
-- **Note**: Same key works for Mainnet and Sepolia
+- **Get From**: https://polygonscan.com/myapikey
+- **Note**: Same key works for Mainnet and Amoy
 
 ### Application Secrets
 
@@ -53,7 +53,7 @@ All workflows use the following secrets. You must configure these in your reposi
 - **Description**: Deployed MTX token contract address
 - **Usage**: Frontend configuration and casino integration
 - **Set After**: MTX contract is successfully deployed to mainnet
-- **Format**: Ethereum address (0x followed by 40 hex characters)
+- **Format**: Polygon address (0x followed by 40 hex characters)
 
 #### `SUPABASE_DATABASE_URL`
 - **Description**: Supabase project URL
@@ -192,14 +192,14 @@ For local development, secrets are NOT used. Instead:
 
 **Solution**: 
 1. Check the deployer address: Get it from workflow logs
-2. Send ETH to that address
+2. Send MATIC to that address
 3. Re-run the workflow
 
-### Etherscan verification fails
+### Polygonscan verification fails
 **Problem**: Invalid or missing `ETHERSCAN_API_KEY`.
 
 **Solution**:
-1. Get a valid API key from https://etherscan.io/myapikey
+1. Get a valid API key from https://polygonscan.com/myapikey
 2. Update the `ETHERSCAN_API_KEY` secret
 3. Re-run the verification step
 

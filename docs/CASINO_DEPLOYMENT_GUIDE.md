@@ -11,7 +11,7 @@ Before deploying, ensure you have:
 - [ ] Deployer wallet with private key
 - [ ] Sufficient ETH in deployer wallet for gas (0.1+ ETH recommended)
 - [ ] RPC endpoint URL (Alchemy, Infura, or public)
-- [ ] Etherscan API key (optional, for verification)
+- [ ] Polygonscan API key (optional, for verification)
 - [ ] MTX token already deployed
 
 ## Step 1: Environment Setup
@@ -33,7 +33,7 @@ PRIVATE_KEY=your_64_character_hex_private_key_here
 MAINNET_RPC_URL=https://eth-mainnet.g.alchemy.com/v2/YOUR_ALCHEMY_KEY
 SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/YOUR_ALCHEMY_KEY
 
-# Etherscan API key for contract verification
+# Polygonscan API key for contract verification
 ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY
 ```
 
@@ -45,15 +45,15 @@ git status .env
 # Should show: ".env" is in .gitignore
 
 # Verify deployer wallet has funds
-# For Sepolia: Visit https://sepolia.etherscan.io/address/YOUR_DEPLOYER_ADDRESS
-# For Mainnet: Visit https://etherscan.io/address/YOUR_DEPLOYER_ADDRESS
+# For Amoy: Visit https://amoy.polygonscan.com/address/YOUR_DEPLOYER_ADDRESS
+# For Mainnet: Visit https://polygonscan.com/address/YOUR_DEPLOYER_ADDRESS
 ```
 
 ## Step 2: Deploy MTX Token First
 
 The casino contracts require the MTX token to be deployed first.
 
-### 2.1 Deploy to Sepolia (Testnet)
+### 2.1 Deploy to Amoy (Testnet)
 
 ```bash
 npx hardhat run scripts/deploy_mtx.js --network sepolia
@@ -71,7 +71,7 @@ npx hardhat run scripts/deploy_mtx.js --network sepolia
 # Check the deployment file was created
 cat deployments/mtx-sepolia.json
 
-# Verify on Etherscan
+# Verify on Polygonscan
 npx hardhat verify --network sepolia <MTX_ADDRESS> "100000000" "0x58e7893356002ac8f8f612f7b3d29d8b181d85b3"
 ```
 
@@ -92,7 +92,7 @@ const DEPLOYMENT_CONFIG = {
 };
 ```
 
-### 3.2 Deploy to Sepolia
+### 3.2 Deploy to Amoy
 
 ```bash
 npx hardhat run scripts/deploy_casino.js --network sepolia
@@ -106,11 +106,11 @@ npx hardhat run scripts/deploy_casino.js --network sepolia
 
 📡 Network Information:
    Network: sepolia
-   Chain ID: 11155111
+   Chain ID: 80002
 
 👤 Deployer Account:
    Address: 0x...
-   Balance: 0.5 ETH
+   Balance: 0.5 MATIC
 
 📋 Loading MTX Token Information...
    MTX Token Address: 0x...
@@ -141,7 +141,7 @@ npx hardhat run scripts/deploy_casino.js --network sepolia
 ✅ LiquidityRouter deployed successfully
    Address: 0x...
    ⚠️  DEX pool address is temporary (deployer)
-   ⚠️  Update after creating Uniswap MTX/ETH pool
+   ⚠️  Update after creating QuickSwap MTX/ETH pool
 
 4️⃣  CasinoCore
 🔨 Deploying CasinoCore...
@@ -174,7 +174,7 @@ cat deployments/casino-sepolia.json
 jq '.contracts' deployments/casino-sepolia.json
 ```
 
-## Step 4: Verify Contracts on Etherscan
+## Step 4: Verify Contracts on Polygonscan
 
 Verify each contract for transparency:
 
@@ -207,11 +207,11 @@ The CasinoReserve was deployed with a temporary casinoCore address. Update it:
 1. Option A: Redeploy CasinoReserve with correct address
 2. Option B: If contract has a setter function, call it on-chain
 
-### 5.2 Create Uniswap Pool
+### 5.2 Create QuickSwap Pool
 
 Create a liquidity pool for MTX/ETH:
 
-1. Visit https://app.uniswap.org/
+1. Visit https://app.quickswap.exchange/
 2. Connect your wallet
 3. Go to "Pool" > "New Position"
 4. Select MTX and ETH
@@ -224,7 +224,7 @@ Create a liquidity pool for MTX/ETH:
 Transfer MTX tokens to the reserve:
 
 ```bash
-# Using Etherscan or cast
+# Using Polygonscan or cast
 cast send <MTX_ADDRESS> \
   "transfer(address,uint256)" \
   <RESERVE_ADDRESS> \
@@ -273,11 +273,11 @@ Update any files that interact with casino contracts:
 
 ## Step 7: Testing
 
-### 7.1 Test on Sepolia
+### 7.1 Test on Amoy
 
 Before mainnet deployment, thoroughly test:
 
-- [ ] Connect wallet to Sepolia
+- [ ] Connect wallet to Amoy
 - [ ] Verify contract addresses are correct
 - [ ] Test placing bets
 - [ ] Test winning payouts
@@ -297,11 +297,11 @@ npx hardhat run scripts/check_gas_usage.js --network sepolia
 
 ## Step 8: Mainnet Deployment (Production)
 
-⚠️ **ONLY after thorough Sepolia testing!**
+⚠️ **ONLY after thorough Amoy testing!**
 
 ### 8.1 Final Checklist
 
-- [ ] All Sepolia tests passed
+- [ ] All Amoy tests passed
 - [ ] Smart contracts audited (recommended)
 - [ ] Gas optimizations completed
 - [ ] Security review completed
@@ -328,8 +328,8 @@ npx hardhat verify --network mainnet <CONTRACT_ADDRESSES>
 # Check deployment file
 cat deployments/casino-mainnet.json
 
-# View on Etherscan
-open https://etherscan.io/address/<CASINO_CORE_ADDRESS>
+# View on Polygonscan
+open https://polygonscan.com/address/<CASINO_CORE_ADDRESS>
 ```
 
 ## Troubleshooting
@@ -338,7 +338,7 @@ open https://etherscan.io/address/<CASINO_CORE_ADDRESS>
 **Solution:** Deploy MTX first using `deploy_mtx.js`
 
 ### "Insufficient funds"
-**Solution:** Add ETH to deployer wallet. Check balance on Etherscan.
+**Solution:** Add ETH to deployer wallet. Check balance on Polygonscan.
 
 ### "Deployment failed"
 **Solution:** Check RPC URL, network connectivity, and error message.
@@ -346,7 +346,7 @@ open https://etherscan.io/address/<CASINO_CORE_ADDRESS>
 ### "Verification failed"
 **Solution:** 
 - Wait 1-2 minutes after deployment
-- Verify Etherscan API key is valid
+- Verify Polygonscan API key is valid
 - Check constructor args match exactly
 
 ### "Transaction underpriced"
@@ -364,7 +364,7 @@ For issues:
 
 - ✅ Never commit `.env` to git
 - ✅ Use burner wallets for deployment
-- ✅ Verify contracts on Etherscan
+- ✅ Verify contracts on Polygonscan
 - ✅ Test thoroughly on testnet first
 - ✅ Keep private keys secure
 - ⚠️ Smart contract deployments are irreversible

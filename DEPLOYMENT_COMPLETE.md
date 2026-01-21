@@ -8,7 +8,7 @@ The `npm run deploy:sepolia` command and all supporting infrastructure is now **
 
 ## 📦 What Was Delivered
 
-### 🎯 Primary Objective: Enable Sepolia Deployment
+### 🎯 Primary Objective: Enable Amoy Deployment
 **Status**: ✅ **COMPLETE**
 
 The deployment command is ready to use:
@@ -21,7 +21,7 @@ npm run deploy:sepolia
 | File | Size | Purpose |
 |------|------|---------|
 | `docs/DEPLOYMENT_INDEX.md` | 6.8 KB | **Navigation hub** - Start here for all deployment docs |
-| `docs/SEPOLIA_DEPLOYMENT.md` | 7.2 KB | **Primary guide** - Complete step-by-step Sepolia deployment |
+| `docs/SEPOLIA_DEPLOYMENT.md` | 7.2 KB | **Primary guide** - Complete step-by-step Amoy deployment |
 | `docs/DEPLOYMENT_SUMMARY.md` | 7.9 KB | **Overview** - Complete setup summary with all info |
 | `docs/QUICK_DEPLOY.md` | 1.8 KB | **Fast track** - 5-minute quick start guide |
 | `docs/DEPLOYMENT_CHECKLIST.md` | 5.3 KB | **Checklist** - Interactive pre/post deployment tasks |
@@ -33,8 +33,8 @@ npm run deploy:sepolia
 
 ### 🔑 Key Requirements Addressed
 
-#### ✅ Etherscan API Key (Primary Requirement)
-- Where to get it: https://etherscan.io/myapikey
+#### ✅ Polygonscan API Key (Primary Requirement)
+- Where to get it: https://polygonscan.com/myapikey
 - How to configure it in `.env`
 - Why it's needed (contract verification)
 - Example format provided
@@ -47,9 +47,9 @@ npm run deploy:sepolia
 - Format requirements (without 0x)
 - `.gitignore` protection
 
-#### ✅ Sepolia Test ETH
+#### ✅ Amoy test MATIC
 - Faucet links provided
-- Amount needed (~0.5 ETH)
+- Amount needed (~0.5 MATIC)
 - Multiple faucet options
 
 #### ✅ Environment Configuration
@@ -86,19 +86,19 @@ npm run deploy:sepolia
 
 ### Primary Commands
 ```bash
-# Deploy to Sepolia testnet
+# Deploy to Amoy testnet
 npm run deploy:sepolia
 
-# Deploy to Ethereum mainnet (after testing)
+# Deploy to Polygon (after testing)
 npm run deploy:mainnet
 ```
 
 ### Verification Commands
 ```bash
-# Verify on Sepolia Etherscan
+# Verify on Amoy Polygonscan
 npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 
-# Verify on Mainnet Etherscan
+# Verify on Mainnet Polygonscan
 npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
@@ -124,7 +124,7 @@ The deployment will create:
 | **Decimals** | 18 |
 | **Initial Supply** | 100,000,000 MTX |
 | **Owner Address** | 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077 |
-| **Network** | Sepolia (ChainID: 11155111) |
+| **Network** | Amoy (Chain ID: 80002) |
 | **Contract** | MatrixHubCoin.sol |
 
 > Note: The token's display name uses a hyphen (**Matrix-HubCoin**), while the Solidity contract file and contract name use **MatrixHubCoin** (no hyphen). This difference is intentional and follows Solidity naming conventions.
@@ -135,7 +135,7 @@ The deployment will create:
 ## 🛠️ Technical Configuration
 
 ### Files Modified/Created
-✅ `.env.example` - Enhanced with Etherscan API key documentation  
+✅ `.env.example` - Enhanced with Polygonscan API key documentation  
 ✅ `README.md` - Added deployment commands and documentation links  
 ✅ `docs/DEPLOYMENT_INDEX.md` - Navigation hub  
 ✅ `docs/SEPOLIA_DEPLOYMENT.md` - Primary deployment guide  
@@ -146,7 +146,7 @@ The deployment will create:
 
 ### Existing Configuration (Already Working)
 ✅ `package.json` - Scripts defined  
-✅ `hardhat.config.js` - Networks and Etherscan configured  
+✅ `hardhat.config.js` - Networks and Polygonscan configured  
 ✅ `scripts/deploy_mtx.js` - Deployment script  
 ✅ `contracts/MatrixHubCoin.sol` - Smart contract  
 ✅ `.gitignore` - Protects `.env`  
@@ -159,7 +159,7 @@ The deployment will create:
 ✅ **Private key security** (never commit, no 0x prefix)  
 ✅ **Environment protection** (`.env` in `.gitignore`)  
 ✅ **API key security** (treat like password)  
-✅ **Test-first approach** (Sepolia before mainnet)  
+✅ **Test-first approach** (Amoy before mainnet)  
 ✅ **Verification** (transparent contract source)  
 
 ---
@@ -192,7 +192,7 @@ Matrix-Hub.org/
 |--------|--------|
 | Deployment command ready | ✅ |
 | Documentation complete | ✅ (8 files) |
-| Etherscan API key setup documented | ✅ |
+| Polygonscan API key setup documented | ✅ |
 | Prerequisites clearly listed | ✅ |
 | Step-by-step instructions | ✅ |
 | Troubleshooting guide | ✅ |
@@ -224,7 +224,7 @@ Everything is in place. Users can now:
 ec85da3 Add deployment documentation index for easy navigation
 1d69f72 Add comprehensive deployment summary documentation
 8c8d9c0 Add quick deploy guide and update README with links
-dd95713 Add comprehensive Sepolia deployment with API key setup
+dd95713 Add comprehensive Amoy deployment with API key setup
 6f862ae Initial plan
 ```
 
@@ -244,7 +244,7 @@ The `npm run deploy:sepolia` infrastructure is **production-ready** with compreh
 - ✅ Security best practices
 - ✅ Multiple user paths (quick, detailed, checklist)
 
-**Next Step**: Users can deploy the MTX token to Sepolia testnet! 🚀
+**Next Step**: Users can deploy the MTX token to Amoy testnet! 🚀
 
 ---
 

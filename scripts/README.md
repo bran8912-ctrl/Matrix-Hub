@@ -74,11 +74,11 @@ This script generates a password hash for **client-side authentication only**. B
 ## Main Deployment Scripts
 
 ### `deploy_mtx.js`
-Deploys the MTX (Matrix-HubCoin) token contract to Ethereum networks.
+Deploys the MTX (Matrix-HubCoin) token contract to Polygon networks.
 
 **Usage:**
 ```bash
-# Deploy to Sepolia testnet
+# Deploy to Amoy testnet
 npm run deploy:sepolia
 
 # Deploy to Mainnet
@@ -100,14 +100,14 @@ npm run deploy:mainnet
 **Output:**
 - Deploys contract and prints contract address
 - Saves deployment info to `deployments/mtx-{network}.json`
-- Provides verification command for Etherscan
+- Provides verification command for Polygonscan
 
 ### `deploy_casino.js`
-Deploys the complete casino contract ecosystem to Ethereum networks. This automated script handles deployment of CasinoCore, CasinoReserve, LiquidityRouter, and RNGEngine with proper configuration and error handling.
+Deploys the complete casino contract ecosystem to Polygon networks. This automated script handles deployment of CasinoCore, CasinoReserve, LiquidityRouter, and RNGEngine with proper configuration and error handling.
 
 **Usage:**
 ```bash
-# Deploy to Sepolia testnet (recommended first)
+# Deploy to Amoy testnet (recommended first)
 npx hardhat run scripts/deploy_casino.js --network sepolia
 
 # Deploy to Mainnet (after thorough testing)
@@ -148,7 +148,7 @@ const DEPLOYMENT_CONFIG = {
 - Creates `deployments/` folder if it doesn't exist
 - Saves deployment info to `deployments/casino-{network}.json`
 - Provides complete post-deployment instructions
-- Includes contract verification commands for Etherscan
+- Includes contract verification commands for Polygonscan
 - Shows frontend integration steps for Astro
 
 **Deployment Information File:**
@@ -156,7 +156,7 @@ The script generates a JSON file (`deployments/casino-{network}.json`) containin
 ```json
 {
   "network": "sepolia",
-  "chainId": 11155111,
+  "chainId": 80002,
   "deployer": "0x...",
   "deploymentTime": "2026-01-06T23:32:00.000Z",
   "contracts": {
@@ -187,9 +187,9 @@ The script generates a JSON file (`deployments/casino-{network}.json`) containin
 
 **Post-Deployment Steps:**
 1. **Update CasinoReserve** with the actual CasinoCore address
-2. **Create Uniswap Pool** for MTX/ETH and update LiquidityRouter
+2. **Create QuickSwap Pool** for MTX/ETH and update LiquidityRouter
 3. **Fund CasinoReserve** with initial MTX (recommended: 100,000+)
-4. **Verify Contracts** on Etherscan using provided commands
+4. **Verify Contracts** on Polygonscan using provided commands
 5. **Update Frontend** environment variables and import deployment JSON
 6. **Test Thoroughly** on testnet before mainnet deployment
 
@@ -269,10 +269,10 @@ PRIVATE_KEY=your_private_key_here
 
 # RPC URLs (defaults provided if not set)
 MAINNET_RPC_URL=https://eth.llamarpc.com
-SEPOLIA_RPC_URL=https://rpc.sepolia.org/
+SEPOLIA_RPC_URL=https://rpc-amoy.polygon.technology/
 
-# Etherscan API key for contract verification
-# Get from: https://etherscan.io/myapikey
+# Polygonscan API key for contract verification
+# Get from: https://polygonscan.com/myapikey
 ETHERSCAN_API_KEY=your_etherscan_api_key_here
 ```
 
@@ -293,8 +293,8 @@ npm install
 cp .env.example .env
 # Edit .env with your private key and API key
 
-# Get test ETH (for Sepolia)
-# Visit: https://sepoliafaucet.com/
+# Get test MATIC (for Amoy)
+# Visit: https://faucet.polygon.technology/amoy/
 ```
 
 ### 2. Compile Contracts
@@ -323,7 +323,7 @@ Replace `YOUR_CONTRACT_ADDRESS` with the deployed contract address.
 
 ### 5. Test Thoroughly
 
-- Check contract on Sepolia Etherscan
+- Check contract on Amoy Polygonscan
 - Verify token balance of initial owner
 - Test contract functions
 - Test wallet integration
@@ -342,23 +342,23 @@ npm run verify:mainnet YOUR_CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc
 
 ## Networks
 
-### Sepolia Testnet
-- **Chain ID**: 11155111
-- **RPC**: https://rpc.sepolia.org/
-- **Explorer**: https://sepolia.etherscan.io/
-- **Faucet**: https://sepoliafaucet.com/
+### Amoy Testnet
+- **Chain ID**: 80002
+- **RPC**: https://rpc-amoy.polygon.technology/
+- **Explorer**: https://amoy.polygonscan.com/
+- **Faucet**: https://faucet.polygon.technology/amoy/
 - **Purpose**: Testing before mainnet deployment
 
-### Ethereum Mainnet
+### Polygon
 - **Chain ID**: 1
 - **RPC**: https://eth.llamarpc.com
-- **Explorer**: https://etherscan.io/
+- **Explorer**: https://polygonscan.com/
 - **Purpose**: Production deployment
 
 ## Deployment Artifacts
 
 After deployment, artifacts are saved to `deployments/`:
-- `mtx-sepolia.json` - Sepolia deployment info
+- `mtx-sepolia.json` - Amoy deployment info
 - `mtx-mainnet.json` - Mainnet deployment info
 
 Each file contains:
@@ -378,7 +378,7 @@ Each file contains:
 - Use a 64-character hex string
 
 ### "Insufficient funds"
-- Get test ETH from faucet (Sepolia)
+- Get test MATIC from faucet (Amoy)
 - Buy ETH on exchange (Mainnet)
 - Ensure deployer wallet has enough ETH for gas
 
@@ -391,12 +391,12 @@ Each file contains:
 - Ensure `ETHERSCAN_API_KEY` is set in `.env`
 - Wait 1-2 minutes after deployment before verifying
 - Check constructor arguments match deployment exactly
-- Verify API key is valid at https://etherscan.io/myapikey
+- Verify API key is valid at https://polygonscan.com/myapikey
 
 ## Documentation
 
 For detailed deployment instructions, see:
-- [Sepolia Deployment Guide](../docs/SEPOLIA_DEPLOYMENT.md)
+- [Amoy Deployment Guide](../docs/SEPOLIA_DEPLOYMENT.md)
 - [Full Deployment Guide](../docs/MTX_Deployment_Guide.md)
 - [Quick Start Guide](../docs/DEPLOYMENT_QUICK_START.md)
 
@@ -405,7 +405,7 @@ For detailed deployment instructions, see:
 For questions or issues:
 1. Check the documentation
 2. Review Hardhat documentation: https://hardhat.org/
-3. Check Etherscan API docs: https://docs.etherscan.io/
+3. Check Polygonscan API docs: https://docs.polygonscan.com/
 
 ---
 

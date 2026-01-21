@@ -42,7 +42,7 @@ This document summarizes the successful integration of improvements, functionali
 - `contracts/LiquidityRouter.sol` - Liquidity management
 
 #### Key Features
-- **Direct ETH→MTX Minting**: Fixed rate (1 ETH = 100,000 MTX)
+- **Direct MATIC → MTX Minting**: Fixed rate (1 MATIC = 1,000 MTX)
 - **Max Supply Cap**: 100,000,000 MTX
 - **Owner Controls**: Pause minting, adjust rate, withdraw ETH
 - **Burn Mechanism**: Users can burn their MTX
@@ -95,11 +95,11 @@ Diamond   → 100,000 MTX (#B9F2FF)
   - Amount (formatted MTX)
   - From/To address (truncated)
   - Timestamp (formatted date)
-  - Etherscan link for details
+  - Polygonscan link for details
 - Refresh button for manual updates
 - Configurable max items (default: 10)
 - Empty state handling
-- Link to full history on Etherscan
+- Link to full history on Polygonscan
 
 #### Component 3: MTXStatsWidget.tsx
 **Location**: `src/components/MTXStatsWidget.tsx`  
@@ -108,11 +108,11 @@ Diamond   → 100,000 MTX (#B9F2FF)
 
 **Features**:
 - Display total supply, circulating supply, burned tokens
-- Show current ETH→MTX exchange rate
+- Show current MATIC → MTX exchange rate
 - Minting status indicator (Active/Paused)
 - Compact and full display modes
 - Auto-refresh every 2 minutes
-- Links to contract and Uniswap
+- Links to contract and QuickSwap
 - Responsive design
 - Error handling with fallback values
 
@@ -164,7 +164,7 @@ Diamond   → 100,000 MTX (#B9F2FF)
 **Location**: `src/pages/api/mtx-balance.ts`  
 **Lines**: 134 lines
 
-**Purpose**: Query MTX balance for any Ethereum address
+**Purpose**: Query MTX balance for any Polygon address
 
 **Request**:
 ```
@@ -182,7 +182,7 @@ GET /api/mtx-balance?address=0x1234567890123456789012345678901234567890
   "percentageOfSupply": "0.001000",
   "timestamp": 1234567890,
   "contractAddress": "0xabcd...efgh",
-  "network": "Ethereum",
+  "network": "Polygon",
   "chainId": 1
 }
 ```
@@ -218,10 +218,10 @@ GET /api/mtx-stats
   "mintingPaused": false,
   "ethToMtxRate": 100000,
   "contractAddress": "0xabcd...efgh",
-  "network": "Ethereum",
+  "network": "Polygon",
   "chainId": 1,
-  "blockExplorer": "https://etherscan.io/address/...",
-  "uniswapUrl": "https://app.uniswap.org/...",
+  "blockExplorer": "https://polygonscan.com/address/...",
+  "uniswapUrl": "https://app.quickswap.exchange/...",
   "deployed": true,
   "timestamp": 1234567890,
   "lastBlockNumber": 12345678
@@ -329,7 +329,7 @@ GET /api/mtx-stats
 - **Frontend**: Astro 5.x + React 19.x
 - **Styling**: TailwindCSS 4.x
 - **Language**: TypeScript (strict mode)
-- **Blockchain**: Ethereum + ethers.js v6.x
+- **Blockchain**: Polygon + ethers.js v6.x
 - **Smart Contracts**: Solidity 0.8.20 + Hardhat
 - **Database**: Supabase (existing)
 - **Build**: Vite 7.x
@@ -455,7 +455,7 @@ GET /api/mtx-stats
 
 ### Before Integration
 1. Users could connect wallet and see basic balance
-2. Buy MTX via direct mint or Uniswap (existing)
+2. Buy MTX via direct mint or QuickSwap (existing)
 3. Limited visibility into transactions
 4. No tier information
 5. No centralized dashboard
@@ -471,7 +471,7 @@ GET /api/mtx-stats
 3. ✅ Transaction history with:
    - Recent 10 transactions
    - Type categorization (send/receive/mint/burn)
-   - Direct links to Etherscan
+   - Direct links to Polygonscan
    - Refresh capability
 4. ✅ Homepage stats widget showing:
    - Total supply
@@ -578,7 +578,7 @@ GET /api/mtx-stats
 - ✅ Any static site host
 
 ### Post-Deployment Steps
-1. Deploy MTX contract to Ethereum mainnet
+1. Deploy MTX contract to Polygon
 2. Update `src/config/mtx.ts` with contract address
 3. Set `MTX_CONTRACT_ADDRESS` environment variable
 4. Rebuild and redeploy frontend
@@ -647,7 +647,7 @@ The Matrix-Hub.org platform now has a fully integrated MTX token ecosystem with:
 - Ready for mainnet deployment
 
 ### Next Steps for Deployment
-1. Deploy MTX smart contract to Ethereum mainnet
+1. Deploy MTX smart contract to Polygon
 2. Update configuration with contract address
 3. Deploy frontend to hosting platform
 4. Test all features with real wallet

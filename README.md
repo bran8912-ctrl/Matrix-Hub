@@ -120,10 +120,10 @@ The system sustains itself. The loop never stops.
 ┌─────────────────────────────────────────────────────────┐
 │              MTX Purchase Options                        │
 │                                                         │
-│  ├─ Direct Mint: Send ETH → Receive MTX (1 ETH = 100,000 MTX) │
+│  ├─ Direct Mint: Send MATIC → Receive MTX (1 MATIC = 1,000 MTX) │
 │  │  └─ Lower gas, instant minting, perfect for onboarding │
 │  │                                                      │
-│  └─ Uniswap DEX: Public market trading                  │
+│  └─ QuickSwap DEX: Public market trading                  │
 │     └─ Market rates, high liquidity, any token swap     │
 └─────────────────────────────────────────────────────────┘
                         ↓
@@ -144,8 +144,8 @@ The system sustains itself. The loop never stops.
 ```
 
 **Entry Points:**
-- **Direct Mint**: Send ETH directly to MTX contract for instant minting at fixed rate
-- **DEX Acquisition**: Purchase MTX on Uniswap at market rates
+- **Direct Mint**: Send MATIC directly to MTX contract for instant minting at fixed rate
+- **DEX Acquisition**: Purchase MTX on QuickSwap at market rates
 - **Direct Earn**: Earn MTX through platform engagement (no purchase required)
 - **Wallet Connection**: Non-custodial — you control your MTX
 
@@ -410,7 +410,7 @@ New to Matrix-Hub? Here's how to get started with MTX:
 
 ### ⚠️ MTX Contract Deployment Required
 
-**IMPORTANT**: The MTX token contract must be deployed to Ethereum Mainnet to get a legitimate address before the platform can be used.
+**IMPORTANT**: The MTX token contract must be deployed to Polygon to get a legitimate address before the platform can be used.
 
 **Current Status**: Contract not yet deployed to live network.
 
@@ -426,12 +426,12 @@ npm install
 cp .env.example .env
 nano .env
 
-# Deploy to Ethereum Sepolia Testnet (recommended first)
+# Deploy to Polygon Amoy Testnet (recommended first)
 npm run deploy:sepolia
 
-# Get testnet ETH from: https://sepoliafaucet.com/
+# Get testnet ETH from: https://faucet.polygon.technology/amoy/
 
-# After testing, deploy to Ethereum Mainnet
+# After testing, deploy to Polygon
 npm run deploy:mainnet
 ```
 
@@ -439,7 +439,7 @@ npm run deploy:mainnet
 - 🔐 [GitHub Actions Secrets Setup](docs/GITHUB_ACTIONS_SECRETS.md) - Configure secrets for automated deployment
 - 🚀 [Quick Deploy Guide](docs/QUICK_DEPLOY.md) - Get started in 5 minutes
 - 📋 [Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md) - Pre-deployment checklist
-- 📖 [Sepolia Deployment Guide](docs/SEPOLIA_DEPLOYMENT.md) - Detailed testnet deployment
+- 📖 [Amoy Deployment Guide](docs/SEPOLIA_DEPLOYMENT.md) - Detailed testnet deployment
 - 📚 [Full Deployment Guide](docs/MTX_Deployment_Guide.md) - Complete instructions
 
 ### Once Deployed: Purchase Options
@@ -447,14 +447,14 @@ npm run deploy:mainnet
 ### Option 1: Direct Mint (Recommended for First-Time Users)
 
 1. **Visit** [matrix-hub.org/buy-mtx](https://matrix-hub.org/buy-mtx)
-2. **Connect** your Ethereum wallet (MetaMask or compatible)
-3. **Send ETH** directly to the MTX contract to mint tokens
-4. **Rate**: 1 ETH = 100,000 MTX (fixed)
+2. **Connect** your Polygon wallet (MetaMask or compatible)
+3. **Send MATIC** directly to the MTX contract to mint tokens
+4. **Rate**: 1 MATIC = 1,000 MTX (fixed)
 5. **Benefits**: Lower gas fees, instant minting, perfect for small purchases
 
-### Option 2: Uniswap DEX (For Market Trading)
+### Option 2: QuickSwap DEX (For Market Trading)
 
-1. **Visit** [Uniswap](https://app.uniswap.org/)
+1. **Visit** [QuickSwap](https://app.quickswap.exchange/)
 2. **Connect** your wallet
 3. **Swap** ETH or any token for MTX
 4. **Benefits**: Market rates, high liquidity, flexible amounts
@@ -469,12 +469,12 @@ npm run deploy:mainnet
 
 ### MTX Contract Information
 
-- **Network**: Ethereum Mainnet (ChainID: 1)
+- **Network**: Polygon (Chain ID: 137)
 - **Contract Address**: *To be updated after deployment*
 - **Contract Owner**: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 - **Symbol**: MTX
 - **Decimals**: 18
-- **Block Explorer**: Etherscan
+- **Block Explorer**: Polygonscan
 
 ⚠️ **Always verify the contract address before sending funds!**
 
@@ -505,10 +505,10 @@ All commands are run from the root of the project, from a terminal:
 | :------------------------ | :----------------------------------------------- |
 | `npm run compile`         | Compile Solidity contracts                       |
 | `npm run test`            | Run Hardhat tests                                |
-| `npm run deploy:sepolia`  | Deploy MTX contract to Sepolia testnet           |
-| `npm run deploy:mainnet`  | Deploy MTX contract to Ethereum mainnet          |
-| `npm run verify:sepolia`  | Verify contract on Sepolia Etherscan            |
-| `npm run verify:mainnet`  | Verify contract on Mainnet Etherscan            |
+| `npm run deploy:sepolia`  | Deploy MTX contract to Amoy testnet           |
+| `npm run deploy:mainnet`  | Deploy MTX contract to Polygon          |
+| `npm run verify:sepolia`  | Verify contract on Amoy Polygonscan            |
+| `npm run verify:mainnet`  | Verify contract on Mainnet Polygonscan            |
 
 ## Content Workflow Commands
 

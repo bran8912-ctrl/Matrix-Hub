@@ -19,7 +19,7 @@ Each deployment file contains:
 ```json
 {
   "network": "sepolia",
-  "chainId": 11155111,
+  "chainId": 80002,
   "contractAddress": "0x...",
   "deployer": "0x...",
   "deploymentTime": "2026-01-06T...",
@@ -36,7 +36,7 @@ These files are:
 1. **Used by deployment scripts** - Later scripts read earlier deployment files to get contract addresses
 2. **Uploaded as artifacts** - GitHub Actions uploads these as downloadable artifacts
 3. **Git-ignored by default** - Not committed to repository (see `.gitignore`)
-4. **Essential for verification** - Used for Etherscan contract verification
+4. **Essential for verification** - Used for Polygonscan contract verification
 
 ## Security Note
 

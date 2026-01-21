@@ -15,7 +15,7 @@ This guide covers the complete MTX (Matrix Hub Coin) token integration, includin
   - Web3Modal integration
   - MTX balance display
   - Add token to wallet (EIP-747)
-  - Buy links (Uniswap + Direct Mint)
+  - Buy links (QuickSwap + Direct Mint)
 
 #### 2. **WalletConnect.tsx** - Advanced Wallet Features
 - Location: `src/components/WalletConnect.tsx`
@@ -28,13 +28,13 @@ This guide covers the complete MTX (Matrix Hub Coin) token integration, includin
 
 #### 3. **BuyMTX.tsx** - Direct Minting Interface
 - Location: `src/components/BuyMTX.tsx`
-- Purpose: Direct ETH→MTX minting
+- Purpose: Direct MATIC → MTX minting
 - Features:
   - Live exchange rate display
   - ETH input with MTX calculation
   - Transaction status tracking
   - Security warnings
-  - Link to Etherscan
+  - Link to Polygonscan
 
 #### 4. **MTXDashboard.tsx** - Comprehensive Dashboard
 - Location: `src/components/MTXDashboard.tsx`
@@ -54,7 +54,7 @@ This guide covers the complete MTX (Matrix Hub Coin) token integration, includin
   - Fetch Transfer events from blockchain
   - Categorize transactions (send, receive, mint, burn)
   - Display amounts and timestamps
-  - Link to Etherscan for details
+  - Link to Polygonscan for details
   - Refresh capability
   - Last 10,000 blocks coverage
 
@@ -63,7 +63,7 @@ This guide covers the complete MTX (Matrix Hub Coin) token integration, includin
 #### 1. **GET /api/mtx-balance**
 - Purpose: Fetch MTX balance for any address
 - Parameters:
-  - `address` (required): Ethereum address
+  - `address` (required): Polygon address
 - Returns:
   ```json
   {
@@ -75,7 +75,7 @@ This guide covers the complete MTX (Matrix Hub Coin) token integration, includin
     "percentageOfSupply": "0.001000",
     "timestamp": 1234567890,
     "contractAddress": "0x...",
-    "network": "Ethereum",
+    "network": "Polygon",
     "chainId": 1
   }
   ```
@@ -96,10 +96,10 @@ This guide covers the complete MTX (Matrix Hub Coin) token integration, includin
     "mintingPaused": false,
     "ethToMtxRate": 100000,
     "contractAddress": "0x...",
-    "network": "Ethereum",
+    "network": "Polygon",
     "chainId": 1,
-    "blockExplorer": "https://etherscan.io/address/0x...",
-    "uniswapUrl": "https://app.uniswap.org/...",
+    "blockExplorer": "https://polygonscan.com/address/0x...",
+    "uniswapUrl": "https://app.quickswap.exchange/...",
     "deployed": true,
     "timestamp": 1234567890,
     "lastBlockNumber": 12345678
@@ -118,7 +118,7 @@ This guide covers the complete MTX (Matrix Hub Coin) token integration, includin
 - Location: `contracts/MatrixHubCoin.sol`
 - Standard: ERC-20 with OpenZeppelin v5.4.0
 - Features:
-  - Direct ETH→MTX minting
+  - Direct MATIC → MTX minting
   - Owner-controlled minting pause
   - Adjustable exchange rate
   - Max supply cap
@@ -139,7 +139,7 @@ This guide covers the complete MTX (Matrix Hub Coin) token integration, includin
 - Location: `src/utils/mtxTransfer.ts`
 - Functions:
   - `spendMTX(to, amount)`: Transfer MTX tokens
-  - `ensureEthereum()`: Verify/switch to correct network
+  - `ensurePolygon()`: Verify/switch to correct network
 - Used by: Casino games, premium features
 
 ### Configuration
@@ -151,11 +151,11 @@ This guide covers the complete MTX (Matrix Hub Coin) token integration, includin
   - `address`: Contract address
   - `symbol`: "MTX"
   - `decimals`: 18
-  - `chainId`: 1 (Ethereum Mainnet)
+  - `chainId`: 1 (Polygon)
   - `ethToMtxRate`: 100000
   - `rpcUrls`: Public RPC endpoints
-  - `blockExplorerUrls`: Etherscan
-  - `uniswapUrl`: Uniswap swap link
+  - `blockExplorerUrls`: Polygonscan
+  - `uniswapUrl`: QuickSwap swap link
   - `isDeployed`: Deployment status
 
 ### ABI Files
@@ -186,11 +186,11 @@ User → Click "Connect Wallet"
 User → Visit /buy-mtx page
      → Enter ETH amount
      → See calculated MTX amount
-     → Click "Buy MTX with ETH"
+     → Click "Buy MTX with MATIC"
      → Approve transaction in wallet
      → Wait for confirmation
      → MTX minted to wallet
-     → Success message + Etherscan link
+     → Success message + Polygonscan link
 ```
 
 ### 3. Viewing Dashboard
@@ -211,7 +211,7 @@ User → Connect wallet
      → Dashboard fetches Transfer events
      → Events processed and categorized
      → Display in table format
-     → Click "View" for Etherscan details
+     → Click "View" for Polygonscan details
      → Click "Refresh" for latest data
 ```
 
@@ -250,8 +250,8 @@ User → Connect wallet
 
 ### Prerequisites
 - [ ] Node.js v18.14+
-- [ ] Ethereum wallet with ETH for gas
-- [ ] Etherscan API key (for verification)
+- [ ] Polygon wallet with MATIC for gas
+- [ ] Polygonscan API key (for verification)
 - [ ] RPC endpoint (or use public)
 
 ### Contract Deployment
@@ -284,13 +284,13 @@ User → Connect wallet
    ```
 
 ### Testing
-1. Connect testnet wallet (Sepolia)
+1. Connect testnet wallet (Amoy)
 2. Test wallet connection
 3. Test direct mint with testnet ETH
 4. Verify balance updates
 5. Check transaction history
 6. Test tier progress
-7. Verify Etherscan links
+7. Verify Polygonscan links
 
 ## Usage Examples
 
@@ -360,11 +360,11 @@ async function addTokenToWallet() {
 
 ### Issue: "Failed to connect wallet"
 - **Solution**: Install MetaMask or compatible wallet
-- Check network (should be Ethereum Mainnet)
+- Check network (should be Polygon)
 - Try refreshing the page
 
 ### Issue: "Insufficient MTX balance"
-- **Solution**: Buy MTX via direct mint or Uniswap
+- **Solution**: Buy MTX via direct mint or QuickSwap
 - Check you're on the correct network
 - Verify wallet is connected
 
@@ -376,7 +376,7 @@ async function addTokenToWallet() {
 
 ### Issue: "No transactions showing"
 - **Solution**: Transactions may not have occurred in last 10k blocks
-- Check Etherscan for full history
+- Check Polygonscan for full history
 - Click "Refresh" to fetch latest data
 - Ensure wallet is connected
 

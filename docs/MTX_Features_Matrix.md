@@ -7,10 +7,10 @@ This document provides a comprehensive overview of all MTX token-related feature
 
 | Feature | Status | Location | Description |
 |---------|--------|----------|-------------|
-| Wallet Connection | ✅ Complete | `/wallet`, `/enhanced-wallet` | Connect Ethereum wallet via Web3Modal |
+| Wallet Connection | ✅ Complete | `/wallet`, `/enhanced-wallet` | Connect Polygon wallet via Web3Modal |
 | MTX Balance Display | ✅ Complete | All wallet pages | Real-time MTX balance from blockchain |
-| Direct Mint (ETH→MTX) | ✅ Complete | `/buy-mtx` | Purchase MTX directly with ETH |
-| Uniswap Integration | ✅ Complete | Multiple pages | Trade MTX on Uniswap DEX |
+| Direct Mint (MATIC → MTX) | ✅ Complete | `/buy-mtx` | Purchase MTX directly with MATIC |
+| QuickSwap Integration | ✅ Complete | Multiple pages | Trade MTX on QuickSwap DEX |
 | Transaction History | ✅ Complete | `/enhanced-wallet` | View recent MTX transactions |
 | Dashboard | ✅ Complete | `/enhanced-wallet` | Comprehensive stats and overview |
 | Tier System | ✅ Complete | Dashboard, WalletConnect | Bronze to Diamond tiers |
@@ -23,7 +23,7 @@ This document provides a comprehensive overview of all MTX token-related feature
 | API: Balance Query | ✅ Complete | `/api/mtx-balance` | Fetch balance for any address |
 | API: Statistics | ✅ Complete | `/api/mtx-stats` | Global MTX statistics |
 | Smart Contract | ✅ Complete | `contracts/MatrixHubCoin.sol` | ERC-20 with OpenZeppelin |
-| Contract Verification | ✅ Complete | Etherscan | Verified source code |
+| Contract Verification | ✅ Complete | Polygonscan | Verified source code |
 | Documentation | ✅ Complete | `/docs/*` | Comprehensive guides |
 
 ## Component Details
@@ -40,7 +40,7 @@ This document provides a comprehensive overview of all MTX token-related feature
 - Display connected address (truncated)
 - Show MTX balance with live updates
 - Add MTX token to wallet (EIP-747)
-- Links to buy MTX (Uniswap + Direct Mint)
+- Links to buy MTX (QuickSwap + Direct Mint)
 - Account change detection
 - Network change handling
 
@@ -71,17 +71,17 @@ import WalletConnect from "../components/WalletConnect.tsx";
 ```
 
 #### 3. BuyMTX.tsx
-**Purpose**: Direct ETH→MTX minting interface  
+**Purpose**: Direct MATIC → MTX minting interface  
 **Location**: `src/components/BuyMTX.tsx`
 
 **Features**:
-- Display current exchange rate (1 ETH = 100,000 MTX)
+- Display current exchange rate (1 MATIC = 1,000 MTX)
 - ETH amount input with real-time MTX calculation
 - Fetch rate from smart contract
 - Check if minting is paused
 - Transaction execution and confirmation
 - Status messages (pending, success, error)
-- Link to Etherscan for transaction details
+- Link to Polygonscan for transaction details
 - Security warnings and best practices
 - Network validation
 
@@ -140,10 +140,10 @@ import MTXDashboard from "../components/MTXDashboard.tsx";
   - Amount (MTX)
   - From/To address (truncated)
   - Timestamp
-  - Link to Etherscan
+  - Link to Polygonscan
 - Refresh button
 - Shows up to 10 transactions by default
-- Link to full history on Etherscan
+- Link to full history on Polygonscan
 - Empty state handling
 
 **Usage**:
@@ -167,7 +167,7 @@ import MTXTransactionHistory from "../components/MTXTransactionHistory.tsx";
 #### 3. /buy-mtx
 **Purpose**: Purchase MTX tokens  
 **Components**: BuyMTX.tsx  
-**Features**: Direct ETH→MTX minting, Uniswap link, security info
+**Features**: Direct MATIC → MTX minting, QuickSwap link, security info
 
 #### 4. /casino
 **Purpose**: Play casino games with MTX  
@@ -182,10 +182,10 @@ import MTXTransactionHistory from "../components/MTXTransactionHistory.tsx";
 ### API Endpoints
 
 #### GET /api/mtx-balance
-**Purpose**: Query MTX balance for any Ethereum address
+**Purpose**: Query MTX balance for any Polygon address
 
 **Parameters**:
-- `address` (required): Ethereum address (0x...)
+- `address` (required): Polygon address (0x...)
 
 **Response**:
 ```json
@@ -198,7 +198,7 @@ import MTXTransactionHistory from "../components/MTXTransactionHistory.tsx";
   "percentageOfSupply": "0.001000",
   "timestamp": 1234567890,
   "contractAddress": "0xabcd...efgh",
-  "network": "Ethereum",
+  "network": "Polygon",
   "chainId": 1
 }
 ```
@@ -227,10 +227,10 @@ curl "https://matrix-hub.org/api/mtx-balance?address=0x742d35Cc6634C0532925a3b84
   "mintingPaused": false,
   "ethToMtxRate": 100000,
   "contractAddress": "0xabcd...efgh",
-  "network": "Ethereum",
+  "network": "Polygon",
   "chainId": 1,
-  "blockExplorer": "https://etherscan.io/address/...",
-  "uniswapUrl": "https://app.uniswap.org/...",
+  "blockExplorer": "https://polygonscan.com/address/...",
+  "uniswapUrl": "https://app.quickswap.exchange/...",
   "deployed": true,
   "timestamp": 1234567890,
   "lastBlockNumber": 12345678
@@ -252,7 +252,7 @@ curl "https://matrix-hub.org/api/mtx-stats"
 **Standard**: ERC-20 (OpenZeppelin v5.4.0)
 
 **Key Functions**:
-- `buyMTX()`: Purchase MTX with ETH
+- `buyMTX()`: Purchase MTX with MATIC
 - `setEthToMtxRate(uint256)`: Update exchange rate (owner only)
 - `setMintingPaused(bool)`: Pause/unpause minting (owner only)
 - `withdrawETH(address)`: Withdraw collected ETH (owner only)
@@ -264,9 +264,9 @@ curl "https://matrix-hub.org/api/mtx-stats"
 - Symbol: "MTX"
 - Decimals: 18
 - Max Supply: 100,000,000 MTX (100M)
-- Initial Exchange Rate: 1 ETH = 100,000 MTX
+- Initial Exchange Rate: 1 MATIC = 1,000 MTX
 - Owner-controlled minting pause
-- Direct ETH→MTX minting
+- Direct MATIC → MTX minting
 - Burn functionality
 
 #### CasinoCore.sol
@@ -298,18 +298,18 @@ curl "https://matrix-hub.org/api/mtx-stats"
    - Checks balance before transfer
    - Handles errors gracefully
 
-2. `ensureEthereum(): Promise<void>`
+2. `ensurePolygon(): Promise<void>`
    - Verify user is on correct network
    - Automatically switch network if needed
    - Add network to wallet if not present
-   - Validates Ethereum wallet availability
+   - Validates Polygon wallet availability
 
 **Usage**:
 ```typescript
-import { spendMTX, ensureEthereum } from '../utils/mtxTransfer';
+import { spendMTX, ensurePolygon } from '../utils/mtxTransfer';
 
 // Ensure correct network
-await ensureEthereum();
+await ensurePolygon();
 
 // Spend MTX
 const txHash = await spendMTX(recipientAddress, '10');
@@ -325,14 +325,14 @@ console.log('Transaction:', txHash);
 2. Navigates to /wallet or /enhanced-wallet
 3. Clicks "Connect Wallet"
 4. Approves wallet connection in MetaMask
-5. Automatic network check/switch to Ethereum Mainnet
+5. Automatic network check/switch to Polygon
 6. Balance displayed (likely 0 MTX)
-7. Clicks "Buy MTX (Direct Mint)" or "Buy on Uniswap"
+7. Clicks "Buy MTX (Direct Mint)" or "Buy on QuickSwap"
 8. For direct mint:
    a. Navigate to /buy-mtx
-   b. Enter ETH amount (e.g., 0.01 ETH)
+   b. Enter ETH amount (e.g., 0.01 MATIC)
    c. See calculated MTX (e.g., 1,000 MTX)
-   d. Click "Buy MTX with ETH"
+   d. Click "Buy MTX with MATIC"
    e. Approve transaction in wallet
    f. Wait for confirmation
    g. Success! MTX appears in wallet
