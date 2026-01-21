@@ -12,7 +12,7 @@ import { ensureEthereum } from '../utils/mtxTransfer';
  * - Display connected address
  * - Display MTX token balance
  * - Add MTX to wallet button (EIP-747)
- * - Buy MTX on Uniswap button
+ * - Buy MTX on QuickSwap button
  * - Automatic network switching
  */
 const Wallet = () => {
