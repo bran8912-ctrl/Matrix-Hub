@@ -3,13 +3,13 @@ pragma solidity ^0.8.20;
 
 /*
  Matrix-HubCoin (MTX)
-  Utility token for the Matrix-Hub ecosystem on Ethereum Mainnet.
-  Direct ETH→MTX mint for easy onboarding.
+  Utility token for the Matrix-Hub ecosystem on Polygon.
+  Direct MATIC→MTX mint for easy onboarding.
   No taxes. Owner can pause minting.
   
-  Network: Ethereum Mainnet (Chain ID: 1)
+  Network: Polygon Mainnet (Chain ID: 137)
   Token Standard: ERC-20
-  Initial Owner: 0x58e7893356002ac8f8f612f7b3d29d8b181d85b3
+  Initial Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
   
   Audit Trail: Standard OpenZeppelin ERC20 implementation with owner-controlled minting
   Security: Auditable, transparent, and follows best practices
@@ -21,8 +21,8 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 /**
  * @title MatrixHubCoin
  * @author Matrix-Hub Team
- * @notice ERC-20 utility token for the Matrix-Hub ecosystem on Ethereum Mainnet
- * @dev Implements direct ETH→MTX minting with owner-controlled parameters
+ * @notice ERC-20 utility token for the Matrix-Hub ecosystem on Polygon
+ * @dev Implements direct MATIC→MTX minting with owner-controlled parameters
  */
 contract MatrixHubCoin is ERC20, Ownable {
     // Custom errors for gas efficiency
@@ -32,21 +32,21 @@ contract MatrixHubCoin is ERC20, Ownable {
     error ExceedsMaxSupply();
     error InvalidRate();
     error WithdrawalFailed();
-    error NoETHToWithdraw();
+    error NoMATICToWithdraw();
     /// @notice Maximum supply fixed at deployment
     uint256 public immutable MAX_SUPPLY;
     
-    /// @notice Fixed exchange rate: 1 ETH = ethToMtxRate MTX (can be adjusted by owner)
-    uint256 public ethToMtxRate = 100000;
+    /// @notice Fixed exchange rate: 1 MATIC = maticToMtxRate MTX (can be adjusted by owner)
+    uint256 public maticToMtxRate = 1000;
     
     /// @notice Minting can be paused by owner (e.g., when transitioning to DEX-only)
     bool public mintingPaused = false;
     
-    /// @notice Emitted when MTX is purchased with ETH
+    /// @notice Emitted when MTX is purchased with MATIC
     /// @param buyer Address of the buyer
-    /// @param ethAmount Amount of ETH spent
+    /// @param maticAmount Amount of MATIC spent
     /// @param mtxAmount Amount of MTX received
-    event MTXPurchased(address indexed buyer, uint256 indexed ethAmount, uint256 indexed mtxAmount);
+    event MTXPurchased(address indexed buyer, uint256 indexed maticAmount, uint256 indexed mtxAmount);
     
     /// @notice Emitted when the exchange rate is updated
     /// @param newRate New exchange rate
@@ -56,9 +56,9 @@ contract MatrixHubCoin is ERC20, Ownable {
     /// @param paused True if minting is paused, false otherwise
     event MintingPaused(bool indexed paused);
     
-    /// @notice Emitted when ETH is withdrawn from the contract
-    /// @param recipient Address receiving the ETH
-    /// @param amount Amount of ETH withdrawn
+    /// @notice Emitted when MATIC is withdrawn from the contract
+    /// @param recipient Address receiving the MATIC
+    /// @param amount Amount of MATIC withdrawn
     event Withdrawal(address indexed recipient, uint256 indexed amount);
 
     /**
@@ -76,8 +76,8 @@ contract MatrixHubCoin is ERC20, Ownable {
     }
 
     /**
-     * @notice Direct ETH→MTX purchase function
-     * @dev Users send ETH and receive MTX at the fixed rate
+     * @notice Direct MATIC→MTX purchase function
+     * @dev Users send MATIC and receive MTX at the fixed rate
      */
     function buyMTX() external payable {
         _buyMTXInternal();
@@ -85,7 +85,7 @@ contract MatrixHubCoin is ERC20, Ownable {
     
     /**
      * @notice Fallback receive function - delegates to buyMTX
-     * @dev Allows users to simply send ETH to contract address
+     * @dev Allows users to simply send MATIC to contract address
      */
     receive() external payable {
         _buyMTXInternal();
@@ -100,7 +100,7 @@ contract MatrixHubCoin is ERC20, Ownable {
         if (msg.value == 0) revert ZeroAmount();
         
         // Calculate MTX to mint
-        uint256 mtxAmount = (msg.value * ethToMtxRate * 10 ** decimals()) / 1 ether;
+        uint256 mtxAmount = (msg.value * maticToMtxRate * 10 ** decimals()) / 1 ether;
         
         if (totalSupply() + mtxAmount > MAX_SUPPLY) revert ExceedsMaxSupply();
         
@@ -111,13 +111,13 @@ contract MatrixHubCoin is ERC20, Ownable {
     }
     
     /**
-     * @notice Update the ETH to MTX exchange rate
+     * @notice Update the MATIC to MTX exchange rate
      * @dev Only callable by contract owner
-     * @param newRate The new exchange rate (1 ETH = newRate MTX)
+     * @param newRate The new exchange rate (1 MATIC = newRate MTX)
      */
-    function setEthToMtxRate(uint256 newRate) external onlyOwner {
+    function setMaticToMtxRate(uint256 newRate) external onlyOwner {
         if (newRate == 0) revert InvalidRate();
-        ethToMtxRate = newRate;
+        maticToMtxRate = newRate;
         emit RateUpdated(newRate);
     }
     
@@ -132,14 +132,14 @@ contract MatrixHubCoin is ERC20, Ownable {
     }
     
     /**
-     * @notice Withdraw collected ETH to recipient (for liquidity provision or operations)
+     * @notice Withdraw collected MATIC to recipient (for liquidity provision or operations)
      * @dev Only callable by contract owner
-     * @param recipient Address to receive the ETH
+     * @param recipient Address to receive the MATIC
      */
-    function withdrawETH(address payable recipient) external onlyOwner {
+    function withdrawMATIC(address payable recipient) external onlyOwner {
         if (recipient == address(0)) revert ZeroAddress();
         uint256 balance = address(this).balance;
-        if (balance == 0) revert NoETHToWithdraw();
+        if (balance == 0) revert NoMATICToWithdraw();
         
         (bool success, ) = recipient.call{value: balance}("");
         if (!success) revert WithdrawalFailed();
@@ -160,7 +160,7 @@ contract MatrixHubCoin is ERC20, Ownable {
         if (totalSupply() + amount > MAX_SUPPLY) revert ExceedsMaxSupply();
         
         _mint(to, amount);
-        emit MTXPurchased(to, 0, amount); // Use 0 ETH to indicate owner mint
+        emit MTXPurchased(to, 0, amount); // Use 0 MATIC to indicate owner mint
     }
 
     /**
