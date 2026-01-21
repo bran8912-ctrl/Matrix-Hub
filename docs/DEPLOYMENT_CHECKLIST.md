@@ -12,12 +12,12 @@ Use this checklist to ensure you have everything ready before deploying the MTX 
 ### Wallet Preparation
 - [ ] Burner wallet created (NOT your main wallet)
 - [ ] Private key added to `.env` (without `0x` prefix)
-- [ ] Test ETH obtained from Sepolia faucet (https://sepoliafaucet.com/)
+- [ ] test MATIC obtained from Amoy faucet (https://faucet.polygon.technology/amoy/)
 - [ ] Sufficient ETH balance (0.05+ ETH recommended for gas)
 
 ### API Keys
-- [ ] Etherscan account created (https://etherscan.io/)
-- [ ] Etherscan API key generated (https://etherscan.io/myapikey)
+- [ ] Polygonscan account created (https://polygonscan.com/)
+- [ ] Polygonscan API key generated (https://polygonscan.com/myapikey)
 - [ ] API key added to `.env` as `ETHERSCAN_API_KEY`
 
 ### Contract Configuration
@@ -31,7 +31,7 @@ Use this checklist to ensure you have everything ready before deploying the MTX 
 - [ ] No compilation errors
 - [ ] Artifacts generated in `artifacts/` directory
 
-## Deployment to Sepolia (Testnet)
+## Deployment to Amoy (Testnet)
 
 ### Deploy Contract
 - [ ] Run: `npm run deploy:sepolia`
@@ -41,34 +41,34 @@ Use this checklist to ensure you have everything ready before deploying the MTX 
 
 ### Verify Contract
 - [ ] Run: `npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"`
-- [ ] Verification successful on Sepolia Etherscan
-- [ ] Contract source code visible on Etherscan
-- [ ] Green checkmark appears on Etherscan
+- [ ] Verification successful on Amoy Polygonscan
+- [ ] Contract source code visible on Polygonscan
+- [ ] Green checkmark appears on Polygonscan
 
 ### Post-Deployment Testing
-- [ ] Contract visible on Sepolia Etherscan
+- [ ] Contract visible on Amoy Polygonscan
 - [ ] Owner has 100M MTX balance
 - [ ] Token name: Matrix-HubCoin
 - [ ] Token symbol: MTX
 - [ ] Token decimals: 18
-- [ ] Can read contract values on Etherscan
+- [ ] Can read contract values on Polygonscan
 - [ ] Contract functions visible and callable
 
 ### Configuration Updates
-- [ ] Update `src/config/mtx.ts` with Sepolia contract address
+- [ ] Update `src/config/mtx.ts` with Amoy contract address
 - [ ] Update documentation with deployment info
-- [ ] Test wallet connection with Sepolia network
-- [ ] Test buying MTX with test ETH
+- [ ] Test wallet connection with Amoy network
+- [ ] Test buying MTX with test MATIC
 
 ## Deployment to Mainnet (Production)
 
-⚠️ **Only proceed after thorough Sepolia testing!**
+⚠️ **Only proceed after thorough Amoy testing!**
 
 ### Pre-Mainnet Checklist
-- [ ] All Sepolia tests passed
+- [ ] All Amoy tests passed
 - [ ] Contract behavior verified on testnet
 - [ ] Wallet integration tested
-- [ ] UI tested with Sepolia contract
+- [ ] UI tested with Amoy contract
 - [ ] Security audit completed (if applicable)
 - [ ] Real ETH obtained for mainnet deployment (0.1+ ETH recommended)
 
@@ -80,16 +80,16 @@ Use this checklist to ensure you have everything ready before deploying the MTX 
 
 ### Verify on Mainnet
 - [ ] Run: `npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"`
-- [ ] Verification successful on Mainnet Etherscan
+- [ ] Verification successful on Mainnet Polygonscan
 - [ ] Contract source code visible
-- [ ] Green checkmark on Etherscan
+- [ ] Green checkmark on Polygonscan
 
 ### Post-Mainnet Verification
-- [ ] Contract visible on Mainnet Etherscan
+- [ ] Contract visible on Mainnet Polygonscan
 - [ ] Owner has 100M MTX balance
 - [ ] All token details correct
 - [ ] Contract functions visible and callable
-- [ ] No errors or warnings on Etherscan
+- [ ] No errors or warnings on Polygonscan
 
 ### Configuration Updates
 - [ ] Update `src/config/mtx.ts` with Mainnet contract address
@@ -99,7 +99,7 @@ Use this checklist to ensure you have everything ready before deploying the MTX 
 - [ ] Test buying MTX with real ETH (small amount first)
 
 ### Go Live
-- [ ] Add liquidity to Uniswap (ETH/MTX pair)
+- [ ] Add liquidity to QuickSwap (MATIC/MTX pair)
 - [ ] Test DEX integration
 - [ ] Monitor first transactions
 - [ ] Announce deployment with verified contract link
@@ -123,7 +123,7 @@ Use this checklist to ensure you have everything ready before deploying the MTX 
 
 ## Quick Reference
 
-### Sepolia Deployment
+### Amoy Deployment
 ```bash
 # 1. Setup
 cp .env.example .env
@@ -157,10 +157,10 @@ npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3d
 - **"Verification failed"**: Ensure `ETHERSCAN_API_KEY` is set, wait 1-2 minutes, check constructor args
 
 ### Support Resources
-- [Sepolia Deployment Guide](SEPOLIA_DEPLOYMENT.md)
+- [Amoy Deployment Guide](SEPOLIA_DEPLOYMENT.md)
 - [Full Deployment Guide](MTX_Deployment_Guide.md)
 - [Hardhat Documentation](https://hardhat.org/)
-- [Etherscan API Docs](https://docs.etherscan.io/)
+- [Polygonscan API Docs](https://docs.polygonscan.com/)
 
 ---
 

@@ -2,25 +2,25 @@
 
 ## Overview
 
-Matrix Hub's MTX token system has been fully implemented and configured for Ethereum Mainnet deployment with comprehensive smart contracts, wallet integration, purchase flows, and documentation.
+Matrix Hub's MTX token system has been fully implemented and configured for Polygon deployment with comprehensive smart contracts, wallet integration, purchase flows, and documentation.
 
 ## Key Features Implemented
 
 ### Network Configuration
-- **Configured for Ethereum Mainnet** as the primary network
+- **Configured for Polygon** as the primary network
 - Updated all references: MATIC → ETH
-- Updated DEX: QuickSwap → Uniswap
-- Updated Explorer: Polygonscan → Etherscan
-- Added Ethereum network auto-detection and switching
+- Updated DEX: QuickSwap → QuickSwap
+- Updated Explorer: Polygonscan → Polygonscan
+- Added Polygon network auto-detection and switching
 
 ### Smart Contracts (Solidity 0.8.20)
 
 #### MatrixHubCoin.sol - ERC-20 Token Contract
 - Standard OpenZeppelin ERC-20 implementation
-- Direct ETH→MTX mint function at fixed rate (1 ETH = 100,000 MTX)
+- Direct MATIC → MTX mint function at fixed rate (1 MATIC = 1,000 MTX)
 - Added `receive()` fallback for simple ETH sends
 - Owner-controlled minting pause/unpause
-- Owner can adjust ETH→MTX exchange rate
+- Owner can adjust MATIC → MTX exchange rate
 - Owner can withdraw collected ETH
 - User-callable burn function
 - Initial owner address: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
@@ -34,7 +34,7 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 
 #### CasinoModules.sol - Supporting Contracts
 - **CasinoReserve**: Holds MTX for casino payouts
-- **LiquidityRouter**: Manages DEX (Uniswap) liquidity
+- **LiquidityRouter**: Manages DEX (QuickSwap) liquidity
 - **RNGEngine**: Provably fair random number generation
 
 ### Frontend Components (React/Astro)
@@ -44,16 +44,16 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 - Real-time rate display from contract
 - Minting paused status indicator
 - Transaction confirmation feedback
-- Etherscan transaction links
+- Polygonscan transaction links
 - Security warnings and guidance
 
 #### Wallet.jsx - Wallet Connection
 - Web3Modal integration for wallet connection
 - MTX balance display (reads from contract)
 - Add MTX to wallet (EIP-747)
-- Buy on Uniswap button
+- Buy on QuickSwap button
 - Direct mint link
-- Ethereum network auto-switch
+- Polygon network auto-switch
 
 #### MTXEcosystem.astro - Information Panel
 - Deployment status warning banner
@@ -65,29 +65,29 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 ### Configuration Files
 
 #### hardhat.config.js
-- Ethereum Mainnet (Chain ID 1) - PRIMARY
-- Ethereum Sepolia Testnet for testing
-- Etherscan API integration for verification
+- Polygon (Chain ID 137) - PRIMARY
+- Polygon Amoy Testnet for testing
+- Polygonscan API integration for verification
 
 #### src/config/mtx.ts
-- Ethereum Mainnet configuration
+- Polygon configuration
 - Placeholder address with deployment checks
-- Uniswap DEX integration
-- Etherscan explorer links
+- QuickSwap DEX integration
+- Polygonscan explorer links
 - Network validation
 - Owner address documentation
 
 ### Deployment Scripts
 
 #### scripts/deploy_mtx.js
-- Deploys MatrixHubCoin to Ethereum
+- Deploys MatrixHubCoin to Polygon
 - Sets initial owner to specified address
 - Saves deployment info to JSON
 - Generates verification commands
 - Provides next steps guidance
 
 #### scripts/deploy_casino.js
-- Deploys all casino contracts to Ethereum
+- Deploys all casino contracts to Polygon
 - Links to deployed MTX token
 - Configurable parameters
 - Generates verification commands
@@ -95,34 +95,34 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 ### Documentation
 
 #### Deployment Guides
-- **MTX_Deployment_Guide.md**: Complete Ethereum deployment instructions
+- **MTX_Deployment_Guide.md**: Complete Polygon deployment instructions
 - **DEPLOYMENT_QUICK_START.md**: Quick reference for deployment
 - **ETHEREUM_MIGRATION_SUMMARY.md**: Migration from Polygon documentation
 
 #### User Documentation
 - **MTX_Tokenomics.md**: Token economics and distribution
 - **MTX_Wallet_Integration.md**: Wallet setup and usage
-- **README.md**: Updated with Ethereum instructions
+- **README.md**: Updated with Polygon instructions
 
 ## Deployment Workflow
 
 ### Phase 1: Testnet Deployment
-1. Deploy to Ethereum Sepolia testnet
+1. Deploy to Polygon Amoy testnet
    ```bash
    npm run deploy:sepolia
    ```
 2. Get testnet ETH from faucet
 3. Test all functionality
-4. Verify contract on Etherscan
+4. Verify contract on Polygonscan
 
 ### Phase 2: Mainnet Deployment
-1. Deploy to Ethereum Mainnet
+1. Deploy to Polygon
    ```bash
    npm run deploy:mainnet
    ```
-2. Verify contract on Etherscan
+2. Verify contract on Polygonscan
 3. Update configuration with real address
-4. Add liquidity to Uniswap
+4. Add liquidity to QuickSwap
 
 ### Phase 3: Testing & Launch
 1. Test wallet connection
@@ -134,13 +134,13 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 
 ### Option 1: Direct Mint (Recommended for First-Time Users)
 1. User visits /buy-mtx
-2. Connects Ethereum wallet (MetaMask)
+2. Connects Polygon wallet (MetaMask)
 3. Enters ETH amount
 4. Confirms transaction
-5. Receives MTX instantly (1 ETH = 100,000 MTX)
+5. Receives MTX instantly (1 MATIC = 1,000 MTX)
 
-### Option 2: Uniswap DEX (Market Trading)
-1. User visits Uniswap
+### Option 2: QuickSwap DEX (Market Trading)
+1. User visits QuickSwap
 2. Swaps ETH or any token for MTX
 3. Market-determined rates
 4. High liquidity once pool is funded
@@ -158,7 +158,7 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 - Owner-controlled emergency pause
 - Max supply cap enforcement
 - Transparent on-chain transactions
-- Verified source code on Etherscan
+- Verified source code on Polygonscan
 
 ### User Protection
 - Placeholder address prevents premature use
@@ -175,19 +175,19 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 
 ## Network Information
 
-### Ethereum Mainnet (Production)
+### Polygon (Production)
 - **Chain ID**: 1
 - **Currency**: ETH
 - **RPC**: https://eth.llamarpc.com
-- **Explorer**: https://etherscan.io/
-- **DEX**: Uniswap
+- **Explorer**: https://polygonscan.com/
+- **DEX**: QuickSwap
 
-### Ethereum Sepolia (Testing)
-- **Chain ID**: 11155111
-- **Currency**: Test ETH
-- **RPC**: https://rpc.sepolia.org/
-- **Explorer**: https://sepolia.etherscan.io/
-- **Faucet**: https://sepoliafaucet.com/
+### Polygon Amoy (Testing)
+- **Chain ID**: 80002
+- **Currency**: test MATIC
+- **RPC**: https://rpc-amoy.polygon.technology/
+- **Explorer**: https://amoy.polygonscan.com/
+- **Faucet**: https://faucet.polygon.technology/amoy/
 
 ## Current Status
 
@@ -199,15 +199,15 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 - [x] Purchase flows
 - [x] Configuration system
 - [x] Documentation
-- [x] Network migration to Ethereum
+- [x] Network migration to Polygon
 - [x] Security checks
 
 ### ⚠️ Pending
 - [ ] Contract deployment to testnet
 - [ ] Testnet testing and validation
 - [ ] Contract deployment to mainnet
-- [ ] Contract verification on Etherscan
-- [ ] Liquidity provision on Uniswap
+- [ ] Contract verification on Polygonscan
+- [ ] Liquidity provision on QuickSwap
 - [ ] Public launch
 
 ## Technical Stack
@@ -223,11 +223,11 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 
 ## Next Steps
 
-1. **Deploy to Sepolia Testnet**: Test all functionality
+1. **Deploy to Amoy Testnet**: Test all functionality
 2. **Thorough Testing**: Validate all features work correctly
-3. **Deploy to Mainnet**: Production deployment on Ethereum
-4. **Verify on Etherscan**: Make contract source public
-5. **Add Liquidity**: Create Uniswap ETH/MTX pool
+3. **Deploy to Mainnet**: Production deployment on Polygon
+4. **Verify on Polygonscan**: Make contract source public
+5. **Add Liquidity**: Create QuickSwap MATIC/MTX pool
 6. **Update Config**: Set real contract address
 7. **Public Launch**: Announce to community
 
@@ -236,10 +236,10 @@ Matrix Hub's MTX token system has been fully implemented and configured for Ethe
 - **Deployment Guide**: See `docs/MTX_Deployment_Guide.md`
 - **Quick Start**: See `docs/DEPLOYMENT_QUICK_START.md`
 - **Migration Info**: See `docs/ETHEREUM_MIGRATION_SUMMARY.md`
-- **Etherscan**: https://etherscan.io/
-- **Uniswap**: https://app.uniswap.org/
+- **Polygonscan**: https://polygonscan.com/
+- **QuickSwap**: https://app.quickswap.exchange/
 
 ---
 
-**Status**: Ready for Ethereum deployment
+**Status**: Ready for Polygon deployment
 **Last Updated**: December 29, 2024

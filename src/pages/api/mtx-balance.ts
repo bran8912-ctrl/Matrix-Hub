@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({ request }) => {
     return new Response(
       JSON.stringify({
         error: 'Missing address parameter',
-        message: 'Please provide an Ethereum address via ?address=0x...'
+        message: 'Please provide a Polygon address via ?address=0x...'
       }),
       {
         status: 400,
@@ -37,7 +37,7 @@ export const GET: APIRoute = async ({ request }) => {
     return new Response(
       JSON.stringify({
         error: 'Invalid address format',
-        message: 'Address must be a valid Ethereum address (0x... with 40 hex characters)'
+        message: 'Address must be a valid Polygon address (0x... with 40 hex characters)'
       }),
       {
         status: 400,

@@ -5,7 +5,7 @@ This document describes the MTX wallet integration components and utilities adde
 ## MTX Contract Information
 
 - **Status**: ⚠️ **Pending Deployment** - Contract not yet deployed to mainnet
-- **Network**: Ethereum Mainnet (ChainID: 1) - Target network for deployment
+- **Network**: Polygon (Chain ID: 137) - Target network for deployment
 - **Symbol**: MTX
 - **Decimals**: 18
 - **Name**: Matrix Hub Coin
@@ -15,7 +15,7 @@ This document describes the MTX wallet integration components and utilities adde
 
 ## Wallet Connection - Reown AppKit (formerly Web3Modal v3)
 
-Matrix Hub uses [Reown AppKit](https://docs.reown.com/appkit) (formerly Web3Modal v3) for wallet connections. This provides a modern, user-friendly interface for connecting various Ethereum wallets.
+Matrix Hub uses [Reown AppKit](https://docs.reown.com/appkit) (formerly Web3Modal v3) for wallet connections. This provides a modern, user-friendly interface for connecting various Polygon wallets.
 
 ### Migration from Web3Modal v1
 
@@ -43,7 +43,7 @@ export const metadata = {
 
 **src/components/AppKitProvider.tsx** - Provider component:
 - Initializes AppKit modal on client side only
-- Configures Ethereum mainnet connection
+- Configures Polygon connection
 - Sets dark theme with Matrix Hub branding
 
 ### Environment Variables
@@ -63,13 +63,13 @@ Get a free project ID from [Reown Cloud](https://cloud.reown.com) (formerly Wall
 A React island component that provides wallet connection and MTX token balance management using Reown AppKit.
 
 **Features:**
-- Connect Ethereum wallet via Reown AppKit modal
+- Connect Polygon wallet via Reown AppKit modal
 - Display connected wallet address
 - Display MTX token balance
 - Add MTX token to wallet (EIP-747)
-- Buy MTX on Uniswap
+- Buy MTX on QuickSwap
 - **NEW**: Buy MTX via Direct Mint
-- Automatic network switching to Ethereum mainnet
+- Automatic network switching to Polygon
 - Handle account and network changes
 
 **Implementation:**
@@ -94,12 +94,12 @@ import Wallet from "../components/Wallet.jsx";
 
 ### BuyMTX.tsx
 
-A React component for purchasing MTX directly with ETH using the direct mint feature.
+A React component for purchasing MTX directly with MATIC using the direct mint feature.
 
 **Features:**
 - Display current ETH to MTX exchange rate
 - Calculate MTX amount based on ETH input
-- Send ETH to contract to mint MTX
+- Send MATIC to contract to mint MTX
 - Transaction status feedback
 - Security guidance and warnings
 - Testnet/Mainnet compatibility
@@ -121,7 +121,7 @@ Matrix Hub offers two ways to purchase MTX tokens:
 
 **How it works:**
 1. User sends ETH directly to the MTX contract
-2. Contract mints MTX at a fixed rate (1 ETH = 100,000 MTX)
+2. Contract mints MTX at a fixed rate (1 MATIC = 1,000 MTX)
 3. MTX tokens are instantly credited to user's wallet
 
 **Advantages:**
@@ -133,15 +133,15 @@ Matrix Hub offers two ways to purchase MTX tokens:
 
 **How to use:**
 1. Visit `/buy-mtx` page on Matrix Hub
-2. Connect your Ethereum wallet
+2. Connect your Polygon wallet
 3. Enter amount of ETH to spend
-4. Click "Buy MTX with ETH"
+4. Click "Buy MTX with MATIC"
 5. Confirm transaction in wallet
 6. Receive MTX instantly
 
 **Technical details:**
 - Contract function: `buyMTX()` (payable)
-- Fallback function: `receive()` also works (send ETH directly to contract)
+- Fallback function: `receive()` also works (Send MATIC directly to contract)
 - Rate can be updated by contract owner if needed
 - Minting can be paused by owner (e.g., for transition to DEX-only)
 
@@ -156,7 +156,7 @@ async function buyMTXDirectMint(ethAmount: string) {
   const signer = await provider.getSigner();
   const mtxContract = new Contract(MTX.address, mtxAbi, signer);
   
-  // Send ETH to buyMTX function
+  // Send MATIC to buyMTX function
   const tx = await mtxContract.buyMTX({ value: parseEther(ethAmount) });
   await tx.wait();
   
@@ -164,10 +164,10 @@ async function buyMTXDirectMint(ethAmount: string) {
 }
 ```
 
-### Option 2: Uniswap DEX (Public Market)
+### Option 2: QuickSwap DEX (Public Market)
 
 **How it works:**
-1. User swaps ETH or other tokens for MTX on Uniswap
+1. User swaps ETH or other tokens for MTX on QuickSwap
 2. Pricing determined by liquidity pool (market rates)
 3. Instant settlement
 
@@ -178,7 +178,7 @@ async function buyMTXDirectMint(ethAmount: string) {
 - Trusted, battle-tested platform
 
 **How to use:**
-1. Visit Uniswap link from Matrix Hub
+1. Visit QuickSwap link from Matrix Hub
 2. Connect wallet
 3. Select input token and amount
 4. Review swap details
@@ -195,7 +195,7 @@ Provides utility functions for MTX token transfers and network management.
 Transfers MTX tokens from the connected wallet to a specified address.
 
 **Parameters:**
-- `to` (string): Recipient Ethereum address (e.g., casino vault address)
+- `to` (string): Recipient Polygon address (e.g., casino vault address)
 - `amount` (string): Amount of MTX to transfer in human-readable format (e.g., "10" for 10 MTX)
 
 **Returns:**
@@ -220,9 +220,9 @@ try {
 }
 ```
 
-#### ensureEthereum()
+#### ensurePolygon()
 
-Ensures the user is connected to the correct Ethereum network (based on config). Automatically attempts to switch networks if needed.
+Ensures the user is connected to the correct Polygon network (based on config). Automatically attempts to switch networks if needed.
 
 **Returns:**
 - `Promise<void>`
@@ -234,11 +234,11 @@ Ensures the user is connected to the correct Ethereum network (based on config).
 
 **Example:**
 ```typescript
-import { ensureEthereum } from '../utils/mtxTransfer';
+import { ensurePolygon } from '../utils/mtxTransfer';
 
 // Ensure correct network before performing operations
 try {
-  await ensureEthereum();
+  await ensurePolygon();
   // Proceed with blockchain operations
 } catch (error) {
   console.error('Network check failed:', error.message);
@@ -259,7 +259,7 @@ The MTX token ABI includes the following methods:
 - `burn(uint256 amount)`: Burn MTX tokens
 
 **Direct Mint Features:**
-- `buyMTX()`: Purchase MTX with ETH (payable)
+- `buyMTX()`: Purchase MTX with MATIC (payable)
 - `ethToMtxRate()`: Get current ETH to MTX exchange rate
 - `mintingPaused()`: Check if direct minting is paused
 - `MAX_SUPPLY()`: Get maximum MTX supply
@@ -277,11 +277,11 @@ export const MTX = {
   address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0", // Live contract address
   symbol: "MTX",
   decimals: 18,
-  chainId: 1, // Ethereum mainnet
+  Chain ID: 137, // Polygon
   name: "Matrix Hub Coin",
-  ethToMtxRate: 100000, // 1 ETH = 100,000 MTX
+  ethToMtxRate: 100000, // 1 MATIC = 1,000 MTX
   get uniswapUrl() {
-    return `https://app.uniswap.org/#/swap?outputCurrency=${this.address}&chain=ethereum`;
+    return `https://app.quickswap.exchange/#/swap?outputCurrency=${this.address}&chain=ethereum`;
   }
 };
 ```
@@ -323,7 +323,7 @@ async function placeBet(betAmount: number) {
 
 3. **Error Handling**: All functions include comprehensive error handling for common scenarios (wallet not found, insufficient balance, user rejection).
 
-4. **Network Verification**: The `ensureEthereum` function ensures users are on the correct network before performing operations.
+4. **Network Verification**: The `ensurePolygon` function ensures users are on the correct network before performing operations.
 
 5. **No Private Keys**: The utilities never request or handle private keys; all signing is done through the user's wallet.
 
@@ -331,7 +331,7 @@ async function placeBet(betAmount: number) {
 
 Requires:
 - Modern browser with ES2020+ support
-- MetaMask or compatible Ethereum wallet extension
+- MetaMask or compatible Polygon wallet extension
 - User approval for wallet connection and transactions
 
 ## Dependencies

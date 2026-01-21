@@ -237,7 +237,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onWalletChange }) => {
                 marginRight: '0.5rem'
               }}
             >
-              Buy MTX on Uniswap
+              Buy MTX on QuickSwap
             </a>
             {/* MTX: Direct Mint link */}
             <a 

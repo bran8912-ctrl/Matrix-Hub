@@ -9,7 +9,7 @@ export const GITHUB_REPO_URL = 'https://github.com/bran8912-ctrl/Matrix-Hub.org'
 
 // Security patterns for detection (without global flag to avoid state issues)
 export const SECURITY_PATTERNS = Object.freeze({
-  // Ethereum wallet addresses (expandable to other chains if needed)
+  // Polygon wallet addresses (expandable to other chains if needed)
   walletAddress: /\b(0x[a-fA-F0-9]{40})\b/,
   privateKey: /\b(private[\s_\-]?key|seed[\s_\-]?phrase|mnemonic|recovery[\s_\-]?phrase)\b/i,
   suspiciousLinks: /\b(bit\.ly|tinyurl|goo\.gl|t\.co|ow\.ly|is\.gd|cutt\.ly)\b/i,

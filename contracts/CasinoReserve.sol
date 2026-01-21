@@ -6,7 +6,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 /**
  * @title CasinoReserve
  * @author Matrix-Hub Team
- * @notice Holds MTX reserves for casino payouts on Ethereum
+ * @notice Holds MTX reserves for casino payouts on Polygon
  * @dev Manages reserve balance and payout distribution
  */
 contract CasinoReserve {
@@ -41,7 +41,7 @@ contract CasinoReserve {
     /**
      * @notice Constructor initializes reserve with MTX token address
      * @dev Sets up reserve parameters and CasinoCore integration
-     * @param _mtx Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Ethereum
+     * @param _mtx Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Polygon
      * @param _reserveCap Maximum reserve capacity in MTX
      * @param _casinoCore Address of CasinoCore contract
      */
@@ -49,7 +49,7 @@ contract CasinoReserve {
         if (_mtx == address(0)) revert ZeroAddress();
         if (_casinoCore == address(0)) revert ZeroAddress();
         if (_reserveCap == 0) revert ZeroAmount();
-        mtx = IERC20(_mtx); // MTX Token address on Ethereum - set from deployed MatrixHubCoin
+        mtx = IERC20(_mtx); // MTX Token address on Polygon - set from deployed MatrixHubCoin
         reserveCap = _reserveCap;
         casinoCore = _casinoCore;
     }

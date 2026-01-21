@@ -1,6 +1,6 @@
 # Deployment Documentation Index
 
-All documentation for deploying the MTX token contract to Ethereum networks.
+All documentation for deploying the MTX token contract to Polygon networks.
 
 ## 🚀 Start Here
 
@@ -63,7 +63,7 @@ cp .env.example .env
 
 # Edit with your credentials
 # - PRIVATE_KEY (without 0x prefix)
-# - ETHERSCAN_API_KEY (from https://etherscan.io/myapikey)
+# - ETHERSCAN_API_KEY (from https://polygonscan.com/myapikey)
 
 # Install dependencies
 npm install
@@ -72,9 +72,9 @@ npm install
 npm run compile
 ```
 
-### Deploy to Sepolia Testnet
+### Deploy to Amoy Testnet
 ```bash
-# Get test ETH first: https://sepoliafaucet.com/
+# Get test MATIC first: https://faucet.polygon.technology/amoy/
 
 # Deploy
 npm run deploy:sepolia
@@ -99,13 +99,13 @@ npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3d
    - Private key (64 hex chars, no `0x`)
    - Separate from your main wallet
 
-2. **Test ETH** (for Sepolia)
+2. **test MATIC** (for Amoy)
    - Faucets:
-     - https://sepoliafaucet.com/
-     - https://www.alchemy.com/faucets/ethereum-sepolia
+     - https://faucet.polygon.technology/amoy/
+     - https://www.alchemy.com/faucets/polygon-amoy
 
-3. **Etherscan API Key**
-   - Get from: https://etherscan.io/myapikey
+3. **Polygonscan API Key**
+   - Get from: https://polygonscan.com/myapikey
    - Used for contract verification
    - Example: `ETHERSCAN_API_KEY=ABC123XYZ456YOUR_KEY_HERE`
 
@@ -169,22 +169,22 @@ npm run verify:mainnet CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3d
 - Quick deploy: [QUICK_DEPLOY.md](QUICK_DEPLOY.md)
 - Checklist format: [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md)
 
-**Q: Where do I get an Etherscan API key?**
-- Visit: https://etherscan.io/myapikey
+**Q: Where do I get an Polygonscan API key?**
+- Visit: https://polygonscan.com/myapikey
 - Sign up or log in
 - Create new API key
 - Copy and add to `.env`
 
-**Q: Where do I get test ETH?**
-- Sepolia faucets:
-  - https://sepoliafaucet.com/
-  - https://www.alchemy.com/faucets/ethereum-sepolia
+**Q: Where do I get test MATIC?**
+- Amoy faucets:
+  - https://faucet.polygon.technology/amoy/
+  - https://www.alchemy.com/faucets/polygon-amoy
 
 **Q: What if deployment fails?**
 - Check [Troubleshooting](SEPOLIA_DEPLOYMENT.md#troubleshooting)
 - Verify all prerequisites are met
 - Check `.env` configuration
-- Ensure sufficient test ETH
+- Ensure sufficient test MATIC
 
 **Q: How do I verify the contract?**
 - Use: `npm run verify:sepolia CONTRACT_ADDRESS "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"`

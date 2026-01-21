@@ -3,14 +3,14 @@
 **Version**: 1.0  
 **Date**: January 6, 2026  
 **Contract**: MatrixHubCoin (MTX) ERC20 Token  
-**Target Network**: Ethereum Mainnet (Chain ID: 1)  
+**Target Network**: Polygon (Chain ID: 137)  
 **Deployment Owner**: Repo Owner (with production keys)
 
 ---
 
 ## Overview
 
-This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 token to Ethereum Mainnet. The deployment must be performed by the repository owner using their secured API keys and environment configuration stored in GitHub repository secrets or local .env files.
+This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 token to Polygon. The deployment must be performed by the repository owner using their secured API keys and environment configuration stored in GitHub repository secrets or local .env files.
 
 **CRITICAL**: This is a production smart contract deployment. Mistakes can result in permanent loss of funds. Follow each step carefully.
 
@@ -42,10 +42,10 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
   # Deployer wallet private key (NO 0x prefix)
   PRIVATE_KEY=your_actual_private_key_here
   
-  # Ethereum RPC URL (free public RPC)
+  # Polygon RPC URL (free public RPC)
   MAINNET_RPC_URL=https://eth.llamarpc.com
   
-  # Etherscan API key for contract verification
+  # Polygonscan API key for contract verification
   ETHERSCAN_API_KEY=your_etherscan_api_key_here
   
   # Leave empty - will be filled after deployment
@@ -54,10 +54,10 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
   
   **Security Notes**:
   - Use a dedicated deployer wallet, NOT your main wallet
-  - Deployer wallet needs ~0.1 ETH for gas fees
+  - Deployer wallet needs ~0.1 MATIC for gas fees
   - Store private key securely after deployment
   - Consider using hardware wallet for mainnet deployment
-  - Get Etherscan API key: https://etherscan.io/myapikey
+  - Get Polygonscan API key: https://polygonscan.com/myapikey
 
 ### 1.2 Network Configuration Verification
 
@@ -67,15 +67,15 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
     mainnet: {
       url: process.env.MAINNET_RPC_URL || "https://eth.llamarpc.com",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 1
+      Chain ID: 137
     }
   }
   ```
 
 - [ ] **Verify src/config/mtx.ts**
   ```typescript
-  chainId: 1, // Ethereum Mainnet
-  chainName: "Ethereum",
+  Chain ID: 137, // Polygon
+  chainName: "Polygon",
   nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 }
   ```
 
@@ -103,9 +103,9 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
   - Record wallet address for reference
 
 - [ ] **Fund Deployer Wallet**
-  - Send ~0.1 ETH to deployer wallet for gas
+  - Send ~0.1 MATIC to deployer wallet for gas
   - Confirm receipt of funds
-  - Check balance: `cast balance <address>` or use Etherscan
+  - Check balance: `cast balance <address>` or use Polygonscan
 
 - [ ] **Backup Private Key Securely**
   - Store in password manager
@@ -119,19 +119,19 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
 
 **DO NOT SKIP TESTNET TESTING**
 
-### 2.1 Sepolia Testnet Setup
+### 2.1 Amoy Testnet Setup
 
 - [ ] **Get Testnet ETH**
-  - Visit: https://sepoliafaucet.com/
+  - Visit: https://faucet.polygon.technology/amoy/
   - Send testnet ETH to deployer wallet
   - Confirm receipt (usually 2-5 minutes)
 
-- [ ] **Configure Sepolia RPC**
+- [ ] **Configure Amoy RPC**
   ```bash
-  SEPOLIA_RPC_URL=https://rpc.sepolia.org/
+  SEPOLIA_RPC_URL=https://rpc-amoy.polygon.technology/
   ```
 
-### 2.2 Deploy to Sepolia
+### 2.2 Deploy to Amoy
 
 - [ ] **Compile Contracts**
   ```bash
@@ -140,12 +140,12 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
   - Verify no compilation errors
   - Check artifacts generated in `artifacts/` directory
 
-- [ ] **Deploy to Sepolia**
+- [ ] **Deploy to Amoy**
   ```bash
   npm run deploy:sepolia
   # OR
   ./scripts/deploy.sh
-  # Select option 1 (Sepolia)
+  # Select option 1 (Amoy)
   ```
 
 - [ ] **Record Deployment Info**
@@ -155,7 +155,7 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
   - Deployment Time: `____________________________`
   - Gas Used: `____________________________`
 
-### 2.3 Verify on Sepolia Etherscan
+### 2.3 Verify on Amoy Polygonscan
 
 - [ ] **Verify Contract Source**
   ```bash
@@ -163,13 +163,13 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
   ```
   
 - [ ] **Confirm Verification Success**
-  - Visit: https://sepolia.etherscan.io/address/<CONTRACT_ADDRESS>
+  - Visit: https://amoy.polygonscan.com/address/<CONTRACT_ADDRESS>
   - Check "Contract" tab shows verified source code
   - Review read/write contract functions
 
-### 2.4 Test Contract Functions on Sepolia
+### 2.4 Test Contract Functions on Amoy
 
-- [ ] **Test Read Functions** (via Etherscan or script)
+- [ ] **Test Read Functions** (via Polygonscan or script)
   - `name()` returns "Matrix-HubCoin"
   - `symbol()` returns "MTX"
   - `decimals()` returns 18
@@ -187,8 +187,8 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
   - Verify events emitted correctly
 
 - [ ] **Test buyMTX Function**
-  - Send 0.01 test ETH to contract via `buyMTX()`
-  - Verify MTX received (0.01 ETH * 100000 = 1000 MTX)
+  - Send 0.01 test MATIC to contract via `buyMTX()`
+  - Verify MTX received (0.01 MATIC * 100000 = 1000 MTX)
   - Check `totalSupply()` increased
   - Verify `MTXPurchased` event emitted
 
@@ -205,18 +205,18 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
 ### 2.5 Test Wallet Integration on Testnet
 
 - [ ] **Update Test Config**
-  - Temporarily set Sepolia contract address in `src/config/mtx.ts`
-  - Change chainId to 11155111 (Sepolia)
+  - Temporarily set Amoy contract address in `src/config/mtx.ts`
+  - Change chainId to 80002 (Amoy)
 
 - [ ] **Test Frontend Connection**
   ```bash
   npm run dev
   ```
-  - Connect wallet to Sepolia network
+  - Connect wallet to Amoy network
   - Verify MTX balance displays correctly
   - Test "Add MTX to Wallet" button (EIP-747)
   - Test direct mint via frontend
-  - Verify transactions appear on Sepolia Etherscan
+  - Verify transactions appear on Amoy Polygonscan
 
 - [ ] **Revert Test Config**
   - Restore mainnet configuration in `src/config/mtx.ts`
@@ -240,7 +240,7 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
 
 ## Phase 3: Mainnet Deployment
 
-**⚠️ FINAL WARNING: This deploys to production Ethereum Mainnet with real ETH and real value**
+**⚠️ FINAL WARNING: This deploys to production Polygon with real ETH and real value**
 
 ### 3.1 Final Pre-Deployment Checks
 
@@ -250,14 +250,14 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
   - Gas costs acceptable
 
 - [ ] **Deployer Wallet Ready**
-  - Wallet has sufficient ETH (~0.1 ETH recommended)
+  - Wallet has sufficient ETH (~0.1 MATIC recommended)
   - Private key backed up securely
   - Wallet address recorded
 
 - [ ] **Environment Variables Set**
   - `PRIVATE_KEY` - Deployer private key (no 0x)
-  - `MAINNET_RPC_URL` - Ethereum RPC URL
-  - `ETHERSCAN_API_KEY` - Etherscan API key
+  - `MAINNET_RPC_URL` - Polygon RPC URL
+  - `ETHERSCAN_API_KEY` - Polygonscan API key
   - All values verified correct
 
 - [ ] **Final Code Review**
@@ -292,7 +292,7 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
   ```
 
 - [ ] **Monitor Deployment**
-  - Watch transaction in Etherscan
+  - Watch transaction in Polygonscan
   - Wait for confirmation (usually 15-30 seconds)
   - Verify no errors in output
 
@@ -302,7 +302,7 @@ This checklist guides the secure deployment of the MatrixHubCoin (MTX) ERC20 tok
 
 ```
 Deployment Date/Time: ___________________________
-Network: Ethereum Mainnet (Chain ID: 1)
+Network: Polygon (Chain ID: 137)
 Contract Address: ___________________________
 Owner Address: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 Deployer Address: ___________________________
@@ -323,7 +323,7 @@ Initial Supply: 100,000,000 MTX
 
 ## Phase 4: Post-Deployment Verification
 
-### 4.1 Etherscan Verification
+### 4.1 Polygonscan Verification
 
 - [ ] **Verify Contract Source Code**
   ```bash
@@ -331,14 +331,14 @@ Initial Supply: 100,000,000 MTX
   ```
 
 - [ ] **Confirm Verification**
-  - Visit: https://etherscan.io/address/<CONTRACT_ADDRESS>
+  - Visit: https://polygonscan.com/address/<CONTRACT_ADDRESS>
   - "Contract" tab shows green checkmark
   - Source code visible and readable
   - Constructor arguments correct
   - Compiler version matches (0.8.20)
   - Optimization enabled (200 runs)
 
-- [ ] **Review Contract on Etherscan**
+- [ ] **Review Contract on Polygonscan**
   - Read Contract tab functional
   - Write Contract tab functional (for owner)
   - All functions visible
@@ -347,7 +347,7 @@ Initial Supply: 100,000,000 MTX
 
 ### 4.2 Initial Contract State Verification
 
-- [ ] **Verify Read Functions** (via Etherscan)
+- [ ] **Verify Read Functions** (via Polygonscan)
   - `name()` = "Matrix-HubCoin" ✓
   - `symbol()` = "MTX" ✓
   - `decimals()` = 18 ✓
@@ -400,7 +400,7 @@ Initial Supply: 100,000,000 MTX
 - [ ] **Update README.md**
   - Add contract address if mentioned
   - Update deployment status
-  - Add Etherscan link
+  - Add Polygonscan link
 
 - [ ] **Update CONTRACT_DETAILS_AUDIT.md**
   - Mark deployment status as "DEPLOYED"
@@ -413,10 +413,10 @@ Initial Supply: 100,000,000 MTX
   
   Date: <DATE>
   Contract: <ADDRESS>
-  Network: Ethereum Mainnet
+  Network: Polygon
   Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
   Initial Supply: 100,000,000 MTX
-  Etherscan: https://etherscan.io/address/<ADDRESS>
+  Polygonscan: https://polygonscan.com/address/<ADDRESS>
   ```
 
 ---
@@ -434,30 +434,30 @@ Initial Supply: 100,000,000 MTX
   - Ensure contract address used correctly
 
 - [ ] **Test Wallet Connection**
-  - Connect wallet to Ethereum Mainnet
+  - Connect wallet to Polygon
   - Verify MTX balance reads correctly
   - Check network switching works
   - Test "Add MTX to Wallet" (EIP-747)
 
 - [ ] **Test Direct Mint (Small Amount)**
-  - Use 0.01 ETH first for safety
-  - Call `buyMTX()` or send ETH directly
-  - Verify MTX received (1000 MTX for 0.01 ETH)
-  - Check transaction on Etherscan
+  - Use 0.01 MATIC first for safety
+  - Call `buyMTX()` or Send MATIC directly
+  - Verify MTX received (1000 MTX for 0.01 MATIC)
+  - Check transaction on Polygonscan
   - Verify balance updates in wallet
 
 - [ ] **Test Transfer Function**
   - Transfer small amount to test address
   - Verify transfer completes
   - Check balances updated correctly
-  - Confirm transaction on Etherscan
+  - Confirm transaction on Polygonscan
 
 ### 5.2 Owner Function Testing
 
 **⚠️ ONLY OWNER CAN PERFORM THESE**
 
 - [ ] **Test Rate Adjustment**
-  - Call `setEthToMtxRate(newRate)` via Etherscan
+  - Call `setEthToMtxRate(newRate)` via Polygonscan
   - Verify rate changed
   - Confirm event emitted
   - Test mint with new rate
@@ -468,7 +468,7 @@ Initial Supply: 100,000,000 MTX
   - Call `setMintingPaused(false)`
   - Verify buying works again
 
-- [ ] **Test ETH Withdrawal**
+- [ ] **test MATIC Withdrawal**
   - Ensure contract has ETH balance
   - Call `withdrawETH(recipient)`
   - Verify ETH transferred
@@ -496,21 +496,21 @@ Initial Supply: 100,000,000 MTX
 
 ## Phase 6: Liquidity and Launch
 
-### 6.1 Uniswap Liquidity Pool
+### 6.1 QuickSwap Liquidity Pool
 
-- [ ] **Approve MTX for Uniswap**
-  - Call `approve(UniswapRouter, amount)`
+- [ ] **Approve MTX for QuickSwap**
+  - Call `approve(QuickSwapRouter, amount)`
   - Amount = desired liquidity amount
 
-- [ ] **Add Liquidity on Uniswap**
-  - Visit: https://app.uniswap.org/add
+- [ ] **Add Liquidity on QuickSwap**
+  - Visit: https://app.quickswap.exchange/add
   - Select ETH and MTX pair
-  - Add initial liquidity (e.g., 1 ETH + 100,000 MTX)
+  - Add initial liquidity (e.g., 1 MATIC + 100,000 MTX)
   - Confirm transaction
   - Save liquidity pool address
 
 - [ ] **Verify Pool Created**
-  - Find pool on Uniswap
+  - Find pool on QuickSwap
   - Verify correct ratio
   - Check liquidity displayed
   - Test small swap
@@ -535,8 +535,8 @@ Initial Supply: 100,000,000 MTX
 
 - [ ] **Prepare Announcement**
   - Contract address verified
-  - Etherscan link
-  - Uniswap trading link
+  - Polygonscan link
+  - QuickSwap trading link
   - Token information
   - How to buy/add to wallet
 
@@ -640,7 +640,7 @@ Initial Supply: 100,000,000 MTX
 
 **This checklist must be completed by the repository owner who has access to:**
 - Production private keys
-- Etherscan API keys
+- Polygonscan API keys
 - Sufficient ETH for deployment
 - Authority to deploy to mainnet
 
@@ -657,7 +657,7 @@ Initial Supply: 100,000,000 MTX
 - ✅ Testnet deployment and testing is MANDATORY
 - ✅ Never commit private keys or .env files
 - ✅ Use burner wallet for deployment, not main wallet
-- ✅ Verify contract on Etherscan immediately after deployment
+- ✅ Verify contract on Polygonscan immediately after deployment
 - ✅ Test with small amounts before large transactions
 - ✅ Monitor contract activity closely after launch
 - ✅ Keep owner private key secure at all times

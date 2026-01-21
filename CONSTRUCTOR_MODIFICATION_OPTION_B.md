@@ -8,7 +8,7 @@
 
 ## Change Summary
 
-Modified the MatrixHubCoin constructor to implement **Option B**: NO initial minting at deployment. Tokens will be distributed gradually through the `buyMTX()` function as users purchase MTX with ETH.
+Modified the MatrixHubCoin constructor to implement **Option B**: NO initial minting at deployment. Tokens will be distributed gradually through the `buyMTX()` function as users purchase MTX with MATIC.
 
 ---
 
@@ -57,7 +57,7 @@ constructor(uint256 maxSupply, address initialOwner) {
 
 ### 1. **Fair Distribution**
 - No single entity holds all tokens initially
-- Users mint tokens directly by purchasing with ETH
+- Users mint tokens directly by purchasing with MATIC
 - Transparent and fair launch mechanism
 
 ### 2. **Organic Growth**
@@ -68,7 +68,7 @@ constructor(uint256 maxSupply, address initialOwner) {
 ### 3. **Revenue Generation**
 - Contract collects ETH from purchases
 - Owner can withdraw ETH for liquidity or operations
-- Direct ETH→MTX conversion for users
+- Direct MATIC → MTX conversion for users
 
 ### 4. **Simplified Launch**
 - No need to manually distribute tokens
@@ -90,12 +90,12 @@ constructor(uint256 maxSupply, address initialOwner) {
 3. Owner controls minting parameters (rate, pause)
 
 ### Token Creation
-Users call `buyMTX()` or send ETH directly to contract:
+Users call `buyMTX()` or Send MATIC directly to contract:
 
 ```solidity
 function buyMTX() external payable {
     // User sends ETH
-    // Contract mints MTX at rate: 1 ETH = 100,000 MTX
+    // Contract mints MTX at rate: 1 MATIC = 1,000 MTX
     // Minted tokens sent to user
     // ETH stays in contract (owner can withdraw)
 }
@@ -123,9 +123,9 @@ initialOwner: "0x58e78..."  // Contract owner (receives no tokens initially)
 Initial totalSupply: 0 MTX
 Max Supply Cap: 100,000,000 MTX
 Owner Balance: 0 MTX
-Contract ETH Balance: 0 ETH
+Contract ETH Balance: 0 MATIC
 Minting Status: Active (unpausedmintingPaused = false)
-Exchange Rate: 1 ETH = 100,000 MTX
+Exchange Rate: 1 MATIC = 1,000 MTX
 ```
 
 ---
@@ -199,14 +199,14 @@ Owner can still control the token economics:
 
 ## Testing Checklist
 
-Before mainnet deployment, test on Sepolia:
+Before mainnet deployment, test on Amoy:
 
 - [ ] Deploy contract and verify totalSupply() = 0
 - [ ] Verify owner balance = 0 MTX
-- [ ] Purchase 0.01 ETH worth (1000 MTX)
+- [ ] Purchase 0.01 MATIC worth (1000 MTX)
 - [ ] Confirm totalSupply() increases to 1000 MTX
 - [ ] Verify buyer received 1000 MTX
-- [ ] Check contract collected 0.01 ETH
+- [ ] Check contract collected 0.01 MATIC
 - [ ] Owner withdraws ETH successfully
 - [ ] Test pause minting functionality
 - [ ] Verify unpause works
@@ -220,7 +220,7 @@ Before mainnet deployment, test on Sepolia:
 After deployment, verify using same commands:
 
 ```bash
-# Verification on Etherscan (parameters are values, not names)
+# Verification on Polygonscan (parameters are values, not names)
 npx hardhat verify --network mainnet <ADDRESS> "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
@@ -240,7 +240,7 @@ The verification works because:
 await contract.buyMTX({ value: ethers.parseEther("1.0") });
 // Receives 100,000 MTX
 
-// Option 2: Send ETH directly to contract
+// Option 2: Send MATIC directly to contract
 await signer.sendTransaction({
   to: contractAddress,
   value: ethers.parseEther("0.5")
@@ -254,7 +254,7 @@ await signer.sendTransaction({
 await contract.withdrawETH(ownerAddress);
 
 // Adjust rate if needed
-await contract.setEthToMtxRate(200000); // Now 1 ETH = 200k MTX
+await contract.setEthToMtxRate(200000); // Now 1 MATIC = 200k MTX
 
 // Pause minting when sufficient supply
 await contract.setMintingPaused(true);
@@ -265,13 +265,13 @@ await contract.setMintingPaused(true);
 ## Comparison with DEX Trading
 
 ### Direct Mint (buyMTX)
-- **Rate**: Fixed by owner (1 ETH = 100k MTX)
+- **Rate**: Fixed by owner (1 MATIC = 100k MTX)
 - **Slippage**: None
 - **Gas**: Lower (no DEX routing)
 - **Availability**: When minting active
 - **ETH Goes To**: Contract (owner collects)
 
-### DEX Trading (Uniswap)
+### DEX Trading (QuickSwap)
 - **Rate**: Market determined (AMM curve)
 - **Slippage**: Yes (depends on liquidity)
 - **Gas**: Higher (DEX routing)
@@ -290,7 +290,7 @@ await contract.setMintingPaused(true);
 - Direct user engagement
 
 **Next Steps**:
-1. Test thoroughly on Sepolia testnet
+1. Test thoroughly on Amoy testnet
 2. Verify all functions work as expected
 3. Update remaining documentation
 4. Deploy to mainnet following checklist
@@ -301,4 +301,4 @@ await contract.setMintingPaused(true);
 **Change By**: GitHub Copilot Agent  
 **Date**: January 6, 2026  
 **Status**: ✅ Implemented (Option B)  
-**Testing Required**: Yes (Sepolia before mainnet)
+**Testing Required**: Yes (Amoy before mainnet)

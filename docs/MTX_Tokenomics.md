@@ -2,7 +2,7 @@
 
 ## Contract Information
 - **Status**: ⚠️ **Pending Deployment** - Contract not yet deployed to mainnet
-- **Network**: Ethereum Mainnet (ChainID: 1) - Target network for deployment
+- **Network**: Polygon (Chain ID: 137) - Target network for deployment
 - **Symbol**: MTX
 - **Decimals**: 18
 - **Deployment Guide**: See [MTX Deployment Guide](./MTX_Deployment_Guide.md) for instructions
@@ -18,13 +18,13 @@
 - Ecosystem Reserve
 - Development Allocation
 - Community Incentives
-- Direct mint purchases (ETH → MTX)
+- Direct mint purchases (MATIC → MTX)
 
 ## Acquisition Methods
 
 ### 1. Direct Mint (Primary Onboarding Method)
-- **Rate**: 1 ETH = 100,000 MTX (fixed)
-- **Method**: Send ETH to contract, receive MTX instantly
+- **Rate**: 1 MATIC = 1,000 MTX (fixed)
+- **Method**: Send MATIC to contract, receive MTX instantly
 - **Advantages**: 
   - Lower gas costs than DEX swaps
   - Predictable pricing
@@ -33,7 +33,7 @@
 - **Limitations**: Subject to max supply cap
 - **Owner Controls**: Can pause minting or adjust rate if needed
 
-### 2. Uniswap DEX (Public Market)
+### 2. QuickSwap DEX (Public Market)
 - **Rate**: Market-determined via liquidity pool
 - **Method**: Swap ETH or any ERC-20 for MTX
 - **Advantages**:

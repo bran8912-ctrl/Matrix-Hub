@@ -46,19 +46,19 @@ The scripts **must** be run in this order:
 
 ### Required Accounts & Keys
 
-#### For Testnet (Sepolia)
+#### For Testnet (Amoy)
 
-- [ ] Ethereum wallet with testnet ETH (get from [Sepolia Faucet](https://sepoliafaucet.com/))
+- [ ] Polygon wallet with testnet ETH (get from [Amoy Faucet](https://faucet.polygon.technology/amoy/))
 - [ ] Wallet private key (for deployment)
-- [ ] Sepolia RPC URL (free from [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/))
-- [ ] Etherscan API key (optional, for contract verification)
+- [ ] Amoy RPC URL (free from [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/))
+- [ ] Polygonscan API key (optional, for contract verification)
 
 #### For Mainnet
 
-- [ ] Ethereum wallet with sufficient ETH for deployment (~0.5-1 ETH recommended)
+- [ ] Polygon wallet with sufficient ETH for deployment (~0.5-1 MATIC recommended)
 - [ ] **Hardware wallet strongly recommended** (Ledger, Trezor)
 - [ ] Mainnet RPC URL (Infura, Alchemy, or your own node)
-- [ ] Etherscan API key (for contract verification)
+- [ ] Polygonscan API key (for contract verification)
 
 ### Environment Setup
 
@@ -96,7 +96,7 @@ The scripts **must** be run in this order:
    MAINNET_RPC_URL="https://mainnet.infura.io/v3/YOUR-PROJECT-ID"
    # NEVER commit mainnet private keys - use hardware wallet
    
-   # Etherscan (for contract verification)
+   # Polygonscan (for contract verification)
    ETHERSCAN_API_KEY="your-etherscan-api-key"
    
    # Developer Wallet (receives 2% MTX allocation)
@@ -146,8 +146,8 @@ The easiest way to deploy to testnet is using GitHub Actions:
    Go to repository Settings → Secrets and variables → Actions, and add:
 
    - `TESTNET_PRIVATE_KEY`: Your testnet wallet private key
-   - `SEPOLIA_RPC_URL`: Your Sepolia RPC endpoint URL
-   - `ETHERSCAN_API_KEY`: Your Etherscan API key (optional)
+   - `SEPOLIA_RPC_URL`: Your Amoy RPC endpoint URL
+   - `ETHERSCAN_API_KEY`: Your Polygonscan API key (optional)
 
 2. **Run the workflow:**
 
@@ -184,10 +184,10 @@ npm run deploy:testnet:mtx
 
 **Expected Output:**
 ```
-Starting MTX Token Deployment to Ethereum Sepolia...
+Starting MTX Token Deployment to Polygon Amoy...
 Network: sepolia
 Deploying with account: 0x...
-Account balance: 1.5 ETH
+Account balance: 1.5 MATIC
 
 Deployment parameters:
 - Maximum Supply Cap: 100000000 MTX
@@ -207,10 +207,10 @@ npm run deploy:testnet:casino
 
 **Expected Output:**
 ```
-Starting Casino Contracts Deployment to Ethereum Sepolia...
+Starting Casino Contracts Deployment to Polygon Amoy...
 📋 Using MTX Token: 0x...
 
-🎰 Deploying Casino Contracts on Ethereum...
+🎰 Deploying Casino Contracts on Polygon...
 1️⃣ Deploying RNGEngine...
 ✅ RNGEngine deployed: 0x...
 2️⃣ Deploying CasinoReserve...
@@ -289,7 +289,7 @@ Before deploying to mainnet, ensure:
 - [ ] Smart contracts audited by reputable firm
 - [ ] Deployment parameters reviewed and confirmed
 - [ ] Hardware wallet connected and verified
-- [ ] Sufficient ETH in deployer wallet (~0.5-1 ETH)
+- [ ] Sufficient ETH in deployer wallet (~0.5-1 MATIC)
 - [ ] Backup of deployment scripts and configs
 - [ ] Team members ready to verify deployment
 - [ ] Block explorer verification prepared
@@ -363,9 +363,9 @@ npx hardhat run scripts/distribute_mtx.js --network mainnet
 - Total distributed: 32M MTX
 - Remaining supply: 68M MTX
 
-#### 5. Verify Contracts on Etherscan
+#### 5. Verify Contracts on Polygonscan
 
-After deployment, verify all contracts on Etherscan:
+After deployment, verify all contracts on Polygonscan:
 
 ```bash
 # Verify MTX token
@@ -401,13 +401,13 @@ cat deployments/mtx-distribution-sepolia.json
 
 ### 2. Verify on Block Explorer
 
-For Sepolia testnet:
-- Visit: https://sepolia.etherscan.io/address/<CONTRACT_ADDRESS>
+For Amoy testnet:
+- Visit: https://amoy.polygonscan.com/address/<CONTRACT_ADDRESS>
 - Verify contract is deployed
 - Check contract source code (if verified)
 
 For Mainnet:
-- Visit: https://etherscan.io/address/<CONTRACT_ADDRESS>
+- Visit: https://polygonscan.com/address/<CONTRACT_ADDRESS>
 - Verify contract is deployed and verified
 - Check all transactions
 
@@ -443,7 +443,7 @@ Update contract addresses in your application:
    export const MTX_CONFIG = {
      address: "0x...", // New MTX address
      network: "sepolia", // or "mainnet"
-     chainId: 11155111, // or 1 for mainnet
+     Chain ID: 80002, // or 1 for mainnet
    };
    ```
 
@@ -503,7 +503,7 @@ npm run deploy:testnet:distribute
 **Cause:** Deployer wallet doesn't have enough ETH.
 
 **Solution:**
-- For testnet: Get more testnet ETH from [Sepolia Faucet](https://sepoliafaucet.com/)
+- For testnet: Get more testnet ETH from [Amoy Faucet](https://faucet.polygon.technology/amoy/)
 - For mainnet: Transfer more ETH to deployer wallet
 
 #### Issue: "nonce has already been used"
@@ -524,10 +524,10 @@ npm run compile
 
 #### Issue: "ETHERSCAN_API_KEY not set"
 
-**Cause:** Etherscan API key not configured.
+**Cause:** Polygonscan API key not configured.
 
 **Solution:**
-- Get API key from: https://etherscan.io/myapikey
+- Get API key from: https://polygonscan.com/myapikey
 - Add to `.env`: `ETHERSCAN_API_KEY=your-key-here`
 
 #### Issue: Contract verification failed
@@ -539,7 +539,7 @@ npm run compile
 # Try verifying with flattened contract
 npx hardhat flatten contracts/MatrixHubCoin.sol > flattened.sol
 
-# Manually verify on Etherscan using flattened source
+# Manually verify on Polygonscan using flattened source
 ```
 
 ### Getting Help
@@ -548,7 +548,7 @@ If you encounter issues:
 
 1. Check the deployment logs for error messages
 2. Review the [Hardhat documentation](https://hardhat.org/docs)
-3. Check [Etherscan](https://etherscan.io/) for transaction status
+3. Check [Polygonscan](https://polygonscan.com/) for transaction status
 4. Open an issue on [GitHub](https://github.com/bran8912-ctrl/Matrix-Hub.org/issues)
 
 ---
@@ -565,7 +565,7 @@ If you encounter issues:
 
 ### Deployment Safety
 
-1. **Test on testnet first** - Always deploy and test on Sepolia before mainnet
+1. **Test on testnet first** - Always deploy and test on Amoy before mainnet
 2. **Verify all parameters** - Double-check all deployment parameters
 3. **Use multi-sig wallets** - Consider multi-sig for contract ownership
 4. **Implement timelock** - Add timelock for critical functions
@@ -574,7 +574,7 @@ If you encounter issues:
 ### Post-Deployment
 
 1. **Backup deployment artifacts** - Save all JSON files and logs
-2. **Verify contracts immediately** - Verify on Etherscan right after deployment
+2. **Verify contracts immediately** - Verify on Polygonscan right after deployment
 3. **Transfer ownership** - Transfer to secure multi-sig if needed
 4. **Monitor contracts** - Set up monitoring for unusual activity
 5. **Document everything** - Keep detailed records of all deployments
@@ -604,8 +604,8 @@ If something goes wrong:
 ### Tools
 
 - [Hardhat](https://hardhat.org/) - Development environment
-- [Etherscan](https://etherscan.io/) - Block explorer
-- [Sepolia Faucet](https://sepoliafaucet.com/) - Get testnet ETH
+- [Polygonscan](https://polygonscan.com/) - Block explorer
+- [Amoy Faucet](https://faucet.polygon.technology/amoy/) - Get testnet ETH
 - [Remix IDE](https://remix.ethereum.org/) - Online Solidity IDE
 
 ### Community

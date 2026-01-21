@@ -67,7 +67,7 @@ constructor(uint256 maxSupply, address initialOwner)
 - Token Name: "Matrix-HubCoin"
 - Token Symbol: "MTX"
 - Decimals: 18 (standard)
-- Distribution: Gradual via ETH purchases at 1 ETH = 100,000 MTX
+- Distribution: Gradual via ETH purchases at 1 MATIC = 1,000 MTX
 
 ## 2. Ownership and Access Control
 
@@ -111,7 +111,7 @@ function setMintingPaused(bool paused) external onlyOwner {
 - ✅ Emits `MintingPaused` event for transparency
 - ✅ Useful for transitioning to DEX-only trading
 
-**Use Case**: After initial distribution, owner can pause direct minting to force all trading through DEX (Uniswap).
+**Use Case**: After initial distribution, owner can pause direct minting to force all trading through DEX (QuickSwap).
 
 ## 4. Mint and Burn Mechanisms
 
@@ -141,8 +141,8 @@ function _buyMTXInternal() private {
 ```
 
 **Verification**:
-- ✅ Direct ETH→MTX minting function
-- ✅ Configurable exchange rate (default: 1 ETH = 100,000 MTX)
+- ✅ Direct MATIC → MTX minting function
+- ✅ Configurable exchange rate (default: 1 MATIC = 1,000 MTX)
 - ✅ Respects MAX_SUPPLY limit
 - ✅ Prevents minting when paused
 - ✅ Emits transparent `MTXPurchased` events
@@ -186,13 +186,13 @@ function _buyMTXInternal() private {
 - ✅ Set to 100M MTX (100,000,000 * 10^18 wei)
 - ✅ All minting operations check against MAX_SUPPLY
 - ✅ **Constructor does NOT mint initial supply** (Option B)
-- ✅ Tokens created gradually via buyMTX() as users purchase with ETH
+- ✅ Tokens created gradually via buyMTX() as users purchase with MATIC
 - ✅ Supply starts at 0 and grows organically with demand
 
 **Distribution Strategy - OPTION B IMPLEMENTED**:
 - ✅ **NO initial minting** at deployment
 - ✅ Total supply starts at 0 MTX
-- ✅ Users mint tokens by purchasing with ETH via `buyMTX()`
+- ✅ Users mint tokens by purchasing with MATIC via `buyMTX()`
 - ✅ Fair launch mechanism - no centralized token holder
 - ✅ Transparent on-chain distribution
 - ✅ Owner collects ETH from purchases (can withdraw for liquidity/operations)
@@ -286,7 +286,7 @@ export const MTX = {
   address: contractAddress,
   symbol: "MTX",
   decimals: 18,
-  chainId: 1, // Ethereum Mainnet
+  Chain ID: 137, // Polygon
   ethToMtxRate: 100000,
   owner: "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077",
   isDeployed: isValidAddress && !isPlaceholder,
@@ -300,7 +300,7 @@ export const MTX = {
 - ✅ Validates address format
 - ✅ Provides deployment status checking
 - ✅ Includes all required contract parameters
-- ✅ Correctly configured for Ethereum Mainnet (chainId: 1)
+- ✅ Correctly configured for Polygon (Chain ID: 137)
 
 ### ✅ ABI: `src/abi/mtx.json`
 
@@ -341,13 +341,13 @@ const MTX_TOKEN_ABI = [
 - ✅ Implements wallet connection via Web3Modal
 - ✅ Reads user MTX balance from contract
 - ✅ Implements EIP-747 (Add Token to Wallet)
-- ✅ Links to Uniswap DEX via MTX.uniswapUrl
+- ✅ Links to QuickSwap DEX via MTX.uniswapUrl
 
 **Integration Flow**:
 1. User connects wallet via Web3Modal
 2. Component reads MTX balance using contract address from config
 3. User can add MTX token to wallet (EIP-747)
-4. User can buy MTX via Uniswap or direct mint
+4. User can buy MTX via QuickSwap or direct mint
 5. Balance updates reflect on-chain state
 
 ## 10. CONTRACT_DETAILS_AUDIT.md Requirements Satisfied
@@ -362,10 +362,10 @@ const MTX_TOKEN_ABI = [
 | Burn | ✅ VERIFIED | burn(uint256) function available |
 | Max Supply | ✅ VERIFIED | Immutable 100M MTX cap enforced |
 | Deployment Status | ✅ VERIFIED | Placeholder address, warnings in UI |
-| Network Config | ✅ VERIFIED | Ethereum Mainnet (chainId: 1) |
+| Network Config | ✅ VERIFIED | Polygon (Chain ID: 137) |
 | Environment Variables | ✅ VERIFIED | MTX_CONTRACT_ADDRESS in .env.example |
 | Security Warnings | ✅ VERIFIED | Prominent warnings about deployment |
-| Contract Verification | ✅ VERIFIED | Scripts ready for Etherscan verification |
+| Contract Verification | ✅ VERIFIED | Scripts ready for Polygonscan verification |
 
 ## 11. Deployment Readiness Checklist
 
@@ -376,7 +376,7 @@ const MTX_TOKEN_ABI = [
 - [x] Constructor parameters validated
 - [x] Owner address verified
 - [x] Initial supply confirmed (100M MTX)
-- [x] Network configuration set (Ethereum Mainnet)
+- [x] Network configuration set (Polygon)
 - [x] .env.example includes all required variables
 - [x] Deployment scripts tested (deploy_mtx.js)
 - [x] Interactive deployment script ready (deploy.sh)
@@ -389,7 +389,7 @@ const MTX_TOKEN_ABI = [
 - [x] Safe placeholder address (0x000...)
 - [x] Deployment validation in code
 - [x] User-facing warnings when not deployed
-- [x] Etherscan verification commands ready
+- [x] Polygonscan verification commands ready
 
 ### ✅ Documentation
 
@@ -429,8 +429,8 @@ constructor(uint256 maxSupply, address initialOwner) ... {
 
 **Deployment Strategy - Option B**:
 - ✅ Constructor does NOT mint tokens
-- ✅ Users purchase MTX with ETH via buyMTX()
-- ✅ Rate: 1 ETH = 100,000 MTX (owner adjustable)
+- ✅ Users purchase MTX with MATIC via buyMTX()
+- ✅ Rate: 1 MATIC = 1,000 MTX (owner adjustable)
 - ✅ Max supply cap: 100M MTX enforced
 - ✅ Owner withdraws collected ETH for operations/liquidity
 
@@ -439,7 +439,7 @@ constructor(uint256 maxSupply, address initialOwner) ... {
 
 ```bash
 PRIVATE_KEY=              # Deployer wallet private key (without 0x)
-MAINNET_RPC_URL=          # Ethereum RPC (default: https://eth.llamarpc.com)
+MAINNET_RPC_URL=          # Polygon RPC (default: https://eth.llamarpc.com)
 ETHERSCAN_API_KEY=        # For contract verification
 MTX_CONTRACT_ADDRESS=     # Set AFTER deployment
 ```
@@ -447,13 +447,13 @@ MTX_CONTRACT_ADDRESS=     # Set AFTER deployment
 ### ✅ Deployment Steps
 
 1. Configure .env with deployer private key and RPC
-2. Ensure deployer wallet has sufficient ETH for gas (~0.05-0.1 ETH)
+2. Ensure deployer wallet has sufficient ETH for gas (~0.05-0.1 MATIC)
 3. Run: `npm run deploy:sepolia` (testnet first - MANDATORY)
 4. **Verify initial state**: totalSupply() = 0, owner balance = 0
-5. **Test buyMTX**: Purchase small amount (0.01 ETH) and verify receipt
+5. **Test buyMTX**: Purchase small amount (0.01 MATIC) and verify receipt
 6. **Test all functions**: pause, rate change, withdraw ETH
 7. Run: `npm run deploy:mainnet` (production - only after testnet success)
-8. Verify on Etherscan immediately
+8. Verify on Polygonscan immediately
 9. Update src/config/mtx.ts with deployed address
 10. **No initial DEX liquidity needed** - users purchase directly via buyMTX()
 11. Test wallet connection and purchases on mainnet with small amounts
@@ -473,11 +473,11 @@ The MatrixHubCoin (MTX) ERC20 token contract fully complies with OpenZeppelin st
 - ✅ Supply grows organically based on demand
 
 **Recommendations**:
-1. Deploy to Sepolia testnet first for thorough testing (MANDATORY)
+1. Deploy to Amoy testnet first for thorough testing (MANDATORY)
 2. ✅ Constructor modified for fair launch (Option B implemented)
 3. Consider adding ReentrancyGuard to withdrawETH for extra protection
-4. Ensure sufficient ETH for gas on deployment (~0.05-0.1 ETH)
-5. Verify contract on Etherscan immediately after deployment
+4. Ensure sufficient ETH for gas on deployment (~0.05-0.1 MATIC)
+5. Verify contract on Polygonscan immediately after deployment
 6. Test all functions (pause, rate change, withdraw, buyMTX) on testnet
 7. Announce fair launch mechanism - no pre-mine, equal opportunity for all
 

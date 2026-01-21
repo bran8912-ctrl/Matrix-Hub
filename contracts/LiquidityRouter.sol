@@ -6,7 +6,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 /**
  * @title LiquidityRouter
  * @author Matrix-Hub Team
- * @notice Manages liquidity for MTX/ETH pool on Ethereum DEX (Uniswap)
+ * @notice Manages liquidity for MTX/MATIC pool on Polygon DEX (QuickSwap)
  * @dev Routes liquidity to DEX pool
  */
 contract LiquidityRouter {
@@ -24,13 +24,13 @@ contract LiquidityRouter {
     /**
      * @notice Constructor initializes router with MTX token and DEX pool
      * @dev Sets up integration with DEX
-     * @param _mtx Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Ethereum
-     * @param _dexPool Address of Uniswap V2/V3 pool for MTX/ETH
+     * @param _mtx Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Polygon
+     * @param _dexPool Address of QuickSwap V2/V3 pool for MTX/MATIC
      */
     constructor(address _mtx, address _dexPool) {
         if (_mtx == address(0)) revert ZeroAddress();
         if (_dexPool == address(0)) revert ZeroAddress();
-        mtx = IERC20(_mtx); // MTX Token address on Ethereum - set from deployed MatrixHubCoin
+        mtx = IERC20(_mtx); // MTX Token address on Polygon - set from deployed MatrixHubCoin
         dexPool = _dexPool;
     }
 

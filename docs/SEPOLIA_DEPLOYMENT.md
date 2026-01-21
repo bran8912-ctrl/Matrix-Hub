@@ -1,27 +1,27 @@
-# Deploy MTX Token to Sepolia Testnet
+# Deploy MTX Token to Amoy Testnet
 
-This guide walks you through deploying the MTX token contract to Ethereum Sepolia testnet.
+This guide walks you through deploying the MTX token contract to Polygon Amoy testnet.
 
 ## Prerequisites
 
-### 1. Get Sepolia Test ETH
+### 1. Get Amoy test MATIC
 
-You need Sepolia ETH to pay for gas fees:
-- Visit: https://sepoliafaucet.com/
-- Or: https://www.alchemy.com/faucets/ethereum-sepolia
-- Request test ETH for your deployer wallet address
+You need Amoy MATIC to pay for gas fees:
+- Visit: https://faucet.polygon.technology/amoy/
+- Or: https://www.alchemy.com/faucets/polygon-amoy
+- Request test MATIC for your deployer wallet address
 
-### 2. Get Etherscan API Key
+### 2. Get Polygonscan API Key
 
 **Required for contract verification:**
 
-1. Go to https://etherscan.io/myapikey
+1. Go to https://polygonscan.com/myapikey
 2. Create an account or sign in
 3. Click "Add" to create a new API key
 4. Name it (e.g., "Matrix Hub Deployment")
 5. Copy the generated API key
 
-**Note**: The same API key works for both Mainnet and Sepolia Etherscan.
+**Note**: The same API key works for both Mainnet and Amoy Polygonscan.
 
 ### 3. Set Up Environment Variables
 
@@ -34,13 +34,13 @@ Edit `.env` and add your values:
 
 ```env
 # Your deployer wallet private key (WITHOUT the 0x prefix)
-# ⚠️ Use a burner wallet with only test ETH, not your main wallet!
+# ⚠️ Use a burner wallet with only test MATIC, not your main wallet!
 PRIVATE_KEY=your_private_key_without_0x
 
-# Sepolia RPC URL (default provided, or use your own)
-SEPOLIA_RPC_URL=https://rpc.sepolia.org/
+# Amoy RPC URL (default provided, or use your own)
+SEPOLIA_RPC_URL=https://rpc-amoy.polygon.technology/
 
-# Etherscan API key for contract verification
+# Polygonscan API key for contract verification
 ETHERSCAN_API_KEY=your_etherscan_api_key_here
 ```
 
@@ -65,24 +65,24 @@ npm run compile
 
 This compiles the Solidity contracts and generates artifacts.
 
-### Step 3: Deploy to Sepolia
+### Step 3: Deploy to Amoy
 
 ```bash
 npm run deploy:sepolia
 ```
 
 This will:
-1. Connect to Sepolia testnet
+1. Connect to Amoy testnet
 2. Deploy the MatrixHubCoin contract
 3. Mint 100M MTX to the owner address: `0x9fb4bb44d8d962d695fc93b3dc15f1b287391077`
 4. Save deployment info to `deployments/mtx-sepolia.json`
 
 **Expected output:**
 ```
-Starting MTX Token Deployment to Sepolia testnet...
+Starting MTX Token Deployment to Amoy testnet...
 Network: sepolia
 Deploying with account: 0xYourDeployerAddress
-Account balance: 1.0 ETH
+Account balance: 1.0 MATIC
 
 Deployment parameters:
 - Initial Supply: 100000000 MTX
@@ -90,7 +90,7 @@ Deployment parameters:
 - Token Name: MatrixHubCoin
 - Token Symbol: MTX
 - Decimals: 18
-- Network: Sepolia (Chain ID: 11155111)
+- Network: Amoy (Chain ID: 80002)
 
 Deploying MatrixHubCoin contract...
 
@@ -103,22 +103,22 @@ Block Number: 12345
 📄 Deployment info saved to: deployments/mtx-sepolia.json
 
 📋 Next Steps:
-1. Verify contract on Etherscan:
+1. Verify contract on Polygonscan:
    npx hardhat verify --network sepolia 0xYourContractAddress "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 
 2. Update src/config/mtx.ts with the contract address:
    address: "0xYourContractAddress"
 
-3. Add liquidity to Uniswap (ETH/MTX pair)
+3. Add liquidity to QuickSwap (MATIC/MTX pair)
 
 4. Test the contract thoroughly before announcing
 
-🔍 View on Etherscan: https://sepolia.etherscan.io/address/0xYourContractAddress
+🔍 View on Polygonscan: https://amoy.polygonscan.com/address/0xYourContractAddress
 ```
 
 **SAVE THE CONTRACT ADDRESS!** You'll need it for verification and configuration.
 
-### Step 4: Verify Contract on Etherscan
+### Step 4: Verify Contract on Polygonscan
 
 After deployment, verify the contract to make it publicly readable:
 
@@ -129,10 +129,10 @@ npm run verify:sepolia 0xYourContractAddress "100000000" "0x9fb4bb44d8d962d695fc
 Replace `0xYourContractAddress` with your actual deployed contract address.
 
 **What verification does:**
-- Makes contract source code publicly readable on Etherscan
-- Enables users to interact with contract directly on Etherscan
+- Makes contract source code publicly readable on Polygonscan
+- Enables users to interact with contract directly on Polygonscan
 - Builds trust by showing the contract matches the source code
-- Allows Etherscan to properly decode transactions and events
+- Allows Polygonscan to properly decode transactions and events
 
 **Expected output:**
 ```
@@ -140,8 +140,8 @@ Successfully submitted source code for contract
 contracts/MatrixHubCoin.sol:MatrixHubCoin at 0xYourContractAddress
 for verification on the block explorer. Waiting for verification result...
 
-Successfully verified contract MatrixHubCoin on Etherscan.
-https://sepolia.etherscan.io/address/0xYourContractAddress#code
+Successfully verified contract MatrixHubCoin on Polygonscan.
+https://amoy.polygonscan.com/address/0xYourContractAddress#code
 ```
 
 ### Step 5: Update Configuration
@@ -150,21 +150,21 @@ Update `src/config/mtx.ts` with your deployed contract address:
 
 ```typescript
 export const MTX = {
-  address: "0xYourActualContractAddress", // ✅ Your Sepolia contract address
+  address: "0xYourActualContractAddress", // ✅ Your Amoy contract address
   symbol: "MTX",
   decimals: 18,
-  chainId: 11155111, // Sepolia testnet
-  chainName: "Sepolia",
+  Chain ID: 80002, // Amoy testnet
+  chainName: "Amoy",
   // ... rest of config
 };
 ```
 
 ### Step 6: Test the Deployment
 
-1. **View on Etherscan**: Visit the Etherscan URL from the deployment output
+1. **View on Polygonscan**: Visit the Polygonscan URL from the deployment output
 2. **Check Contract**: Verify the contract shows as verified with green checkmark
 3. **Check Balance**: Confirm initial owner has 100M MTX tokens
-4. **Test Transactions**: Try reading contract values on Etherscan
+4. **Test Transactions**: Try reading contract values on Polygonscan
 
 ## Troubleshooting
 
@@ -174,34 +174,34 @@ export const MTX = {
 - Example: `PRIVATE_KEY=1234567890abcdef...` (64 characters)
 
 ### "Error: insufficient funds"
-- Get more Sepolia test ETH from a faucet
-- Deployment typically costs 0.01-0.05 test ETH
+- Get more Amoy test MATIC from a faucet
+- Deployment typically costs 0.01-0.05 test MATIC
 
 ### "Cannot download compiler"
 - This happens when Hardhat can't reach the internet
 - If artifacts already exist, you may be able to deploy anyway
 - Otherwise, check your internet connection and try again
 
-### "Etherscan verification failed"
+### "Polygonscan verification failed"
 - Make sure `ETHERSCAN_API_KEY` is set in `.env`
-- Verify the API key is valid (check https://etherscan.io/myapikey)
+- Verify the API key is valid (check https://polygonscan.com/myapikey)
 - Wait 1-2 minutes after deployment before verifying
 - Ensure constructor arguments match exactly: `"100000000"` and `"0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"`
 
 ### "Error: already verified"
 - Contract was already verified successfully
-- You can view it on Etherscan
+- You can view it on Polygonscan
 
 ## Network Information
 
-### Sepolia Testnet
-- **Chain ID**: 11155111
-- **Currency**: Sepolia ETH (test ETH)
-- **RPC URL**: https://rpc.sepolia.org/
-- **Block Explorer**: https://sepolia.etherscan.io/
+### Amoy Testnet
+- **Chain ID**: 80002
+- **Currency**: Amoy MATIC (test MATIC)
+- **RPC URL**: https://rpc-amoy.polygon.technology/
+- **Block Explorer**: https://amoy.polygonscan.com/
 - **Faucets**: 
-  - https://sepoliafaucet.com/
-  - https://www.alchemy.com/faucets/ethereum-sepolia
+  - https://faucet.polygon.technology/amoy/
+  - https://www.alchemy.com/faucets/polygon-amoy
 
 ### Contract Details
 - **Name**: Matrix-HubCoin
@@ -213,28 +213,28 @@ export const MTX = {
 ## After Deployment
 
 ### Testing Checklist
-- [ ] Contract appears on Sepolia Etherscan
+- [ ] Contract appears on Amoy Polygonscan
 - [ ] Contract is verified (green checkmark)
 - [ ] Initial owner has 100M MTX balance
-- [ ] Can read contract values on Etherscan
+- [ ] Can read contract values on Polygonscan
 - [ ] Token shows correct name, symbol, decimals
-- [ ] All contract functions are visible on Etherscan
+- [ ] All contract functions are visible on Polygonscan
 
 ### Next Steps for Production
-1. Test all contract functions thoroughly on Sepolia
-2. Test wallet integration with Sepolia contract
-3. Test buying MTX with test ETH
+1. Test all contract functions thoroughly on Amoy
+2. Test wallet integration with Amoy contract
+3. Test buying MTX with test MATIC
 4. Once confident, deploy to Mainnet using `npm run deploy:mainnet`
-5. Add liquidity to Uniswap after mainnet deployment
+5. Add liquidity to QuickSwap after mainnet deployment
 
 ## Important Notes
 
 - **Never commit your `.env` file** - it's protected by `.gitignore`
 - **Use a burner wallet** for deployment, not your main wallet
-- **Test on Sepolia first** before deploying to mainnet
+- **Test on Amoy first** before deploying to mainnet
 - **Save your contract address** immediately after deployment
-- **Verify on Etherscan** to build trust and enable public interaction
-- **Keep your Etherscan API key secret** - treat it like a password
+- **Verify on Polygonscan** to build trust and enable public interaction
+- **Keep your Polygonscan API key secret** - treat it like a password
 
 ## Support
 

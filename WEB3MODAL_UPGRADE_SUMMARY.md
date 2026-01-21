@@ -111,7 +111,7 @@ Successfully upgraded Matrix Hub from web3modal v1.9.12 to Reown AppKit v1.8.16 
 
 3. **Network Switching:**
    - [ ] Connect on wrong network (e.g., Polygon)
-   - [ ] Verify automatic switch to Ethereum prompt
+   - [ ] Verify automatic switch to Polygon prompt
    - [ ] Complete network switch
    - [ ] Verify app functions correctly after switch
 

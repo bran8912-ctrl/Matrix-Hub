@@ -31,12 +31,12 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
   
   // Check if window.ethereum is available
   if (!window.ethereum) {
-    throw new Error('Ethereum wallet not found. Please install MetaMask or compatible wallet.');
+    throw new Error('Polygon wallet not found. Please install MetaMask or compatible wallet.');
   }
 
   // Validate recipient address
   if (!to || !isAddress(to)) {
-    throw new Error('Invalid recipient address. Please provide a valid Ethereum address.');
+    throw new Error('Invalid recipient address. Please provide a valid Polygon address.');
   }
 
   // Validate amount is a valid positive number
@@ -99,14 +99,14 @@ export async function spendMTX(to: string, amount: string): Promise<string> {
 /**
  * Helper function to ensure the correct network is selected.
  * Automatically switches to the configured network if needed.
- * For Ethereum network, will attempt to add it to wallet if not present.
+ * For Polygon network, will attempt to add it to wallet if not present.
  * 
  * @returns Promise<void>
  * @throws Error if network switch fails or is rejected
  */
 export async function ensureEthereum(): Promise<void> {
   if (!window.ethereum) {
-    throw new Error('Ethereum wallet not found. Please install MetaMask or compatible wallet.');
+    throw new Error('Polygon wallet not found. Please install MetaMask or compatible wallet.');
   }
 
   try {

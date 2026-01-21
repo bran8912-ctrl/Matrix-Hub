@@ -3,11 +3,11 @@ pragma solidity ^0.8.20;
 
 /**
  * @title CasinoCore - Matrix Hub Casino Core Contract
- * @dev Casino management contract for Ethereum Mainnet
+ * @dev Casino management contract for Polygon
  * @notice Uses MTX (ERC-20) token for all casino operations
  * 
- * Network: Ethereum Mainnet (Chain ID: 1)
- * Currency: ETH
+ * Network: Polygon (Chain ID: 137)
+ * Currency: MATIC
  * Token: MTX (Matrix Hub Coin)
  */
 
@@ -64,7 +64,7 @@ interface IRNGEngine {
 /**
  * @title CasinoCore
  * @author Matrix-Hub Team
- * @notice Main casino contract managing bets, payouts, and game logic on Ethereum
+ * @notice Main casino contract managing bets, payouts, and game logic on Polygon
  * @dev Uses MTX token for all operations and integrates with external modules
  */
 contract CasinoCore {
@@ -115,7 +115,7 @@ contract CasinoCore {
     /**
      * @notice Constructor initializes casino with required contract addresses
      * @dev Sets up all contract integrations and parameters
-     * @param _mtx Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Ethereum
+     * @param _mtx Address of deployed MatrixHubCoin (MTX) ERC-20 contract on Polygon
      * @param _liquidity Address of LiquidityRouter contract
      * @param _reserve Address of CasinoReserve contract
      * @param _rng Address of RNGEngine contract
@@ -134,7 +134,7 @@ contract CasinoCore {
         address _dev,
         address _governance
     ) {
-        mtx = IERC20(_mtx); // MTX Token on Ethereum - deploy MatrixHubCoin first, then pass address here
+        mtx = IERC20(_mtx); // MTX Token on Polygon - deploy MatrixHubCoin first, then pass address here
         liquidity = ILiquidityRouter(_liquidity);
         reserve = ICasinoReserve(_reserve);
         rng = IRNGEngine(_rng);

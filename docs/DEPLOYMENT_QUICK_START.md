@@ -12,8 +12,8 @@ The MTX token contract is ready for deployment but has not been deployed to any 
 
 1. Install dependencies: `npm install`
 2. Create `.env` file: `cp .env.example .env`
-3. Add your private key to `.env` (wallet with ETH for gas)
-4. Get testnet ETH: https://sepoliafaucet.com/
+3. Add your private key to `.env` (wallet with MATIC for gas)
+4. Get testnet ETH: https://faucet.polygon.technology/amoy/
 
 ### Deploy Commands
 
@@ -47,37 +47,37 @@ npm run deploy:mainnet
    - **IMPORTANT**: Replace placeholder `0x0000000000000000000000000000000000000000` everywhere
 
 3. **Test Everything**
-   - Connect wallet on correct network (Ethereum Mainnet)
-   - Test direct mint with small amount (0.01 ETH)
+   - Connect wallet on correct network (Polygon)
+   - Test direct mint with small amount (0.01 MATIC)
    - Verify token appears in wallet
-   - Test DEX integration on Uniswap
+   - Test DEX integration on QuickSwap
 
 4. **Add Liquidity**
-   - Go to https://app.uniswap.org/
-   - Add ETH/MTX liquidity pool
+   - Go to https://app.quickswap.exchange/
+   - Add MATIC/MTX liquidity pool
    - Enables DEX trading
 
 ## Network Information
 
-### Ethereum Mainnet (Production)
+### Polygon (Production)
 - **Chain ID**: 1
 - **Currency**: ETH
 - **RPC**: https://eth.llamarpc.com
-- **Explorer**: https://etherscan.io/
-- **DEX**: Uniswap
+- **Explorer**: https://polygonscan.com/
+- **DEX**: QuickSwap
 
-### Ethereum Sepolia Testnet (Testing)
-- **Chain ID**: 11155111
-- **Currency**: Test ETH
-- **RPC**: https://rpc.sepolia.org/
-- **Explorer**: https://sepolia.etherscan.io/
-- **Faucet**: https://sepoliafaucet.com/
+### Polygon Amoy Testnet (Testing)
+- **Chain ID**: 80002
+- **Currency**: test MATIC
+- **RPC**: https://rpc-amoy.polygon.technology/
+- **Explorer**: https://amoy.polygonscan.com/
+- **Faucet**: https://faucet.polygon.technology/amoy/
 
-## Verification on Etherscan
+## Verification on Polygonscan
 
-After deployment, verify your contract on Etherscan:
+After deployment, verify your contract on Polygonscan:
 
-1. Get Etherscan API key from: https://etherscan.io/myapikey
+1. Get Polygonscan API key from: https://polygonscan.com/myapikey
 2. Add to `.env`: `ETHERSCAN_API_KEY=your_key_here`
 3. Run verification command (see above)
 
@@ -87,13 +87,13 @@ Before going live:
 
 - [ ] Contract deployed to testnet first
 - [ ] All functions tested on testnet
-- [ ] Contract verified on Etherscan
+- [ ] Contract verified on Polygonscan
 - [ ] Private keys secured (never commit to Git)
 - [ ] Contract ownership checked
 - [ ] Rate and minting controls tested
 - [ ] Emergency pause tested
 - [ ] Max supply verified
-- [ ] Initial DEX liquidity added (Uniswap)
+- [ ] Initial DEX liquidity added (QuickSwap)
 - [ ] All documentation updated
 - [ ] Frontend tested with real contract
 - [ ] User-facing addresses match deployment
@@ -116,7 +116,7 @@ Before going live:
 
 **"Contract verification failed"**
 - Check constructor arguments match deployment
-- Verify Etherscan API key is correct
+- Verify Polygonscan API key is correct
 - Wait a few minutes after deployment before verifying
 
 ## Support

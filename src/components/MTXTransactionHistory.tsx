@@ -292,7 +292,7 @@ const MTXTransactionHistory: React.FC<MTXTransactionHistoryProps> = ({
           rel="noopener noreferrer"
           style={{ color: '#00ff99', textDecoration: 'none' }}
         >
-          Etherscan ↗
+          PolygonScan ↗
         </a>
       </div>
     </div>

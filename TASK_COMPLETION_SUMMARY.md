@@ -39,7 +39,7 @@ Created comprehensive verification report:
 3. ✅ All standard ERC20 functions
 4. ✅ Ownership and access control
 5. ✅ Pause functionality
-6. ✅ Mint mechanisms (buyMTX with ETH)
+6. ✅ Mint mechanisms (buyMTX with MATIC)
 7. ✅ Burn functionality
 8. ✅ Max supply protection (100M immutable cap)
 9. ✅ Security features (custom errors, reentrancy protection)
@@ -64,9 +64,9 @@ Created production deployment guide:
   - Wallet preparation
 
 - **Phase 2**: Testnet Deployment (MANDATORY)
-  - Sepolia setup
+  - Amoy setup
   - Contract deployment
-  - Etherscan verification
+  - Polygonscan verification
   - Function testing
   - Frontend integration testing
 
@@ -76,7 +76,7 @@ Created production deployment guide:
   - Deployment information recording
 
 - **Phase 4**: Post-Deployment Verification
-  - Etherscan verification
+  - Polygonscan verification
   - Contract state verification
   - Configuration updates
   - Documentation updates
@@ -87,7 +87,7 @@ Created production deployment guide:
   - Security verification
 
 - **Phase 6**: Liquidity and Launch
-  - Uniswap pool creation
+  - QuickSwap pool creation
   - Token listings
   - Public announcement
 
@@ -191,7 +191,7 @@ This PR is documentation and reference material only:
 - ✅ `src/config/mtx.ts` environment-variable based
 - ✅ `src/abi/mtx.json` matches contract exactly
 - ✅ `WalletConnect.tsx` integrates correctly
-- ✅ Network configuration correct (Ethereum Mainnet, chainId: 1)
+- ✅ Network configuration correct (Polygon, Chain ID: 137)
 
 ### Deployment Setup ✅
 - ✅ `.env.example` complete with all required variables
@@ -245,7 +245,7 @@ constructor(uint256 initialSupply, address initialOwner) {
 
 ### ⚠️ Testnet Required
 - MANDATORY testnet deployment before mainnet
-- All functions must be tested on Sepolia
+- All functions must be tested on Amoy
 - Frontend integration must be verified
 - No exceptions to this requirement
 
@@ -259,18 +259,18 @@ constructor(uint256 initialSupply, address initialOwner) {
 3. ⏳ Fund deployer wallet with testnet ETH
 
 ### Testnet Phase
-4. ⏳ Deploy to Sepolia testnet
-5. ⏳ Verify contract on Sepolia Etherscan
+4. ⏳ Deploy to Amoy testnet
+5. ⏳ Verify contract on Amoy Polygonscan
 6. ⏳ Test all contract functions
 7. ⏳ Test frontend integration
 8. ⏳ Document any issues found
 
 ### Mainnet Phase (Only After Testnet Success)
 9. ⏳ Follow DEPLOYMENT_CHECKLIST_COMPREHENSIVE.md
-10. ⏳ Deploy to Ethereum Mainnet
-11. ⏳ Verify on Etherscan immediately
+10. ⏳ Deploy to Polygon
+11. ⏳ Verify on Polygonscan immediately
 12. ⏳ Update src/config/mtx.ts with deployed address
-13. ⏳ Add liquidity to Uniswap
+13. ⏳ Add liquidity to QuickSwap
 14. ⏳ Test production functionality
 15. ⏳ Announce to community
 

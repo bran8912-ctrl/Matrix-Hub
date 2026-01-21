@@ -248,12 +248,12 @@ const BuyMTX: React.FC = () => {
           {txHash && (
             <div style={{ marginTop: '0.5rem' }}>
               <a
-                href={`https://etherscan.io/tx/${txHash}`}
+                href={`https://polygonscan.com/tx/${txHash}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: '#00ff99', textDecoration: 'underline' }}
               >
-                View on Etherscan
+                View on PolygonScan
               </a>
             </div>
           )}

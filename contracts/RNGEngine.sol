@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 /**
  * @title RNGEngine
  * @author Matrix-Hub Team
- * @notice Provably fair random number generator for casino games on Ethereum
+ * @notice Provably fair random number generator for casino games on Polygon
  * @dev Uses server seed commitment and client seed for verifiable randomness
  */
 contract RNGEngine {

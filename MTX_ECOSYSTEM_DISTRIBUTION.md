@@ -26,8 +26,8 @@ With **Option B** implementation (no initial minting), the MTX token contract st
 |------------|--------|---------|------------|
 | **Developer Wallet** | 2,000,000 MTX | Initial development allocation + 2% of bet winnings | 2% |
 | **CasinoReserve** | 20,000,000 MTX | Casino operations and payouts | 20% |
-| **LiquidityRouter** | 10,000,000 MTX | Initial DEX liquidity (Uniswap) | 10% |
-| **Public (buyMTX)** | 68,000,000 MTX | Direct mint purchases at 1 ETH = 100k MTX | 68% |
+| **LiquidityRouter** | 10,000,000 MTX | Initial DEX liquidity (QuickSwap) | 10% |
+| **Public (buyMTX)** | 68,000,000 MTX | Direct mint purchases at 1 MATIC = 100k MTX | 68% |
 | **TOTAL** | **100,000,000 MTX** | | **100%** |
 
 ---
@@ -108,13 +108,13 @@ Casino should be self-sustaining through house edge, not reliant on large pre-al
 **Now**: 10M MTX  
 **Why**: Adequate for initial DEX seeding, grow organically
 
-- **Purpose**: Initial Uniswap liquidity
+- **Purpose**: Initial QuickSwap liquidity
 - **Usage**:
-  - Uniswap MTX/ETH pool
+  - QuickSwap MTX/ETH pool
   - Enables open market trading
   - Price discovery mechanism
 - **Philosophy**: Bootstrap liquidity, let market grow naturally
-- **Paired with**: ~100 ETH (at 1 ETH = 100k MTX rate)
+- **Paired with**: ~100 MATIC (at 1 MATIC = 100k MTX rate)
 
 **From README:**
 > "DEX provides access, not promises"  
@@ -128,8 +128,8 @@ Casino should be self-sustaining through house edge, not reliant on large pre-al
 
 - **Purpose**: Fair public distribution
 - **Usage**:
-  - Users purchase directly with ETH
-  - Rate: 1 ETH = 100,000 MTX (owner adjustable)
+  - Users purchase directly with MATIC
+  - Rate: 1 MATIC = 1,000 MTX (owner adjustable)
   - Transparent on-chain minting
 - **Philosophy**: 
   - Low friction onboarding
@@ -138,7 +138,7 @@ Casino should be self-sustaining through house edge, not reliant on large pre-al
   - Earn through engagement, buy when needed
 
 **From README:**
-> "Direct Mint: Send ETH → Receive MTX (1 ETH = 100,000 MTX)"  
+> "Direct Mint: Send MATIC → Receive MTX (1 MATIC = 1,000 MTX)"  
 > "Lower gas, instant minting, perfect for onboarding"
 
 **From Tokenomics:**
@@ -167,7 +167,7 @@ Casino should be self-sustaining through house edge, not reliant on large pre-al
 
 **Example Flow:**
 ```
-User: Buy 1000 MTX with 0.01 ETH
+User: Buy 1000 MTX with 0.01 MATIC
 User: Play slots, spend 100 MTX
 House Edge: CasinoCore collects 1 MTX (1%)
 Winner Payout: Reserve pays 99 MTX to winner
@@ -247,7 +247,7 @@ function mintToEcosystem(address to, uint256 amount) external onlyOwner {
     if (totalSupply() + amount > MAX_SUPPLY) revert ExceedsMaxSupply();
     
     _mint(to, amount);
-    emit MTXPurchased(to, 0, amount); // 0 ETH indicates owner mint
+    emit MTXPurchased(to, 0, amount); // 0 MATIC indicates owner mint
 }
 ```
 
@@ -292,7 +292,7 @@ This script will:
 
 ### Step 3: Verify Distributions
 
-Check on Etherscan that each contract received correct amount:
+Check on Polygonscan that each contract received correct amount:
 
 ```bash
 # Check Developer Wallet balance
@@ -330,18 +330,18 @@ The CasinoReserve needs to be "activated" with its allocation:
 
 ### 2. DEX Liquidity Provision
 
-Use LiquidityRouter's 20M MTX allocation to add Uniswap liquidity:
+Use LiquidityRouter's 20M MTX allocation to add QuickSwap liquidity:
 
 ```bash
-# 1. Approve Uniswap Router to spend MTX from LiquidityRouter
+# 1. Approve QuickSwap Router to spend MTX from LiquidityRouter
 # 2. Add liquidity: 20M MTX + X ETH (determine appropriate ratio)
 # 3. Receive LP tokens as proof of liquidity provision
 ```
 
 Example liquidity ratios:
-- Conservative: 20M MTX + 200 ETH (10,000 MTX/ETH)
-- Moderate: 20M MTX + 100 ETH (200,000 MTX/ETH - matches buyMTX rate)
-- Aggressive: 20M MTX + 50 ETH (400,000 MTX/ETH)
+- Conservative: 20M MTX + 200 MATIC (10,000 MTX/ETH)
+- Moderate: 20M MTX + 100 MATIC (200,000 MTX/ETH - matches buyMTX rate)
+- Aggressive: 20M MTX + 50 MATIC (400,000 MTX/ETH)
 
 ### 3. Casino Activation
 
@@ -370,7 +370,7 @@ After distribution, casino can begin operations:
 ### Execution
 
 ```bash
-# Testnet (Sepolia)
+# Testnet (Amoy)
 node scripts/distribute_mtx.js --network sepolia
 
 # Mainnet (Production)
@@ -421,9 +421,9 @@ Script creates: `deployments/mtx-distribution-{network}.json`
 
 ### 3. Audit Trail
 
-- ✅ All mints emit `MTXPurchased` event (with 0 ETH)
+- ✅ All mints emit `MTXPurchased` event (with 0 MATIC)
 - ✅ Distribution info saved to JSON file
-- ✅ All transactions visible on Etherscan
+- ✅ All transactions visible on Polygonscan
 - ✅ Block explorer shows exact amounts and timestamps
 
 ### 4. Contract Validation
@@ -432,24 +432,24 @@ Before distribution, verify contracts are correct:
 
 ```bash
 # Check casino contracts are deployed correctly
-# Verify contract code on Etherscan
+# Verify contract code on Polygonscan
 # Test with small amounts on testnet first
 ```
 
 ---
 
-## Testing on Sepolia
+## Testing on Amoy
 
-**MANDATORY**: Test distribution on Sepolia before mainnet
+**MANDATORY**: Test distribution on Amoy before mainnet
 
 ```bash
-# 1. Deploy MTX to Sepolia
+# 1. Deploy MTX to Amoy
 npm run deploy:sepolia
 
-# 2. Deploy casino to Sepolia  
+# 2. Deploy casino to Amoy  
 node scripts/deploy_casino.js --network sepolia
 
-# 3. Distribute MTX on Sepolia
+# 3. Distribute MTX on Amoy
 node scripts/distribute_mtx.js --network sepolia
 
 # 4. Verify all balances
@@ -459,8 +459,8 @@ node scripts/distribute_mtx.js --network sepolia
 
 ### Testnet Checklist
 
-- [ ] MTX deployed to Sepolia
-- [ ] Casino contracts deployed to Sepolia
+- [ ] MTX deployed to Amoy
+- [ ] Casino contracts deployed to Amoy
 - [ ] Distribution executed successfully
 - [ ] Developer Wallet has 2M MTX
 - [ ] CasinoReserve has 20M MTX
@@ -479,8 +479,8 @@ node scripts/distribute_mtx.js --network sepolia
 ### Pre-Distribution Checklist
 
 - [ ] All contracts deployed to mainnet
-- [ ] All contracts verified on Etherscan
-- [ ] Owner wallet has sufficient ETH for gas (~0.01 ETH)
+- [ ] All contracts verified on Polygonscan
+- [ ] Owner wallet has sufficient ETH for gas (~0.01 MATIC)
 - [ ] Distribution amounts confirmed (2M dev, 20M reserve, 10M liquidity)
 - [ ] Developer wallet address confirmed
 - [ ] Testnet testing completed successfully
@@ -506,7 +506,7 @@ node scripts/distribute_mtx.js --network mainnet
 - [ ] LiquidityRouter balance = 10M MTX
 - [ ] Total supply = 32M MTX
 - [ ] Distribution JSON file created
-- [ ] All transactions visible on Etherscan
+- [ ] All transactions visible on Polygonscan
 - [ ] No errors in any transaction
 - [ ] Developer receives 2% on first test bet
 
@@ -555,7 +555,7 @@ const DISTRIBUTIONS = {
 
 ### Prevention
 
-- ✅ Test on Sepolia first (MANDATORY)
+- ✅ Test on Amoy first (MANDATORY)
 - ✅ Double-check all contract addresses
 - ✅ Verify amounts add up correctly
 - ✅ Have team review distribution plan
@@ -579,7 +579,7 @@ A: No, minting is permanent. Choose amounts carefully before execution.
 A: Owner can use `mintToEcosystem()` again, up to MAX_SUPPLY cap. Consider keeping some capacity reserved for this.
 
 **Q: How does public access remaining 40M MTX?**  
-A: Via `buyMTX()` function - users send ETH and receive MTX at configured rate.
+A: Via `buyMTX()` function - users Send MATIC and receive MTX at configured rate.
 
 **Q: Can users buy before distribution?**  
 A: Yes, `buyMTX()` works immediately after MTX deployment. Distribution and public buying can happen in any order.

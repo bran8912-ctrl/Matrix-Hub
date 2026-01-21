@@ -9,7 +9,7 @@
 
 ## Summary
 
-This PR integrates OpenZeppelin contracts package into the repository following best practices and provides comprehensive verification of the MatrixHubCoin (MTX) ERC20 token deployment readiness for Ethereum Mainnet. All security requirements, deployment scripts, and documentation have been verified and enhanced.
+This PR integrates OpenZeppelin contracts package into the repository following best practices and provides comprehensive verification of the MatrixHubCoin (MTX) ERC20 token deployment readiness for Polygon. All security requirements, deployment scripts, and documentation have been verified and enhanced.
 
 ---
 
@@ -55,10 +55,10 @@ This PR integrates OpenZeppelin contracts package into the repository following 
    - Does not affect existing token transfers
 
 4. ✅ **Mint and Burn Mechanisms**
-   - Direct ETH→MTX minting via `buyMTX()`
+   - Direct MATIC → MTX minting via `buyMTX()`
    - User-controlled burn function
    - MAX_SUPPLY enforcement
-   - Exchange rate: 1 ETH = 100,000 MTX
+   - Exchange rate: 1 MATIC = 1,000 MTX
 
 5. ✅ **Max Supply Protection**
    - Immutable 100M MTX cap
@@ -96,7 +96,7 @@ This PR integrates OpenZeppelin contracts package into the repository following 
 - ✅ Private key handling secure (never in source)
 - ✅ RPC URL configuration correct
 - ✅ Contract address from environment
-- ✅ Etherscan API key setup documented
+- ✅ Polygonscan API key setup documented
 - ✅ `.gitignore` protects sensitive files
 
 **Scripts Verified**:
@@ -107,7 +107,7 @@ This PR integrates OpenZeppelin contracts package into the repository following 
   - Contract verification commands
   
 - ✅ `scripts/deploy.sh` - Interactive deployment wizard
-  - Network selection (Sepolia/Mainnet)
+  - Network selection (Amoy/Mainnet)
   - Safety confirmations for mainnet
   - Automatic contract verification
   - Config file updating
@@ -127,9 +127,9 @@ This PR integrates OpenZeppelin contracts package into the repository following 
 - **Phase 1**: Pre-Deployment Preparation (environment, config, review)
 - **Phase 2**: Testnet Deployment (MANDATORY testing procedures)
 - **Phase 3**: Mainnet Deployment (production deployment steps)
-- **Phase 4**: Post-Deployment Verification (Etherscan, state checks)
+- **Phase 4**: Post-Deployment Verification (Polygonscan, state checks)
 - **Phase 5**: Testing and Integration (frontend, owner functions)
-- **Phase 6**: Liquidity and Launch (Uniswap, listings, announcements)
+- **Phase 6**: Liquidity and Launch (QuickSwap, listings, announcements)
 - **Phase 7**: Ongoing Monitoring (24h, 1 week, ongoing)
 - **Emergency Procedures**: If something goes wrong
 - **Sign-off Section**: For owner confirmation
@@ -174,7 +174,7 @@ This PR integrates OpenZeppelin contracts package into the repository following 
 
 ### ⚠️ Critical Notes
 1. Constructor mints full 100M MTX to owner - requires distribution strategy
-2. Deployer wallet needs ~0.1 ETH for gas
+2. Deployer wallet needs ~0.1 MATIC for gas
 3. Deployment is IRREVERSIBLE - thorough testing required
 4. Owner must secure production private keys
 
@@ -197,7 +197,7 @@ This PR integrates OpenZeppelin contracts package into the repository following 
 
 ### Testnet Testing (Owner Responsibility)
 - Required: Full testnet deployment before mainnet
-- Required: All contract functions tested on Sepolia
+- Required: All contract functions tested on Amoy
 - Required: Frontend integration tested
 - Required: Emergency procedures tested
 
@@ -248,21 +248,21 @@ This PR prepares everything for deployment but **does NOT deploy**. The reposito
 2. **Setup Environment**
    - Create `.env` from `.env.example`
    - Add deployer private key
-   - Add Etherscan API key
+   - Add Polygonscan API key
    - Fund deployer wallet
 
 3. **Testnet Deployment** (MANDATORY)
-   - Deploy to Sepolia: `npm run deploy:sepolia`
+   - Deploy to Amoy: `npm run deploy:sepolia`
    - Test all functions thoroughly
-   - Verify contract on Sepolia Etherscan
+   - Verify contract on Amoy Polygonscan
    - Test frontend integration
 
 4. **Mainnet Deployment** (After Testnet Success)
    - Follow `DEPLOYMENT_CHECKLIST_COMPREHENSIVE.md`
    - Deploy to mainnet: `npm run deploy:mainnet`
-   - Verify on Etherscan immediately
+   - Verify on Polygonscan immediately
    - Update configuration with deployed address
-   - Add Uniswap liquidity
+   - Add QuickSwap liquidity
    - Announce to community
 
 ---
@@ -271,7 +271,7 @@ This PR prepares everything for deployment but **does NOT deploy**. The reposito
 
 ### Existing (Unchanged)
 - `@openzeppelin/contracts@5.4.0` (npm) - Used by Hardhat compilation
-- `ethers@6.16.0` - Ethereum interactions
+- `ethers@6.16.0` - Polygon interactions
 - `hardhat@2.22.0` - Contract compilation and deployment
 - All other dependencies unchanged
 
@@ -298,7 +298,7 @@ After successful mainnet deployment, update:
 - `src/config/mtx.ts` - Add deployed contract address
 - `docs/MTX_Deployment_Guide.md` - Update deployment status
 - `CONTRACT_DETAILS_AUDIT.md` - Mark as deployed
-- `README.md` - Add contract address and Etherscan link
+- `README.md` - Add contract address and Polygonscan link
 
 ---
 
@@ -357,10 +357,10 @@ If issues found after merge:
 
 3. **Mainnet Deployment**
    - Follow comprehensive checklist
-   - Deploy to Ethereum Mainnet
-   - Verify on Etherscan
+   - Deploy to Polygon
+   - Verify on Polygonscan
    - Update configuration
-   - Add Uniswap liquidity
+   - Add QuickSwap liquidity
 
 4. **Public Launch**
    - Announce deployment
@@ -401,7 +401,7 @@ If issues found after merge:
 ## Acknowledgments
 
 - OpenZeppelin for industry-leading smart contract implementations
-- Ethereum Foundation for ERC20 standard
+- Polygon Foundation for ERC20 standard
 - Matrix-Hub community for requirements and feedback
 
 ---

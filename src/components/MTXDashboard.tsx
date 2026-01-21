@@ -5,7 +5,7 @@ import mtxAbi from '../abi/mtx.json';
 
 interface DashboardStats {
   mtxBalance: string;
-  ethBalance: string;
+  maticBalance: string;
   totalSupply: string;
   userPercentage: string;
   tier: string;
@@ -30,7 +30,7 @@ interface MTXDashboardProps {
  * Comprehensive dashboard for MTX token holdings and statistics
  * 
  * Features:
- * - Display MTX and ETH balances
+ * - Display MTX and MATIC balances
  * - Show user tier based on MTX holdings
  * - Display total supply and user's percentage
  * - Track locked vs available MTX
@@ -97,7 +97,7 @@ const MTXDashboard: React.FC<MTXDashboardProps> = ({ address }) => {
       const mtxContract = new Contract(MTX.address, mtxAbi, provider);
 
       // Fetch all data in parallel
-      const [rawBalance, decimals, totalSupply, ethBalance] = await Promise.all([
+      const [rawBalance, decimals, totalSupply, maticBalance] = await Promise.all([
         mtxContract.balanceOf(address),
         mtxContract.decimals(),
         mtxContract.totalSupply(),
@@ -117,7 +117,7 @@ const MTXDashboard: React.FC<MTXDashboardProps> = ({ address }) => {
 
       setStats({
         mtxBalance,
-        ethBalance: formatEther(ethBalance),
+        maticBalance: formatEther(maticBalance),
         totalSupply: totalSupplyFormatted,
         userPercentage,
         tier: tier.name,
@@ -245,7 +245,7 @@ const MTXDashboard: React.FC<MTXDashboardProps> = ({ address }) => {
           </div>
         </div>
 
-        {/* ETH Balance Card */}
+        {/* MATIC Balance Card */}
         <div style={{
           padding: '1.5rem',
           background: 'rgba(99, 153, 255, 0.05)',
@@ -253,7 +253,7 @@ const MTXDashboard: React.FC<MTXDashboardProps> = ({ address }) => {
           borderRadius: '8px'
         }}>
           <div style={{ fontSize: '0.875rem', color: '#aaa', marginBottom: '0.5rem' }}>
-            ETH Balance
+            MATIC Balance
           </div>
           <div style={{
             fontSize: '2rem',
@@ -261,10 +261,10 @@ const MTXDashboard: React.FC<MTXDashboardProps> = ({ address }) => {
             color: '#6399ff',
             fontFamily: 'monospace'
           }}>
-            {loading ? '...' : Number(stats.ethBalance).toFixed(4)}
+            {loading ? '...' : Number(stats.maticBalance).toFixed(4)}
           </div>
           <div style={{ fontSize: '0.75rem', color: '#aaa', marginTop: '0.25rem' }}>
-            Ethereum Mainnet
+            Polygon Mainnet
           </div>
         </div>
 
@@ -379,7 +379,7 @@ const MTXDashboard: React.FC<MTXDashboardProps> = ({ address }) => {
             display: 'block'
           }}
         >
-          Trade on Uniswap
+          Trade on QuickSwap
         </a>
         <a
           href="/casino"

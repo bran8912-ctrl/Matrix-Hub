@@ -2,7 +2,7 @@
 
 ## ⚠️ CRITICAL SECURITY WARNING
 
-**The MTX contract is now configured for Ethereum Mainnet deployment with the specified owner address.**
+**The MTX contract is now configured for Polygon deployment with the specified owner address.**
 
 **DO NOT:**
 - Use testnet addresses in production
@@ -21,8 +21,8 @@ The MTX contract is currently configured with a placeholder address (`0x00000000
 ### 1. Choose Network
 
 The recommended deployment target is:
-- **Ethereum Mainnet** (ChainID: 1) - Primary production network
-- Alternative: **Ethereum Sepolia Testnet** (ChainID: 11155111) for testing
+- **Polygon** (Chain ID: 137) - Primary production network
+- Alternative: **Polygon Amoy Testnet** (Chain ID: 80002) for testing
 
 ### 2. Prerequisites
 
@@ -59,16 +59,16 @@ MTX_CONTRACT_ADDRESS=  # Leave empty until deployed
 
 ### 3. Deploy Contract
 
-#### Test Deployment (Ethereum Sepolia Testnet)
+#### Test Deployment (Polygon Amoy Testnet)
 
 ```bash
-# Get testnet ETH from faucet: https://sepoliafaucet.com/
+# Get testnet ETH from faucet: https://faucet.polygon.technology/amoy/
 
 # Deploy to testnet
 npm run deploy:sepolia
 ```
 
-#### Production Deployment (Ethereum Mainnet)
+#### Production Deployment (Polygon)
 
 ```bash
 # Ensure you have real ETH in your deployer wallet
@@ -85,14 +85,14 @@ Contract Owner: 0x9fb4bb44d8d962d695fc93b3dc15f1b287391077
 
 **SAVE THIS ADDRESS IMMEDIATELY!**
 
-### 4. Verify Contract on Etherscan
+### 4. Verify Contract on Polygonscan
 
 ```bash
 # Verify the contract (replace with your actual address and constructor args)
 npm run verify:mainnet 0xYourActualContractAddress "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077"
 ```
 
-This will make the contract publicly verifiable on Etherscan.
+This will make the contract publicly verifiable on Polygonscan.
 
 ### 5. Update Configuration
 
@@ -103,8 +103,8 @@ export const MTX = {
   address: "0xYourActualContractAddress", // ✅ Real deployed address
   symbol: "MTX",
   decimals: 18,
-  chainId: 1, // Ethereum Mainnet
-  chainName: "Ethereum",
+  Chain ID: 137, // Polygon
+  chainName: "Polygon",
   name: "Matrix Hub Coin",
   ethToMtxRate: 100000,
   // ... rest of config
@@ -115,54 +115,54 @@ export const MTX = {
 
 Before going live:
 
-1. **Test wallet connection** on Ethereum Mainnet
-2. **Test direct mint** with small amount (0.01 ETH)
+1. **Test wallet connection** on Polygon
+2. **Test direct mint** with small amount (0.01 MATIC)
 3. **Test token display** and balance reading
-4. **Test DEX integration** on Uniswap
-5. **Verify contract** on Etherscan is readable
+4. **Test DEX integration** on QuickSwap
+5. **Verify contract** on Polygonscan is readable
 6. **Check EIP-747** (Add Token) functionality
 
 ### 7. Security Checklist
 
 - [ ] Contract deployed to testnet first
-- [ ] Contract verified on Etherscan
+- [ ] Contract verified on Polygonscan
 - [ ] Deployer wallet secured
 - [ ] Private keys removed from code
 - [ ] Contract ownership verified
 - [ ] Rate and minting controls tested
 - [ ] Emergency pause functionality tested
 - [ ] Max supply limit verified
-- [ ] Initial liquidity provided on Uniswap
+- [ ] Initial liquidity provided on QuickSwap
 - [ ] All documentation updated
 - [ ] User-facing addresses match deployment
 
 ## Network Information
 
-### Ethereum Mainnet
+### Polygon
 - **Chain ID**: 1
 - **Currency**: ETH
 - **RPC**: https://eth.llamarpc.com
-- **Explorer**: https://etherscan.io/
-- **DEX**: Uniswap
+- **Explorer**: https://polygonscan.com/
+- **DEX**: QuickSwap
 
-### Ethereum Sepolia Testnet
-- **Chain ID**: 11155111  
-- **Currency**: Test ETH
-- **RPC**: https://rpc.sepolia.org/
-- **Explorer**: https://sepolia.etherscan.io/
-- **Faucet**: https://sepoliafaucet.com/
+### Polygon Amoy Testnet
+- **Chain ID**: 80002  
+- **Currency**: test MATIC
+- **RPC**: https://rpc-amoy.polygon.technology/
+- **Explorer**: https://amoy.polygonscan.com/
+- **Faucet**: https://faucet.polygon.technology/amoy/
 
 ## Post-Deployment
 
-### Add Liquidity to Uniswap
+### Add Liquidity to QuickSwap
 
-1. Go to https://app.uniswap.org/
-2. Add ETH/MTX liquidity pool
+1. Go to https://app.quickswap.exchange/
+2. Add MATIC/MTX liquidity pool
 3. This enables DEX trading for users
 
 ### Monitor Contract
 
-- Track transactions on Etherscan
+- Track transactions on Polygonscan
 - Monitor minting activity
 - Watch for any issues
 - Keep emergency pause available
@@ -170,7 +170,7 @@ Before going live:
 ## Important Notes
 
 - **Never deploy to mainnet without testnet testing first**
-- **Always verify contracts on Etherscan**
+- **Always verify contracts on Polygonscan**
 - **Keep deployer private key secure**
 - **Test with small amounts first**
 - **Have emergency procedures ready**
@@ -201,9 +201,9 @@ The contract is currently using a placeholder address and is not functional on a
 
 ### Post-Launch
 - [ ] Take screenshots of working wallet connection and MTX purchase flow
-- [ ] Update documentation with actual transaction examples and Etherscan links
-- [ ] Verify all Etherscan links point to mainnet (not testnet)
+- [ ] Update documentation with actual transaction examples and Polygonscan links
+- [ ] Verify all Polygonscan links point to mainnet (not testnet)
 - [ ] Announce deployment and share verified contract address
 - [ ] Monitor first few transactions closely
 
-**Exchange Rate Confirmed**: 1 ETH = 100,000 MTX (as configured in contract and all docs)
+**Exchange Rate Confirmed**: 1 MATIC = 1,000 MTX (as configured in contract and all docs)
