@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { PlinkoEngine, type PlinkoResult } from './PlinkoEngine';
+import { generateClientHash, type BetResult } from '../../utils/casinoBet';
 
 interface PlinkoGameProps {
   walletAddress?: string;
   mtxBalance: number;
+  placeBet?: (amount: number, gameData?: string) => Promise<BetResult>;
+  refreshBalance?: () => void;
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function PlinkoGame({ walletAddress, mtxBalance, onBetPlaced }: PlinkoGameProps) {
+export default function PlinkoGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance: _refreshBalance, onBetPlaced }: PlinkoGameProps) {
   const [betAmount, setBetAmount] = useState(PlinkoEngine.BET_AMOUNT);
   const [result, setResult] = useState<PlinkoResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [txHash, setTxHash] = useState('');
 
   const multipliers = [5.6, 2.1, 1.1, 1.0, 0.5, 1.0, 1.1, 2.1, 5.6];
 
@@ -29,7 +33,7 @@ export default function PlinkoGame({ walletAddress, mtxBalance, onBetPlaced }: P
     }
 
     if (Number(mtxBalance) <= 0) {
-      alert('You need MTX to play.');
+      setError('You need MTX to play. Buy MTX first.');
       return;
     }
 
@@ -40,27 +44,39 @@ export default function PlinkoGame({ walletAddress, mtxBalance, onBetPlaced }: P
     }
 
     if (mtxBalance < betAmount) {
-      setError('Insufficient MTX balance');
+      setError(`Insufficient MTX balance. Need ${betAmount} MTX.`);
       return;
     }
 
     setError('');
+    setTxHash('');
     setLoading(true);
 
     try {
-      // Simulate a provably fair hash (in production, this would come from backend/contract)
-      const hash = Array.from({ length: 64 }, () =>
-        Math.floor(Math.random() * 16).toString(16)
-      ).join('');
+      // Place the on-chain MTX bet
+      if (placeBet) {
+        const betResult = await placeBet(betAmount);
+        setTxHash(betResult.txHash);
+        if (onBetPlaced) onBetPlaced(betAmount);
+
+        // If CasinoCore resolved the bet on-chain, use that as the source of truth
+        if (betResult.mode === 'on-chain' && betResult.win !== undefined) {
+          const hash = generateClientHash();
+          const dropResult = PlinkoEngine.dropBall(hash, betAmount);
+          // Override payout with on-chain outcome
+          setResult({ ...dropResult, payout: betResult.payout ?? 0 });
+          return;
+        }
+      }
+
+      // Derive game result from a provably fair hash (transfer mode or no placeBet)
+      const hash = generateClientHash();
 
       const dropResult = PlinkoEngine.dropBall(hash, betAmount);
       setResult(dropResult);
-      
-      if (onBetPlaced) {
-        onBetPlaced(betAmount);
-      }
-    } catch (e) {
-      setError('Failed to drop ball. Please try again.');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Failed to drop ball. Please try again.';
+      setError(msg);
       console.error(e);
     } finally {
       setLoading(false);
@@ -73,7 +89,7 @@ export default function PlinkoGame({ walletAddress, mtxBalance, onBetPlaced }: P
       
       <div className="mb-6 text-center">
         <p className="text-gray-300 mb-2">Minimum bet: {PlinkoEngine.BET_AMOUNT} MTX</p>
-        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance} MTX</p>
+        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance.toFixed(2)} MTX</p>
       </div>
 
       {/* Plinko Board Visualization */}
@@ -131,6 +147,21 @@ export default function PlinkoGame({ walletAddress, mtxBalance, onBetPlaced }: P
         </div>
       )}
 
+      {/* Transaction Hash */}
+      {txHash && (
+        <div className="bg-gray-800 text-green-400 p-3 rounded mb-4 text-center text-sm">
+          ✅ Bet confirmed on-chain!{' '}
+          <a
+            href={`https://polygonscan.com/tx/${txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            View TX
+          </a>
+        </div>
+      )}
+
       {/* Betting Controls */}
       <div className="bg-gray-800 p-4 rounded-lg mb-4">
         <label className="block text-gray-300 mb-2">Bet Amount (MTX)</label>
@@ -157,7 +188,7 @@ export default function PlinkoGame({ walletAddress, mtxBalance, onBetPlaced }: P
         disabled={loading || !walletAddress}
         className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white font-bold py-4 px-6 rounded-lg text-xl transition-colors"
       >
-        {loading ? 'Dropping...' : walletAddress ? '🎯 DROP BALL' : 'Connect Wallet to Play'}
+        {loading ? 'Processing...' : walletAddress ? `🎯 DROP BALL (${betAmount} MTX)` : 'Connect Wallet to Play'}
       </button>
 
       {/* Info */}

@@ -65,7 +65,13 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:contracts": "solhint 'contracts/**/*.sol'",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "deploy:polygon:casino": "hardhat run scripts/deploy_casino.js --network polygon",
+    "deploy:amoy:casino": "hardhat run scripts/deploy_casino.js --network amoy",
+    "deploy:polygon:mtx": "hardhat run scripts/deploy_mtx.js --network polygon",
+    "deploy:amoy:mtx": "hardhat run scripts/deploy_mtx.js --network amoy",
+    "deploy:polygon:full": "npm run deploy:polygon:mtx && npm run deploy:polygon:casino",
+    "deploy:amoy:full": "npm run deploy:amoy:mtx && npm run deploy:amoy:casino"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

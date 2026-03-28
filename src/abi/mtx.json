@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "initialSupply",
+        "name": "maxSupply",
         "type": "uint256"
       },
       {
@@ -118,7 +118,7 @@
   },
   {
     "inputs": [],
-    "name": "NoETHToWithdraw",
+    "name": "NoMATICToWithdraw",
     "type": "error"
   },
   {
@@ -195,7 +195,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "ethAmount",
+        "name": "maticAmount",
         "type": "uint256"
       },
       {
@@ -412,7 +412,7 @@
   },
   {
     "inputs": [],
-    "name": "ethToMtxRate",
+    "name": "maticToMtxRate",
     "outputs": [
       {
         "internalType": "uint256",
@@ -477,7 +477,7 @@
         "type": "uint256"
       }
     ],
-    "name": "setEthToMtxRate",
+    "name": "setMaticToMtxRate",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -595,7 +595,7 @@
         "type": "address"
       }
     ],
-    "name": "withdrawETH",
+    "name": "withdrawMATIC",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -603,5 +603,23 @@
   {
     "stateMutability": "payable",
     "type": "receive"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "mintToEcosystem",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ]

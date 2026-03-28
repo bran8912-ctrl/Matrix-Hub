@@ -1,27 +1,32 @@
 import React, { useState } from 'react';
 import { MinesEngine, type MinesGameState, type MinesResult } from './MinesEngine';
+import { generateClientHash, type BetResult } from '../../utils/casinoBet';
 
 interface MinesGameProps {
   walletAddress?: string;
   mtxBalance: number;
+  placeBet?: (amount: number, gameData?: string) => Promise<BetResult>;
+  refreshBalance?: () => void;
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function MinesGame({ walletAddress, mtxBalance, onBetPlaced }: MinesGameProps) {
+export default function MinesGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance: _refreshBalance, onBetPlaced }: MinesGameProps) {
   const [betAmount, setBetAmount] = useState(MinesEngine.BET_AMOUNT);
   const [numMines, setNumMines] = useState(5);
   const [gameState, setGameState] = useState<MinesGameState | null>(null);
   const [lastResult, setLastResult] = useState<MinesResult | null>(null);
   const [error, setError] = useState('');
+  const [txHash, setTxHash] = useState('');
+  const [startingGame, setStartingGame] = useState(false);
 
-  function startNewGame() {
+  async function startNewGame() {
     if (!walletAddress) {
       setError('Please connect your wallet first');
       return;
     }
 
     if (Number(mtxBalance) <= 0) {
-      alert('You need MTX to play.');
+      setError('You need MTX to play. Buy MTX first.');
       return;
     }
 
@@ -32,23 +37,46 @@ export default function MinesGame({ walletAddress, mtxBalance, onBetPlaced }: Mi
     }
 
     if (mtxBalance < betAmount) {
-      setError('Insufficient MTX balance');
+      setError(`Insufficient MTX balance. Need ${betAmount} MTX.`);
       return;
     }
 
     setError('');
-    
-    // Generate provably fair hash (in production, this would come from backend/contract)
-    const hash = Array.from({ length: 64 }, () =>
-      Math.floor(Math.random() * 16).toString(16)
-    ).join('');
+    setTxHash('');
+    setStartingGame(true);
 
-    const newGame = MinesEngine.initGame(hash, numMines);
-    setGameState(newGame);
-    setLastResult(null);
+    try {
+      // Place the on-chain MTX bet first
+      if (placeBet) {
+        const betResult = await placeBet(betAmount);
+        setTxHash(betResult.txHash);
+        if (onBetPlaced) onBetPlaced(betAmount);
 
-    if (onBetPlaced) {
-      onBetPlaced(betAmount);
+        // When using CasinoCore (on-chain mode), the bet is resolved immediately on-chain.
+        // The local board is for entertainment only — don't present it as the financial result.
+        if (betResult.mode === 'on-chain') {
+          // Only start a local board for the interactive reveal experience;
+          // the actual payout was already settled on-chain via BetResolved.
+          const hash = generateClientHash();
+          const newGame = MinesEngine.initGame(hash, numMines);
+          setGameState(newGame);
+          setLastResult(null);
+          return;
+        }
+      }
+
+      // Off-chain / transfer-fallback mode: use local random game
+      const hash = generateClientHash();
+
+      const newGame = MinesEngine.initGame(hash, numMines);
+      setGameState(newGame);
+      setLastResult(null);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Failed to start game. Please try again.';
+      setError(msg);
+      console.error(e);
+    } finally {
+      setStartingGame(false);
     }
   }
 
@@ -117,7 +145,7 @@ export default function MinesGame({ walletAddress, mtxBalance, onBetPlaced }: Mi
       
       <div className="mb-6 text-center">
         <p className="text-gray-300 mb-2">Minimum bet: {MinesEngine.BET_AMOUNT} MTX</p>
-        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance} MTX</p>
+        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance.toFixed(2)} MTX</p>
       </div>
 
       {/* Game Status */}
@@ -212,6 +240,21 @@ export default function MinesGame({ walletAddress, mtxBalance, onBetPlaced }: Mi
         </div>
       ) : null}
 
+      {/* Transaction Hash */}
+      {txHash && (
+        <div className="bg-gray-800 text-green-400 p-3 rounded mb-4 text-center text-sm">
+          ✅ Bet confirmed on-chain!{' '}
+          <a
+            href={`https://polygonscan.com/tx/${txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            View TX
+          </a>
+        </div>
+      )}
+
       {/* Error Display */}
       {error && (
         <div className="bg-red-900 text-red-200 p-3 rounded mb-4 text-center">
@@ -223,10 +266,10 @@ export default function MinesGame({ walletAddress, mtxBalance, onBetPlaced }: Mi
       {(!gameState || gameState.gameOver) && (
         <button
           onClick={startNewGame}
-          disabled={!walletAddress}
+          disabled={!walletAddress || startingGame}
           className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white font-bold py-4 px-6 rounded-lg text-xl transition-colors"
         >
-          {walletAddress ? '🎮 START NEW GAME' : 'Connect Wallet to Play'}
+          {startingGame ? 'Processing...' : walletAddress ? `🎮 START NEW GAME (${betAmount} MTX)` : 'Connect Wallet to Play'}
         </button>
       )}
 
