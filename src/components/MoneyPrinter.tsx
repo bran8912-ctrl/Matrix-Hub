@@ -1,6 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
-// Staking tier configuration (matches staking.astro tiers)
+// ─────────────────────────────────────────────────────────────────────────────
+//  CONSTANTS
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Staking tier configuration (mirrors staking.astro)
 const STAKING_TIERS = [
   { name: 'No Stake', min: 0, max: 999, apy: 0, color: '#888888', emoji: '⬜' },
   { name: 'Bronze', min: 1000, max: 10000, apy: 5, color: '#CD7F32', emoji: '🥉' },
