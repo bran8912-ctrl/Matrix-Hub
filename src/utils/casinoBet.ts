@@ -86,7 +86,7 @@ export async function placeCasinoBet(
     const casinoContract = new Contract(casinoCoreAddress, casinoCoreAbi, signer);
     const encodedGameData = gameData || generateRandomGameData();
     const betTx = await casinoContract.placeBet(betAmountWei, encodedGameData);
-    const receipt = await betTx.wait(1);
+    const receipt = await betTx.wait(2); // 2 confirmations for Polygon safety
 
     return {
       txHash: receipt.hash,
@@ -97,7 +97,7 @@ export async function placeCasinoBet(
 
   // Fallback: transfer MTX to casino vault
   const transferTx = await mtxContract.transfer(CASINO_VAULT_ADDRESS, betAmountWei);
-  const receipt = await transferTx.wait(1);
+  const receipt = await transferTx.wait(2); // 2 confirmations for Polygon safety
 
   return {
     txHash: receipt.hash,
@@ -107,8 +107,18 @@ export async function placeCasinoBet(
 }
 
 /**
- * Generate random game data bytes for provably fair RNG.
- * In production this should come from the server seed commitment flow.
+ * Generate cryptographically random game data bytes for the RNG contract.
+ *
+ * NOTE: This provides the client seed component of the provably-fair flow.
+ * Uses `crypto.getRandomValues` (CSPRNG), NOT `Math.random()`.
+ *
+ * For a fully provably-fair protocol, integrate server-side seed commitment:
+ * 1. Server commits hash(serverSeed) before the round
+ * 2. Client generates clientSeed (this function)
+ * 3. Result = hash(serverSeed + clientSeed + nonce)
+ * 4. Server reveals serverSeed after the round for verification
+ *
+ * See RNGEngine.sol for the on-chain verification flow.
  */
 function generateRandomGameData(): string {
   const randomBytes = new Uint8Array(32);
