@@ -173,7 +173,8 @@ const MoneyPrinter: React.FC = () => {
   const [brrrActive, setBrrrActive] = useState(false);
   const [projectionDays, setProjectionDays] = useState(365);
 
-  const tier = getTierForAmount(stakingAmount);
+  // Memoize tier so it only recalculates when stakingAmount changes
+  const tier = useMemo(() => getTierForAmount(stakingAmount), [stakingAmount]);
   const selectedTF = TIME_FRAMES.find(t => t.key === timeFrame) ?? TIME_FRAMES[3];
 
   const stakingEarnings = compound
@@ -185,14 +186,17 @@ const MoneyPrinter: React.FC = () => {
   const game = CASINO_GAMES[casinoGame];
   const casinoExpectedReturn = casinoSessions * game.cost * (game.winChance * game.avgMultiplier - 1);
 
-  // Growth projection chart data (1 year)
-  const chartData: ChartPoint[] = [];
-  for (let d = 0; d <= projectionDays; d += Math.ceil(projectionDays / 50)) {
-    const earned = compound
-      ? calcCompound(stakingAmount, tier.apy, d)
-      : (stakingAmount * (tier.apy / 100) * d) / 365;
-    chartData.push({ day: d, value: stakingAmount + earned });
-  }
+  // Memoize chart data to avoid recalculating 50+ iterations on every render
+  const chartData = useMemo<ChartPoint[]>(() => {
+    const pts: ChartPoint[] = [];
+    for (let d = 0; d <= projectionDays; d += Math.ceil(projectionDays / 50)) {
+      const earned = compound
+        ? calcCompound(stakingAmount, tier.apy, d)
+        : (stakingAmount * (tier.apy / 100) * d) / 365;
+      pts.push({ day: d, value: stakingAmount + earned });
+    }
+    return pts;
+  }, [stakingAmount, tier.apy, compound, projectionDays]);
 
   const handleBrrr = useCallback(() => {
     setBrrrActive(true);
@@ -201,8 +205,10 @@ const MoneyPrinter: React.FC = () => {
 
   const handleAmountInput = (v: string) => {
     setInputValue(v);
-    const n = parseInt(v.replace(/[^0-9]/g, ''), 10);
-    if (!isNaN(n)) setStakingAmount(Math.min(n, 10_000_000));
+    const digits = v.replace(/[^0-9]/g, '');
+    // When input is cleared or non-numeric, reset amount to 0
+    const n = digits === '' ? 0 : parseInt(digits, 10);
+    setStakingAmount(Math.min(n, 10_000_000));
   };
 
   const finalBalance = stakingAmount + (compound
@@ -302,8 +308,13 @@ const MoneyPrinter: React.FC = () => {
               style={{ width: '100%', marginTop: '0.5rem', accentColor: tier.color }}
             />
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', opacity: 0.6 }}>
-              <span>0</span><span>50K</span><span>100K+</span>
+              <span>0</span><span>50K</span><span>100K</span>
             </div>
+            {stakingAmount > 100000 && (
+              <div style={{ fontSize: '0.68rem', color: tier.color, marginTop: '0.25rem', opacity: 0.8 }}>
+                ↑ Slider shows up to 100K — your typed value ({formatMTX(stakingAmount)}) is used in all calculations.
+              </div>
+            )}
           </div>
 
           <div>
@@ -372,9 +383,9 @@ const MoneyPrinter: React.FC = () => {
           <div style={valueStyle}>
             +{formatMTX(animatedEarnings)} MTX
           </div>
-          {tier.apy > 0 && (
+          {tier.apy > 0 && stakingAmount > 0 && (
             <div style={{ fontSize: '0.75rem', opacity: 0.6, marginTop: '0.4rem' }}>
-              ≈ {(animatedEarnings / (stakingAmount || 1) * 100).toFixed(3)}% return
+              ≈ {(animatedEarnings / stakingAmount * 100).toFixed(3)}% return
             </div>
           )}
         </div>

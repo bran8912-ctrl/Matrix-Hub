@@ -1,0 +1,879 @@
+---
+import Layout from "../components/Layout.astro";
+
+export const prerender = true;
+
+export const title = "Affiliates";
+export const navCategory = "affiliates";
+
+// ── All affiliate deals data ──────────────────────────────────────────────────
+const DEALS = [
+  // ── Crypto & Security ────────────────────────────────────────────────────
+  {
+    category: "crypto",
+    label: "HARDWARE WALLET",
+    emoji: "🔐",
+    title: "Ledger Hardware Wallet",
+    description: "Protect your crypto assets with military-grade offline security. The most trusted hardware wallet in the world — recommended for anyone serious about self-custody.",
+    url: "https://shop.ledger.com/?r=5b26c17b2e98",
+    badge: "RECOMMENDED",
+    badgeColor: "#00ff99",
+    bonus: "Best-in-class security",
+  },
+  {
+    category: "crypto",
+    label: "CRYPTO EXCHANGE",
+    emoji: "📈",
+    title: "Binance US — Trade Crypto",
+    description: "Trade 100+ cryptocurrencies with some of the lowest fees in the industry. Advanced charts, spot & futures trading, and a trusted global platform.",
+    url: "https://www.binance.us/universal_JHHGDSKDJ/auth/registration?ref=614205735",
+    badge: "LOW FEES",
+    badgeColor: "#FFD700",
+    bonus: "Sign-up bonus available",
+  },
+  {
+    category: "crypto",
+    label: "CRYPTO TRADING",
+    emoji: "⚡",
+    title: "BTCC Exchange",
+    description: "Advanced crypto derivatives trading with bonuses for new users. One of the longest-running crypto exchanges with deep liquidity.",
+    url: "https://btcc.com/invite/Ufihz4l",
+    badge: "NEW USER BONUS",
+    badgeColor: "#00aaff",
+    bonus: "Referral bonuses",
+  },
+
+  // ── Investing & Finance ──────────────────────────────────────────────────
+  {
+    category: "finance",
+    label: "MICRO-INVESTING",
+    emoji: "🌱",
+    title: "Acorns — Start Investing",
+    description: "Automatically invest your spare change and build wealth passively. Perfect for beginners. Get $5 FREE just for signing up through this link.",
+    url: "https://acorns.com/share/?shareable_code=CQ1T7GA&first_name=Brandon&friend_reward=5",
+    badge: "FREE $5",
+    badgeColor: "#00ff99",
+    bonus: "FREE $5 on signup",
+  },
+  {
+    category: "finance",
+    label: "STOCK TRADING",
+    emoji: "📊",
+    title: "Robinhood — Free Stock",
+    description: "Commission-free stock, ETF, and options trading. Get a free stock worth up to $225 just for opening an account through this referral link.",
+    url: "https://join.robinhood.com/brandol-06d7e3",
+    badge: "FREE STOCK",
+    badgeColor: "#00ff99",
+    bonus: "Free stock worth up to $225",
+  },
+
+  // ── AI Tools ─────────────────────────────────────────────────────────────
+  {
+    category: "ai",
+    label: "AI VIDEO EDITOR",
+    emoji: "🎬",
+    title: "VEED — AI Video Editor",
+    description: "Professional browser-based video editing powered by AI. Auto-subtitles, translation, screen recording, and much more. Perfect for content creators.",
+    url: "https://veed.sjv.io/7aj7Pr",
+    badge: "AI POWERED",
+    badgeColor: "#bf00ff",
+    bonus: "Creator-grade tools",
+  },
+  {
+    category: "ai",
+    label: "AI VIDEO CREATOR",
+    emoji: "🤖",
+    title: "Pictory — AI Video Creator",
+    description: "Turn scripts, blog posts, or articles into stunning professional videos automatically. No editing experience required — AI does the heavy lifting.",
+    url: "https://pictory.ai?ref=brandon94",
+    badge: "HOT",
+    badgeColor: "#ff6600",
+    bonus: "Turn text into video",
+  },
+  {
+    category: "ai",
+    label: "AI STUDIO",
+    emoji: "✨",
+    title: "Invideo AI — Unlimited Videos",
+    description: "Generate unlimited AI videos from simple prompts. Turn any idea into a polished video in minutes — the fastest AI video studio available.",
+    url: "https://invideo.sjv.io/o4E32b",
+    badge: "UNLIMITED",
+    badgeColor: "#bf00ff",
+    bonus: "Unlimited generations",
+  },
+
+  // ── Shopping Deals ───────────────────────────────────────────────────────
+  {
+    category: "shopping",
+    label: "EXCLUSIVE DEAL",
+    emoji: "⭐",
+    title: "TEMU — Exclusive Offer",
+    description: "Tap this exclusive link for top-quality items at ultra-low prices. Deals only available through this referral. Free shipping & 90-day free returns.",
+    url: "https://temu.to/k/pssqr37haqj",
+    badge: "EXCLUSIVE",
+    badgeColor: "#ff6600",
+    bonus: "Free shipping + returns",
+  },
+  {
+    category: "shopping",
+    label: "HOT DEALS",
+    emoji: "🔥",
+    title: "TEMU — Hot Deals & Free Gifts",
+    description: "Score $0 free gifts on your first orders. Flash deals on trending products with free shipping and free returns within 90 days.",
+    url: "https://temu.to/k/prxuzyej54g",
+    badge: "FREE GIFTS",
+    badgeColor: "#FFD700",
+    bonus: "$0 gift items",
+  },
+  {
+    category: "shopping",
+    label: "$200 COUPONS",
+    emoji: "🎟️",
+    title: "TEMU — $200 Coupon Bundle",
+    description: "Claim a massive $200 coupon bundle on eligible orders. Stack savings across categories for maximum value on your purchases.",
+    url: "https://temu.to/k/plk7nt89x6c",
+    badge: "$200 OFF",
+    badgeColor: "#00ff99",
+    bonus: "$200 coupon bundle",
+  },
+  {
+    category: "shopping",
+    label: "BEST SELLERS",
+    emoji: "🏆",
+    title: "TEMU — Best Sellers",
+    description: "Shop the most popular, highest-rated products at unbeatable prices. Curated best-sellers across tech, fashion, home, and more.",
+    url: "https://temu.to/k/pjbw6mpytbx",
+    badge: "TOP RATED",
+    badgeColor: "#FFD700",
+    bonus: "Trending products",
+  },
+  {
+    category: "shopping",
+    label: "FAST EARNING",
+    emoji: "⚡",
+    title: "TEMU — Super Fast Earning",
+    description: "Earn rewards while you shop. The faster you shop, the more rewards you stack — redeemable on future purchases.",
+    url: "https://temu.to/k/ph6uzzqbm7c",
+    badge: "EARN REWARDS",
+    badgeColor: "#00aaff",
+    bonus: "Rewards on every order",
+  },
+
+  // ── Amazon Services ──────────────────────────────────────────────────────
+  {
+    category: "amazon",
+    label: "PRIME SHIPPING",
+    emoji: "📦",
+    title: "Amazon Prime",
+    description: "Free two-day shipping on millions of items, plus Prime Video streaming, Prime Music, exclusive deals, and more. The best value subscription in e-commerce.",
+    url: "https://amzn.to/48AEXgW",
+    badge: "BEST VALUE",
+    badgeColor: "#FFD700",
+    bonus: "Free 30-day trial",
+  },
+  {
+    category: "amazon",
+    label: "PRIME DEAL",
+    emoji: "🎓",
+    title: "Prime for Young Adults (18–24)",
+    description: "Discounted Amazon Prime for ages 18–24. Full Prime benefits at a fraction of the price — ideal for students and young professionals.",
+    url: "https://amzn.to/4pzCx7R",
+    badge: "DISCOUNTED",
+    badgeColor: "#00aaff",
+    bonus: "50% off Prime",
+  },
+  {
+    category: "amazon",
+    label: "STREAMING",
+    emoji: "🎬",
+    title: "Prime Video",
+    description: "Stream thousands of movies, TV shows, and Amazon Originals. Watch on any device, anytime — included with Prime or as a standalone service.",
+    url: "https://amzn.to/3XkW404",
+    badge: "STREAMING",
+    badgeColor: "#00aaff",
+    bonus: "Exclusive originals",
+  },
+  {
+    category: "amazon",
+    label: "AUDIOBOOKS",
+    emoji: "🎧",
+    title: "Audible Premium Plus",
+    description: "Unlimited audiobooks, podcasts, and Audible Originals. Listen anywhere — your car, gym, or commute. One of the best investments for your mind.",
+    url: "https://amzn.to/44p4Mhw",
+    badge: "UNLIMITED",
+    badgeColor: "#ff6600",
+    bonus: "Free trial available",
+  },
+  {
+    category: "amazon",
+    label: "E-BOOKS",
+    emoji: "📚",
+    title: "Kindle Unlimited",
+    description: "Unlimited reading access to over 4 million e-books, magazines, and comics. Reads on any device with the free Kindle app.",
+    url: "https://amzn.to/3XhTl7x",
+    badge: "4M+ BOOKS",
+    badgeColor: "#bf00ff",
+    bonus: "Read unlimited titles",
+  },
+  {
+    category: "amazon",
+    label: "MUSIC",
+    emoji: "🎵",
+    title: "Amazon Music Unlimited",
+    description: "Stream 100 million+ songs ad-free in HD and Ultra HD audio. Hands-free with Alexa, offline listening, and exclusive content.",
+    url: "https://amzn.to/4rtHuBg",
+    badge: "100M+ SONGS",
+    badgeColor: "#00aaff",
+    bonus: "HD audio quality",
+  },
+  {
+    category: "amazon",
+    label: "FAMILY",
+    emoji: "👨‍👩‍👧",
+    title: "Amazon Kids+",
+    description: "Ad-free books, games, videos, and apps for kids. Parental controls built-in, covers ages 3–12. Peace of mind for parents, fun for kids.",
+    url: "https://amzn.to/4oE71oJ",
+    badge: "KID SAFE",
+    badgeColor: "#00ff99",
+    bonus: "Parental controls",
+  },
+  {
+    category: "amazon",
+    label: "SNAP/EBT SAVINGS",
+    emoji: "💳",
+    title: "Amazon Access (SNAP/EBT)",
+    description: "Discounted Prime membership for qualifying government assistance recipients. Full Prime benefits — free shipping, video, music — at a deeply reduced rate.",
+    url: "https://amzn.to/4rp4EZk",
+    badge: "ASSISTANCE",
+    badgeColor: "#00ff99",
+    bonus: "Discounted for EBT/SNAP",
+  },
+
+  // ── Gaming ───────────────────────────────────────────────────────────────
+  {
+    category: "gaming",
+    label: "WIN REAL MONEY",
+    emoji: "🏆",
+    title: "MPL PRO — Cash Prizes",
+    description: "Compete in skill-based mobile games for real cash prizes. MPL Pro hosts daily tournaments across dozens of games — pure skill, no luck required.",
+    url: "https://referral-mplpro.onelink.me/eMpV/6kc2y3ka",
+    badge: "CASH PRIZES",
+    badgeColor: "#FFD700",
+    bonus: "Real money tournaments",
+  },
+  {
+    category: "gaming",
+    label: "SOCIAL CASINO",
+    emoji: "🎰",
+    title: "Stake.US — Social Casino",
+    description: "Free-to-play social casino with a huge variety of slots, table games, and live dealer titles. No real money required — just pure entertainment.",
+    url: "https://stake.us/?c=vKE8Fpwd",
+    badge: "FREE TO PLAY",
+    badgeColor: "#00aaff",
+    bonus: "No deposit needed",
+  },
+
+  // ── Health & Fitness ─────────────────────────────────────────────────────
+  {
+    category: "health",
+    label: "SUPPLEMENTS",
+    emoji: "💪",
+    title: "Redcon1 — Premium Supplements",
+    description: "Military-grade performance supplements trusted by professional athletes. Pre-workout, protein, recovery, and more with exclusive rewards for new customers.",
+    url: "http://rwrd.io/nr6geao?s",
+    badge: "REWARDS",
+    badgeColor: "#ff0040",
+    bonus: "Exclusive rewards program",
+  },
+
+  // ── Food & Delivery ──────────────────────────────────────────────────────
+  {
+    category: "food",
+    label: "FOOD DELIVERY",
+    emoji: "🍕",
+    title: "DoorDash — Food Delivery",
+    description: "Get food from your favorite local restaurants and chains delivered to your door. New users get sign-up savings on their first orders.",
+    url: "https://drd.sh/W94sSoxe4jsGyFoO",
+    badge: "NEW USER BONUS",
+    badgeColor: "#ff6600",
+    bonus: "First order savings",
+  },
+];
+
+// Build category filter list
+const CATEGORIES = [
+  { key: "all",      label: "⚡ ALL DEALS",         count: DEALS.length },
+  { key: "crypto",   label: "🔐 Crypto",             count: DEALS.filter(d => d.category === "crypto").length },
+  { key: "finance",  label: "💰 Finance",            count: DEALS.filter(d => d.category === "finance").length },
+  { key: "ai",       label: "🤖 AI Tools",           count: DEALS.filter(d => d.category === "ai").length },
+  { key: "shopping", label: "🛒 Shopping",           count: DEALS.filter(d => d.category === "shopping").length },
+  { key: "amazon",   label: "📦 Amazon",             count: DEALS.filter(d => d.category === "amazon").length },
+  { key: "gaming",   label: "🎮 Gaming",             count: DEALS.filter(d => d.category === "gaming").length },
+  { key: "health",   label: "💪 Health",             count: DEALS.filter(d => d.category === "health").length },
+  { key: "food",     label: "🍕 Food",               count: DEALS.filter(d => d.category === "food").length },
+];
+---
+
+<Layout title="Affiliate Deals — Matrix Hub">
+  <div class="affiliates-page">
+
+    <!-- ── Page Header ── -->
+    <div class="page-header">
+      <div class="header-badge">PARTNER NETWORK</div>
+      <h1 class="page-title">AFFILIATE HUB</h1>
+      <p class="page-subtitle">
+        Curated partner deals — crypto, finance, AI tools, shopping, gaming &amp; more.<br />
+        Every link supports the Matrix Hub ecosystem. 100% free to use.
+      </p>
+      <div class="header-stats">
+        <span class="stat">{DEALS.length} <small>deals</small></span>
+        <span class="stat-divider">·</span>
+        <span class="stat">{CATEGORIES.length - 1} <small>categories</small></span>
+        <span class="stat-divider">·</span>
+        <span class="stat">0 <small>cost to you</small></span>
+      </div>
+    </div>
+
+    <!-- ── Disclaimer Banner ── -->
+    <div class="disclaimer-banner">
+      <span class="disclaimer-icon">ℹ️</span>
+      <span>
+        Affiliate links — we may earn a commission at no extra cost to you.
+        All partners are personally vetted. Your support keeps Matrix Hub free.
+      </span>
+    </div>
+
+    <!-- ── Category Filter Tabs ── -->
+    <nav class="filter-nav" id="filter-nav" aria-label="Deal categories">
+      {CATEGORIES.map((cat) => (
+        <button
+          class={`filter-btn ${cat.key === "all" ? "active" : ""}`}
+          data-category={cat.key}
+          type="button"
+        >
+          {cat.label}
+          <span class="filter-count">{cat.count}</span>
+        </button>
+      ))}
+    </nav>
+
+    <!-- ── Deals Grid ── -->
+    <div class="deals-grid" id="deals-grid">
+      {DEALS.map((deal) => (
+        <article class="deal-card" data-category={deal.category}>
+          <!-- Badge row -->
+          <div class="deal-top">
+            <span class="deal-category-tag">{deal.label}</span>
+            <span class="deal-badge" style={`background: ${deal.badgeColor}20; color: ${deal.badgeColor}; border-color: ${deal.badgeColor}50;`}>
+              {deal.badge}
+            </span>
+          </div>
+
+          <!-- Title & emoji -->
+          <div class="deal-title-row">
+            <span class="deal-emoji" aria-hidden="true">{deal.emoji}</span>
+            <h2 class="deal-title">{deal.title}</h2>
+          </div>
+
+          <!-- Description -->
+          <p class="deal-description">{deal.description}</p>
+
+          <!-- Bonus highlight -->
+          <div class="deal-bonus">
+            <span class="bonus-icon">✦</span>
+            {deal.bonus}
+          </div>
+
+          <!-- CTA -->
+          <a
+            href={deal.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="deal-cta"
+            aria-label={`Open ${deal.title}`}
+          >
+            GET THIS DEAL
+            <span class="cta-arrow" aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <!-- ── No results fallback (hidden by default) ── -->
+    <div class="no-results" id="no-results" style="display:none;">
+      <span>🔍</span>
+      <p>No deals in this category yet.</p>
+    </div>
+
+    <!-- ── Support Banner ── -->
+    <div class="support-banner panel">
+      <h2 class="support-title">⚡ Support Matrix Hub Directly</h2>
+      <p class="support-desc">
+        Using affiliate links supports us for free — but if you want to tip directly, every contribution keeps the platform running and free for everyone.
+      </p>
+      <div class="support-methods">
+        <a href="https://www.paypal.me/bletourneau692" target="_blank" rel="noopener noreferrer" class="support-btn paypal">
+          💳 PayPal
+        </a>
+        <a href="https://venmo.com/code?user_id=2943286704603136860&created=1765731516" target="_blank" rel="noopener noreferrer" class="support-btn venmo">
+          📱 Venmo
+        </a>
+        <a href="https://cash.app/$bran8912" target="_blank" rel="noopener noreferrer" class="support-btn cashapp">
+          💵 Cash App
+        </a>
+        <a href="https://t.me/matrixhuborg" target="_blank" rel="noopener noreferrer" class="support-btn telegram">
+          📢 Telegram
+        </a>
+      </div>
+    </div>
+
+  </div>
+</Layout>
+
+<!-- ── Category filter script ───────────────────────────────────────────────── -->
+<script is:inline>
+  (function () {
+    const grid      = document.getElementById('deals-grid');
+    const noResults = document.getElementById('no-results');
+    const filterNav = document.getElementById('filter-nav');
+
+    if (!grid || !noResults || !filterNav) return;
+
+    filterNav.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+
+      const cat = btn.dataset.category;
+
+      // Update active tab
+      filterNav.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Filter cards
+      let visible = 0;
+      grid.querySelectorAll('.deal-card').forEach((card) => {
+        const matches = cat === 'all' || card.dataset.category === cat;
+        card.style.display = matches ? '' : 'none';
+        if (matches) visible++;
+      });
+
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+    });
+  })();
+</script>
+
+<style>
+  /* ── Page layout ──────────────────────────────────────────────────────── */
+  .affiliates-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ── Header ──────────────────────────────────────────────────────────── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .header-badge {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--theme-primary);
+    border: 1px solid var(--theme-primary);
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px var(--theme-glow);
+  }
+
+  .page-title {
+    font-size: 2.8rem;
+    color: var(--theme-primary);
+    text-shadow: 0 0 20px var(--theme-glow), 0 0 40px var(--theme-glow);
+    letter-spacing: 5px;
+    margin-bottom: 0.75rem;
+    animation: titlePulse 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes titlePulse {
+    from { text-shadow: 0 0 10px var(--theme-glow), 0 0 20px var(--theme-glow); }
+    to   { text-shadow: 0 0 20px var(--theme-glow), 0 0 50px var(--theme-glow), 0 0 80px var(--theme-glow); }
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+    color: var(--theme-text);
+    opacity: 0.8;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 1.2rem;
+  }
+
+  .header-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .stat {
+    color: var(--theme-primary);
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  .stat small {
+    font-size: 0.72rem;
+    opacity: 0.65;
+    font-weight: normal;
+  }
+
+  .stat-divider {
+    opacity: 0.4;
+  }
+
+  /* ── Disclaimer ──────────────────────────────────────────────────────── */
+  .disclaimer-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.75rem 1.2rem;
+    background: rgba(255, 170, 0, 0.06);
+    border: 1px solid rgba(255, 170, 0, 0.25);
+    border-radius: 6px;
+    font-size: 0.78rem;
+    color: var(--theme-text);
+    opacity: 0.85;
+    margin-bottom: 1.75rem;
+    line-height: 1.5;
+  }
+
+  .disclaimer-icon {
+    flex-shrink: 0;
+    font-size: 1rem;
+  }
+
+  /* ── Filter Nav ──────────────────────────────────────────────────────── */
+  .filter-nav {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 255, 153, 0.15);
+  }
+
+  .filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.9rem;
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--theme-text);
+    border: 1px solid rgba(0, 255, 153, 0.2);
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover {
+    background: rgba(0, 255, 153, 0.1);
+    border-color: var(--theme-primary);
+    color: var(--theme-primary);
+    box-shadow: 0 0 8px var(--theme-glow);
+  }
+
+  .filter-btn.active {
+    background: var(--theme-primary);
+    color: #000;
+    border-color: var(--theme-primary);
+    font-weight: bold;
+    box-shadow: 0 0 14px var(--theme-glow);
+  }
+
+  .filter-count {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-size: 0.65rem;
+  }
+
+  .filter-btn.active .filter-count {
+    background: rgba(0, 0, 0, 0.2);
+    color: #000;
+  }
+
+  /* ── Deals Grid ──────────────────────────────────────────────────────── */
+  .deals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* ── Deal Card ───────────────────────────────────────────────────────── */
+  .deal-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.4rem;
+    background: var(--theme-bg-panel);
+    border: 1px solid rgba(0, 255, 153, 0.2);
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    animation: cardIn 0.4s ease both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .deal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 153, 0.04), transparent);
+    transition: left 0.5s ease;
+    pointer-events: none;
+  }
+
+  .deal-card:hover {
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 22px var(--theme-glow), 0 4px 20px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+  }
+
+  .deal-card:hover::before {
+    left: 120%;
+  }
+
+  /* ── Card internals ── */
+  .deal-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .deal-category-tag {
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    color: var(--theme-secondary);
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .deal-badge {
+    font-size: 0.62rem;
+    font-weight: bold;
+    padding: 0.15rem 0.55rem;
+    border-radius: 12px;
+    border: 1px solid;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .deal-title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .deal-emoji {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    line-height: 1.2;
+  }
+
+  .deal-title {
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: var(--theme-primary);
+    text-shadow: 0 0 8px var(--theme-glow);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .deal-description {
+    font-size: 0.83rem;
+    color: var(--theme-text);
+    opacity: 0.82;
+    line-height: 1.6;
+    margin-bottom: 0.85rem;
+    flex: 1;
+  }
+
+  .deal-bonus {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--theme-primary);
+    background: rgba(0, 255, 153, 0.06);
+    border: 1px solid rgba(0, 255, 153, 0.18);
+    border-radius: 4px;
+    padding: 0.35rem 0.65rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+
+  .bonus-icon {
+    color: var(--theme-primary);
+    font-size: 0.85rem;
+  }
+
+  /* ── CTA Button ─────────────────────────────────────────────────────── */
+  .deal-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    background: transparent;
+    color: var(--theme-primary);
+    border: 2px solid var(--theme-primary);
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    margin-top: auto;
+  }
+
+  .deal-cta:hover {
+    background: var(--theme-primary);
+    color: #000;
+    box-shadow: 0 0 18px var(--theme-glow);
+    text-decoration: none;
+    text-shadow: none;
+    transform: translateY(-1px);
+  }
+
+  .cta-arrow {
+    transition: transform 0.2s ease;
+    font-style: normal;
+  }
+
+  .deal-cta:hover .cta-arrow {
+    transform: translateX(4px);
+  }
+
+  /* ── No results ──────────────────────────────────────────────────────── */
+  .no-results {
+    text-align: center;
+    padding: 3rem;
+    opacity: 0.5;
+    font-size: 1.1rem;
+  }
+
+  .no-results span {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── Support Banner ──────────────────────────────────────────────────── */
+  .support-banner {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .support-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .support-desc {
+    font-size: 0.88rem;
+    opacity: 0.8;
+    line-height: 1.6;
+    max-width: 580px;
+    margin: 0 auto 1.5rem;
+    color: var(--theme-text);
+  }
+
+  .support-methods {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .support-btn {
+    display: inline-block;
+    padding: 0.65rem 1.4rem;
+    border: 2px solid var(--theme-primary);
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.88rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    color: var(--theme-primary);
+    text-shadow: 0 0 8px var(--theme-glow);
+  }
+
+  .support-btn.paypal   { background: linear-gradient(135deg, #003087, #001a4d); }
+  .support-btn.venmo    { background: linear-gradient(135deg, #008CFF, #004d8c); }
+  .support-btn.cashapp  { background: linear-gradient(135deg, #00D632, #007a1d); color: #000; text-shadow: none; }
+  .support-btn.telegram { background: linear-gradient(135deg, #0088cc, #005580); }
+
+  .support-btn:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 0 20px var(--theme-glow);
+    text-decoration: none;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+      letter-spacing: 3px;
+    }
+
+    .deals-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .filter-nav {
+      gap: 0.3rem;
+    }
+
+    .filter-btn {
+      font-size: 0.72rem;
+      padding: 0.38rem 0.7rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-title {
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+    }
+
+    .affiliates-page {
+      padding: 1.5rem 0.75rem 3rem;
+    }
+  }
+</style>
