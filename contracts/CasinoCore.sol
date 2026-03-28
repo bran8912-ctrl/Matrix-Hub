@@ -76,6 +76,19 @@ contract CasinoCore {
     error InvalidPercentageSum();
     error DevPaymentFailed();
 
+    /// @notice Emitted when a bet is placed
+    /// @param player Address of the player
+    /// @param amount Bet amount in MTX
+    /// @param gameData Encoded game data
+    event BetPlaced(address indexed player, uint256 indexed amount, bytes gameData);
+
+    /// @notice Emitted when a bet is resolved
+    /// @param player Address of the player
+    /// @param amount Original bet amount in MTX
+    /// @param win True if player won, false otherwise
+    /// @param payout Payout amount (0 if loss)
+    event BetResolved(address indexed player, uint256 indexed amount, bool win, uint256 payout);
+
     /// @notice MTX token contract
     IERC20 public mtx;
     
@@ -186,6 +199,8 @@ contract CasinoCore {
         // User must approve CasinoCore for MTX spend
         if (!mtx.transferFrom(msg.sender, address(this), amount)) revert TransferFailed();
 
+        emit BetPlaced(msg.sender, amount, gameData);
+
         uint256 payoutAmount = amount * payoutPercent / 100;
         uint256 liquidityAmount = amount * liquidityPercent / 100;
         uint256 reserveAmount = amount * reservePercent / 100;
@@ -199,10 +214,13 @@ contract CasinoCore {
         }
 
         bool win = rng.resolve(gameData);
+        uint256 payout = 0;
         if (win) {
-            uint256 winnings = calculatePayout(payoutAmount);
-            reserve.payWinner(msg.sender, winnings);
+            payout = calculatePayout(payoutAmount);
+            reserve.payWinner(msg.sender, payout);
         }
+
+        emit BetResolved(msg.sender, amount, win, payout);
     }
 
     /**

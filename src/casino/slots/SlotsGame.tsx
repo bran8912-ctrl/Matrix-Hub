@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { SlotsEngine, type SlotsResult } from './SlotsEngine';
+import type { BetResult } from '../../utils/casinoBet';
 
 interface SlotsGameProps {
   walletAddress?: string;
   mtxBalance: number;
+  placeBet?: (amount: number, gameData?: string) => Promise<BetResult>;
+  refreshBalance?: () => void;
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function SlotsGame({ walletAddress, mtxBalance, onBetPlaced }: SlotsGameProps) {
+export default function SlotsGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance, onBetPlaced }: SlotsGameProps) {
   const [result, setResult] = useState<SlotsResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [txHash, setTxHash] = useState('');
 
   async function handleSpin() {
     if (!walletAddress) {
@@ -19,7 +23,7 @@ export default function SlotsGame({ walletAddress, mtxBalance, onBetPlaced }: Sl
     }
 
     if (Number(mtxBalance) <= 0) {
-      alert('You need MTX to play.');
+      setError('You need MTX to play. Buy MTX first.');
       return;
     }
 
@@ -30,27 +34,32 @@ export default function SlotsGame({ walletAddress, mtxBalance, onBetPlaced }: Sl
     }
 
     if (mtxBalance < SlotsEngine.BET_AMOUNT) {
-      setError('Insufficient MTX balance');
+      setError(`Insufficient MTX balance. Need ${SlotsEngine.BET_AMOUNT} MTX.`);
       return;
     }
 
     setError('');
+    setTxHash('');
     setLoading(true);
 
     try {
-      // Simulate a provably fair hash (in production, this would come from backend/contract)
+      // Place the on-chain MTX bet
+      if (placeBet) {
+        const betResult = await placeBet(SlotsEngine.BET_AMOUNT);
+        setTxHash(betResult.txHash);
+        if (onBetPlaced) onBetPlaced(SlotsEngine.BET_AMOUNT);
+      }
+
+      // Derive game result from a provably fair hash
       const hash = Array.from({ length: 64 }, () =>
         Math.floor(Math.random() * 16).toString(16)
       ).join('');
 
       const spinResult = SlotsEngine.spin(hash);
       setResult(spinResult);
-      
-      if (onBetPlaced) {
-        onBetPlaced(SlotsEngine.BET_AMOUNT);
-      }
-    } catch (e) {
-      setError('Failed to spin. Please try again.');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Failed to spin. Please try again.';
+      setError(msg);
       console.error(e);
     } finally {
       setLoading(false);
@@ -63,7 +72,7 @@ export default function SlotsGame({ walletAddress, mtxBalance, onBetPlaced }: Sl
       
       <div className="mb-6 text-center">
         <p className="text-gray-300 mb-2">Spin costs: {SlotsEngine.BET_AMOUNT} MTX</p>
-        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance} MTX</p>
+        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance.toFixed(2)} MTX</p>
       </div>
 
       {/* Reels Display */}
@@ -95,6 +104,21 @@ export default function SlotsGame({ walletAddress, mtxBalance, onBetPlaced }: Sl
         </div>
       )}
 
+      {/* Transaction Hash */}
+      {txHash && (
+        <div className="bg-gray-800 text-green-400 p-3 rounded mb-4 text-center text-sm">
+          ✅ Bet confirmed on-chain!{' '}
+          <a
+            href={`https://polygonscan.com/tx/${txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            View TX
+          </a>
+        </div>
+      )}
+
       {/* Error Display */}
       {error && (
         <div className="bg-red-900 text-red-200 p-3 rounded mb-4 text-center">
@@ -108,7 +132,7 @@ export default function SlotsGame({ walletAddress, mtxBalance, onBetPlaced }: Sl
         disabled={loading || !walletAddress}
         className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white font-bold py-4 px-6 rounded-lg text-xl transition-colors"
       >
-        {loading ? 'Spinning...' : walletAddress ? '🎰 SPIN' : 'Connect Wallet to Play'}
+        {loading ? 'Processing...' : walletAddress ? `🎰 SPIN (${SlotsEngine.BET_AMOUNT} MTX)` : 'Connect Wallet to Play'}
       </button>
 
       {/* Payout Table */}

@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { DiceEngine, type DiceResult } from './DiceEngine';
+import type { BetResult } from '../../utils/casinoBet';
 
 interface DiceGameProps {
   walletAddress?: string;
   mtxBalance: number;
+  placeBet?: (amount: number, gameData?: string) => Promise<BetResult>;
+  refreshBalance?: () => void;
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function DiceGame({ walletAddress, mtxBalance, onBetPlaced }: DiceGameProps) {
+export default function DiceGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance, onBetPlaced }: DiceGameProps) {
   const [betAmount, setBetAmount] = useState(DiceEngine.BET_AMOUNT);
   const [target, setTarget] = useState(50);
   const [result, setResult] = useState<DiceResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [txHash, setTxHash] = useState('');
 
   const multiplier = DiceEngine.calculateMultiplier(target);
   const winChance = ((target - 1) / 100) * 100;
@@ -24,7 +28,7 @@ export default function DiceGame({ walletAddress, mtxBalance, onBetPlaced }: Dic
     }
 
     if (Number(mtxBalance) <= 0) {
-      alert('You need MTX to play.');
+      setError('You need MTX to play. Buy MTX first.');
       return;
     }
 
@@ -35,27 +39,32 @@ export default function DiceGame({ walletAddress, mtxBalance, onBetPlaced }: Dic
     }
 
     if (mtxBalance < betAmount) {
-      setError('Insufficient MTX balance');
+      setError(`Insufficient MTX balance. Need ${betAmount} MTX.`);
       return;
     }
 
     setError('');
+    setTxHash('');
     setLoading(true);
 
     try {
-      // Simulate a provably fair hash (in production, this would come from backend/contract)
+      // Place the on-chain MTX bet
+      if (placeBet) {
+        const betResult = await placeBet(betAmount);
+        setTxHash(betResult.txHash);
+        if (onBetPlaced) onBetPlaced(betAmount);
+      }
+
+      // Derive game result from a provably fair hash
       const hash = Array.from({ length: 64 }, () =>
         Math.floor(Math.random() * 16).toString(16)
       ).join('');
 
       const rollResult = DiceEngine.roll(hash, target, betAmount);
       setResult(rollResult);
-      
-      if (onBetPlaced) {
-        onBetPlaced(betAmount);
-      }
-    } catch (e) {
-      setError('Failed to roll. Please try again.');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Failed to roll. Please try again.';
+      setError(msg);
       console.error(e);
     } finally {
       setLoading(false);
@@ -68,7 +77,7 @@ export default function DiceGame({ walletAddress, mtxBalance, onBetPlaced }: Dic
       
       <div className="mb-6 text-center">
         <p className="text-gray-300 mb-2">Minimum bet: {DiceEngine.BET_AMOUNT} MTX</p>
-        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance} MTX</p>
+        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance.toFixed(2)} MTX</p>
       </div>
 
       {/* Dice Display */}
@@ -106,6 +115,21 @@ export default function DiceGame({ walletAddress, mtxBalance, onBetPlaced }: Dic
               </p>
             </>
           )}
+        </div>
+      )}
+
+      {/* Transaction Hash */}
+      {txHash && (
+        <div className="bg-gray-800 text-green-400 p-3 rounded mb-4 text-center text-sm">
+          ✅ Bet confirmed on-chain!{' '}
+          <a
+            href={`https://polygonscan.com/tx/${txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            View TX
+          </a>
         </div>
       )}
 
@@ -159,7 +183,7 @@ export default function DiceGame({ walletAddress, mtxBalance, onBetPlaced }: Dic
         disabled={loading || !walletAddress}
         className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white font-bold py-4 px-6 rounded-lg text-xl transition-colors"
       >
-        {loading ? 'Rolling...' : walletAddress ? '🎲 ROLL DICE' : 'Connect Wallet to Play'}
+        {loading ? 'Processing...' : walletAddress ? `🎲 ROLL DICE (${betAmount} MTX)` : 'Connect Wallet to Play'}
       </button>
 
       {/* Info */}

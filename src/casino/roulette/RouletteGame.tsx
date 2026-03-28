@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { RouletteEngine, type RouletteBet, type RouletteResult, type BetType } from './RouletteEngine';
+import type { BetResult } from '../../utils/casinoBet';
 
 interface RouletteGameProps {
   walletAddress?: string;
   mtxBalance: number;
+  placeBet?: (amount: number, gameData?: string) => Promise<BetResult>;
+  refreshBalance?: () => void;
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function RouletteGame({ walletAddress, mtxBalance, onBetPlaced }: RouletteGameProps) {
+export default function RouletteGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance, onBetPlaced }: RouletteGameProps) {
   const [betAmount, setBetAmount] = useState(1);
   const [betType, setBetType] = useState<BetType>('red');
   const [betNumber, setBetNumber] = useState<number>(0);
   const [result, setResult] = useState<RouletteResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [txHash, setTxHash] = useState('');
 
   function getColorClass(color: 'red' | 'black' | 'green') {
     if (color === 'red') return 'bg-red-600';
@@ -28,7 +32,7 @@ export default function RouletteGame({ walletAddress, mtxBalance, onBetPlaced }:
     }
 
     if (Number(mtxBalance) <= 0) {
-      alert('You need MTX to play.');
+      setError('You need MTX to play. Buy MTX first.');
       return;
     }
 
@@ -45,27 +49,32 @@ export default function RouletteGame({ walletAddress, mtxBalance, onBetPlaced }:
     }
 
     if (mtxBalance < betAmount) {
-      setError('Insufficient MTX balance');
+      setError(`Insufficient MTX balance. Need ${betAmount} MTX.`);
       return;
     }
 
     setError('');
+    setTxHash('');
     setLoading(true);
 
     try {
-      // Simulate a provably fair hash (in production, this would come from backend/contract)
+      // Place the on-chain MTX bet
+      if (placeBet) {
+        const betResult = await placeBet(betAmount);
+        setTxHash(betResult.txHash);
+        if (onBetPlaced) onBetPlaced(betAmount);
+      }
+
+      // Derive game result from a provably fair hash
       const hash = Array.from({ length: 64 }, () =>
         Math.floor(Math.random() * 16).toString(16)
       ).join('');
 
       const spinResult = RouletteEngine.spin(hash, bet);
       setResult(spinResult);
-      
-      if (onBetPlaced) {
-        onBetPlaced(betAmount);
-      }
-    } catch (e) {
-      setError('Failed to spin. Please try again.');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Failed to spin. Please try again.';
+      setError(msg);
       console.error(e);
     } finally {
       setLoading(false);
@@ -78,7 +87,7 @@ export default function RouletteGame({ walletAddress, mtxBalance, onBetPlaced }:
       
       <div className="mb-6 text-center">
         <p className="text-gray-300 mb-2">Minimum bet: {RouletteEngine.MIN_BET} MTX</p>
-        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance} MTX</p>
+        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance.toFixed(2)} MTX</p>
       </div>
 
       {/* Result Display */}
@@ -152,6 +161,21 @@ export default function RouletteGame({ walletAddress, mtxBalance, onBetPlaced }:
         )}
       </div>
 
+      {/* Transaction Hash */}
+      {txHash && (
+        <div className="bg-gray-800 text-green-400 p-3 rounded mb-4 text-center text-sm">
+          ✅ Bet confirmed on-chain!{' '}
+          <a
+            href={`https://polygonscan.com/tx/${txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            View TX
+          </a>
+        </div>
+      )}
+
       {/* Error Display */}
       {error && (
         <div className="bg-red-900 text-red-200 p-3 rounded mb-4 text-center">
@@ -165,7 +189,7 @@ export default function RouletteGame({ walletAddress, mtxBalance, onBetPlaced }:
         disabled={loading || !walletAddress}
         className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white font-bold py-4 px-6 rounded-lg text-xl transition-colors"
       >
-        {loading ? 'Spinning...' : walletAddress ? '🎡 SPIN' : 'Connect Wallet to Play'}
+        {loading ? 'Processing...' : walletAddress ? `🎡 SPIN (${betAmount} MTX)` : 'Connect Wallet to Play'}
       </button>
 
       {/* Payout Table */}

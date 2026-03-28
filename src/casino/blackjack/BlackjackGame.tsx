@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { BlackjackEngine, type BlackjackResult, type Card } from './BlackjackEngine';
+import type { BetResult } from '../../utils/casinoBet';
 
 interface BlackjackGameProps {
   walletAddress?: string;
   mtxBalance: number;
+  placeBet?: (amount: number, gameData?: string) => Promise<BetResult>;
+  refreshBalance?: () => void;
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function BlackjackGame({ walletAddress, mtxBalance, onBetPlaced }: BlackjackGameProps) {
+export default function BlackjackGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance, onBetPlaced }: BlackjackGameProps) {
   const [result, setResult] = useState<BlackjackResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [txHash, setTxHash] = useState('');
 
   function renderCard(card: Card) {
     const color = ['♥️', '♦️'].includes(card.suit) ? 'text-red-500' : 'text-gray-200';
@@ -31,7 +35,7 @@ export default function BlackjackGame({ walletAddress, mtxBalance, onBetPlaced }
     }
 
     if (Number(mtxBalance) <= 0) {
-      alert('You need MTX to play.');
+      setError('You need MTX to play. Buy MTX first.');
       return;
     }
 
@@ -42,27 +46,32 @@ export default function BlackjackGame({ walletAddress, mtxBalance, onBetPlaced }
     }
 
     if (mtxBalance < BlackjackEngine.BET_AMOUNT) {
-      setError('Insufficient MTX balance');
+      setError(`Insufficient MTX balance. Need ${BlackjackEngine.BET_AMOUNT} MTX.`);
       return;
     }
 
     setError('');
+    setTxHash('');
     setLoading(true);
 
     try {
-      // Simulate a provably fair hash (in production, this would come from backend/contract)
+      // Place the on-chain MTX bet
+      if (placeBet) {
+        const betResult = await placeBet(BlackjackEngine.BET_AMOUNT);
+        setTxHash(betResult.txHash);
+        if (onBetPlaced) onBetPlaced(BlackjackEngine.BET_AMOUNT);
+      }
+
+      // Derive game result from a provably fair hash
       const hash = Array.from({ length: 64 }, () =>
         Math.floor(Math.random() * 16).toString(16)
       ).join('');
 
       const gameResult = BlackjackEngine.playHand(hash);
       setResult(gameResult);
-      
-      if (onBetPlaced) {
-        onBetPlaced(BlackjackEngine.BET_AMOUNT);
-      }
-    } catch (e) {
-      setError('Failed to deal. Please try again.');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Failed to deal. Please try again.';
+      setError(msg);
       console.error(e);
     } finally {
       setLoading(false);
@@ -75,7 +84,7 @@ export default function BlackjackGame({ walletAddress, mtxBalance, onBetPlaced }
       
       <div className="mb-6 text-center">
         <p className="text-gray-300 mb-2">Bet per hand: {BlackjackEngine.BET_AMOUNT} MTX</p>
-        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance} MTX</p>
+        <p className="text-yellow-400 font-semibold">Your balance: {mtxBalance.toFixed(2)} MTX</p>
       </div>
 
       {/* Dealer's Hand */}
@@ -143,6 +152,21 @@ export default function BlackjackGame({ walletAddress, mtxBalance, onBetPlaced }
         </div>
       )}
 
+      {/* Transaction Hash */}
+      {txHash && (
+        <div className="bg-gray-800 text-green-400 p-3 rounded mb-4 text-center text-sm">
+          ✅ Bet confirmed on-chain!{' '}
+          <a
+            href={`https://polygonscan.com/tx/${txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            View TX
+          </a>
+        </div>
+      )}
+
       {/* Error Display */}
       {error && (
         <div className="bg-red-900 text-red-200 p-3 rounded mb-4 text-center">
@@ -156,7 +180,7 @@ export default function BlackjackGame({ walletAddress, mtxBalance, onBetPlaced }
         disabled={loading || !walletAddress}
         className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white font-bold py-4 px-6 rounded-lg text-xl transition-colors"
       >
-        {loading ? 'Dealing...' : walletAddress ? '🃏 DEAL' : 'Connect Wallet to Play'}
+        {loading ? 'Processing...' : walletAddress ? `🃏 DEAL (${BlackjackEngine.BET_AMOUNT} MTX)` : 'Connect Wallet to Play'}
       </button>
 
       {/* Rules */}

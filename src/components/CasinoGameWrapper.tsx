@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserProvider, formatUnits, Contract } from 'ethers';
+import type { Eip1193Provider } from 'ethers';
 import { useAppKitProvider, useAppKitAccount, useAppKit } from '@reown/appkit/react'
 import { MTX } from '../config/mtx';
+import { placeCasinoBet, type BetResult } from '../utils/casinoBet';
 
 // Deployed MTX token contract address and ABI
 const MTX_TOKEN_ADDRESS = MTX.address;
@@ -12,7 +14,12 @@ const MTX_TOKEN_ABI = [
 ];
 
 interface CasinoGameWrapperProps {
-  children: (props: { walletAddress?: string; mtxBalance: number }) => React.ReactNode;
+  children: (props: {
+    walletAddress?: string;
+    mtxBalance: number;
+    placeBet: (amount: number, gameData?: string) => Promise<BetResult>;
+    refreshBalance: () => void;
+  }) => React.ReactNode;
 }
 
 export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) {
@@ -24,29 +31,39 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
-  // Fetch MTX balance when wallet is connected
-  useEffect(() => {
-    const fetchBalance = async () => {
-      if (!isConnected || !address || !walletProvider) {
-        setBalance(0)
-        return
-      }
-
-      try {
-        const provider = new BrowserProvider(walletProvider)
-        const token = new Contract(MTX_TOKEN_ADDRESS, MTX_TOKEN_ABI, provider)
-        const rawBalance = await token.balanceOf(address)
-        const decimals = await token.decimals()
-        const formatted = Number(formatUnits(rawBalance, decimals))
-        setBalance(formatted)
-      } catch (err) {
-        setError('Failed to fetch MTX balance.')
-        console.error(err)
-      }
+  const fetchBalance = useCallback(async () => {
+    if (!isConnected || !address || !walletProvider) {
+      setBalance(0)
+      return
     }
 
+    try {
+      const provider = new BrowserProvider(walletProvider as Eip1193Provider)
+      const token = new Contract(MTX_TOKEN_ADDRESS, MTX_TOKEN_ABI, provider)
+      const rawBalance = await token.balanceOf(address)
+      const decimals = await token.decimals()
+      const formatted = Number(formatUnits(rawBalance, decimals))
+      setBalance(formatted)
+    } catch (err) {
+      setError('Failed to fetch MTX balance.')
+      console.error(err)
+    }
+  }, [isConnected, address, walletProvider]);
+
+  // Fetch MTX balance when wallet is connected
+  useEffect(() => {
     fetchBalance()
-  }, [isConnected, address, walletProvider])
+  }, [fetchBalance])
+
+  const handlePlaceBet = useCallback(async (amount: number, gameData?: string): Promise<BetResult> => {
+    if (!walletProvider) {
+      throw new Error('Wallet not connected.');
+    }
+    const result = await placeCasinoBet(walletProvider as Eip1193Provider, amount, gameData);
+    // Refresh balance after bet
+    await fetchBalance();
+    return result;
+  }, [walletProvider, fetchBalance]);
 
   return (
     <div>
@@ -79,7 +96,7 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
               </div>
             </div>
           </div>
-          {children({ walletAddress: address, mtxBalance: balance })}
+          {children({ walletAddress: address, mtxBalance: balance, placeBet: handlePlaceBet, refreshBalance: fetchBalance })}
         </>
       )}
     </div>
