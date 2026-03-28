@@ -128,7 +128,12 @@ export default function PersistentMusicPlayer() {
   }, [isMinimized]);
 
   useEffect(() => {
-    localStorage.setItem('matrixPlayerVolume', volume.toString());
+    const timeoutId = window.setTimeout(() => {
+      localStorage.setItem('matrixPlayerVolume', volume.toString());
+    }, 150);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
   }, [volume]);
 
   useEffect(() => {
@@ -252,27 +257,41 @@ export default function PersistentMusicPlayer() {
   }, []);
 
   const getNextShuffledTrack = useCallback(
-    (currentPlayed: number[]) => {
-      const unplayed = matrixPlaylist
-        .map((_, trackIndex) => trackIndex)
-        .filter((trackIndex) => !currentPlayed.includes(trackIndex));
+    () => {
+      // Use functional update exclusively so history is never stale on rapid clicks.
+      // We compute the return value first using the most recent playedTracks ref value,
+      // then commit via functional setState.
+      let selected = 0;
 
-      if (unplayed.length === 0) {
-        // All tracks have played — reset history
-        setPlayedTracks([]);
-        return Math.floor(Math.random() * matrixPlaylist.length);
-      }
+      setPlayedTracks((prevPlayed) => {
+        // Treat the current track as "played" in this shuffle step
+        const playedSet = new Set<number>(prevPlayed);
+        playedSet.add(currentTrackIndex);
 
-      const selected = unplayed[Math.floor(Math.random() * unplayed.length)];
-      setPlayedTracks([...currentPlayed, selected]);
+        const unplayed = matrixPlaylist
+          .map((_, trackIndex) => trackIndex)
+          .filter((trackIndex) => !playedSet.has(trackIndex));
+
+        if (unplayed.length === 0) {
+          // All tracks have played — start a new shuffle cycle.
+          // Record both currentTrackIndex and the new selection so neither can repeat immediately.
+          selected = Math.floor(Math.random() * matrixPlaylist.length);
+          return Array.from(new Set([currentTrackIndex, selected]));
+        }
+
+        selected = unplayed[Math.floor(Math.random() * unplayed.length)];
+        playedSet.add(selected);
+        return Array.from(playedSet);
+      });
+
       return selected;
     },
-    []
+    [currentTrackIndex]
   );
 
   const handlePrevious = useCallback(() => {
     const newIndex = isShuffleOn
-      ? getNextShuffledTrack(playedTracks)
+      ? getNextShuffledTrack()
       : (currentTrackIndex - 1 + matrixPlaylist.length) % matrixPlaylist.length;
 
     // Reset saved position when changing tracks
@@ -288,11 +307,11 @@ export default function PersistentMusicPlayer() {
         });
       }, 0);
     }
-  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks, getNextShuffledTrack]);
+  }, [currentTrackIndex, isShuffleOn, isPlaying, getNextShuffledTrack]);
 
   const handleNext = useCallback(() => {
     const newIndex = isShuffleOn
-      ? getNextShuffledTrack(playedTracks)
+      ? getNextShuffledTrack()
       : (currentTrackIndex + 1) % matrixPlaylist.length;
 
     localStorage.removeItem('matrixPlayerTime');
@@ -306,11 +325,15 @@ export default function PersistentMusicPlayer() {
         });
       }, 0);
     }
-  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks, getNextShuffledTrack]);
+  }, [currentTrackIndex, isShuffleOn, isPlaying, getNextShuffledTrack]);
 
   const handleEnded = useCallback(() => {
     if (isAutoplayOn && !isLoopOn) {
+      // Autoplay is on and not looping: advance to the next track, keep isPlaying true
       handleNext();
+    } else if (!isLoopOn) {
+      // Autoplay is off and not looping: playback has stopped, reflect that in state
+      setIsPlaying(false);
     }
   }, [isAutoplayOn, isLoopOn, handleNext]);
 
@@ -326,9 +349,14 @@ export default function PersistentMusicPlayer() {
       artwork: [{ src: '/favicon.ico', sizes: '96x96', type: 'image/x-icon' }],
     });
 
+    // Route through handleEnable/handlePlay so AudioContext is initialised/resumed
+    // and isEnabled is set correctly, keeping behaviour consistent with in-UI controls.
     navigator.mediaSession.setActionHandler('play', () => {
-      audioRef.current?.play().catch((err) => console.error('Audio playback failed:', err));
-      setIsPlaying(true);
+      if (!isEnabled) {
+        handleEnable();
+      } else {
+        handlePlay();
+      }
     });
     navigator.mediaSession.setActionHandler('pause', () => {
       audioRef.current?.pause();
@@ -336,7 +364,7 @@ export default function PersistentMusicPlayer() {
     });
     navigator.mediaSession.setActionHandler('previoustrack', handlePrevious);
     navigator.mediaSession.setActionHandler('nexttrack', handleNext);
-  }, [currentTrackIndex, handlePrevious, handleNext]);
+  }, [currentTrackIndex, isEnabled, handleEnable, handlePlay, handlePrevious, handleNext]);
 
   const currentTrack = matrixPlaylist[currentTrackIndex];
 
