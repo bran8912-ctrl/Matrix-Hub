@@ -37,6 +37,12 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
       return
     }
 
+    // Skip balance fetch if the MTX contract is not yet deployed
+    if (!MTX.isDeployed) {
+      setBalance(0)
+      return
+    }
+
     try {
       const provider = new BrowserProvider(walletProvider as Eip1193Provider)
       const token = new Contract(MTX_TOKEN_ADDRESS, MTX_TOKEN_ABI, provider)
@@ -44,6 +50,7 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
       const decimals = await token.decimals()
       const formatted = Number(formatUnits(rawBalance, decimals))
       setBalance(formatted)
+      setError('') // Clear any previous transient error on success
     } catch (err) {
       setError('Failed to fetch MTX balance.')
       console.error(err)
@@ -72,7 +79,7 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
           <h3 className="text-2xl font-bold text-green-400 mb-4">Connect Your Wallet</h3>
           <p className="text-gray-300 mb-6">Connect your wallet to check your MTX balance and play casino games.</p>
           <button
-            onClick={() => open()}
+            onClick={async () => { setLoading(true); await open(); setLoading(false); }}
             disabled={loading}
             className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors"
           >

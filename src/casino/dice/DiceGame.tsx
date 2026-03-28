@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DiceEngine, type DiceResult } from './DiceEngine';
-import type { BetResult } from '../../utils/casinoBet';
+import { generateClientHash, type BetResult } from '../../utils/casinoBet';
 
 interface DiceGameProps {
   walletAddress?: string;
@@ -10,7 +10,7 @@ interface DiceGameProps {
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function DiceGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance, onBetPlaced }: DiceGameProps) {
+export default function DiceGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance: _refreshBalance, onBetPlaced }: DiceGameProps) {
   const [betAmount, setBetAmount] = useState(DiceEngine.BET_AMOUNT);
   const [target, setTarget] = useState(50);
   const [result, setResult] = useState<DiceResult | null>(null);
@@ -53,12 +53,19 @@ export default function DiceGame({ walletAddress, mtxBalance = 0, placeBet, refr
         const betResult = await placeBet(betAmount);
         setTxHash(betResult.txHash);
         if (onBetPlaced) onBetPlaced(betAmount);
+
+        // If CasinoCore resolved the bet on-chain, use that as the source of truth
+        if (betResult.mode === 'on-chain' && betResult.win !== undefined) {
+          const hash = generateClientHash();
+          const rollResult = DiceEngine.roll(hash, target, betAmount);
+          // Override win/payout with on-chain outcome
+          setResult({ ...rollResult, win: betResult.win, payout: betResult.payout ?? 0 });
+          return;
+        }
       }
 
-      // Derive game result from a provably fair hash
-      const hash = Array.from({ length: 64 }, () =>
-        Math.floor(Math.random() * 16).toString(16)
-      ).join('');
+      // Derive game result from a provably fair hash (transfer mode or no placeBet)
+      const hash = generateClientHash();
 
       const rollResult = DiceEngine.roll(hash, target, betAmount);
       setResult(rollResult);

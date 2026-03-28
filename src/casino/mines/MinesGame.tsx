@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MinesEngine, type MinesGameState, type MinesResult } from './MinesEngine';
-import type { BetResult } from '../../utils/casinoBet';
+import { generateClientHash, type BetResult } from '../../utils/casinoBet';
 
 interface MinesGameProps {
   walletAddress?: string;
@@ -10,7 +10,7 @@ interface MinesGameProps {
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function MinesGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance, onBetPlaced }: MinesGameProps) {
+export default function MinesGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance: _refreshBalance, onBetPlaced }: MinesGameProps) {
   const [betAmount, setBetAmount] = useState(MinesEngine.BET_AMOUNT);
   const [numMines, setNumMines] = useState(5);
   const [gameState, setGameState] = useState<MinesGameState | null>(null);
@@ -46,17 +46,27 @@ export default function MinesGame({ walletAddress, mtxBalance = 0, placeBet, ref
     setStartingGame(true);
 
     try {
-      // Place the on-chain MTX bet
+      // Place the on-chain MTX bet first
       if (placeBet) {
         const betResult = await placeBet(betAmount);
         setTxHash(betResult.txHash);
         if (onBetPlaced) onBetPlaced(betAmount);
+
+        // When using CasinoCore (on-chain mode), the bet is resolved immediately on-chain.
+        // The local board is for entertainment only — don't present it as the financial result.
+        if (betResult.mode === 'on-chain') {
+          // Only start a local board for the interactive reveal experience;
+          // the actual payout was already settled on-chain via BetResolved.
+          const hash = generateClientHash();
+          const newGame = MinesEngine.initGame(hash, numMines);
+          setGameState(newGame);
+          setLastResult(null);
+          return;
+        }
       }
 
-      // Generate provably fair hash
-      const hash = Array.from({ length: 64 }, () =>
-        Math.floor(Math.random() * 16).toString(16)
-      ).join('');
+      // Off-chain / transfer-fallback mode: use local random game
+      const hash = generateClientHash();
 
       const newGame = MinesEngine.initGame(hash, numMines);
       setGameState(newGame);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BlackjackEngine, type BlackjackResult, type Card } from './BlackjackEngine';
-import type { BetResult } from '../../utils/casinoBet';
+import { generateClientHash, type BetResult } from '../../utils/casinoBet';
 
 interface BlackjackGameProps {
   walletAddress?: string;
@@ -10,7 +10,7 @@ interface BlackjackGameProps {
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function BlackjackGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance, onBetPlaced }: BlackjackGameProps) {
+export default function BlackjackGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance: _refreshBalance, onBetPlaced }: BlackjackGameProps) {
   const [result, setResult] = useState<BlackjackResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -60,12 +60,22 @@ export default function BlackjackGame({ walletAddress, mtxBalance = 0, placeBet,
         const betResult = await placeBet(BlackjackEngine.BET_AMOUNT);
         setTxHash(betResult.txHash);
         if (onBetPlaced) onBetPlaced(BlackjackEngine.BET_AMOUNT);
+
+        // If CasinoCore resolved the bet on-chain, use that as the source of truth
+        if (betResult.mode === 'on-chain' && betResult.win !== undefined) {
+          const hash = generateClientHash();
+          const gameResult = BlackjackEngine.playHand(hash);
+          // Override win/payout with on-chain outcome
+          const onChainOutcome = betResult.win
+            ? (gameResult.outcome === 'blackjack' ? 'blackjack' : 'win')
+            : 'lose';
+          setResult({ ...gameResult, outcome: onChainOutcome, payout: betResult.payout ?? 0 });
+          return;
+        }
       }
 
-      // Derive game result from a provably fair hash
-      const hash = Array.from({ length: 64 }, () =>
-        Math.floor(Math.random() * 16).toString(16)
-      ).join('');
+      // Derive game result from a provably fair hash (transfer mode or no placeBet)
+      const hash = generateClientHash();
 
       const gameResult = BlackjackEngine.playHand(hash);
       setResult(gameResult);

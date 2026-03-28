@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PlinkoEngine, type PlinkoResult } from './PlinkoEngine';
-import type { BetResult } from '../../utils/casinoBet';
+import { generateClientHash, type BetResult } from '../../utils/casinoBet';
 
 interface PlinkoGameProps {
   walletAddress?: string;
@@ -10,7 +10,7 @@ interface PlinkoGameProps {
   onBetPlaced?: (amount: number) => void;
 }
 
-export default function PlinkoGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance, onBetPlaced }: PlinkoGameProps) {
+export default function PlinkoGame({ walletAddress, mtxBalance = 0, placeBet, refreshBalance: _refreshBalance, onBetPlaced }: PlinkoGameProps) {
   const [betAmount, setBetAmount] = useState(PlinkoEngine.BET_AMOUNT);
   const [result, setResult] = useState<PlinkoResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -58,12 +58,19 @@ export default function PlinkoGame({ walletAddress, mtxBalance = 0, placeBet, re
         const betResult = await placeBet(betAmount);
         setTxHash(betResult.txHash);
         if (onBetPlaced) onBetPlaced(betAmount);
+
+        // If CasinoCore resolved the bet on-chain, use that as the source of truth
+        if (betResult.mode === 'on-chain' && betResult.win !== undefined) {
+          const hash = generateClientHash();
+          const dropResult = PlinkoEngine.dropBall(hash, betAmount);
+          // Override payout with on-chain outcome
+          setResult({ ...dropResult, payout: betResult.payout ?? 0 });
+          return;
+        }
       }
 
-      // Derive game result from a provably fair hash
-      const hash = Array.from({ length: 64 }, () =>
-        Math.floor(Math.random() * 16).toString(16)
-      ).join('');
+      // Derive game result from a provably fair hash (transfer mode or no placeBet)
+      const hash = generateClientHash();
 
       const dropResult = PlinkoEngine.dropBall(hash, betAmount);
       setResult(dropResult);
