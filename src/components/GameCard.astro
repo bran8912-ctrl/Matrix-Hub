@@ -39,24 +39,36 @@ const categoryLabel: Record<GameCategory, string> = {
     </div>
 
     <div class="card-actions">
-      <a
-        href={game.gitUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="play-btn"
-        aria-label={`Play ${game.name} (opens GitHub)`}
-      >
-        ▶ Play
-      </a>
-      <a
-        href={game.gitUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="source-link"
-        aria-label={`View source for ${game.name}`}
-      >
-        Source ↗
-      </a>
+      {game.playUrl ? (
+        <a
+          href={`/games/play/${game.slug}`}
+          class="play-btn"
+          aria-label={`Play ${game.name}`}
+        >
+          ▶ Play
+        </a>
+      ) : (
+        <a
+          href={game.gitUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="play-btn play-btn--external"
+          aria-label={`Play ${game.name} (opens externally)`}
+        >
+          ▶ Play ↗
+        </a>
+      )}
+      {!game.playUrl?.startsWith('/') && (
+        <a
+          href={game.gitUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="source-link"
+          aria-label={`View source for ${game.name}`}
+        >
+          Source ↗
+        </a>
+      )}
     </div>
   </div>
 </div>
