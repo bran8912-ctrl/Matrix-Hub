@@ -1,11 +1,10 @@
 # MTX Tokenomics
 
 ## Contract Information
-- **Status**: ⚠️ **Pending Deployment** - Contract not yet deployed to mainnet
-- **Network**: Polygon (Chain ID: 137) - Target network for deployment
+- **Status**: 🔄 **Deploying to Polygon** — Contract address will be published on launch
+- **Network**: Polygon (Chain ID: 137)
 - **Symbol**: MTX
 - **Decimals**: 18
-- **Deployment Guide**: See [MTX Deployment Guide](./MTX_Deployment_Guide.md) for instructions
 
 ## Supply
 - Fixed Max Supply

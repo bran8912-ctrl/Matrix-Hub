@@ -1,10 +1,15 @@
 ---
 import Layout from "../components/Layout.astro";
+import { MTX } from "../config/mtx";
 
 export const prerender = true;
 
 export const title = "MTX Contract";
 export const navCategory = "mtx-token";
+
+const isDeployed = MTX.isDeployed;
+const contractAddress = MTX.address;
+const blockExplorerUrl = MTX.blockExplorerUrl;
 ---
 
 <Layout title="MTX Token Contract - Matrix Hub">
@@ -19,37 +24,54 @@ export const navCategory = "mtx-token";
         <h2>Contract Details</h2>
         <div class="detail-row">
           <span class="label">Contract Address:</span>
-          <code class="value">Pending Deployment</code>
+          {isDeployed ? (
+            <a href={blockExplorerUrl} target="_blank" rel="noopener noreferrer" class="value contract-link">
+              {contractAddress}
+            </a>
+          ) : (
+            <code class="value coming-soon">Coming Soon</code>
+          )}
         </div>
         <div class="detail-row">
           <span class="label">Token Name:</span>
-          <span class="value">Matrix Hub Coin</span>
+          <span class="value">{MTX.name}</span>
         </div>
         <div class="detail-row">
           <span class="label">Token Symbol:</span>
-          <span class="value">MTX</span>
+          <span class="value">{MTX.symbol}</span>
         </div>
         <div class="detail-row">
           <span class="label">Decimals:</span>
-          <span class="value">18</span>
+          <span class="value">{MTX.decimals}</span>
         </div>
         <div class="detail-row">
           <span class="label">Network:</span>
-          <span class="value">Polygon (Chain ID: 137)</span>
+          <span class="value">{MTX.chainName} (Chain ID: {MTX.chainId})</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Mint Rate:</span>
+          <span class="value">1 MATIC = {MTX.maticToMtxRate.toLocaleString()} MTX</span>
         </div>
         <div class="detail-row">
           <span class="label">Standard:</span>
           <span class="value">ERC-20</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Status:</span>
+          <span class={`value status-badge ${isDeployed ? 'deployed' : 'pending'}`}>
+            {isDeployed ? '✅ Live on Polygon' : '🔄 Deploying Soon'}
+          </span>
         </div>
       </div>
 
       <div class="info-card">
         <h2>Tokenomics</h2>
         <ul>
-          <li><strong>Max Supply:</strong> 1,000,000,000 MTX</li>
-          <li><strong>Mint Rate:</strong> 1 MATIC = 1,000 MTX</li>
+          <li><strong>Max Supply:</strong> {MTX.maxSupply.toLocaleString()} MTX</li>
+          <li><strong>Mint Rate:</strong> 1 MATIC = {MTX.maticToMtxRate.toLocaleString()} MTX</li>
           <li><strong>Burn Mechanism:</strong> Casino games and premium features</li>
           <li><strong>Utility:</strong> Access to casino, premium tools, staking rewards</li>
+          <li><strong>Distribution:</strong> Gradual release via MATIC purchases</li>
         </ul>
         <a href="/docs/mtx-tokenomics" class="btn-link">View Full Tokenomics →</a>
       </div>
@@ -59,9 +81,15 @@ export const navCategory = "mtx-token";
         <div class="actions">
           <a href="/wallet" class="btn-primary">Connect Wallet</a>
           <a href="/buy-mtx" class="btn-primary">Buy MTX</a>
-          <span class="btn-secondary btn-disabled" title="Contract not yet deployed">
-            View on Polygonscan (Coming Soon)
-          </span>
+          {isDeployed ? (
+            <a href={blockExplorerUrl} target="_blank" rel="noopener noreferrer" class="btn-secondary">
+              View on Polygonscan →
+            </a>
+          ) : (
+            <span class="btn-secondary btn-pending">
+              Polygonscan Link — Coming Soon
+            </span>
+          )}
         </div>
       </div>
 
@@ -69,9 +97,10 @@ export const navCategory = "mtx-token";
         <h2>🔒 Security</h2>
         <ul>
           <li>Smart contract based on OpenZeppelin standards</li>
-          <li>Deployed on Polygon for maximum security</li>
+          <li>Deployed on Polygon for low fees and maximum security</li>
           <li>All transactions are transparent and verifiable on-chain</li>
-          <li>Always verify contract address before transactions</li>
+          <li>Always verify the contract address before sending MATIC</li>
+          <li>Contract owner: <code class="owner-addr">{MTX.owner.slice(0, 10)}...{MTX.owner.slice(-8)}</code></li>
         </ul>
       </div>
     </div>
@@ -216,9 +245,15 @@ export const navCategory = "mtx-token";
     border: 1px solid var(--theme-primary);
   }
 
-  .btn-disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  .btn-pending {
+    opacity: 0.6;
+    cursor: default;
+    font-style: italic;
+  }
+
+  .btn-pending:hover {
+    transform: none;
+    opacity: 0.6;
   }
 
   .btn-primary:hover,
@@ -227,9 +262,49 @@ export const navCategory = "mtx-token";
     opacity: 0.9;
   }
 
-  .btn-disabled:hover {
-    transform: none;
-    opacity: 0.5;
+  .contract-link {
+    color: var(--theme-primary);
+    text-decoration: none;
+    word-break: break-all;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+  }
+
+  .contract-link:hover {
+    text-decoration: underline;
+  }
+
+  .coming-soon {
+    color: var(--theme-secondary);
+    font-style: italic;
+  }
+
+  .status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+
+  .status-badge.deployed {
+    background: rgba(0, 255, 153, 0.15);
+    color: var(--theme-primary);
+    border: 1px solid var(--theme-primary);
+  }
+
+  .status-badge.pending {
+    background: rgba(100, 100, 255, 0.1);
+    color: var(--theme-secondary);
+    border: 1px solid var(--theme-secondary);
+  }
+
+  .owner-addr {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--theme-secondary);
   }
 
   @media (max-width: 768px) {

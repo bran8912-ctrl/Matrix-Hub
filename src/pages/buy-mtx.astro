@@ -22,19 +22,6 @@ const uniswapUrl = MTX.uniswapUrl;
       or buy on QuickSwap for instant liquidity.
     </p>
     
-    {!isDeployed && (
-      <div class="deployment-warning">
-        <strong>⚠️ Contract Not Yet Deployed</strong>
-        <p>
-          The MTX token contract has not been deployed to mainnet yet. 
-          The purchase functionality will be available once the contract is deployed.
-        </p>
-        <p>
-          For deployment information, see the <a href="/docs/MTX_Deployment_Guide">MTX Deployment Guide</a>.
-        </p>
-      </div>
-    )}
-    
     <!-- Direct Mint Component -->
     <div class="buy-section">
       <BuyMTX client:load />
@@ -79,7 +66,7 @@ const uniswapUrl = MTX.uniswapUrl;
               </a>
             ) : (
               <span class="cta-button uniswap disabled">
-                Available After Deployment
+                QuickSwap — Coming Soon
               </span>
             )}
           </div>
@@ -89,7 +76,7 @@ const uniswapUrl = MTX.uniswapUrl;
       <div class="security-notice">
         <h3>🔒 Security & Best Practices</h3>
         <ul>
-          <li><strong>Verify Contract Address:</strong> Always double-check you're interacting with the correct contract{isDeployed ? `: ${contractAddress}` : ' (will be displayed after deployment)'}</li>
+          <li><strong>Verify Contract Address:</strong> Always double-check you're interacting with the correct contract{isDeployed ? `: ${contractAddress}` : ' — address will be displayed once live on Polygon'}</li>
           <li><strong>Network:</strong> Ensure you're on Polygon (Chain ID: 137)</li>
           <li><strong>Start Small:</strong> For first-time users, we recommend starting with a small test purchase</li>
           <li><strong>Gas Fees:</strong> Consider current network gas prices before transacting</li>
