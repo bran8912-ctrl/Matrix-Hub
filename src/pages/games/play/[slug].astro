@@ -1,0 +1,262 @@
+---
+import Layout from "../../../components/Layout.astro";
+import { games } from "../../../data/games";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  return games
+    .filter((g) => g.playUrl)
+    .map((g) => ({
+      params: { slug: g.slug },
+      props: { game: g },
+    }));
+}
+
+const { game } = Astro.props;
+
+// Local games (playUrl starts with '/') need access to localStorage and prompt().
+// External games must NOT get allow-same-origin (that would remove sandbox protections).
+const isLocal = game.playUrl?.startsWith('/') ?? false;
+const sandboxPolicy = isLocal
+  ? "allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups allow-modals"
+  : "allow-scripts allow-forms allow-pointer-lock allow-popups";
+---
+
+<Layout title={`Play ${game.name} | Matrix Hub`}>
+  <div class="play-page">
+    <!-- Top bar -->
+    <div class="play-bar">
+      <a href="/games" class="back-link">← Games</a>
+      <div class="game-info">
+        <span class="game-title">{game.name}</span>
+        <span class="game-tag">{game.tag}</span>
+      </div>
+      <div class="play-actions">
+        <a
+          href={game.playUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="fullscreen-btn"
+          title="Open in new tab for fullscreen"
+        >
+          ⤢ Full Tab
+        </a>
+        {game.gitUrl && !game.playUrl?.startsWith('/') && (
+          <a
+            href={game.gitUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="source-btn"
+          >
+            Source ↗
+          </a>
+        )}
+      </div>
+    </div>
+
+    <!-- Game iframe -->
+    <div class="iframe-wrapper">
+      <iframe
+        id="game-frame"
+        src={game.playUrl}
+        title={`Play ${game.name}`}
+        allow="fullscreen; accelerometer; gyroscope"
+        loading="lazy"
+        sandbox={sandboxPolicy}
+      ></iframe>
+      <!-- Fallback banner shown for external games after IFRAME_LOAD_TIMEOUT_MS.
+           It overlays the bottom of the iframe so the "Open in new tab" link is
+           always reachable even if the embed was silently blocked by X-Frame-Options. -->
+      <div class="iframe-fallback" id="iframe-fallback">
+        <p>⚠️ Embedding may be blocked by browser security settings.</p>
+        <a
+          href={game.playUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="fallback-link"
+        >
+          ▶ Open {game.name} in a new tab
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .play-page {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--player-height, 0px) - 4rem);
+    min-height: 500px;
+  }
+
+  .play-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    border-bottom: 1px solid rgba(34, 197, 94, 0.3);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .back-link {
+    color: rgb(34, 197, 94);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: rgb(134, 239, 172);
+  }
+
+  .game-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .game-title {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: rgb(134, 239, 172);
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .game-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: rgb(107, 114, 128);
+    font-style: italic;
+  }
+
+  .play-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .fullscreen-btn,
+  .source-btn {
+    padding: 0.3rem 0.75rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+
+  .fullscreen-btn {
+    background: rgba(34, 197, 94, 0.15);
+    color: rgb(34, 197, 94);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+  }
+
+  .fullscreen-btn:hover {
+    background: rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+  }
+
+  .source-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgb(107, 114, 128);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .source-btn:hover {
+    color: rgb(156, 163, 175);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .iframe-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+  }
+
+  #game-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .iframe-fallback {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: rgba(0, 0, 0, 0.88);
+    color: rgb(156, 163, 175);
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+    border-top: 1px solid rgba(34, 197, 94, 0.3);
+  }
+
+  .fallback-link {
+    padding: 0.75rem 1.5rem;
+    background: rgba(34, 197, 94, 0.15);
+    color: rgb(34, 197, 94);
+    border: 1px solid rgba(34, 197, 94, 0.5);
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s;
+  }
+
+  .fallback-link:hover {
+    background: rgba(34, 197, 94, 0.3);
+  }
+</style>
+
+<script>
+  // For external (cross-origin) games, show the fallback "Open in new tab" banner
+  // after IFRAME_LOAD_TIMEOUT_MS. We do NOT rely on the iframe `load` event because
+  // browsers fire it even when embedding is blocked by X-Frame-Options or CSP.
+  // We also keep the iframe visible — the banner overlays the bottom edge only.
+  const IFRAME_LOAD_TIMEOUT_MS = 8000;
+
+  const frame = document.getElementById('game-frame') as HTMLIFrameElement;
+  const fallback = document.getElementById('iframe-fallback') as HTMLDivElement;
+
+  if (frame && fallback) {
+    // Use getAttribute to read the original src attribute before the browser
+    // resolves it to an absolute URL (frame.src is always absolute, so a local
+    // path like "/games/cyber-snake/" would still start with "http" and be
+    // misidentified as external).
+    const srcAttr = frame.getAttribute('src');
+    let isExternal = false;
+    if (srcAttr) {
+      try {
+        const resolvedUrl = new URL(srcAttr, window.location.href);
+        isExternal = resolvedUrl.origin !== window.location.origin;
+      } catch {
+        // If we can't parse the URL, assume it's external to be safe.
+        isExternal = true;
+      }
+    }
+
+    if (isExternal) {
+      setTimeout(() => {
+        fallback.style.display = 'flex';
+      }, IFRAME_LOAD_TIMEOUT_MS);
+    }
+  }
+</script>
