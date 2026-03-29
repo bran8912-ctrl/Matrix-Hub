@@ -1,5 +1,5 @@
 ---
-// Matrix Rain background animation component
+// Matrix Rain background animation – theme-aware and audio-reactive
 ---
 
 <canvas id="matrix-canvas"></canvas>
@@ -7,50 +7,134 @@
 <script>
   const canvas = document.getElementById('matrix-canvas') as HTMLCanvasElement;
   if (canvas) {
-    const ctx = canvas.getContext('2d');
-    
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    
+    const ctx = canvas.getContext('2d')!;
     const matrixChars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?';
     const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    
-    const drops: number[] = [];
-    for (let i = 0; i < columns; i++) {
-      drops[i] = Math.random() * -100;
+    // Drops start above the canvas so columns stagger on first load
+    const INITIAL_DROP_OFFSET = -100;
+    // Probability base for a column to reset once it exits the bottom
+    const BASE_RESET_THRESHOLD = 0.975;
+    // Per-unit of energy added to the reset probability (more energy → denser rain)
+    const ENERGY_RESET_FACTOR  = 0.015;
+    // Extra speed added per unit of beat value (1.0 = 1.8× base speed at full beat)
+    const MAX_BEAT_SPEED_BOOST = 0.8;
+
+    // ── Theme colour (synced with PersistentThemeCustomizer) ─────────────
+    let themeRgb = { r: 0, g: 255, b: 0 }; // default: classic matrix green
+
+    function parseColor(raw: string): { r: number; g: number; b: number } {
+      raw = raw.trim();
+      if (raw.startsWith('#')) {
+        let h = raw.slice(1);
+        if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+        const n = parseInt(h, 16);
+        return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+      }
+      // rgb(...) / rgba(...)
+      const m = raw.match(/\d+/g);
+      if (m && m.length >= 3) return { r: +m[0], g: +m[1], b: +m[2] };
+      return { r: 0, g: 255, b: 0 };
     }
-    
+
+    function syncTheme() {
+      const root = document.documentElement;
+      const val =
+        root.style.getPropertyValue('--theme-primary').trim() ||
+        getComputedStyle(root).getPropertyValue('--theme-primary').trim() ||
+        '#00ff00';
+      themeRgb = parseColor(val);
+    }
+
+    syncTheme();
+
+    // Re-sync whenever PersistentThemeCustomizer updates the inline style
+    new MutationObserver(syncTheme).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['style'],
+    });
+
+    // ── Audio helpers (CSS vars set by PersistentMusicPlayer) ────────────
+    function readAV(name: string): number {
+      return (
+        parseFloat(
+          document.documentElement.style.getPropertyValue(name) || '0'
+        ) || 0
+      );
+    }
+
+    // ── Column / drop initialisation ─────────────────────────────────────
+    let cols = Math.floor(window.innerWidth / fontSize);
+    let drops: number[] = Array.from({ length: cols }, () =>
+      Math.random() * INITIAL_DROP_OFFSET
+    );
+
+    function handleResize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const newCols = Math.floor(canvas.width / fontSize);
+      while (drops.length < newCols) drops.push(0);
+      drops.length = newCols;
+      cols = newCols;
+    }
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    // ── Draw loop ─────────────────────────────────────────────────────────
     function draw() {
-      if (!ctx) return;
-      
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      const bass   = readAV('--matrix-bass');
+      const beat   = readAV('--matrix-beat');
+      const energy = readAV('--matrix-energy');
+
+      // Fading overlay — weaker fade on high bass → longer, ghostlier trails
+      ctx.fillStyle = `rgba(0,0,0,${Math.max(0.025, 0.06 - bass * 0.03).toFixed(3)})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      ctx.fillStyle = '#0f0';
+
       ctx.font = `${fontSize}px monospace`;
-      
+
+      const { r, g, b } = themeRgb;
+
+      // Brightness scales from 35% (silence) → 100% (peak bass)
+      const bright = 0.35 + bass * 0.65;
+      const nr = Math.round(r * bright);
+      const ng = Math.round(g * bright);
+      const nb = Math.round(b * bright);
+
+      // On beat: blend theme colour toward white for a flash effect
+      const bMix  = beat * 0.7;
+      const wr    = Math.round(r + (255 - r) * bMix);
+      const wg    = Math.round(g + (255 - g) * bMix);
+      const wb    = Math.round(b + (255 - b) * bMix);
+      const alpha = Math.min(1, beat + 0.3).toFixed(2);
+
+      ctx.fillStyle =
+        beat > 0.3
+          ? `rgba(${wr},${wg},${wb},${alpha})`
+          : `rgb(${nr},${ng},${nb})`;
+
       for (let i = 0; i < drops.length; i++) {
-        const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-        
-        ctx.fillText(text, x, y);
-        
-        if (y > canvas.height && Math.random() > 0.975) {
+        ctx.fillText(
+          matrixChars[Math.floor(Math.random() * matrixChars.length)],
+          i * fontSize,
+          drops[i] * fontSize,
+        );
+
+        // Denser rain when energy is high
+        if (
+          drops[i] * fontSize > canvas.height &&
+          Math.random() > BASE_RESET_THRESHOLD - energy * ENERGY_RESET_FACTOR
+        ) {
           drops[i] = 0;
         }
-        
-        drops[i]++;
+
+        // Speed boost on beat (max 1.8× normal speed)
+        drops[i] += 1 + beat * MAX_BEAT_SPEED_BOOST;
       }
+
+      requestAnimationFrame(draw);
     }
-    
-    setInterval(draw, 33);
-    
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
+
+    requestAnimationFrame(draw);
   }
 </script>
 

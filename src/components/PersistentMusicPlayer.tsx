@@ -50,14 +50,32 @@ const matrixPlaylist: Track[] = [
   { title: "Industrial Cyberpunk", artist: "Matrix Hub", url: "/music/industrial-cyberpunk.mp3" },
   { title: "Sci-Fi Ambient 1", artist: "Matrix Hub", url: "/music/sci-fi-ambient-1.mp3" },
   { title: "The Ambient", artist: "Matrix Hub", url: "/music/the-ambient.mp3" },
+  // Additional remote tracks
+  { title: "Digital Override", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/115/115.mp3" },
+  { title: "Voltage", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/116/116.mp3" },
+  { title: "Frequency War", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/118/118.mp3" },
+  { title: "System Pulse", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/119/119.mp3" },
+  { title: "Neural Static", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/120/120.mp3" },
+  { title: "Binary Drift", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/123/123.mp3" },
+  { title: "Quantum Lock", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/135/135.mp3" },
+  { title: "Data Flux", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/136/136.mp3" },
+  { title: "Neon Protocol", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/161/161.mp3" },
+  { title: "Cipher Loop", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/163/163.mp3" },
+  { title: "Matrix Signal", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/168/168.mp3" },
+  { title: "Deep Protocol", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/628/628.mp3" },
+  { title: "Synthwave Override", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/629/629.mp3" },
+  { title: "Voltage Core", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/630/630.mp3" },
 ];
 
 export default function PersistentMusicPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const playerRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
   const animFrameRef = useRef<number | null>(null);
+  const shouldAutoPlayRef = useRef(false);
+  const errorCountRef = useRef(0);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
@@ -167,6 +185,42 @@ export default function PersistentMusicPlayer() {
     return () => clearInterval(interval);
   }, []);
 
+  // Set --player-height on <html> so TabNav sticks right below the player
+  useEffect(() => {
+    const el = playerRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        document.documentElement.style.setProperty(
+          '--player-height',
+          `${Math.round(entry.contentRect.height)}px`,
+        );
+      }
+    });
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+      document.documentElement.style.setProperty('--player-height', '0px');
+    };
+  }, []);
+
+  // Trigger playback after a track change (replaces the old setTimeout approach)
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const handleCanPlay = () => {
+      if (shouldAutoPlayRef.current) {
+        shouldAutoPlayRef.current = false;
+        audio.play().catch((err) => {
+          console.error('Auto-play on track change failed:', err);
+          setIsPlaying(false);
+        });
+      }
+    };
+    audio.addEventListener('canplay', handleCanPlay);
+    return () => audio.removeEventListener('canplay', handleCanPlay);
+  }, [currentTrackIndex]);
+
   // Web Audio API: set up AudioContext + AnalyserNode on first enable
   const setupAudioContext = useCallback(() => {
     const audio = audioRef.current;
@@ -178,7 +232,8 @@ export default function PersistentMusicPlayer() {
         (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       const ctx = new AudioContextClass();
       const analyser = ctx.createAnalyser();
-      analyser.fftSize = 256;
+      analyser.fftSize = 512;               // frequencyBinCount = fftSize/2 = 256 bins
+      analyser.smoothingTimeConstant = 0.8; // gentle smoothing (default)
 
       const source = ctx.createMediaElementSource(audio);
       source.connect(analyser);
@@ -188,16 +243,44 @@ export default function PersistentMusicPlayer() {
       analyserRef.current = analyser;
       sourceNodeRef.current = source;
 
-      // Animate --matrix-bass from low-frequency bins each frame
-      const frequencyData = new Uint8Array(analyser.frequencyBinCount);
+      // Drive all audio-reactive CSS variables every animation frame
+      const frequencyData = new Uint8Array(analyser.frequencyBinCount); // 256 elements
+      let smoothedBass = 0; // slow EMA used for beat threshold
+      let beatValue    = 0; // decays 0→1→0 on each detected beat
 
       const tick = () => {
         analyser.getByteFrequencyData(frequencyData);
-        // Average the first 8 bins (bass frequencies)
+
+        // Bass:   bins 0-5   (~0–430 Hz, approx. based on 44100 Hz sample rate / 512)
         let bassSum = 0;
-        for (let binIndex = 0; binIndex < 8; binIndex++) bassSum += frequencyData[binIndex];
-        const bassAvg = bassSum / 8 / 255;
-        document.documentElement.style.setProperty('--matrix-bass', bassAvg.toFixed(3));
+        for (let i = 0; i < 6; i++) bassSum += frequencyData[i];
+        const bass = bassSum / 6 / 255;
+
+        // Mid:    bins 6-35  (~516–3010 Hz, approx.)
+        let midSum = 0;
+        for (let i = 6; i < 36; i++) midSum += frequencyData[i];
+        const mid = midSum / 30 / 255;
+
+        // Energy: average of first 100 bins (~0–8600 Hz, approx.)
+        let energySum = 0;
+        for (let i = 0; i < 100; i++) energySum += frequencyData[i];
+        const energy = energySum / 100 / 255;
+
+        // Beat detection: spike in bass above 1.5× recent average
+        smoothedBass = smoothedBass * 0.9 + bass * 0.1;
+        if (bass > smoothedBass * 1.5 && bass > 0.08) {
+          beatValue = 1.0;
+        } else {
+          beatValue *= 0.88; // ~200 ms full decay at 60 fps
+          if (beatValue < 0.001) beatValue = 0;
+        }
+
+        const root = document.documentElement.style;
+        root.setProperty('--matrix-bass',   bass.toFixed(3));
+        root.setProperty('--matrix-mid',    mid.toFixed(3));
+        root.setProperty('--matrix-beat',   beatValue.toFixed(3));
+        root.setProperty('--matrix-energy', energy.toFixed(3));
+
         animFrameRef.current = requestAnimationFrame(tick);
       };
 
@@ -214,6 +297,12 @@ export default function PersistentMusicPlayer() {
         cancelAnimationFrame(animFrameRef.current);
       }
       audioContextRef.current?.close().catch(() => {});
+      // Reset audio-reactive CSS variables
+      const root = document.documentElement.style;
+      root.setProperty('--matrix-bass',   '0');
+      root.setProperty('--matrix-mid',    '0');
+      root.setProperty('--matrix-beat',   '0');
+      root.setProperty('--matrix-energy', '0');
     };
   }, []);
 
@@ -256,76 +345,51 @@ export default function PersistentMusicPlayer() {
     setIsPlaying(false);
   }, []);
 
-  const getNextShuffledTrack = useCallback(
-    () => {
-      // Use functional update exclusively so history is never stale on rapid clicks.
-      // We compute the return value first using the most recent playedTracks ref value,
-      // then commit via functional setState.
-      let selected = 0;
-
-      setPlayedTracks((prevPlayed) => {
-        // Treat the current track as "played" in this shuffle step
-        const playedSet = new Set<number>(prevPlayed);
-        playedSet.add(currentTrackIndex);
-
-        const unplayed = matrixPlaylist
-          .map((_, trackIndex) => trackIndex)
-          .filter((trackIndex) => !playedSet.has(trackIndex));
-
-        if (unplayed.length === 0) {
-          // All tracks have played — start a new shuffle cycle.
-          // Record both currentTrackIndex and the new selection so neither can repeat immediately.
-          selected = Math.floor(Math.random() * matrixPlaylist.length);
-          return Array.from(new Set([currentTrackIndex, selected]));
-        }
-
-        selected = unplayed[Math.floor(Math.random() * unplayed.length)];
-        playedSet.add(selected);
-        return Array.from(playedSet);
-      });
-
-      return selected;
-    },
-    [currentTrackIndex]
-  );
-
   const handlePrevious = useCallback(() => {
-    const newIndex = isShuffleOn
-      ? getNextShuffledTrack()
-      : (currentTrackIndex - 1 + matrixPlaylist.length) % matrixPlaylist.length;
-
-    // Reset saved position when changing tracks
-    localStorage.removeItem('matrixPlayerTime');
-    setCurrentTrackIndex(newIndex);
-
-    if (isPlaying) {
-      // play() is triggered via the onLoadedMetadata flow; request it after state update
-      setTimeout(() => {
-        audioRef.current?.play().catch((err) => {
-          console.error('Audio playback failed:', err);
-          setIsPlaying(false);
-        });
-      }, 0);
+    let newIndex: number;
+    if (isShuffleOn) {
+      const unplayed = matrixPlaylist
+        .map((_, i) => i)
+        .filter((i) => i !== currentTrackIndex && !playedTracks.includes(i));
+      if (unplayed.length === 0) {
+        const allOther = matrixPlaylist.map((_, i) => i).filter((i) => i !== currentTrackIndex);
+        newIndex = allOther[Math.floor(Math.random() * allOther.length)];
+        setPlayedTracks([currentTrackIndex, newIndex]);
+      } else {
+        newIndex = unplayed[Math.floor(Math.random() * unplayed.length)];
+        setPlayedTracks((prev) => [...prev, currentTrackIndex]);
+      }
+    } else {
+      newIndex = (currentTrackIndex - 1 + matrixPlaylist.length) % matrixPlaylist.length;
     }
-  }, [currentTrackIndex, isShuffleOn, isPlaying, getNextShuffledTrack]);
+
+    localStorage.removeItem('matrixPlayerTime');
+    if (isPlaying) shouldAutoPlayRef.current = true;
+    setCurrentTrackIndex(newIndex);
+  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks]);
 
   const handleNext = useCallback(() => {
-    const newIndex = isShuffleOn
-      ? getNextShuffledTrack()
-      : (currentTrackIndex + 1) % matrixPlaylist.length;
+    let newIndex: number;
+    if (isShuffleOn) {
+      const unplayed = matrixPlaylist
+        .map((_, i) => i)
+        .filter((i) => i !== currentTrackIndex && !playedTracks.includes(i));
+      if (unplayed.length === 0) {
+        const allOther = matrixPlaylist.map((_, i) => i).filter((i) => i !== currentTrackIndex);
+        newIndex = allOther[Math.floor(Math.random() * allOther.length)];
+        setPlayedTracks([currentTrackIndex, newIndex]);
+      } else {
+        newIndex = unplayed[Math.floor(Math.random() * unplayed.length)];
+        setPlayedTracks((prev) => [...prev, currentTrackIndex]);
+      }
+    } else {
+      newIndex = (currentTrackIndex + 1) % matrixPlaylist.length;
+    }
 
     localStorage.removeItem('matrixPlayerTime');
+    if (isPlaying) shouldAutoPlayRef.current = true;
     setCurrentTrackIndex(newIndex);
-
-    if (isPlaying) {
-      setTimeout(() => {
-        audioRef.current?.play().catch((err) => {
-          console.error('Audio playback failed:', err);
-          setIsPlaying(false);
-        });
-      }, 0);
-    }
-  }, [currentTrackIndex, isShuffleOn, isPlaying, getNextShuffledTrack]);
+  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks]);
 
   const handleEnded = useCallback(() => {
     if (isAutoplayOn && !isLoopOn) {
@@ -369,7 +433,7 @@ export default function PersistentMusicPlayer() {
   const currentTrack = matrixPlaylist[currentTrackIndex];
 
   return (
-    <div className={`persistent-music-player${isMinimized ? ' minimized' : ''}`}>
+    <div ref={playerRef} className={`persistent-music-player${isMinimized ? ' minimized' : ''}`}>
       <audio
         ref={audioRef}
         src={currentTrack.url}
@@ -377,8 +441,19 @@ export default function PersistentMusicPlayer() {
         crossOrigin="anonymous"
         loop={isLoopOn}
         onEnded={handleEnded}
-        onPlay={() => setIsPlaying(true)}
+        onPlay={() => { setIsPlaying(true); errorCountRef.current = 0; }}
         onPause={() => setIsPlaying(false)}
+        onError={() => {
+          console.warn(`[MatrixPlayer] Track failed to load: ${currentTrack.url}`);
+          errorCountRef.current += 1;
+          if (errorCountRef.current < matrixPlaylist.length) {
+            handleNext();
+          } else {
+            console.error('[MatrixPlayer] All tracks failed to load.');
+            setIsPlaying(false);
+            errorCountRef.current = 0;
+          }
+        }}
       />
 
       {/* Header — always visible */}
