@@ -1,8 +1,13 @@
 ---
+import { MTX } from "../config/mtx";
+
 const currentYear = new Date().getFullYear();
 const GITHUB_REPO = "https://github.com/bran8912-ctrl/Matrix-Hub.org";
-const MTX_ADDRESS = "0x8711467ad4baf15ab7691a4dadc139fcc9c4da54";
-const POLYGONSCAN_URL = `https://polygonscan.com/token/${MTX_ADDRESS}`;
+const POLYGONSCAN_URL = `https://polygonscan.com/token/${MTX.address}`;
+// Abbreviated address for display – derived from the same source as the link
+const shortAddress = MTX.address.startsWith("0x")
+  ? `${MTX.address.slice(0, 6)}...${MTX.address.slice(-4)}`
+  : MTX.address;
 ---
 
 <footer class="site-footer">
@@ -114,13 +119,13 @@ const POLYGONSCAN_URL = `https://polygonscan.com/token/${MTX_ADDRESS}`;
   <!-- Bottom bar -->
   <div class="footer-bottom">
     <div class="footer-bottom-inner">
-      <span class="copyright">
-        &copy; {currentYear} Matrix-Hub.org — All rights reserved.
+      <span class="copyright" id="footer-copyright">
+        &copy; <span id="footer-year">{currentYear}</span> Matrix-Hub.org — All rights reserved.
       </span>
       <div class="footer-bottom-links">
-        <a href="/docs/privacy" aria-label="Privacy Policy">Privacy Policy</a>
+        <a href="/docs/disclaimer" aria-label="Privacy Policy">Privacy Policy</a>
         <span class="separator" aria-hidden="true">|</span>
-        <a href="/docs/terms" aria-label="Terms of Service">Terms of Service</a>
+        <a href="/docs/responsible-play" aria-label="Terms of Service">Terms of Service</a>
         <span class="separator" aria-hidden="true">|</span>
         <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" aria-label="Open Source on GitHub">Open Source</a>
       </div>
@@ -131,7 +136,7 @@ const POLYGONSCAN_URL = `https://polygonscan.com/token/${MTX_ADDRESS}`;
           rel="noopener noreferrer"
           class="address-link"
           title="View MTX token on PolygonScan"
-        >0x8711...da54</a>
+        >{shortAddress}</a>
       </div>
     </div>
   </div>
@@ -359,4 +364,19 @@ const POLYGONSCAN_URL = `https://polygonscan.com/token/${MTX_ADDRESS}`;
       gap: 0.5rem;
     }
   }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .footer-scan-line {
+      animation: none;
+    }
+  }
 </style>
+
+<script is:inline>
+  // Keep the copyright year current client-side (the static build date is the fallback).
+  const yearEl = document.getElementById('footer-year');
+  if (yearEl) {
+    yearEl.textContent = String(new Date().getFullYear());
+  }
+</script>
