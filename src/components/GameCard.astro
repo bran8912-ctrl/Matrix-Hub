@@ -1,5 +1,5 @@
 ---
-import type { Game } from '../data/games';
+import type { Game, GameCategory } from '../data/games';
 
 interface Props {
   game: Game;
@@ -7,7 +7,7 @@ interface Props {
 
 const { game } = Astro.props;
 
-const categoryLabel: Record<string, string> = {
+const categoryLabel: Record<GameCategory, string> = {
   game: 'Game',
   playground: 'Playground',
   instrument: 'Instrument',
@@ -30,8 +30,12 @@ const categoryLabel: Record<string, string> = {
     <p class="game-tag">{game.tag}</p>
 
     <div class="device-icons">
-      {game.mobile && <span title="Mobile compatible">📱</span>}
-      {game.desktop && <span title="Desktop compatible">🖥️</span>}
+      {game.mobile && (
+        <span role="img" aria-label="Mobile compatible" title="Mobile compatible">📱</span>
+      )}
+      {game.desktop && (
+        <span role="img" aria-label="Desktop compatible" title="Desktop compatible">🖥️</span>
+      )}
     </div>
 
     <div class="card-actions">
@@ -40,6 +44,7 @@ const categoryLabel: Record<string, string> = {
         target="_blank"
         rel="noopener noreferrer"
         class="play-btn"
+        aria-label={`Play ${game.name} (opens GitHub)`}
       >
         ▶ Play
       </a>
@@ -48,6 +53,7 @@ const categoryLabel: Record<string, string> = {
         target="_blank"
         rel="noopener noreferrer"
         class="source-link"
+        aria-label={`View source for ${game.name}`}
       >
         Source ↗
       </a>

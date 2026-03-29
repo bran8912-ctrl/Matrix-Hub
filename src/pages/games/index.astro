@@ -16,17 +16,17 @@ export const navCategory = "games";
       Free, open-source browser games — play instantly, no install required.
       All games sourced from the open-source community.
     </p>
-    <p class="hero-count">{games.length} games available</p>
+    <p class="hero-count">{games.length} titles available</p>
   </div>
 
   <!-- Controls: filters + search -->
   <div class="controls">
     <!-- Category filter tabs -->
     <div class="filter-tabs" role="group" aria-label="Filter by category">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="game">🕹️ Games</button>
-      <button class="filter-btn" data-filter="playground">🌱 Playgrounds</button>
-      <button class="filter-btn" data-filter="instrument">🎵 Instruments</button>
+      <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+      <button class="filter-btn" data-filter="game" aria-pressed="false">🕹️ Games</button>
+      <button class="filter-btn" data-filter="playground" aria-pressed="false">🌱 Playgrounds</button>
+      <button class="filter-btn" data-filter="instrument" aria-pressed="false">🎵 Instruments</button>
     </div>
 
     <div class="search-row">
@@ -252,8 +252,12 @@ export const navCategory = "games";
 
   filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach((b) => b.classList.remove('active'));
+      filterBtns.forEach((b) => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       activeCategory = btn.dataset.filter ?? 'all';
       applyFilters();
     });
