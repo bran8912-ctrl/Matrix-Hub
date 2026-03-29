@@ -1,0 +1,264 @@
+---
+import Layout from "../../components/Layout.astro";
+import GameCard from "../../components/GameCard.astro";
+import { games } from "../../data/games";
+
+export const prerender = true;
+export const title = "Games";
+export const navCategory = "games";
+---
+
+<Layout title="Games | Matrix Hub">
+  <!-- Hero Section -->
+  <div class="games-hero">
+    <h1 class="hero-title">🎮 Matrix Games Arcade</h1>
+    <p class="hero-subtitle">
+      Free, open-source browser games — play instantly, no install required.
+      All games sourced from the open-source community.
+    </p>
+    <p class="hero-count">{games.length} games available</p>
+  </div>
+
+  <!-- Controls: filters + search -->
+  <div class="controls">
+    <!-- Category filter tabs -->
+    <div class="filter-tabs" role="group" aria-label="Filter by category">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="game">🕹️ Games</button>
+      <button class="filter-btn" data-filter="playground">🌱 Playgrounds</button>
+      <button class="filter-btn" data-filter="instrument">🎵 Instruments</button>
+    </div>
+
+    <div class="search-row">
+      <!-- Search bar -->
+      <input
+        type="search"
+        id="game-search"
+        placeholder="Search games…"
+        class="search-input"
+        aria-label="Search games by name"
+      />
+
+      <!-- Mobile-only toggle -->
+      <label class="mobile-toggle" for="mobile-only">
+        <input type="checkbox" id="mobile-only" />
+        <span>📱 Mobile only</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- No results message -->
+  <p id="no-results" class="no-results" hidden>No games match your filters.</p>
+
+  <!-- Games grid -->
+  <div class="games-grid" id="games-grid">
+    {games.map((game) => <GameCard game={game} />)}
+  </div>
+</Layout>
+
+<style>
+  /* Hero */
+  .games-hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: rgb(34, 197, 94);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+    margin-bottom: 0.75rem;
+    animation: glow-pulse 2.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow-pulse {
+    from { text-shadow: 0 0 10px rgba(34, 197, 94, 0.4), 0 0 20px rgba(34, 197, 94, 0.2); }
+    to   { text-shadow: 0 0 20px rgba(34, 197, 94, 0.8), 0 0 40px rgba(34, 197, 94, 0.4); }
+  }
+
+  .hero-subtitle {
+    color: rgb(156, 163, 175);
+    font-size: 1rem;
+    max-width: 560px;
+    margin: 0 auto 0.5rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  .hero-count {
+    color: rgba(34, 197, 94, 0.7);
+    font-size: 0.85rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 0.45rem 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    color: rgb(156, 163, 175);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover {
+    border-color: rgba(34, 197, 94, 0.6);
+    color: rgb(134, 239, 172);
+  }
+
+  .filter-btn.active {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.7);
+    color: rgb(34, 197, 94);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+  }
+
+  .search-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.5rem 0.85rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: rgb(134, 239, 172);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-input::placeholder {
+    color: rgb(75, 85, 99);
+  }
+
+  .search-input:focus {
+    border-color: rgba(34, 197, 94, 0.7);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.2);
+  }
+
+  .mobile-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgb(156, 163, 175);
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .mobile-toggle input[type="checkbox"] {
+    accent-color: rgb(34, 197, 94);
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+  }
+
+  /* No results */
+  .no-results {
+    text-align: center;
+    color: rgb(107, 114, 128);
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    margin: 2rem 0;
+  }
+
+  /* Games grid */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 900px) {
+    .games-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero-title {
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .games-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-title {
+      font-size: 1.6rem;
+    }
+  }
+</style>
+
+<script>
+  const grid = document.getElementById('games-grid') as HTMLElement;
+  const noResults = document.getElementById('no-results') as HTMLElement;
+  const searchInput = document.getElementById('game-search') as HTMLInputElement;
+  const mobileOnly = document.getElementById('mobile-only') as HTMLInputElement;
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+
+  let activeCategory = 'all';
+
+  function applyFilters() {
+    const query = searchInput.value.toLowerCase().trim();
+    const onlyMobile = mobileOnly.checked;
+    const cards = grid.querySelectorAll<HTMLElement>('.game-card');
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const category = card.dataset.category ?? '';
+      const name = card.dataset.name ?? '';
+      const isMobile = card.dataset.mobile === 'true';
+
+      const matchesCategory = activeCategory === 'all' || category === activeCategory;
+      const matchesSearch = !query || name.includes(query);
+      const matchesMobile = !onlyMobile || isMobile;
+
+      const show = matchesCategory && matchesSearch && matchesMobile;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    noResults.hidden = visible > 0;
+  }
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.dataset.filter ?? 'all';
+      applyFilters();
+    });
+  });
+
+  searchInput.addEventListener('input', applyFilters);
+  mobileOnly.addEventListener('change', applyFilters);
+</script>
