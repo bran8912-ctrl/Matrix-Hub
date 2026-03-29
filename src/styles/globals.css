@@ -12,10 +12,17 @@
   --theme-border: #00ff00;
   --theme-name: 'Classic Matrix';
   
-  /* Audio-reactive UI pulse (0..1) */
+  /* Audio-reactive UI pulse (0..1) – all set by PersistentMusicPlayer each frame */
   --matrix-bass: 0;
-  
+  --matrix-mid: 0;
+  --matrix-beat: 0;
+  --matrix-energy: 0;
+
+  /* Music player height – updated by ResizeObserver in PersistentMusicPlayer */
+  --player-height: 0px;
+
   /* Z-Index Hierarchy - Centralized stacking context management */
+  --z-index-music-player: 1002;
   --z-index-theme-customizer: 999;
   --z-index-navigation: 1000;
   --z-index-navigation-toggle: 1001;
@@ -131,7 +138,9 @@
   
   h1, h2, h3, h4, h5, h6 {
     color: var(--theme-primary);
-    text-shadow: 0 0 10px var(--theme-glow);
+    text-shadow:
+      0 0 calc(10px + var(--matrix-beat, 0) * 20px) var(--theme-glow),
+      0 0 calc(4px  + var(--matrix-bass, 0) * 10px) var(--theme-glow);
   }
 }
 
@@ -156,8 +165,9 @@
   backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
   -webkit-backdrop-filter: blur(18px) brightness(1.08) saturate(1.2);
   box-shadow:
-    0 0 0 calc(var(--matrix-bass) * 2px) var(--matrix-pulse-color),
-    0 0 calc(18px + var(--matrix-bass) * 32px) var(--matrix-pulse-color),
+    0 0 0 calc(var(--matrix-bass, 0) * 2px) var(--matrix-pulse-color),
+    0 0 calc(18px + var(--matrix-bass, 0) * 32px) var(--matrix-pulse-color),
+    0 0 calc(var(--matrix-beat, 0) * 28px) var(--matrix-pulse-color),
     0 0 40px 0 rgba(0,255,0,0.08);
   will-change: box-shadow, background;
   transition: background 0.5s, box-shadow 0.5s;

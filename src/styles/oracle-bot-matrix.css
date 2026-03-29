@@ -104,10 +104,16 @@
 
 @keyframes oraclePulse {
   0%, 100% {
-    box-shadow: var(--oracle-glow-medium), 0 8px 24px rgba(0, 0, 0, 0.8);
+    box-shadow:
+      var(--oracle-glow-medium),
+      0 8px 24px rgba(0, 0, 0, 0.8),
+      0 0 calc(var(--matrix-beat, 0) * 24px) var(--oracle-green-glow);
   }
   50% {
-    box-shadow: var(--oracle-glow-strong), 0 12px 32px rgba(0, 0, 0, 0.9);
+    box-shadow:
+      var(--oracle-glow-strong),
+      0 12px 32px rgba(0, 0, 0, 0.9),
+      0 0 calc(var(--matrix-beat, 0) * 24px) var(--oracle-green-glow);
   }
 }
 
