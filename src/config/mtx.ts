@@ -30,6 +30,7 @@ export const MTX = {
   chainId: 137, // Polygon Mainnet
   chainName: "Polygon",
   name: "Matrix Hub Coin",
+  maxSupply: 100_000_000, // 100M MTX hard cap
   // Fixed MATIC to MTX rate for direct mint: 1 MATIC = 1,000 MTX
   maticToMtxRate: 1000,
   nativeCurrency: {
@@ -48,5 +49,9 @@ export const MTX = {
   get quickswapUrl() {
     // QuickSwap is the primary DEX on Polygon
     return `https://quickswap.exchange/#/swap?outputCurrency=${this.address}`;
+  },
+  get uniswapUrl() {
+    // Alias for quickswapUrl — Polygon uses QuickSwap, but call sites reference uniswapUrl
+    return this.quickswapUrl;
   }
 };

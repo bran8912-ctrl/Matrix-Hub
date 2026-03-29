@@ -31,7 +31,7 @@ const isPlaceholder = (address: string): boolean => {
 const createContractInfo = (address: string) => ({
   address,
   isDeployed: isValidAddress(address) && !isPlaceholder(address),
-  displayAddress: (isValidAddress(address) && !isPlaceholder(address)) ? address : "Pending Deployment"
+  displayAddress: (isValidAddress(address) && !isPlaceholder(address)) ? address : "Coming Soon"
 });
 
 // Check deployment status
@@ -49,12 +49,12 @@ export const Casino = {
     casinoCore: {
       address: casinoCoreAddress,
       isDeployed: casinoCoreDeployed,
-      displayAddress: casinoCoreDeployed ? casinoCoreAddress : "Pending Deployment"
+      displayAddress: casinoCoreDeployed ? casinoCoreAddress : "Coming Soon"
     },
     casinoReserve: {
       address: casinoReserveAddress,
       isDeployed: casinoReserveDeployed,
-      displayAddress: casinoReserveDeployed ? casinoReserveAddress : "Pending Deployment"
+      displayAddress: casinoReserveDeployed ? casinoReserveAddress : "Coming Soon"
     },
     liquidityRouter: createContractInfo(liquidityRouterAddress),
     rngEngine: createContractInfo(rngEngineAddress)

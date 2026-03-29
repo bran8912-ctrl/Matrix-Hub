@@ -5,8 +5,6 @@ import { Casino } from '../config/casino';
 
 // Check if contracts are deployed
 const mtxDeployed = MTX.isDeployed;
-const casinoCoreAddress = Casino.contracts.casinoCore.displayAddress;
-const casinoReserveAddress = Casino.contracts.casinoReserve.displayAddress;
 const casinoDeployed = Casino.isFullyDeployed;
 ---
 
@@ -20,23 +18,16 @@ const casinoDeployed = Casino.isFullyDeployed;
   </div>
   
   <div class="contract-info">
-    {!casinoDeployed && (
-      <div class="deployment-warning">
-        <strong>⚠️ Contracts Not Yet Deployed</strong>
-        <p>The MTX Casino contracts have not been deployed to mainnet yet. Casino functionality will be available once contracts are deployed.</p>
-        <p>See <a href="/docs/MTX_Deployment_Guide">MTX Deployment Guide</a> for deployment instructions.</p>
-      </div>
-    )}
     <strong>Contract Addresses:</strong><br>
     <ul>
-      <li><strong>MTX Token (MatrixHubCoin):</strong> <span class="contract-address">{mtxDeployed ? MTX.address : "Pending Deployment"}</span></li>
-      <li><strong>CasinoCore:</strong> <span class="contract-address">{casinoCoreAddress}</span></li>
-      <li><strong>CasinoReserve:</strong> <span class="contract-address">{casinoReserveAddress}</span></li>
+      <li><strong>MTX Token (MatrixHubCoin):</strong> <span class="contract-address">{mtxDeployed ? MTX.address : "Coming Soon"}</span></li>
+      <li><strong>CasinoCore:</strong> <span class="contract-address">{Casino.contracts.casinoCore.displayAddress}</span></li>
+      <li><strong>CasinoReserve:</strong> <span class="contract-address">{Casino.contracts.casinoReserve.displayAddress}</span></li>
     </ul>
     {casinoDeployed ? (
       <p style="margin-top: 10px;"><strong>Status:</strong> Connect your wallet to interact with the MTX Casino.</p>
     ) : (
-      <p style="margin-top: 10px;"><strong>Status:</strong> Awaiting contract deployment. Test locally with Hardhat for development.</p>
+      <p style="margin-top: 10px;"><strong>Status:</strong> Casino contracts deploying to Polygon mainnet — games are playable in preview mode now.</p>
     )}
   </div>
   

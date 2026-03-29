@@ -4,17 +4,6 @@ import { MTX } from '../config/mtx';
 ---
 
 <Panel title="MTX ECOSYSTEM" class="mtx-panel">
-  <!-- Deployment Status Warning -->
-  {!MTX.isDeployed && (
-    <div class="deployment-warning">
-      <h4>⚠️ Deployment Required</h4>
-      <p>
-        The MTX token contract must be deployed to Polygon before the platform can be used.
-        See <a href="/docs/DEPLOYMENT_QUICK_START.md">Deployment Guide</a> for instructions.
-      </p>
-    </div>
-  )}
-
   <div class="panel-text">
     <strong>MTX</strong> is the key token powering Matrix-Hub on Polygon.<br>
     Earn, spend, burn, and lock MTX to unlock features, access premium tools, and participate in the Casino.
@@ -49,7 +38,7 @@ import { MTX } from '../config/mtx';
               {MTX.address.slice(0, 10)}...{MTX.address.slice(-8)}
             </a>
           ) : (
-            <span class="pending">Pending Deployment</span>
+            <span class="pending">Coming Soon</span>
           )}
         </span>
       </div>
@@ -67,17 +56,20 @@ import { MTX } from '../config/mtx';
   <div class="mtx-purchase-cta">
     <h4 style="color:var(--theme-primary); margin-bottom: 10px;">Get Started with MTX:</h4>
     <div class="cta-buttons">
-      <a href="/buy-mtx" class="cta-btn primary" class:list={[{disabled: !MTX.isDeployed}]}>
+      <a href="/buy-mtx" class="cta-btn primary">
         Buy MTX (Direct Mint)
       </a>
-      <a href={MTX.uniswapUrl} target="_blank" rel="noopener noreferrer" class="cta-btn secondary" class:list={[{disabled: !MTX.isDeployed}]}>
-        Buy on QuickSwap
-      </a>
+      {MTX.isDeployed ? (
+        <a href={MTX.uniswapUrl} target="_blank" rel="noopener noreferrer" class="cta-btn secondary">
+          Buy on QuickSwap
+        </a>
+      ) : (
+        <span class="cta-btn secondary disabled" title="Available after contract deployment">
+          QuickSwap — Coming Soon
+        </span>
+      )}
       <a href="/wallet" class="cta-btn tertiary">Connect Wallet</a>
     </div>
-    {!MTX.isDeployed && (
-      <p class="cta-note">Purchase options will be available after contract deployment.</p>
-    )}
   </div>
   
   <div class="mtx-links">
