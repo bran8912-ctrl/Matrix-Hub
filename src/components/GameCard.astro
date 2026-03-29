@@ -1,0 +1,178 @@
+---
+import type { Game, GameCategory } from '../data/games';
+
+interface Props {
+  game: Game;
+}
+
+const { game } = Astro.props;
+
+const categoryLabel: Record<GameCategory, string> = {
+  game: 'Game',
+  playground: 'Playground',
+  instrument: 'Instrument',
+};
+---
+
+<div
+  class="game-card"
+  data-category={game.category}
+  data-name={game.name.toLowerCase()}
+  data-mobile={game.mobile ? 'true' : 'false'}
+>
+  <div class="card-inner">
+    <div class="card-header">
+      <span class="category-badge">{categoryLabel[game.category]}</span>
+      <span class="license-badge">{game.license}</span>
+    </div>
+
+    <h3 class="game-name">{game.name}</h3>
+    <p class="game-tag">{game.tag}</p>
+
+    <div class="device-icons">
+      {game.mobile && (
+        <span role="img" aria-label="Mobile compatible" title="Mobile compatible">📱</span>
+      )}
+      {game.desktop && (
+        <span role="img" aria-label="Desktop compatible" title="Desktop compatible">🖥️</span>
+      )}
+    </div>
+
+    <div class="card-actions">
+      <a
+        href={game.gitUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="play-btn"
+        aria-label={`Play ${game.name} (opens GitHub)`}
+      >
+        ▶ Play
+      </a>
+      <a
+        href={game.gitUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="source-link"
+        aria-label={`View source for ${game.name}`}
+      >
+        Source ↗
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .game-card {
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    overflow: hidden;
+  }
+
+  .game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.25);
+    border-color: rgba(34, 197, 94, 0.7);
+  }
+
+  .card-inner {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 100%;
+  }
+
+  .card-header {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .category-badge,
+  .license-badge {
+    font-size: 0.7rem;
+    font-family: 'Courier New', monospace;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+  }
+
+  .category-badge {
+    background: rgba(34, 197, 94, 0.15);
+    color: rgb(34, 197, 94);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+  }
+
+  .license-badge {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgb(156, 163, 175);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .game-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgb(134, 239, 172);
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .game-tag {
+    font-size: 0.85rem;
+    color: rgb(156, 163, 175);
+    margin: 0;
+    font-style: italic;
+  }
+
+  .device-icons {
+    display: flex;
+    gap: 0.4rem;
+    font-size: 1rem;
+    margin-top: 0.25rem;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 0.75rem;
+  }
+
+  .play-btn {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    background: rgba(34, 197, 94, 0.15);
+    color: rgb(34, 197, 94);
+    border: 1px solid rgba(34, 197, 94, 0.5);
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+
+  .play-btn:hover {
+    background: rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+  }
+
+  .source-link {
+    font-size: 0.8rem;
+    color: rgb(107, 114, 128);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+
+  .source-link:hover {
+    color: rgb(34, 197, 94);
+  }
+</style>
