@@ -1,7 +1,12 @@
-name: Contract Deployment - Mainnet (Protected)
+name: Contract Deployment - Polygon Mainnet (Protected)
 
-# ⚠️ CRITICAL: This workflow deploys to MAINNET with real funds
+# ⚠️ CRITICAL: This workflow deploys to POLYGON MAINNET with real MATIC
 # Multiple safeguards are in place to prevent accidental deployment
+#
+# Required GitHub Secrets:
+#   POLYGON_PRIVATE_KEY   - Deployer wallet private key (without 0x prefix)
+#   POLYGON_RPC_URL       - Polygon RPC endpoint (e.g. https://polygon-rpc.com/)
+#   POLYGONSCAN_API_KEY   - PolygonScan API key for contract verification
 
 on:
   workflow_dispatch:
@@ -16,7 +21,7 @@ on:
           - 'distribute-only'
           - 'full-deployment'
       confirmation_string:
-        description: 'Type "DEPLOY-TO-MAINNET-CONFIRMED" to proceed'
+        description: 'Type "DEPLOY-TO-POLYGON-CONFIRMED" to proceed'
         required: true
         type: string
       double_check:
@@ -31,46 +36,43 @@ on:
 
 jobs:
   validate-mainnet-deployment:
-    name: Validate Mainnet Deployment Request
+    name: Validate Polygon Mainnet Deployment Request
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    
+
     steps:
       - name: Validate confirmation strings
         run: |
-          echo "## 🚨 MAINNET DEPLOYMENT VALIDATION" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚨 POLYGON MAINNET DEPLOYMENT VALIDATION" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️  **CRITICAL: This will deploy to ETHEREUM MAINNET with REAL FUNDS**" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️  **CRITICAL: This will deploy to POLYGON MAINNET with REAL MATIC**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          # Normalize and validate first confirmation
+
           CONFIRMATION=$(echo "${{ inputs.confirmation_string }}" | tr '[:lower:]' '[:upper:]' | xargs)
           DOUBLE_CHECK=$(echo "${{ inputs.double_check }}" | tr '[:lower:]' '[:upper:]' | xargs)
-          
-          if [ "$CONFIRMATION" != "DEPLOY-TO-MAINNET-CONFIRMED" ]; then
+
+          if [ "$CONFIRMATION" != "DEPLOY-TO-POLYGON-CONFIRMED" ]; then
             echo "❌ **VALIDATION FAILED**: Incorrect confirmation string" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Expected: \`DEPLOY-TO-MAINNET-CONFIRMED\`" >> $GITHUB_STEP_SUMMARY
+            echo "Expected: \`DEPLOY-TO-POLYGON-CONFIRMED\`" >> $GITHUB_STEP_SUMMARY
             echo "Received: \`${{ inputs.confirmation_string }}\`" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
-          
+
           if [ "$DOUBLE_CHECK" != "I-UNDERSTAND-THIS-IS-IRREVERSIBLE" ]; then
             echo "❌ **VALIDATION FAILED**: Incorrect double-check string" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
             echo "Expected: \`I-UNDERSTAND-THIS-IS-IRREVERSIBLE\`" >> $GITHUB_STEP_SUMMARY
             echo "Received: \`${{ inputs.double_check }}\`" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
-          
+
           echo "✅ Confirmation strings validated" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Deployment Type:** \`${{ inputs.deployment_type }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Network:** Ethereum Mainnet (Chain ID: 1)" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** Polygon Mainnet (Chain ID: 137)" >> $GITHUB_STEP_SUMMARY
           echo "**Triggered by:** @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️  **PROCEEDING WITH MAINNET DEPLOYMENT**" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️  **PROCEEDING WITH POLYGON MAINNET DEPLOYMENT**" >> $GITHUB_STEP_SUMMARY
 
   compile-contracts:
     name: Compile Smart Contracts
@@ -79,311 +81,322 @@ jobs:
     if: ${{ inputs.skip_compilation == false }}
     permissions:
       contents: read
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Compile contracts
         run: |
           echo "## 🔨 Compiling Smart Contracts" >> $GITHUB_STEP_SUMMARY
           npm run compile
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ Compilation successful" >> $GITHUB_STEP_SUMMARY
-      
+
       - name: Upload compiled contracts
         uses: actions/upload-artifact@v4
         with:
-          name: compiled-contracts-mainnet-${{ github.run_number }}
+          name: compiled-contracts-polygon-${{ github.run_number }}
           path: |
             artifacts/
             cache/
           retention-days: 7
 
-  deploy-mtx-mainnet:
-    name: Deploy MTX Token to Mainnet
+  deploy-mtx-polygon:
+    name: Deploy MTX Token to Polygon Mainnet
     runs-on: ubuntu-latest
     needs: [validate-mainnet-deployment, compile-contracts]
     if: |
-      always() && 
+      always() &&
       needs.validate-mainnet-deployment.result == 'success' &&
       (needs.compile-contracts.result == 'success' || needs.compile-contracts.result == 'skipped') &&
       (inputs.deployment_type == 'mtx-only' || inputs.deployment_type == 'full-deployment')
     permissions:
-      contents: read
-    
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Download compiled contracts
         if: ${{ inputs.skip_compilation == false }}
         uses: actions/download-artifact@v4
         with:
-          name: compiled-contracts-mainnet-${{ github.run_number }}
-      
+          name: compiled-contracts-polygon-${{ github.run_number }}
+
       - name: Create deployments directory
         run: mkdir -p deployments
-      
-      - name: Deploy MTX Token to Mainnet
+
+      - name: Deploy MTX Token to Polygon Mainnet
         env:
-          PRIVATE_KEY: ${{ secrets.MAINNET_PRIVATE_KEY }}
-          MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
-          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+          PRIVATE_KEY: ${{ secrets.POLYGON_PRIVATE_KEY }}
+          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
+          POLYGONSCAN_API_KEY: ${{ secrets.POLYGONSCAN_API_KEY }}
         run: |
-          echo "## 🚀 Deploying MTX Token to MAINNET" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚀 Deploying MTX Token to Polygon Mainnet" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️  **DEPLOYING TO ETHEREUM MAINNET WITH REAL FUNDS**" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️  **DEPLOYING TO POLYGON MAINNET WITH REAL MATIC**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Network:** mainnet" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** polygon (Chain ID: 137)" >> $GITHUB_STEP_SUMMARY
           echo "**Deployer:** @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          npx hardhat run scripts/deploy_mtx.js --network mainnet | tee deploy_mtx_mainnet_output.log
-          
+
+          npx hardhat run scripts/deploy_mtx.js --network polygon 2>&1 | tee deploy_mtx_polygon_output.log
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Deployment Output" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          tail -20 deploy_mtx_mainnet_output.log >> $GITHUB_STEP_SUMMARY
+          tail -25 deploy_mtx_polygon_output.log >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-      
+
+      - name: Verify contract on PolygonScan
+        if: ${{ secrets.POLYGONSCAN_API_KEY != '' }}
+        env:
+          PRIVATE_KEY: ${{ secrets.POLYGON_PRIVATE_KEY }}
+          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
+          POLYGONSCAN_API_KEY: ${{ secrets.POLYGONSCAN_API_KEY }}
+        run: |
+          CONTRACT_ADDRESS=$(node -e "const d=require('./deployments/mtx-polygon.json'); console.log(d.contractAddress)")
+          echo "Verifying contract at $CONTRACT_ADDRESS on PolygonScan..."
+          npx hardhat verify --network polygon "$CONTRACT_ADDRESS" "100000000" "0x9fb4bb44d8d962d695fc93b3dc15f1b287391077" || echo "Verification failed - verify manually on PolygonScan"
+
+      - name: Update site config with deployed contract address
+        run: |
+          node scripts/update-contract-address.cjs polygon
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/config/mtx.ts
+          if git diff --cached --quiet; then
+            echo "No changes to commit (address already up to date)"
+            echo "ℹ️ Contract address was already current in src/config/mtx.ts" >> $GITHUB_STEP_SUMMARY
+          else
+            git commit -m "🚀 Update MTX contract address after Polygon Mainnet deployment [skip ci]"
+            if git push origin HEAD:${{ github.ref_name }}; then
+              echo "✅ Committed contract address update to ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+              CONTRACT_ADDRESS=$(node -e "const d=require('./deployments/mtx-polygon.json'); console.log(d.contractAddress)")
+              echo "**Contract Address:** \`${CONTRACT_ADDRESS}\`" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ Push failed — manually update src/config/mtx.ts with the contract address from the deployment artifact" >> $GITHUB_STEP_SUMMARY
+              echo "Contract address is in the \`mtx-deployment-polygon-${{ github.run_number }}\` artifact (mtx-polygon.json)" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
       - name: Upload MTX deployment artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: mtx-deployment-mainnet-${{ github.run_number }}
+          name: mtx-deployment-polygon-${{ github.run_number }}
           path: |
-            deployments/mtx-mainnet.json
-            deploy_mtx_mainnet_output.log
+            deployments/mtx-polygon.json
+            deploy_mtx_polygon_output.log
           retention-days: 90
 
-  deploy-casino-mainnet:
-    name: Deploy Casino Contracts to Mainnet
+  deploy-casino-polygon:
+    name: Deploy Casino Contracts to Polygon Mainnet
     runs-on: ubuntu-latest
-    needs: [validate-mainnet-deployment, compile-contracts, deploy-mtx-mainnet]
+    needs: [validate-mainnet-deployment, compile-contracts, deploy-mtx-polygon]
     if: |
-      always() && 
+      always() &&
       needs.validate-mainnet-deployment.result == 'success' &&
       (needs.compile-contracts.result == 'success' || needs.compile-contracts.result == 'skipped') &&
-      (needs.deploy-mtx-mainnet.result == 'success' || inputs.deployment_type == 'casino-only') &&
+      (needs.deploy-mtx-polygon.result == 'success' || inputs.deployment_type == 'casino-only') &&
       (inputs.deployment_type == 'casino-only' || inputs.deployment_type == 'full-deployment')
     permissions:
       contents: read
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Download compiled contracts
         if: ${{ inputs.skip_compilation == false }}
         uses: actions/download-artifact@v4
         with:
-          name: compiled-contracts-mainnet-${{ github.run_number }}
-      
+          name: compiled-contracts-polygon-${{ github.run_number }}
+
       - name: Download MTX deployment
         if: inputs.deployment_type == 'full-deployment'
         uses: actions/download-artifact@v4
         with:
-          name: mtx-deployment-mainnet-${{ github.run_number }}
+          name: mtx-deployment-polygon-${{ github.run_number }}
           path: deployments/
-      
+
       - name: Create deployments directory
         run: mkdir -p deployments
-      
-      - name: Deploy Casino Contracts to Mainnet
+
+      - name: Deploy Casino Contracts to Polygon Mainnet
         env:
-          PRIVATE_KEY: ${{ secrets.MAINNET_PRIVATE_KEY }}
-          MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
-          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+          PRIVATE_KEY: ${{ secrets.POLYGON_PRIVATE_KEY }}
+          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
+          POLYGONSCAN_API_KEY: ${{ secrets.POLYGONSCAN_API_KEY }}
         run: |
-          echo "## 🎰 Deploying Casino Contracts to MAINNET" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎰 Deploying Casino Contracts to Polygon Mainnet" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️  **DEPLOYING TO ETHEREUM MAINNET WITH REAL FUNDS**" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** polygon (Chain ID: 137)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Network:** mainnet" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          npx hardhat run scripts/deploy_casino.js --network mainnet | tee deploy_casino_mainnet_output.log
-          
+
+          npx hardhat run scripts/deploy_casino.js --network polygon 2>&1 | tee deploy_casino_polygon_output.log
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Deployment Output" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          tail -30 deploy_casino_mainnet_output.log >> $GITHUB_STEP_SUMMARY
+          tail -30 deploy_casino_polygon_output.log >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-      
+
       - name: Upload Casino deployment artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: casino-deployment-mainnet-${{ github.run_number }}
+          name: casino-deployment-polygon-${{ github.run_number }}
           path: |
-            deployments/casino-mainnet.json
-            deploy_casino_mainnet_output.log
+            deployments/casino-polygon.json
+            deploy_casino_polygon_output.log
           retention-days: 90
 
-  distribute-mtx-mainnet:
-    name: Distribute MTX Tokens on Mainnet
+  distribute-mtx-polygon:
+    name: Distribute MTX Tokens on Polygon Mainnet
     runs-on: ubuntu-latest
-    needs: [validate-mainnet-deployment, compile-contracts, deploy-mtx-mainnet, deploy-casino-mainnet]
+    needs: [validate-mainnet-deployment, compile-contracts, deploy-mtx-polygon, deploy-casino-polygon]
     if: |
-      always() && 
+      always() &&
       needs.validate-mainnet-deployment.result == 'success' &&
       (needs.compile-contracts.result == 'success' || needs.compile-contracts.result == 'skipped') &&
-      ((needs.deploy-mtx-mainnet.result == 'success' && needs.deploy-casino-mainnet.result == 'success') || inputs.deployment_type == 'distribute-only') &&
+      ((needs.deploy-mtx-polygon.result == 'success' && needs.deploy-casino-polygon.result == 'success') || inputs.deployment_type == 'distribute-only') &&
       (inputs.deployment_type == 'distribute-only' || inputs.deployment_type == 'full-deployment')
     permissions:
       contents: read
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Download compiled contracts
         if: ${{ inputs.skip_compilation == false }}
         uses: actions/download-artifact@v4
         with:
-          name: compiled-contracts-mainnet-${{ github.run_number }}
-      
+          name: compiled-contracts-polygon-${{ github.run_number }}
+
       - name: Download MTX deployment
         if: inputs.deployment_type == 'full-deployment'
         uses: actions/download-artifact@v4
         with:
-          name: mtx-deployment-mainnet-${{ github.run_number }}
+          name: mtx-deployment-polygon-${{ github.run_number }}
           path: deployments/
-      
+
       - name: Download Casino deployment
         if: inputs.deployment_type == 'full-deployment'
         uses: actions/download-artifact@v4
         with:
-          name: casino-deployment-mainnet-${{ github.run_number }}
+          name: casino-deployment-polygon-${{ github.run_number }}
           path: deployments/
-      
+
       - name: Create deployments directory
         run: mkdir -p deployments
-      
-      - name: Distribute MTX to Ecosystem on Mainnet
+
+      - name: Distribute MTX to Ecosystem on Polygon Mainnet
         env:
-          PRIVATE_KEY: ${{ secrets.MAINNET_PRIVATE_KEY }}
-          MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
-          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+          PRIVATE_KEY: ${{ secrets.POLYGON_PRIVATE_KEY }}
+          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
+          POLYGONSCAN_API_KEY: ${{ secrets.POLYGONSCAN_API_KEY }}
         run: |
-          echo "## 💰 Distributing MTX Tokens on MAINNET" >> $GITHUB_STEP_SUMMARY
+          echo "## 💰 Distributing MTX Tokens on Polygon Mainnet" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️  **IRREVERSIBLE TRANSACTION ON ETHEREUM MAINNET**" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️  **IRREVERSIBLE TRANSACTION ON POLYGON MAINNET**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Network:** mainnet" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** polygon (Chain ID: 137)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          npx hardhat run scripts/distribute_mtx.js --network mainnet | tee distribute_mtx_mainnet_output.log
-          
+
+          npx hardhat run scripts/distribute_mtx.js --network polygon 2>&1 | tee distribute_mtx_polygon_output.log
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Distribution Output" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          tail -40 distribute_mtx_mainnet_output.log >> $GITHUB_STEP_SUMMARY
+          tail -40 distribute_mtx_polygon_output.log >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-      
+
       - name: Upload Distribution artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: mtx-distribution-mainnet-${{ github.run_number }}
+          name: mtx-distribution-polygon-${{ github.run_number }}
           path: |
-            deployments/mtx-distribution-mainnet.json
-            distribute_mtx_mainnet_output.log
+            deployments/mtx-distribution-polygon.json
+            distribute_mtx_polygon_output.log
           retention-days: 90
 
   deployment-summary:
-    name: Mainnet Deployment Summary
+    name: Polygon Mainnet Deployment Summary
     runs-on: ubuntu-latest
-    needs: [validate-mainnet-deployment, deploy-mtx-mainnet, deploy-casino-mainnet, distribute-mtx-mainnet]
+    needs: [validate-mainnet-deployment, deploy-mtx-polygon, deploy-casino-polygon, distribute-mtx-polygon]
     if: always()
     permissions:
       contents: read
-    
+
     steps:
       - name: Generate deployment summary
         run: |
-          echo "# 📋 MAINNET Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "# 📋 Polygon Mainnet Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️  **MAINNET DEPLOYMENT COMPLETED**" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Network:** Ethereum Mainnet (Chain ID: 1)" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** Polygon Mainnet (Chain ID: 137)" >> $GITHUB_STEP_SUMMARY
           echo "**Deployment Type:** \`${{ inputs.deployment_type }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Triggered by:** @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "**Run Number:** #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           echo "## Job Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Mainnet Validation | ${{ needs.validate-mainnet-deployment.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| MTX Deployment | ${{ needs.deploy-mtx-mainnet.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Casino Deployment | ${{ needs.deploy-casino-mainnet.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| MTX Distribution | ${{ needs.distribute-mtx-mainnet.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Polygon Validation | ${{ needs.validate-mainnet-deployment.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| MTX Deployment | ${{ needs.deploy-mtx-polygon.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Casino Deployment | ${{ needs.deploy-casino-polygon.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| MTX Distribution | ${{ needs.distribute-mtx-polygon.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          echo "## 📦 Artifacts" >> $GITHUB_STEP_SUMMARY
+
+          echo "## 🚨 CRITICAL — Post-Deployment Actions" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Download deployment artifacts from the workflow run page (90-day retention):" >> $GITHUB_STEP_SUMMARY
-          echo "- Deployment JSON files in \`deployments/\` directory" >> $GITHUB_STEP_SUMMARY
-          echo "- Deployment output logs" >> $GITHUB_STEP_SUMMARY
-          echo "- Contract artifacts (if compiled)" >> $GITHUB_STEP_SUMMARY
+          echo "1. **VERIFY** the contract address committed to \`src/config/mtx.ts\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. **CHECK** contract on [PolygonScan](https://polygonscan.com)" >> $GITHUB_STEP_SUMMARY
+          echo "3. **TRIGGER** a new site build so the live site picks up the address" >> $GITHUB_STEP_SUMMARY
+          echo "4. **TEST** \`buyMTX\` with a small MATIC amount on mainnet" >> $GITHUB_STEP_SUMMARY
+          echo "5. **ADD** QuickSwap MTX/MATIC liquidity pool" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          echo "## 🚨 CRITICAL - Post-Deployment Actions" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Artifacts (90-day retention)" >> $GITHUB_STEP_SUMMARY
+          echo "Download deployment JSON files and logs from this workflow run." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "1. **IMMEDIATELY** backup all deployment artifacts" >> $GITHUB_STEP_SUMMARY
-          echo "2. **VERIFY** all contract addresses on Etherscan" >> $GITHUB_STEP_SUMMARY
-          echo "3. **VERIFY** contract source code on Etherscan" >> $GITHUB_STEP_SUMMARY
-          echo "4. **TEST** all contract functions on mainnet" >> $GITHUB_STEP_SUMMARY
-          echo "5. **UPDATE** frontend configuration with new contract addresses" >> $GITHUB_STEP_SUMMARY
-          echo "6. **SECURE** or rotate deployment keys immediately" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          echo "## 🔗 Next Steps" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "1. Download and securely store all artifacts" >> $GITHUB_STEP_SUMMARY
-          echo "2. Verify contracts on Etherscan using downloaded deployment files" >> $GITHUB_STEP_SUMMARY
-          echo "3. Test contract functionality on mainnet with small amounts" >> $GITHUB_STEP_SUMMARY
-          echo "4. Update \`src/config/mtx.ts\` with new contract addresses" >> $GITHUB_STEP_SUMMARY
-          echo "5. Create Uniswap liquidity pool (if deploying casino)" >> $GITHUB_STEP_SUMMARY
-          echo "6. Announce deployment to community" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
           echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Matrix-Hub.org** - Signal Over Noise 🌟" >> $GITHUB_STEP_SUMMARY
+          echo "**Matrix-Hub.org** — Signal Over Noise 🌟" >> $GITHUB_STEP_SUMMARY
