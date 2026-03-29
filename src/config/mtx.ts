@@ -49,5 +49,9 @@ export const MTX = {
   get quickswapUrl() {
     // QuickSwap is the primary DEX on Polygon
     return `https://quickswap.exchange/#/swap?outputCurrency=${this.address}`;
+  },
+  get uniswapUrl() {
+    // Alias for quickswapUrl — Polygon uses QuickSwap, but call sites reference uniswapUrl
+    return this.quickswapUrl;
   }
 };
