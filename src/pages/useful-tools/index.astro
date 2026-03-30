@@ -1,0 +1,648 @@
+---
+import Layout from "../../components/Layout.astro";
+
+export const prerender = true;
+
+export const title = "Useful Tools";
+export const navCategory = "useful-tools";
+
+// ── Financial & Swarm Intelligence Tools ─────────────────────────────────────
+const TOOLS = [
+  // ── Swarm-Intelligence / AI Agent Finance ─────────────────────────────────
+  {
+    category: "swarm-ai",
+    label: "SWARM AI ENGINE",
+    emoji: "🐝",
+    title: "MiroFish",
+    description:
+      "Open-source universal swarm intelligence engine for prediction and analysis. Spawns thousands of autonomous AI agents that simulate collective behaviour to produce prediction reports for finance, markets, politics, and more. Knowledge-graph extraction, multi-agent simulation, and configurable agent personalities.",
+    github: "https://github.com/666ghj/MiroFish",
+    stars: "★ Trending",
+    badge: "SWARM AI",
+    badgeColor: "#00ff99",
+    tags: ["swarm", "prediction", "finance", "multi-agent"],
+  },
+  {
+    category: "swarm-ai",
+    label: "AUTO HEDGE FUND",
+    emoji: "🤖",
+    title: "AutoHedge",
+    description:
+      "Autonomous AI hedge fund powered by swarm intelligence. Multiple specialized agents handle trading strategies, technical analysis, statistical modeling, risk management, and live execution. JSON-based institutional-grade output with modular agent design.",
+    github: "https://github.com/The-Swarm-Corporation/AutoHedge",
+    stars: "The-Swarm-Corporation",
+    badge: "AUTONOMOUS",
+    badgeColor: "#bf00ff",
+    tags: ["hedge-fund", "trading", "swarm", "automation"],
+  },
+  {
+    category: "portfolio",
+    label: "PORTFOLIO RISK",
+    emoji: "📊",
+    title: "Volara",
+    description:
+      "Open-source portfolio risk management and analysis system built with real-time data processing and advanced ML models. Risk assessment for stocks, derivatives, and bonds; real-time updates; extensible risk metrics; portfolio optimization; and API integration.",
+    github: "https://github.com/The-Swarm-Corporation/Volara",
+    stars: "The-Swarm-Corporation",
+    badge: "RISK MGMT",
+    badgeColor: "#00aaff",
+    tags: ["portfolio", "risk", "ML", "real-time"],
+  },
+  {
+    category: "swarm-ai",
+    label: "CURATED AGENTS",
+    emoji: "📋",
+    title: "Awesome Financial Agents",
+    description:
+      "Curated GitHub list of agent-based frameworks and tools focused on financial analysis and trading. Covers frameworks like Tickr Agent and open-aladdin, specialised crypto and stock analysis agents, and step-by-step guides for building multi-agent financial systems.",
+    github: "https://github.com/The-Swarm-Corporation/awesome-financial-agents",
+    stars: "The-Swarm-Corporation",
+    badge: "CURATED LIST",
+    badgeColor: "#FFD700",
+    tags: ["agents", "finance", "curated", "frameworks"],
+  },
+
+  // ── Portfolio Optimisation ─────────────────────────────────────────────────
+  {
+    category: "portfolio",
+    label: "PORTFOLIO OPT",
+    emoji: "⚖️",
+    title: "PyPortfolioOpt",
+    description:
+      "Python library for financial portfolio optimization. Implements classical mean-variance optimization, Black-Litterman allocation, risk models (sample covariance, Ledoit-Wolf, semi-covariance), and efficient frontier generation. Battle-tested and widely used.",
+    github: "https://github.com/robertmartin8/PyPortfolioOpt",
+    stars: "★ 4k+",
+    badge: "OPEN SOURCE",
+    badgeColor: "#00ff99",
+    tags: ["python", "portfolio", "optimization", "quant"],
+  },
+  {
+    category: "analysis",
+    label: "FINANCIAL TOOLKIT",
+    emoji: "🔧",
+    title: "FinanceToolkit",
+    description:
+      "Comprehensive open-source financial analysis toolkit. Covers 150+ financial ratios and performance measurements including fundamental analysis, technical indicators, risk metrics, and factor analysis. Works with any stock or asset.",
+    github: "https://github.com/JerBouma/FinanceToolkit",
+    stars: "★ 3.5k+",
+    badge: "150+ METRICS",
+    badgeColor: "#00aaff",
+    tags: ["toolkit", "analysis", "ratios", "technicals"],
+  },
+
+  // ── Market Data & Crypto ───────────────────────────────────────────────────
+  {
+    category: "crypto",
+    label: "CRYPTO ANALYSIS",
+    emoji: "₿",
+    title: "Freqtrade",
+    description:
+      "Free and open-source crypto trading bot written in Python. Supports backtesting, plotting, machine learning optimization, and paper and live trading on major exchanges. Strategy-first design — write your own logic or use community strategies.",
+    github: "https://github.com/freqtrade/freqtrade",
+    stars: "★ 33k+",
+    badge: "TRADING BOT",
+    badgeColor: "#FFD700",
+    tags: ["crypto", "bot", "backtesting", "python"],
+  },
+  {
+    category: "analysis",
+    label: "QUANT RESEARCH",
+    emoji: "📈",
+    title: "QuantLib",
+    description:
+      "Industry-standard quantitative finance library. Pricing of bonds, options, swaps, interest-rate models, yield curves, and Monte Carlo simulations. Used by banks, hedge funds, and quant researchers worldwide. Available in Python, C++, and more.",
+    github: "https://github.com/lballabio/QuantLib",
+    stars: "★ 5k+",
+    badge: "INDUSTRY STD",
+    badgeColor: "#ff6600",
+    tags: ["quant", "pricing", "bonds", "options"],
+  },
+  {
+    category: "analysis",
+    label: "AWESOME LIST",
+    emoji: "📚",
+    title: "Awesome Quant",
+    description:
+      "The definitive curated list of quantitative finance resources on GitHub. Libraries, data sources, research papers, books, and tutorials covering algorithmic trading, risk management, portfolio theory, market microstructure, and more.",
+    github: "https://github.com/wilsonfreitas/awesome-quant",
+    stars: "★ 17k+",
+    badge: "RESOURCE HUB",
+    badgeColor: "#bf00ff",
+    tags: ["curated", "quant", "resources", "trading"],
+  },
+];
+
+// Build category filter list
+const CATEGORIES = [
+  { key: "all",       label: "⚡ ALL TOOLS",           count: TOOLS.length },
+  { key: "swarm-ai",  label: "🐝 Swarm AI",            count: TOOLS.filter(t => t.category === "swarm-ai").length },
+  { key: "portfolio", label: "⚖️ Portfolio",            count: TOOLS.filter(t => t.category === "portfolio").length },
+  { key: "analysis",  label: "📈 Analysis",             count: TOOLS.filter(t => t.category === "analysis").length },
+  { key: "crypto",    label: "₿ Crypto",               count: TOOLS.filter(t => t.category === "crypto").length },
+];
+---
+
+<Layout title="Useful Tools — Matrix Hub">
+  <div class="tools-page">
+
+    <!-- ── Page Header ──────────────────────────────────────────────────── -->
+    <div class="page-header">
+      <div class="header-badge">OPEN SOURCE TOOLKIT</div>
+      <h1 class="page-title">USEFUL TOOLS</h1>
+      <p class="page-subtitle">
+        Swarm-intelligence and AI-driven financial asset analysis tools — open source on GitHub.<br />
+        Discover, analyze, and optimize any financial asset with collective-intelligence frameworks.
+      </p>
+      <div class="header-stats">
+        <span class="stat">{TOOLS.length} <small>tools</small></span>
+        <span class="stat-divider">·</span>
+        <span class="stat">{CATEGORIES.length - 1} <small>categories</small></span>
+        <span class="stat-divider">·</span>
+        <span class="stat">100% <small>open source</small></span>
+      </div>
+    </div>
+
+    <!-- ── Info Banner ──────────────────────────────────────────────────── -->
+    <div class="info-banner">
+      <span class="info-icon">🐝</span>
+      <span>
+        These tools use swarm intelligence and multi-agent AI systems to analyze financial assets — similar to Swarm Intellect.
+        All projects are open source and available on GitHub.
+      </span>
+    </div>
+
+    <!-- ── Category Filter Tabs ─────────────────────────────────────────── -->
+    <nav class="filter-nav" id="filter-nav" aria-label="Tool categories">
+      {CATEGORIES.map((cat) => (
+        <button
+          class={`filter-btn ${cat.key === "all" ? "active" : ""}`}
+          data-category={cat.key}
+          type="button"
+        >
+          {cat.label}
+          <span class="filter-count">{cat.count}</span>
+        </button>
+      ))}
+    </nav>
+
+    <!-- ── Tools Grid ────────────────────────────────────────────────────── -->
+    <div class="tools-grid" id="tools-grid">
+      {TOOLS.map((tool) => (
+        <article class="tool-card" data-category={tool.category}>
+          <!-- Top row: label + badge -->
+          <div class="tool-top">
+            <span class="tool-category-tag">{tool.label}</span>
+            <span
+              class="tool-badge"
+              style={`background: ${tool.badgeColor}20; color: ${tool.badgeColor}; border-color: ${tool.badgeColor}50;`}
+            >
+              {tool.badge}
+            </span>
+          </div>
+
+          <!-- Title -->
+          <div class="tool-title-row">
+            <span class="tool-emoji" aria-hidden="true">{tool.emoji}</span>
+            <h2 class="tool-title">{tool.title}</h2>
+          </div>
+
+          <!-- Description -->
+          <p class="tool-description">{tool.description}</p>
+
+          <!-- Tags -->
+          <div class="tool-tags">
+            {tool.tags.map((tag) => (
+              <span class="tag">#{tag}</span>
+            ))}
+          </div>
+
+          <!-- Stars / org label -->
+          <div class="tool-meta">
+            <span class="tool-stars">⭐ {tool.stars}</span>
+          </div>
+
+          <!-- CTA -->
+          <a
+            href={tool.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="tool-cta"
+            aria-label={`View ${tool.title} on GitHub`}
+          >
+            VIEW ON GITHUB
+            <span class="cta-arrow" aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <!-- ── No results fallback ──────────────────────────────────────────── -->
+    <div class="no-results" id="no-results" style="display:none;">
+      <span>🔍</span>
+      <p>No tools in this category yet.</p>
+    </div>
+
+    <!-- ── About Swarm Intelligence Banner ──────────────────────────────── -->
+    <div class="about-banner panel">
+      <h2 class="about-title">🐝 What is Swarm Intelligence for Finance?</h2>
+      <p class="about-desc">
+        Swarm intelligence applies collective behaviour principles — borrowed from ant colonies, bird flocking, and bee swarms —
+        to financial analysis. Multiple autonomous AI agents each analyze different facets of a market (fundamentals, sentiment,
+        technicals, on-chain data) and their combined output produces more accurate predictions than any single model.
+        Tools like <strong>MiroFish</strong> and <strong>AutoHedge</strong> bring this approach to open-source finance.
+      </p>
+      <div class="about-links">
+        <a
+          href="https://github.com/topics/swarm-intelligence"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="about-btn"
+        >
+          🔍 Explore GitHub Topic
+        </a>
+        <a
+          href="https://github.com/The-Swarm-Corporation/awesome-financial-agents"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="about-btn"
+        >
+          📋 Full Agents List
+        </a>
+      </div>
+    </div>
+
+  </div>
+</Layout>
+
+<!-- ── Category filter script ───────────────────────────────────────────────── -->
+<script is:inline>
+  (function () {
+    const grid      = document.getElementById('tools-grid');
+    const noResults = document.getElementById('no-results');
+    const filterNav = document.getElementById('filter-nav');
+
+    if (!grid || !noResults || !filterNav) return;
+
+    filterNav.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+
+      const cat = btn.dataset.category;
+
+      filterNav.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      let visible = 0;
+      grid.querySelectorAll('.tool-card').forEach((card) => {
+        const matches = cat === 'all' || card.dataset.category === cat;
+        card.style.display = matches ? '' : 'none';
+        if (matches) visible++;
+      });
+
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+    });
+  })();
+</script>
+
+<style>
+  /* ── Page layout ──────────────────────────────────────────────────────── */
+  .tools-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ── Header ──────────────────────────────────────────────────────────── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .header-badge {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--theme-primary);
+    border: 1px solid var(--theme-primary);
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px var(--theme-glow);
+  }
+
+  .page-title {
+    font-size: 2.8rem;
+    color: var(--theme-primary);
+    text-shadow: 0 0 20px var(--theme-glow), 0 0 40px var(--theme-glow);
+    letter-spacing: 5px;
+    margin-bottom: 0.75rem;
+    animation: titlePulse 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes titlePulse {
+    from { text-shadow: 0 0 10px var(--theme-glow), 0 0 20px var(--theme-glow); }
+    to   { text-shadow: 0 0 20px var(--theme-glow), 0 0 50px var(--theme-glow), 0 0 80px var(--theme-glow); }
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+    color: var(--theme-text);
+    opacity: 0.8;
+    line-height: 1.7;
+    max-width: 660px;
+    margin: 0 auto 1.2rem;
+  }
+
+  .header-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .stat {
+    color: var(--theme-primary);
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  .stat small {
+    font-size: 0.72rem;
+    opacity: 0.65;
+    font-weight: normal;
+  }
+
+  .stat-divider { opacity: 0.4; }
+
+  /* ── Info banner ──────────────────────────────────────────────────────── */
+  .info-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.75rem 1.2rem;
+    background: rgba(0, 255, 153, 0.06);
+    border: 1px solid rgba(0, 255, 153, 0.25);
+    border-radius: 6px;
+    font-size: 0.78rem;
+    color: var(--theme-text);
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .info-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Filter nav ───────────────────────────────────────────────────────── */
+  .filter-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    background: transparent;
+    border: 1px solid var(--theme-border);
+    border-radius: 20px;
+    color: var(--theme-text);
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.75;
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--theme-primary);
+    color: #000;
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 12px var(--theme-glow);
+    opacity: 1;
+  }
+
+  .filter-count {
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 0 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  .filter-btn.active .filter-count { background: rgba(0,0,0,0.2); }
+
+  /* ── Grid ─────────────────────────────────────────────────────────────── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.4rem;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── Tool card ────────────────────────────────────────────────────────── */
+  .tool-card {
+    background: var(--theme-bg-panel);
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 24px var(--theme-glow);
+    border-color: var(--theme-primary);
+  }
+
+  .tool-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tool-category-tag {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--theme-text);
+    opacity: 0.6;
+    text-transform: uppercase;
+  }
+
+  .tool-badge {
+    font-size: 0.62rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .tool-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .tool-emoji { font-size: 1.5rem; }
+
+  .tool-title {
+    font-size: 1.2rem;
+    color: var(--theme-primary);
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin: 0;
+    text-shadow: 0 0 8px var(--theme-glow);
+  }
+
+  .tool-description {
+    font-size: 0.82rem;
+    color: var(--theme-text);
+    opacity: 0.8;
+    line-height: 1.65;
+    margin: 0;
+    flex: 1;
+  }
+
+  /* ── Tags ─────────────────────────────────────────────────────────────── */
+  .tool-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .tag {
+    font-size: 0.65rem;
+    color: var(--theme-secondary);
+    border: 1px solid var(--theme-secondary);
+    border-radius: 3px;
+    padding: 0.15rem 0.45rem;
+    opacity: 0.7;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Meta ─────────────────────────────────────────────────────────────── */
+  .tool-meta { font-size: 0.72rem; color: var(--theme-text); opacity: 0.55; }
+  .tool-stars { letter-spacing: 0.5px; }
+
+  /* ── CTA button ───────────────────────────────────────────────────────── */
+  .tool-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    background: transparent;
+    border: 1px solid var(--theme-primary);
+    border-radius: 5px;
+    color: var(--theme-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 8px rgba(0,255,0,0.1);
+    margin-top: auto;
+  }
+
+  .tool-cta:hover {
+    background: var(--theme-primary);
+    color: #000;
+    box-shadow: 0 0 18px var(--theme-glow);
+  }
+
+  .cta-arrow { font-size: 1rem; transition: transform 0.2s ease; }
+  .tool-cta:hover .cta-arrow { transform: translateX(4px); }
+
+  /* ── No results ───────────────────────────────────────────────────────── */
+  .no-results {
+    text-align: center;
+    padding: 3rem;
+    color: var(--theme-text);
+    opacity: 0.5;
+    font-size: 1rem;
+  }
+
+  /* ── About banner ─────────────────────────────────────────────────────── */
+  .panel {
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    background: var(--theme-bg-panel);
+  }
+
+  .about-banner {
+    padding: 2rem;
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .about-title {
+    font-size: 1.3rem;
+    color: var(--theme-primary);
+    text-shadow: 0 0 10px var(--theme-glow);
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .about-desc {
+    font-size: 0.87rem;
+    color: var(--theme-text);
+    opacity: 0.85;
+    line-height: 1.75;
+    max-width: 720px;
+    margin: 0 auto 1.4rem;
+  }
+
+  .about-desc strong { color: var(--theme-primary); }
+
+  .about-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .about-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.2rem;
+    border: 1px solid var(--theme-border);
+    border-radius: 5px;
+    color: var(--theme-text);
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    opacity: 0.8;
+  }
+
+  .about-btn:hover {
+    border-color: var(--theme-primary);
+    color: var(--theme-primary);
+    box-shadow: 0 0 10px var(--theme-glow);
+    opacity: 1;
+  }
+
+  /* ── Responsive ───────────────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .page-title { font-size: 2rem; letter-spacing: 3px; }
+    .tools-grid { grid-template-columns: 1fr; }
+    .filter-nav { gap: 0.4rem; }
+    .filter-btn { font-size: 0.72rem; padding: 0.35rem 0.75rem; }
+  }
+</style>

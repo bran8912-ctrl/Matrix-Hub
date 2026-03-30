@@ -169,7 +169,7 @@ function filePathToUrlPath(filePath: string): string {
  */
 function sortTabs(tabs: NavigationTab[]): NavigationTab[] {
   // Define preferred order for navigation tabs
-  const order = ['home', 'casino', 'mtx-token', 'leaderboards', 'resources', 'dao'];
+  const order = ['home', 'casino', 'mtx-token', 'leaderboards', 'useful-tools', 'resources', 'dao'];
   
   return tabs.sort((a, b) => {
     const aIndex = order.indexOf(a.id.toLowerCase());
@@ -262,6 +262,8 @@ export async function generateNavigation(): Promise<NavigationTab[]> {
         label = 'Resources';
       } else if (category === 'dao') {
         label = 'DAO';
+      } else if (category === 'useful-tools') {
+        label = 'Useful Tools';
       } else {
         // Fallback: convert kebab-case to Title Case
         label = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
