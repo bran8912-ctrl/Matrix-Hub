@@ -15,7 +15,7 @@ const TOOLS = [
     emoji: "🐝",
     title: "MiroFish",
     description:
-      "Open-source universal swarm intelligence engine for prediction and analysis. Spawns thousands of autonomous AI agents that simulate collective behaviour to produce prediction reports for finance, markets, politics, and more. Knowledge-graph extraction, multi-agent simulation, and configurable agent personalities.",
+      "Open-source universal swarm intelligence engine for prediction and analysis. Spawns thousands of autonomous AI agents that simulate collective behavior to produce prediction reports for finance, markets, politics, and more. Knowledge-graph extraction, multi-agent simulation, and configurable agent personalities.",
     github: "https://github.com/666ghj/MiroFish",
     stars: "★ Trending",
     badge: "SWARM AI",
@@ -147,108 +147,179 @@ const CATEGORIES = [
 
     <!-- ── Page Header ──────────────────────────────────────────────────── -->
     <div class="page-header">
-      <div class="header-badge">OPEN SOURCE TOOLKIT</div>
+      <div class="header-badge">FINANCIAL TOOLS</div>
       <h1 class="page-title">USEFUL TOOLS</h1>
       <p class="page-subtitle">
-        Swarm-intelligence and AI-driven financial asset analysis tools — open source on GitHub.<br />
-        Discover, analyze, and optimize any financial asset with collective-intelligence frameworks.
+        Live market charts and financial analysis tools — usable right here on Matrix Hub.<br />
+        Plus a curated directory of open-source swarm-intelligence frameworks to self-host.
       </p>
-      <div class="header-stats">
-        <span class="stat">{TOOLS.length} <small>tools</small></span>
-        <span class="stat-divider">·</span>
-        <span class="stat">{CATEGORIES.length - 1} <small>categories</small></span>
-        <span class="stat-divider">·</span>
-        <span class="stat">100% <small>open source</small></span>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECTION 1 — LIVE INTERACTIVE TOOLS (embedded, usable on this page)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <section class="live-section">
+      <h2 class="section-heading">
+        <span class="section-dot"></span> Live Tools — Use Right Here
+      </h2>
+      <p class="section-desc">
+        These tools are embedded directly on this page — no install, no sign-up required.
+      </p>
+
+      <!-- ── Tool 1: TradingView Advanced Chart ─────────────────────────── -->
+      <div class="live-tool-card">
+        <div class="live-tool-header">
+          <span class="live-emoji">📈</span>
+          <div>
+            <h3 class="live-tool-title">Live Market Chart</h3>
+            <p class="live-tool-desc">
+              Real-time interactive chart for any stock, crypto, forex, or index.
+              Switch symbols, timeframes, drawing tools, indicators — fully featured TradingView chart embedded here.
+            </p>
+          </div>
+          <span class="live-badge">LIVE</span>
+        </div>
+
+        <!-- Symbol selector -->
+        <div class="symbol-row">
+          <span class="symbol-label">Quick switch:</span>
+          {[
+            { sym: "BINANCE:BTCUSDT",  label: "BTC/USDT" },
+            { sym: "BINANCE:ETHUSDT",  label: "ETH/USDT" },
+            { sym: "NASDAQ:AAPL",      label: "AAPL" },
+            { sym: "NASDAQ:NVDA",      label: "NVDA" },
+            { sym: "FOREXCOM:SPXUSD",  label: "S&P 500" },
+          ].map((s) => (
+            <button class="sym-btn" data-sym={s.sym} type="button">{s.label}</button>
+          ))}
+        </div>
+
+        <!-- TradingView Advanced Chart container -->
+        <div class="tv-chart-wrap">
+          <div id="tv-advanced-chart"></div>
+        </div>
       </div>
-    </div>
 
-    <!-- ── Info Banner ──────────────────────────────────────────────────── -->
-    <div class="info-banner">
-      <span class="info-icon">🐝</span>
-      <span>
-        These tools use swarm intelligence and multi-agent AI systems to analyze financial assets — similar to Swarm Intellect.
-        All projects are open source and available on GitHub.
-      </span>
-    </div>
-
-    <!-- ── Category Filter Tabs ─────────────────────────────────────────── -->
-    <nav class="filter-nav" id="filter-nav" aria-label="Tool categories">
-      {CATEGORIES.map((cat) => (
-        <button
-          class={`filter-btn ${cat.key === "all" ? "active" : ""}`}
-          data-category={cat.key}
-          type="button"
-        >
-          {cat.label}
-          <span class="filter-count">{cat.count}</span>
-        </button>
-      ))}
-    </nav>
-
-    <!-- ── Tools Grid ────────────────────────────────────────────────────── -->
-    <div class="tools-grid" id="tools-grid">
-      {TOOLS.map((tool) => (
-        <article class="tool-card" data-category={tool.category}>
-          <!-- Top row: label + badge -->
-          <div class="tool-top">
-            <span class="tool-category-tag">{tool.label}</span>
-            <span
-              class="tool-badge"
-              style={`background: ${tool.badgeColor}20; color: ${tool.badgeColor}; border-color: ${tool.badgeColor}50;`}
-            >
-              {tool.badge}
-            </span>
+      <!-- ── Tool 2: TradingView Crypto Screener ────────────────────────── -->
+      <div class="live-tool-card" style="margin-top:1.5rem;">
+        <div class="live-tool-header">
+          <span class="live-emoji">🔍</span>
+          <div>
+            <h3 class="live-tool-title">Crypto Market Screener</h3>
+            <p class="live-tool-desc">
+              Scan the entire crypto market by price change, volume, market cap, RSI, and more — live data, updated every few seconds.
+            </p>
           </div>
+          <span class="live-badge">LIVE</span>
+        </div>
+        <div class="tv-chart-wrap tv-chart-wrap--screener">
+          <div class="tradingview-widget-container__widget" id="tv-screener"></div>
+        </div>
+      </div>
 
-          <!-- Title -->
-          <div class="tool-title-row">
-            <span class="tool-emoji" aria-hidden="true">{tool.emoji}</span>
-            <h2 class="tool-title">{tool.title}</h2>
+      <!-- ── Tool 3: TradingView Ticker Tape ───────────────────────────── -->
+      <div class="live-tool-card" style="margin-top:1.5rem;">
+        <div class="live-tool-header">
+          <span class="live-emoji">📡</span>
+          <div>
+            <h3 class="live-tool-title">Market Ticker Tape</h3>
+            <p class="live-tool-desc">
+              Live scrolling ticker showing real-time prices and daily change for top crypto assets.
+            </p>
           </div>
+          <span class="live-badge">LIVE</span>
+        </div>
+        <div class="tv-ticker-wrap">
+          <div id="tv-ticker"></div>
+        </div>
+      </div>
+    </section>
 
-          <!-- Description -->
-          <p class="tool-description">{tool.description}</p>
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECTION 2 — OPEN SOURCE GITHUB TOOLS (self-host / developer resources)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <section class="github-section">
+      <h2 class="section-heading">
+        <span class="section-dot section-dot--purple"></span> Open-Source Developer Resources
+      </h2>
+      <p class="section-desc">
+        These are GitHub projects you can clone, run locally, or deploy on your own server.
+        They are powerful swarm-AI and quant-finance libraries — not browser embeds, but freely available to build with.
+      </p>
 
-          <!-- Tags -->
-          <div class="tool-tags">
-            {tool.tags.map((tag) => (
-              <span class="tag">#{tag}</span>
-            ))}
-          </div>
-
-          <!-- Stars / org label -->
-          <div class="tool-meta">
-            <span class="tool-stars">⭐ {tool.stars}</span>
-          </div>
-
-          <!-- CTA -->
-          <a
-            href={tool.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="tool-cta"
-            aria-label={`View ${tool.title} on GitHub`}
+      <!-- ── Category Filter Tabs ────────────────────────────────────────── -->
+      <nav class="filter-nav" id="filter-nav" aria-label="Tool categories">
+        {CATEGORIES.map((cat) => (
+          <button
+            class={`filter-btn ${cat.key === "all" ? "active" : ""}`}
+            data-category={cat.key}
+            type="button"
           >
-            VIEW ON GITHUB
-            <span class="cta-arrow" aria-hidden="true">→</span>
-          </a>
-        </article>
-      ))}
-    </div>
+            {cat.label}
+            <span class="filter-count">{cat.count}</span>
+          </button>
+        ))}
+      </nav>
 
-    <!-- ── No results fallback ──────────────────────────────────────────── -->
-    <div class="no-results" id="no-results" style="display:none;">
-      <span>🔍</span>
-      <p>No tools in this category yet.</p>
-    </div>
+      <!-- ── Tools Grid ──────────────────────────────────────────────────── -->
+      <div class="tools-grid" id="tools-grid">
+        {TOOLS.map((tool) => (
+          <article class="tool-card" data-category={tool.category}>
+            <div class="tool-top">
+              <span class="tool-category-tag">{tool.label}</span>
+              <span
+                class="tool-badge"
+                style={`background: ${tool.badgeColor}20; color: ${tool.badgeColor}; border-color: ${tool.badgeColor}50;`}
+              >
+                {tool.badge}
+              </span>
+            </div>
+
+            <div class="tool-title-row">
+              <span class="tool-emoji" aria-hidden="true">{tool.emoji}</span>
+              <h3 class="tool-title">{tool.title}</h3>
+            </div>
+
+            <p class="tool-description">{tool.description}</p>
+
+            <div class="tool-tags">
+              {tool.tags.map((tag) => (
+                <span class="tag">#{tag}</span>
+              ))}
+            </div>
+
+            <div class="tool-meta">
+              <span class="tool-stars">⭐ {tool.stars}</span>
+            </div>
+
+            <a
+              href={tool.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="tool-cta"
+              aria-label={`View ${tool.title} on GitHub`}
+            >
+              VIEW ON GITHUB
+              <span class="cta-arrow" aria-hidden="true">→</span>
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <!-- ── No results fallback ────────────────────────────────────────── -->
+      <div class="no-results" id="no-results" style="display:none;">
+        <span>🔍</span>
+        <p>No tools in this category yet.</p>
+      </div>
+    </section>
 
     <!-- ── About Swarm Intelligence Banner ──────────────────────────────── -->
     <div class="about-banner panel">
       <h2 class="about-title">🐝 What is Swarm Intelligence for Finance?</h2>
       <p class="about-desc">
-        Swarm intelligence applies collective behaviour principles — borrowed from ant colonies, bird flocking, and bee swarms —
+        Swarm intelligence applies collective behavior principles — borrowed from ant colonies, bird flocking, and bee swarms —
         to financial analysis. Multiple autonomous AI agents each analyze different facets of a market (fundamentals, sentiment,
-        technicals, on-chain data) and their combined output produces more accurate predictions than any single model.
+        technical indicators, on-chain data) and their combined output produces more accurate predictions than any single model.
         Tools like <strong>MiroFish</strong> and <strong>AutoHedge</strong> bring this approach to open-source finance.
       </p>
       <div class="about-links">
@@ -274,34 +345,128 @@ const CATEGORIES = [
   </div>
 </Layout>
 
-<!-- ── Category filter script ───────────────────────────────────────────────── -->
+<!-- ── TradingView scripts + category filter ─────────────────────────────────── -->
+<script is:inline src="https://s3.tradingview.com/tv.js"></script>
 <script is:inline>
-  (function () {
-    const grid      = document.getElementById('tools-grid');
-    const noResults = document.getElementById('no-results');
-    const filterNav = document.getElementById('filter-nav');
+(function () {
+  /* ── 1. Advanced Chart ──────────────────────────────────────────────── */
+  var DEFAULT_SYM = 'BINANCE:BTCUSDT';
 
+  function buildChart(sym) {
+    var el = document.getElementById('tv-advanced-chart');
+    if (!el) return;
+    el.innerHTML = '';
+    /* eslint-disable no-new */
+    new TradingView.widget({
+      container_id:        'tv-advanced-chart',
+      symbol:              sym || DEFAULT_SYM,
+      interval:            '60',
+      timezone:            'Etc/UTC',
+      theme:               'dark',
+      style:               '1',
+      locale:              'en',
+      width:               '100%',
+      height:              520,
+      toolbar_bg:          '#0a0f0a',
+      enable_publishing:   false,
+      allow_symbol_change: true,
+      hide_side_toolbar:   false,
+      withdateranges:      true,
+      save_image:          false,
+    });
+  }
+
+  // Build on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { buildChart(DEFAULT_SYM); });
+  } else {
+    buildChart(DEFAULT_SYM);
+  }
+
+  // Symbol quick-switch buttons
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.sym-btn');
+    if (!btn) return;
+    // Update active state
+    document.querySelectorAll('.sym-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    buildChart(btn.dataset.sym);
+  });
+
+  /* ── 2. Crypto Screener ─────────────────────────────────────────────── */
+  (function () {
+    var screenerEl = document.getElementById('tv-screener');
+    if (!screenerEl) return;
+    var screenerScript = document.createElement('script');
+    screenerScript.type = 'text/javascript';
+    screenerScript.async = true;
+    screenerScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js';
+    screenerScript.innerHTML = JSON.stringify({
+      width: '100%',
+      height: 490,
+      defaultColumn: 'overview',
+      defaultScreen: 'general',
+      market: 'crypto',
+      showToolbar: true,
+      colorTheme: 'dark',
+      locale: 'en',
+    });
+    screenerEl.appendChild(screenerScript);
+  })();
+
+  /* ── 3. Ticker Tape ─────────────────────────────────────────────────── */
+  (function () {
+    var tickerEl = document.getElementById('tv-ticker');
+    if (!tickerEl) return;
+    var tickerScript = document.createElement('script');
+    tickerScript.type = 'text/javascript';
+    tickerScript.async = true;
+    tickerScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+    tickerScript.innerHTML = JSON.stringify({
+      symbols: [
+        { proName: 'BINANCE:BTCUSDT',  title: 'Bitcoin' },
+        { proName: 'BINANCE:ETHUSDT',  title: 'Ethereum' },
+        { proName: 'BINANCE:SOLUSDT',  title: 'Solana' },
+        { proName: 'BINANCE:BNBUSDT',  title: 'BNB' },
+        { proName: 'BINANCE:ADAUSDT',  title: 'Cardano' },
+        { proName: 'BINANCE:XRPUSDT',  title: 'XRP' },
+        { proName: 'BINANCE:DOGEUSDT', title: 'Dogecoin' },
+        { proName: 'FOREXCOM:SPXUSD',  title: 'S&P 500' },
+        { proName: 'NASDAQ:AAPL',      title: 'Apple' },
+        { proName: 'NASDAQ:NVDA',      title: 'NVIDIA' },
+      ],
+      showSymbolLogo: true,
+      colorTheme: 'dark',
+      isTransparent: true,
+      displayMode: 'adaptive',
+      locale: 'en',
+    });
+    tickerEl.appendChild(tickerScript);
+  })();
+
+  /* ── 4. GitHub tools category filter ───────────────────────────────── */
+  (function () {
+    var grid      = document.getElementById('tools-grid');
+    var noResults = document.getElementById('no-results');
+    var filterNav = document.getElementById('filter-nav');
     if (!grid || !noResults || !filterNav) return;
 
-    filterNav.addEventListener('click', (e) => {
-      const btn = e.target.closest('.filter-btn');
+    filterNav.addEventListener('click', function (e) {
+      var btn = e.target.closest('.filter-btn');
       if (!btn) return;
-
-      const cat = btn.dataset.category;
-
-      filterNav.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      var cat = btn.dataset.category;
+      filterNav.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
-
-      let visible = 0;
-      grid.querySelectorAll('.tool-card').forEach((card) => {
-        const matches = cat === 'all' || card.dataset.category === cat;
+      var visible = 0;
+      grid.querySelectorAll('.tool-card').forEach(function (card) {
+        var matches = cat === 'all' || card.dataset.category === cat;
         card.style.display = matches ? '' : 'none';
         if (matches) visible++;
       });
-
       noResults.style.display = visible === 0 ? 'block' : 'none';
     });
   })();
+})();
 </script>
 
 <style>
@@ -355,45 +520,158 @@ const CATEGORIES = [
     margin: 0 auto 1.2rem;
   }
 
-  .header-stats {
+  /* ── Section headings ─────────────────────────────────────────────────── */
+  .section-heading {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 0.9rem;
-  }
-
-  .stat {
+    gap: 0.6rem;
+    font-size: 1.15rem;
     color: var(--theme-primary);
-    font-weight: bold;
-    font-size: 1.1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    text-shadow: 0 0 8px var(--theme-glow);
   }
 
-  .stat small {
-    font-size: 0.72rem;
+  .section-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--theme-primary);
+    box-shadow: 0 0 6px var(--theme-glow);
+    flex-shrink: 0;
+  }
+
+  .section-dot--purple { background: #bf00ff; box-shadow: 0 0 6px #bf00ff; }
+
+  .section-desc {
+    font-size: 0.82rem;
+    color: var(--theme-text);
     opacity: 0.65;
-    font-weight: normal;
+    margin-bottom: 1.2rem;
+    line-height: 1.6;
   }
 
-  .stat-divider { opacity: 0.4; }
+  /* ── Live section ─────────────────────────────────────────────────────── */
+  .live-section {
+    margin-bottom: 3rem;
+  }
 
-  /* ── Info banner ──────────────────────────────────────────────────────── */
-  .info-banner {
+  .live-tool-card {
+    background: var(--theme-bg-panel);
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    padding: 1.4rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .live-tool-card:hover { border-color: var(--theme-primary); }
+
+  .live-tool-header {
     display: flex;
     align-items: flex-start;
-    gap: 0.6rem;
-    padding: 0.75rem 1.2rem;
-    background: rgba(0, 255, 153, 0.06);
-    border: 1px solid rgba(0, 255, 153, 0.25);
-    border-radius: 6px;
-    font-size: 0.78rem;
-    color: var(--theme-text);
-    opacity: 0.9;
-    margin-bottom: 1.5rem;
-    line-height: 1.5;
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
   }
 
-  .info-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .live-emoji { font-size: 1.8rem; flex-shrink: 0; }
+
+  .live-tool-header > div { flex: 1; min-width: 0; }
+
+  .live-tool-title {
+    font-size: 1.1rem;
+    color: var(--theme-primary);
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin: 0 0 0.3rem;
+    text-shadow: 0 0 8px var(--theme-glow);
+  }
+
+  .live-tool-desc {
+    font-size: 0.82rem;
+    color: var(--theme-text);
+    opacity: 0.75;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .live-badge {
+    font-size: 0.6rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    padding: 0.2rem 0.65rem;
+    border: 1px solid #00ff99;
+    border-radius: 4px;
+    color: #00ff99;
+    background: rgba(0, 255, 153, 0.1);
+    flex-shrink: 0;
+    animation: livePulse 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes livePulse {
+    from { box-shadow: 0 0 4px #00ff99; }
+    to   { box-shadow: 0 0 12px #00ff99; }
+  }
+
+  /* ── Symbol quick-switch row ──────────────────────────────────────────── */
+  .symbol-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .symbol-label {
+    font-size: 0.7rem;
+    color: var(--theme-text);
+    opacity: 0.5;
+    letter-spacing: 1px;
+    margin-right: 0.2rem;
+  }
+
+  .sym-btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.72rem;
+    font-family: 'Courier New', monospace;
+    background: transparent;
+    border: 1px solid var(--theme-border);
+    border-radius: 15px;
+    color: var(--theme-text);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.18s ease;
+  }
+
+  .sym-btn:hover,
+  .sym-btn.active {
+    background: var(--theme-primary);
+    border-color: var(--theme-primary);
+    color: #000;
+    opacity: 1;
+    box-shadow: 0 0 8px var(--theme-glow);
+  }
+
+  /* ── TradingView chart containers ─────────────────────────────────────── */
+  .tv-chart-wrap {
+    border-radius: 6px;
+    overflow: hidden;
+    background: #0a0f0a;
+  }
+
+  .tv-chart-wrap--screener { min-height: 490px; }
+
+  .tv-ticker-wrap {
+    border-radius: 6px;
+    overflow: hidden;
+    background: transparent;
+    min-height: 56px;
+  }
+
+  /* ── GitHub section ───────────────────────────────────────────────────── */
+  .github-section { margin-bottom: 2rem; }
 
   /* ── Filter nav ───────────────────────────────────────────────────────── */
   .filter-nav {
@@ -644,5 +922,6 @@ const CATEGORIES = [
     .tools-grid { grid-template-columns: 1fr; }
     .filter-nav { gap: 0.4rem; }
     .filter-btn { font-size: 0.72rem; padding: 0.35rem 0.75rem; }
+    .live-tool-header { flex-direction: column; }
   }
 </style>
