@@ -355,25 +355,45 @@ const CATEGORIES = [
   function buildChart(sym) {
     var el = document.getElementById('tv-advanced-chart');
     if (!el) return;
+
+    // Fallback message when TradingView cannot be loaded/used
+    var fallbackMsg = 'TradingView chart could not be loaded. ' +
+      'Please check your network connection or disable ad blockers.';
+
+    // Clear previous content
     el.innerHTML = '';
+
+    // Feature-detect TradingView before attempting to create the widget
+    if (typeof window === 'undefined' ||
+        !window.TradingView ||
+        typeof window.TradingView.widget !== 'function') {
+      el.textContent = fallbackMsg;
+      return;
+    }
+
     /* eslint-disable no-new */
-    new TradingView.widget({
-      container_id:        'tv-advanced-chart',
-      symbol:              sym || DEFAULT_SYM,
-      interval:            '60',
-      timezone:            'Etc/UTC',
-      theme:               'dark',
-      style:               '1',
-      locale:              'en',
-      width:               '100%',
-      height:              520,
-      toolbar_bg:          '#0a0f0a',
-      enable_publishing:   false,
-      allow_symbol_change: true,
-      hide_side_toolbar:   false,
-      withdateranges:      true,
-      save_image:          false,
-    });
+    try {
+      new window.TradingView.widget({
+        container_id:        'tv-advanced-chart',
+        symbol:              sym || DEFAULT_SYM,
+        interval:            '60',
+        timezone:            'Etc/UTC',
+        theme:               'dark',
+        style:               '1',
+        locale:              'en',
+        width:               '100%',
+        height:              520,
+        toolbar_bg:          '#0a0f0a',
+        enable_publishing:   false,
+        allow_symbol_change: true,
+        hide_side_toolbar:   false,
+        withdateranges:      true,
+        save_image:          false,
+      });
+    } catch (e) {
+      console.error('Failed to initialize TradingView widget:', e);
+      el.textContent = fallbackMsg;
+    }
   }
 
   // Build on load
