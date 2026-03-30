@@ -4,67 +4,109 @@ interface Track {
   title: string;
   artist: string;
   url: string;
+  genre: string;
 }
 
+const GENRES = ['All', 'Rap / Hip-Hop', 'Rock', 'Metal', 'Electronic / EDM', 'Ambient / Chill', 'Sci-Fi / Cyberpunk'] as const;
+type Genre = typeof GENRES[number];
+
 const matrixPlaylist: Track[] = [
-  // Remote Mixkit tracks
-  { title: "Cyberpunk City", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/140/140.mp3" },
-  { title: "Deep Techno Ambience", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/134/134.mp3" },
-  { title: "Techno Fest Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/124/124.mp3" },
-  { title: "Hazy After Hours", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/132/132.mp3" },
-  { title: "Minimal Techno 01", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/162/162.mp3" },
-  { title: "Minimal Emotion", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/160/160.mp3" },
-  { title: "Machine Drum Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/117/117.mp3" },
-  { title: "Dub Techno Groove", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/133/133.mp3" },
-  { title: "Trance Party", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/166/166.mp3" },
-  { title: "Infected Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/157/157.mp3" },
-  { title: "Goa Trance Mantra", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/137/137.mp3" },
-  { title: "Tech House vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/130/130.mp3" },
-  { title: "Kodama Night Town", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/114/114.mp3" },
-  { title: "Digital Clouds", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/175/175.mp3" },
-  { title: "Slow Rain", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/122/122.mp3" },
-  { title: "Sun in Your Eyes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/131/131.mp3" },
-  { title: "Better Times are Coming", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/173/173.mp3" },
-  { title: "Lonerism", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/159/159.mp3" },
-  { title: "B.O.R.N", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/620/620.mp3" },
-  { title: "Deep Urban", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/623/623.mp3" },
-  { title: "Feedback Dreams", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/588/588.mp3" },
-  { title: "Fragments Of Bangkok", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/625/625.mp3" },
-  { title: "Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/601/601.mp3" },
-  { title: "Silent Descent", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/614/614.mp3" },
-  { title: "Echoes", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/188/188.mp3" },
-  { title: "Sci-Fi Game", artist: "Arulo", url: "https://assets.mixkit.co/music/395/395.mp3" },
-  { title: "Sci-Fi Score", artist: "Arulo", url: "https://assets.mixkit.co/music/464/464.mp3" },
-  { title: "Neon Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/626/626.mp3" },
-  { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3" },
-  { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3" },
-  { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3" },
-  { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3" },
-  // Local music files
-  { title: "Dreamwalker", artist: "Matrix Hub", url: "/music/dreamwalker.mp3" },
-  { title: "Cipher", artist: "Matrix Hub", url: "/music/cipher.mp3" },
-  { title: "Digital Ghost", artist: "Matrix Hub", url: "/music/digital-ghost.mp3" },
-  { title: "Sci-Fi Ambient 2", artist: "Matrix Hub", url: "/music/sci-fi-ambient-2.mp3" },
-  { title: "Night Owl", artist: "Matrix Hub", url: "/music/night-owl.mp3" },
-  { title: "Dark Sci-Fi Synth", artist: "Matrix Hub", url: "/music/dark-sci-fi-synth.mp3" },
-  { title: "Industrial Cyberpunk", artist: "Matrix Hub", url: "/music/industrial-cyberpunk.mp3" },
-  { title: "Sci-Fi Ambient 1", artist: "Matrix Hub", url: "/music/sci-fi-ambient-1.mp3" },
-  { title: "The Ambient", artist: "Matrix Hub", url: "/music/the-ambient.mp3" },
-  // Additional remote tracks
-  { title: "Digital Override", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/115/115.mp3" },
-  { title: "Voltage", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/116/116.mp3" },
-  { title: "Frequency War", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/118/118.mp3" },
-  { title: "System Pulse", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/119/119.mp3" },
-  { title: "Neural Static", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/120/120.mp3" },
-  { title: "Binary Drift", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/123/123.mp3" },
-  { title: "Quantum Lock", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/135/135.mp3" },
-  { title: "Data Flux", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/136/136.mp3" },
-  { title: "Neon Protocol", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/161/161.mp3" },
-  { title: "Cipher Loop", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/163/163.mp3" },
-  { title: "Matrix Signal", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/168/168.mp3" },
-  { title: "Deep Protocol", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/628/628.mp3" },
-  { title: "Synthwave Override", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/629/629.mp3" },
-  { title: "Voltage Core", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/630/630.mp3" },
+  // --- Electronic / EDM ---
+  { title: "Cyberpunk City", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/140/140.mp3", genre: "Electronic / EDM" },
+  { title: "Deep Techno Ambience", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/134/134.mp3", genre: "Electronic / EDM" },
+  { title: "Techno Fest Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/124/124.mp3", genre: "Electronic / EDM" },
+  { title: "Minimal Techno 01", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/162/162.mp3", genre: "Electronic / EDM" },
+  { title: "Machine Drum Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/117/117.mp3", genre: "Electronic / EDM" },
+  { title: "Dub Techno Groove", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/133/133.mp3", genre: "Electronic / EDM" },
+  { title: "Trance Party", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/166/166.mp3", genre: "Electronic / EDM" },
+  { title: "Infected Vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/157/157.mp3", genre: "Electronic / EDM" },
+  { title: "Goa Trance Mantra", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/137/137.mp3", genre: "Electronic / EDM" },
+  { title: "Tech House vibes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/130/130.mp3", genre: "Electronic / EDM" },
+  { title: "B.O.R.N", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/620/620.mp3", genre: "Electronic / EDM" },
+  { title: "Deep Urban", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/623/623.mp3", genre: "Electronic / EDM" },
+  { title: "Feedback Dreams", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/588/588.mp3", genre: "Electronic / EDM" },
+  { title: "Fragments Of Bangkok", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/625/625.mp3", genre: "Electronic / EDM" },
+  { title: "Digital Override", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/115/115.mp3", genre: "Electronic / EDM" },
+  { title: "Voltage", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/116/116.mp3", genre: "Electronic / EDM" },
+  { title: "Frequency War", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/118/118.mp3", genre: "Electronic / EDM" },
+  { title: "Binary Drift", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/123/123.mp3", genre: "Electronic / EDM" },
+  { title: "Deep Protocol", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/628/628.mp3", genre: "Electronic / EDM" },
+  { title: "Voltage Core", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/630/630.mp3", genre: "Electronic / EDM" },
+  // New Electronic / EDM tracks
+  { title: "Tech House", artist: "Mixkit", url: "https://assets.mixkit.co/music/3/3.mp3", genre: "Electronic / EDM" },
+  { title: "Dance Pop", artist: "Mixkit", url: "https://assets.mixkit.co/music/10/10.mp3", genre: "Electronic / EDM" },
+  { title: "Synthwave", artist: "Mixkit", url: "https://assets.mixkit.co/music/25/25.mp3", genre: "Electronic / EDM" },
+  { title: "Deep Bass", artist: "Mixkit", url: "https://assets.mixkit.co/music/571/571.mp3", genre: "Electronic / EDM" },
+  { title: "Neon Lights", artist: "Mixkit", url: "https://assets.mixkit.co/music/572/572.mp3", genre: "Electronic / EDM" },
+  { title: "Digital Dreams", artist: "Mixkit", url: "https://assets.mixkit.co/music/573/573.mp3", genre: "Electronic / EDM" },
+  { title: "Cyber Pulse", artist: "Mixkit", url: "https://assets.mixkit.co/music/574/574.mp3", genre: "Electronic / EDM" },
+  { title: "Future Bass", artist: "Mixkit", url: "https://assets.mixkit.co/music/575/575.mp3", genre: "Electronic / EDM" },
+  // --- Ambient / Chill ---
+  { title: "Hazy After Hours", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/132/132.mp3", genre: "Ambient / Chill" },
+  { title: "Minimal Emotion", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/160/160.mp3", genre: "Ambient / Chill" },
+  { title: "Kodama Night Town", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/114/114.mp3", genre: "Ambient / Chill" },
+  { title: "Digital Clouds", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/175/175.mp3", genre: "Ambient / Chill" },
+  { title: "Slow Rain", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/122/122.mp3", genre: "Ambient / Chill" },
+  { title: "Sun in Your Eyes", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/131/131.mp3", genre: "Ambient / Chill" },
+  { title: "Better Times are Coming", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/173/173.mp3", genre: "Ambient / Chill" },
+  { title: "Lonerism", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/159/159.mp3", genre: "Ambient / Chill" },
+  { title: "Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/601/601.mp3", genre: "Ambient / Chill" },
+  { title: "Silent Descent", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/614/614.mp3", genre: "Ambient / Chill" },
+  { title: "Echoes", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/188/188.mp3", genre: "Ambient / Chill" },
+  { title: "Dream Sequence", artist: "Andrew Ev", url: "https://assets.mixkit.co/music/189/189.mp3", genre: "Ambient / Chill" },
+  { title: "The Ambient", artist: "Matrix Hub", url: "/music/the-ambient.mp3", genre: "Ambient / Chill" },
+  { title: "Night Owl", artist: "Matrix Hub", url: "/music/night-owl.mp3", genre: "Ambient / Chill" },
+  // New Ambient / Chill tracks
+  { title: "Serene", artist: "Mixkit", url: "https://assets.mixkit.co/music/1/1.mp3", genre: "Ambient / Chill" },
+  { title: "Calm Waters", artist: "Mixkit", url: "https://assets.mixkit.co/music/2/2.mp3", genre: "Ambient / Chill" },
+  { title: "Peaceful", artist: "Mixkit", url: "https://assets.mixkit.co/music/20/20.mp3", genre: "Ambient / Chill" },
+  { title: "Morning Dew", artist: "Mixkit", url: "https://assets.mixkit.co/music/576/576.mp3", genre: "Ambient / Chill" },
+  { title: "Floating", artist: "Mixkit", url: "https://assets.mixkit.co/music/577/577.mp3", genre: "Ambient / Chill" },
+  { title: "Gentle Breeze", artist: "Mixkit", url: "https://assets.mixkit.co/music/578/578.mp3", genre: "Ambient / Chill" },
+  { title: "Horizon", artist: "Mixkit", url: "https://assets.mixkit.co/music/579/579.mp3", genre: "Ambient / Chill" },
+  // --- Sci-Fi / Cyberpunk ---
+  { title: "Sci-Fi Game", artist: "Arulo", url: "https://assets.mixkit.co/music/395/395.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Sci-Fi Score", artist: "Arulo", url: "https://assets.mixkit.co/music/464/464.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Neon Skyline", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/626/626.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Digital Mirage", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/627/627.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Night Drive", artist: "Arulo", url: "https://assets.mixkit.co/music/396/396.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Retro Future", artist: "Arulo", url: "https://assets.mixkit.co/music/397/397.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Quantum Lock", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/135/135.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Data Flux", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/136/136.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Neon Protocol", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/161/161.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Cipher Loop", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/163/163.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Matrix Signal", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/168/168.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "System Pulse", artist: "Alejandro Magaña", url: "https://assets.mixkit.co/music/119/119.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Synthwave Override", artist: "Eugenio Mininni", url: "https://assets.mixkit.co/music/629/629.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Dreamwalker", artist: "Matrix Hub", url: "/music/dreamwalker.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Cipher", artist: "Matrix Hub", url: "/music/cipher.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Digital Ghost", artist: "Matrix Hub", url: "/music/digital-ghost.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Sci-Fi Ambient 2", artist: "Matrix Hub", url: "/music/sci-fi-ambient-2.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Dark Sci-Fi Synth", artist: "Matrix Hub", url: "/music/dark-sci-fi-synth.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Industrial Cyberpunk", artist: "Matrix Hub", url: "/music/industrial-cyberpunk.mp3", genre: "Sci-Fi / Cyberpunk" },
+  { title: "Sci-Fi Ambient 1", artist: "Matrix Hub", url: "/music/sci-fi-ambient-1.mp3", genre: "Sci-Fi / Cyberpunk" },
+  // --- Rap / Hip-Hop ---
+  { title: "Hip Hop 02", artist: "Mixkit", url: "https://assets.mixkit.co/music/100/100.mp3", genre: "Rap / Hip-Hop" },
+  { title: "Hip Hop Beat", artist: "Mixkit", url: "https://assets.mixkit.co/music/120/120.mp3", genre: "Rap / Hip-Hop" },
+  { title: "Urban Beat", artist: "Mixkit", url: "https://assets.mixkit.co/music/146/146.mp3", genre: "Rap / Hip-Hop" },
+  { title: "Street Vibe", artist: "Mixkit", url: "https://assets.mixkit.co/music/155/155.mp3", genre: "Rap / Hip-Hop" },
+  { title: "Trap Beat", artist: "Mixkit", url: "https://assets.mixkit.co/music/665/665.mp3", genre: "Rap / Hip-Hop" },
+  { title: "Dark Trap", artist: "Mixkit", url: "https://assets.mixkit.co/music/666/666.mp3", genre: "Rap / Hip-Hop" },
+  { title: "Lo-Fi Hip Hop", artist: "Mixkit", url: "https://assets.mixkit.co/music/668/668.mp3", genre: "Rap / Hip-Hop" },
+  // --- Rock ---
+  { title: "Rock On", artist: "Mixkit", url: "https://assets.mixkit.co/music/4/4.mp3", genre: "Rock" },
+  { title: "Driving Rock", artist: "Mixkit", url: "https://assets.mixkit.co/music/44/44.mp3", genre: "Rock" },
+  { title: "Power Rock", artist: "Mixkit", url: "https://assets.mixkit.co/music/45/45.mp3", genre: "Rock" },
+  { title: "Stadium Rock", artist: "Mixkit", url: "https://assets.mixkit.co/music/46/46.mp3", genre: "Rock" },
+  { title: "Hard Rock", artist: "Mixkit", url: "https://assets.mixkit.co/music/562/562.mp3", genre: "Rock" },
+  // --- Metal ---
+  { title: "Heavy Metal Storm", artist: "Mixkit", url: "https://assets.mixkit.co/music/42/42.mp3", genre: "Metal" },
+  { title: "Metal Forge", artist: "Mixkit", url: "https://assets.mixkit.co/music/43/43.mp3", genre: "Metal" },
+  { title: "Thrash", artist: "Mixkit", url: "https://assets.mixkit.co/music/561/561.mp3", genre: "Metal" },
+  { title: "Metal Core", artist: "Mixkit", url: "https://assets.mixkit.co/music/563/563.mp3", genre: "Metal" },
+  { title: "Dark Metal", artist: "Mixkit", url: "https://assets.mixkit.co/music/564/564.mp3", genre: "Metal" },
+  { title: "Steel Forge", artist: "Mixkit", url: "https://assets.mixkit.co/music/565/565.mp3", genre: "Metal" },
+  { title: "Iron Thunder", artist: "Mixkit", url: "https://assets.mixkit.co/music/566/566.mp3", genre: "Metal" },
 ];
 
 export default function PersistentMusicPlayer() {
@@ -87,6 +129,7 @@ export default function PersistentMusicPlayer() {
   const [playedTracks, setPlayedTracks] = useState<number[]>([]);
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
+  const [activeGenre, setActiveGenre] = useState<Genre>('All');
 
   // Load all persisted state on mount
   useEffect(() => {
@@ -110,6 +153,10 @@ export default function PersistentMusicPlayer() {
     if (savedMinimized) setIsMinimized(savedMinimized === 'true');
     if (savedVolume) setVolume(parseFloat(savedVolume));
     if (savedMuted) setIsMuted(savedMuted === 'true');
+    const savedGenre = localStorage.getItem('matrixPlayerGenre');
+    if (savedGenre && (GENRES as readonly string[]).includes(savedGenre)) {
+      setActiveGenre(savedGenre as Genre);
+    }
   }, []);
 
   // Sync audio element volume/mute whenever those states change
@@ -157,6 +204,10 @@ export default function PersistentMusicPlayer() {
   useEffect(() => {
     localStorage.setItem('matrixPlayerMuted', isMuted.toString());
   }, [isMuted]);
+
+  useEffect(() => {
+    localStorage.setItem('matrixPlayerGenre', activeGenre);
+  }, [activeGenre]);
 
   // Restore saved playback position after track loads
   useEffect(() => {
@@ -346,50 +397,58 @@ export default function PersistentMusicPlayer() {
   }, []);
 
   const handlePrevious = useCallback(() => {
+    const pool = activeGenre === 'All'
+      ? matrixPlaylist.map((_, i) => i)
+      : matrixPlaylist.map((_, i) => i).filter((i) => matrixPlaylist[i].genre === activeGenre);
+    if (pool.length === 0) return;
     let newIndex: number;
     if (isShuffleOn) {
-      const unplayed = matrixPlaylist
-        .map((_, i) => i)
-        .filter((i) => i !== currentTrackIndex && !playedTracks.includes(i));
+      const unplayed = pool.filter((i) => i !== currentTrackIndex && !playedTracks.includes(i));
       if (unplayed.length === 0) {
-        const allOther = matrixPlaylist.map((_, i) => i).filter((i) => i !== currentTrackIndex);
-        newIndex = allOther[Math.floor(Math.random() * allOther.length)];
+        const allOther = pool.filter((i) => i !== currentTrackIndex);
+        newIndex = allOther.length > 0 ? allOther[Math.floor(Math.random() * allOther.length)] : pool[0];
         setPlayedTracks([currentTrackIndex, newIndex]);
       } else {
         newIndex = unplayed[Math.floor(Math.random() * unplayed.length)];
         setPlayedTracks((prev) => [...prev, currentTrackIndex]);
       }
     } else {
-      newIndex = (currentTrackIndex - 1 + matrixPlaylist.length) % matrixPlaylist.length;
+      const pos = pool.indexOf(currentTrackIndex);
+      const prevPos = (pos <= 0 ? pool.length : pos) - 1;
+      newIndex = pool[prevPos];
     }
 
     localStorage.removeItem('matrixPlayerTime');
     if (isPlaying) shouldAutoPlayRef.current = true;
     setCurrentTrackIndex(newIndex);
-  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks]);
+  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks, activeGenre]);
 
   const handleNext = useCallback(() => {
+    const pool = activeGenre === 'All'
+      ? matrixPlaylist.map((_, i) => i)
+      : matrixPlaylist.map((_, i) => i).filter((i) => matrixPlaylist[i].genre === activeGenre);
+    if (pool.length === 0) return;
     let newIndex: number;
     if (isShuffleOn) {
-      const unplayed = matrixPlaylist
-        .map((_, i) => i)
-        .filter((i) => i !== currentTrackIndex && !playedTracks.includes(i));
+      const unplayed = pool.filter((i) => i !== currentTrackIndex && !playedTracks.includes(i));
       if (unplayed.length === 0) {
-        const allOther = matrixPlaylist.map((_, i) => i).filter((i) => i !== currentTrackIndex);
-        newIndex = allOther[Math.floor(Math.random() * allOther.length)];
+        const allOther = pool.filter((i) => i !== currentTrackIndex);
+        newIndex = allOther.length > 0 ? allOther[Math.floor(Math.random() * allOther.length)] : pool[0];
         setPlayedTracks([currentTrackIndex, newIndex]);
       } else {
         newIndex = unplayed[Math.floor(Math.random() * unplayed.length)];
         setPlayedTracks((prev) => [...prev, currentTrackIndex]);
       }
     } else {
-      newIndex = (currentTrackIndex + 1) % matrixPlaylist.length;
+      const pos = pool.indexOf(currentTrackIndex);
+      const nextPos = pos < 0 ? 0 : (pos + 1) % pool.length;
+      newIndex = pool[nextPos];
     }
 
     localStorage.removeItem('matrixPlayerTime');
     if (isPlaying) shouldAutoPlayRef.current = true;
     setCurrentTrackIndex(newIndex);
-  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks]);
+  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks, activeGenre]);
 
   const handleEnded = useCallback(() => {
     if (isAutoplayOn && !isLoopOn) {
@@ -488,12 +547,39 @@ export default function PersistentMusicPlayer() {
       {/* Expanded content */}
       {!isMinimized && (
         <div className="player-content">
+          {/* Genre filter buttons */}
+          <div className="genre-tabs" role="group" aria-label="Filter by genre">
+            {GENRES.map((genre) => {
+              const count = genre === 'All' ? matrixPlaylist.length : matrixPlaylist.filter((t) => t.genre === genre).length;
+              return (
+                <button
+                  key={genre}
+                  className={`genre-tab${activeGenre === genre ? ' active' : ''}`}
+                  onClick={() => setActiveGenre(genre)}
+                  aria-pressed={activeGenre === genre}
+                  title={genre}
+                >
+                  {genre} <span className="genre-count">({count})</span>
+                </button>
+              );
+            })}
+          </div>
+
           <div className="now-playing">
             <div className="now-playing-label">Now Playing</div>
             <div className="track-title">{currentTrack.title}</div>
             <div className="track-artist">{currentTrack.artist}</div>
+            <div className="track-genre-badge">{currentTrack.genre}</div>
             <div className="track-number">
-              Track {currentTrackIndex + 1} of {matrixPlaylist.length}
+              {(() => {
+                const pool = activeGenre === 'All'
+                  ? matrixPlaylist.map((_, i) => i)
+                  : matrixPlaylist.map((_, i) => i).filter((i) => matrixPlaylist[i].genre === activeGenre);
+                const pos = pool.indexOf(currentTrackIndex);
+                return pos >= 0
+                  ? `Track ${pos + 1} of ${pool.length}${activeGenre !== 'All' ? ` in ${activeGenre}` : ''}`
+                  : `Track ${currentTrackIndex + 1} of ${matrixPlaylist.length}`;
+              })()}
             </div>
           </div>
 
@@ -849,6 +935,70 @@ export default function PersistentMusicPlayer() {
         .music-notice a {
           color: var(--theme-primary, #00ff00);
           text-decoration: underline;
+        }
+
+        .genre-tabs {
+          display: flex;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          gap: 6px;
+          padding: 0 0 10px 0;
+          margin-bottom: 12px;
+          scrollbar-width: thin;
+          scrollbar-color: var(--theme-border, #00ff00) transparent;
+        }
+
+        .genre-tabs::-webkit-scrollbar {
+          height: 3px;
+        }
+
+        .genre-tabs::-webkit-scrollbar-thumb {
+          background: var(--theme-border, #00ff00);
+          border-radius: 2px;
+        }
+
+        .genre-tab {
+          background: black;
+          color: var(--theme-primary, #00ff00);
+          border: 1px solid var(--theme-border, #00ff00);
+          padding: 5px 10px;
+          cursor: pointer;
+          font-family: inherit;
+          border-radius: 20px;
+          font-size: 11px;
+          white-space: nowrap;
+          transition: 0.2s;
+          flex-shrink: 0;
+        }
+
+        .genre-tab:hover {
+          background: rgba(0, 255, 0, 0.15);
+        }
+
+        .genre-tab.active {
+          background: var(--theme-primary, #00ff00);
+          color: black;
+          font-weight: bold;
+        }
+
+        .genre-count {
+          opacity: 0.7;
+          font-size: 10px;
+        }
+
+        .genre-tab.active .genre-count {
+          opacity: 0.85;
+        }
+
+        .track-genre-badge {
+          display: inline-block;
+          font-size: 10px;
+          color: black;
+          background: var(--theme-primary, #00ff00);
+          border-radius: 10px;
+          padding: 1px 8px;
+          margin: 4px 0 2px;
+          opacity: 0.85;
         }
 
         @media (max-width: 768px) {

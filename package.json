@@ -76,6 +76,9 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^4.4.2",
+    "@ethersproject/sha2": "^5.8.0",
+    "@reown/appkit": "^1.8.16",
+    "@reown/appkit-adapter-ethers": "^1.8.16",
     "@supabase/supabase-js": "^2.48.1",
     "@tailwindcss/vite": "^4.0.1",
     "@vitejs/plugin-react": "^5.1.2",
@@ -88,9 +91,7 @@
     "react-dom": "^19.2.3",
     "sharp": "^0.34.5",
     "typescript": "^5.6.3",
-    "vite": "^7.3.0",
-    "@reown/appkit": "^1.8.16",
-    "@reown/appkit-adapter-ethers": "^1.8.16"
+    "vite": "^7.3.0"
   },
   "devDependencies": {
     "@astrojs/node": "^9.5.1",
