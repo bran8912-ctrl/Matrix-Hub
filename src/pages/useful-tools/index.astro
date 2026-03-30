@@ -345,34 +345,24 @@ const CATEGORIES = [
   </div>
 </Layout>
 
-<!-- ── TradingView scripts + category filter ─────────────────────────────────── -->
-<script is:inline src="https://s3.tradingview.com/tv.js"></script>
+<!-- ── TradingView + category filter (non-blocking) ──────────────────────────── -->
 <script is:inline>
 (function () {
-  /* ── 1. Advanced Chart ──────────────────────────────────────────────── */
   var DEFAULT_SYM = 'BINANCE:BTCUSDT';
+  var FALLBACK_MSG = 'TradingView chart could not be loaded. ' +
+    'Please check your network connection or disable ad blockers.';
 
+  /* ── Advanced Chart (requires tv.js — called from onload) ──────────── */
   function buildChart(sym) {
     var el = document.getElementById('tv-advanced-chart');
     if (!el) return;
-
-    // Fallback message when TradingView cannot be loaded/used
-    var fallbackMsg = 'TradingView chart could not be loaded. ' +
-      'Please check your network connection or disable ad blockers.';
-
-    // Clear previous content
     el.innerHTML = '';
-
-    // Feature-detect TradingView before attempting to create the widget
-    if (typeof window === 'undefined' ||
-        !window.TradingView ||
-        typeof window.TradingView.widget !== 'function') {
-      el.textContent = fallbackMsg;
+    if (!window.TradingView || typeof window.TradingView.widget !== 'function') {
+      el.textContent = FALLBACK_MSG;
       return;
     }
-
-    /* eslint-disable no-new */
     try {
+      /* eslint-disable no-new */
       new window.TradingView.widget({
         container_id:        'tv-advanced-chart',
         symbol:              sym || DEFAULT_SYM,
@@ -392,57 +382,57 @@ const CATEGORIES = [
       });
     } catch (e) {
       console.error('Failed to initialize TradingView widget:', e);
-      el.textContent = fallbackMsg;
+      var el2 = document.getElementById('tv-advanced-chart');
+      if (el2) el2.textContent = FALLBACK_MSG;
     }
   }
 
-  // Build on load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { buildChart(DEFAULT_SYM); });
-  } else {
-    buildChart(DEFAULT_SYM);
-  }
+  /* ── Load tv.js asynchronously; build chart in onload ──────────────── */
+  var tvScript = document.createElement('script');
+  tvScript.src = 'https://s3.tradingview.com/tv.js';
+  tvScript.async = true;
+  tvScript.onload = function () { buildChart(DEFAULT_SYM); };
+  tvScript.onerror = function () {
+    var el = document.getElementById('tv-advanced-chart');
+    if (el) el.textContent = FALLBACK_MSG;
+  };
+  document.head.appendChild(tvScript);
 
-  // Symbol quick-switch buttons
+  /* ── Symbol quick-switch buttons (delegate; chart init is async) ───── */
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('.sym-btn');
     if (!btn) return;
-    // Update active state
     document.querySelectorAll('.sym-btn').forEach(function (b) { b.classList.remove('active'); });
     btn.classList.add('active');
     buildChart(btn.dataset.sym);
   });
 
-  /* ── 2. Crypto Screener ─────────────────────────────────────────────── */
+  /* ── Crypto Screener (self-loading embed — no tv.js dependency) ─────── */
   (function () {
     var screenerEl = document.getElementById('tv-screener');
     if (!screenerEl) return;
-    var screenerScript = document.createElement('script');
-    screenerScript.type = 'text/javascript';
-    screenerScript.async = true;
-    screenerScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js';
-    screenerScript.innerHTML = JSON.stringify({
-      width: '100%',
-      height: 490,
-      defaultColumn: 'overview',
-      defaultScreen: 'general',
-      market: 'crypto',
-      showToolbar: true,
-      colorTheme: 'dark',
-      locale: 'en',
+    var s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.async = true;
+    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js';
+    s.innerHTML = JSON.stringify({
+      width: '100%', height: 490,
+      defaultColumn: 'overview', defaultScreen: 'general',
+      market: 'crypto', showToolbar: true,
+      colorTheme: 'dark', locale: 'en',
     });
-    screenerEl.appendChild(screenerScript);
+    screenerEl.appendChild(s);
   })();
 
-  /* ── 3. Ticker Tape ─────────────────────────────────────────────────── */
+  /* ── Ticker Tape (self-loading embed — no tv.js dependency) ─────────── */
   (function () {
     var tickerEl = document.getElementById('tv-ticker');
     if (!tickerEl) return;
-    var tickerScript = document.createElement('script');
-    tickerScript.type = 'text/javascript';
-    tickerScript.async = true;
-    tickerScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
-    tickerScript.innerHTML = JSON.stringify({
+    var s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.async = true;
+    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+    s.innerHTML = JSON.stringify({
       symbols: [
         { proName: 'BINANCE:BTCUSDT',  title: 'Bitcoin' },
         { proName: 'BINANCE:ETHUSDT',  title: 'Ethereum' },
@@ -455,22 +445,18 @@ const CATEGORIES = [
         { proName: 'NASDAQ:AAPL',      title: 'Apple' },
         { proName: 'NASDAQ:NVDA',      title: 'NVIDIA' },
       ],
-      showSymbolLogo: true,
-      colorTheme: 'dark',
-      isTransparent: true,
-      displayMode: 'adaptive',
-      locale: 'en',
+      showSymbolLogo: true, colorTheme: 'dark',
+      isTransparent: true, displayMode: 'adaptive', locale: 'en',
     });
-    tickerEl.appendChild(tickerScript);
+    tickerEl.appendChild(s);
   })();
 
-  /* ── 4. GitHub tools category filter ───────────────────────────────── */
+  /* ── GitHub tools category filter (no tv.js dependency) ────────────── */
   (function () {
     var grid      = document.getElementById('tools-grid');
     var noResults = document.getElementById('no-results');
     var filterNav = document.getElementById('filter-nav');
     if (!grid || !noResults || !filterNav) return;
-
     filterNav.addEventListener('click', function (e) {
       var btn = e.target.closest('.filter-btn');
       if (!btn) return;
