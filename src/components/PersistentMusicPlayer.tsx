@@ -547,8 +547,8 @@ export default function PersistentMusicPlayer() {
       {/* Expanded content */}
       {!isMinimized && (
         <div className="player-content">
-          {/* Genre tabs */}
-          <div className="genre-tabs" role="tablist" aria-label="Genre filter">
+          {/* Genre filter buttons */}
+          <div className="genre-tabs" role="group" aria-label="Filter by genre">
             {GENRES.map((genre) => {
               const count = genre === 'All' ? matrixPlaylist.length : matrixPlaylist.filter((t) => t.genre === genre).length;
               return (
@@ -556,8 +556,7 @@ export default function PersistentMusicPlayer() {
                   key={genre}
                   className={`genre-tab${activeGenre === genre ? ' active' : ''}`}
                   onClick={() => setActiveGenre(genre)}
-                  role="tab"
-                  aria-selected={activeGenre === genre}
+                  aria-pressed={activeGenre === genre}
                   title={genre}
                 >
                   {genre} <span className="genre-count">({count})</span>
@@ -572,7 +571,15 @@ export default function PersistentMusicPlayer() {
             <div className="track-artist">{currentTrack.artist}</div>
             <div className="track-genre-badge">{currentTrack.genre}</div>
             <div className="track-number">
-              Track {currentTrackIndex + 1} of {matrixPlaylist.length}
+              {(() => {
+                const pool = activeGenre === 'All'
+                  ? matrixPlaylist.map((_, i) => i)
+                  : matrixPlaylist.map((_, i) => i).filter((i) => matrixPlaylist[i].genre === activeGenre);
+                const pos = pool.indexOf(currentTrackIndex);
+                return pos >= 0
+                  ? `Track ${pos + 1} of ${pool.length}${activeGenre !== 'All' ? ` in ${activeGenre}` : ''}`
+                  : `Track ${currentTrackIndex + 1} of ${matrixPlaylist.length}`;
+              })()}
             </div>
           </div>
 

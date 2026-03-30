@@ -1390,7 +1390,8 @@
 	  const layersSyncPicks = document.getElementById('layersSyncPicks');
 
 	  const GENRE_LIST = ['All', 'Rap / Hip-Hop', 'Rock', 'Metal', 'Electronic / EDM', 'Ambient / Chill', 'Sci-Fi / Cyberpunk'];
-	  let activeGenre = localStorage.getItem('matrixPlayerGenre') || 'All';
+	  const _savedGenre = localStorage.getItem('matrixPlayerGenre');
+	  let activeGenre = (_savedGenre && GENRE_LIST.includes(_savedGenre)) ? _savedGenre : 'All';
 
 	  function getFilteredIndices() {
 	    if (activeGenre === 'All') return matrixPlaylist.map((_, i) => i);
@@ -1412,8 +1413,9 @@
 	  }
 
 	  function setGenreTab(genre) {
-	    activeGenre = genre;
-	    try { localStorage.setItem('matrixPlayerGenre', genre); } catch {}
+	    const validated = (genre && GENRE_LIST.includes(genre)) ? genre : 'All';
+	    activeGenre = validated;
+	    try { localStorage.setItem('matrixPlayerGenre', validated); } catch {}
 	    renderGenreTabs();
 	  }
 
