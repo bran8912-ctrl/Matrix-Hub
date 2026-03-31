@@ -4,6 +4,9 @@
  * Serves the built Astro static site AND hosts the WebSocket chat on the
  * same port. No separate process, no port 4000, no environment variables.
  *
+ * Static files are served by serve-handler (github.com/vercel/serve-handler),
+ * a free MIT-licensed library used by Vercel's own `serve` CLI.
+ *
  * Usage (after `npm run build`):
  *   node server.mjs            # default port 3000
  *   PORT=8080 node server.mjs  # custom port
@@ -12,79 +15,13 @@
  */
 
 import { createServer } from "node:http";
-import { readFile, stat } from "node:fs/promises";
-import { join, extname } from "node:path";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import handler from "serve-handler";
 import { WebSocket, WebSocketServer } from "ws";
 
 const PORT = Number(process.env.PORT) || 3000;
 const DIST_DIR = join(fileURLToPath(import.meta.url), "..", "dist");
-
-// ─── MIME types ───────────────────────────────────────────────────────────────
-
-const MIME = {
-  ".html":  "text/html; charset=utf-8",
-  ".js":    "application/javascript",
-  ".mjs":   "application/javascript",
-  ".css":   "text/css",
-  ".json":  "application/json",
-  ".xml":   "application/xml",
-  ".txt":   "text/plain",
-  ".svg":   "image/svg+xml",
-  ".ico":   "image/x-icon",
-  ".png":   "image/png",
-  ".jpg":   "image/jpeg",
-  ".jpeg":  "image/jpeg",
-  ".gif":   "image/gif",
-  ".webp":  "image/webp",
-  ".avif":  "image/avif",
-  ".woff":  "font/woff",
-  ".woff2": "font/woff2",
-  ".ttf":   "font/ttf",
-  ".otf":   "font/otf",
-  ".mp3":   "audio/mpeg",
-  ".mp4":   "video/mp4",
-  ".webm":  "video/webm",
-  ".ogg":   "audio/ogg",
-  ".pdf":   "application/pdf",
-};
-
-// ─── Static file handler ──────────────────────────────────────────────────────
-
-async function serveStatic(req, res) {
-  const urlPath = new URL(req.url, "http://localhost").pathname;
-
-  // Try: exact path, path + .html, path/index.html
-  const candidates = [
-    join(DIST_DIR, urlPath),
-    join(DIST_DIR, urlPath + ".html"),
-    join(DIST_DIR, urlPath, "index.html"),
-  ];
-
-  for (const filePath of candidates) {
-    try {
-      const s = await stat(filePath);
-      if (!s.isFile()) continue;
-      const body = await readFile(filePath);
-      const contentType = MIME[extname(filePath).toLowerCase()] ?? "application/octet-stream";
-      res.writeHead(200, { "Content-Type": contentType });
-      res.end(body);
-      return;
-    } catch {
-      // try next candidate
-    }
-  }
-
-  // Fall back to 404.html if available
-  try {
-    const body = await readFile(join(DIST_DIR, "404.html"));
-    res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" });
-    res.end(body);
-  } catch {
-    res.writeHead(404, { "Content-Type": "text/plain" });
-    res.end("Not found");
-  }
-}
 
 // ─── Chat WebSocket ───────────────────────────────────────────────────────────
 
@@ -112,7 +49,13 @@ function getRoomClients(roomId) {
 // ─── HTTP + WebSocket server ──────────────────────────────────────────────────
 
 const server = createServer((req, res) => {
-  serveStatic(req, res);
+  // serve-handler (github.com/vercel/serve-handler) handles static files,
+  // MIME types, clean URL rewrites, and 404 pages from the dist/ folder.
+  handler(req, res, {
+    public: DIST_DIR,
+    cleanUrls: true,
+    trailingSlash: false,
+  });
 });
 
 const wss = new WebSocketServer({ noServer: true });
