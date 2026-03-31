@@ -365,20 +365,26 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
 
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       // Self-hosted WebSocket path — server broadcasts the message back to all clients
-      socketRef.current.send(JSON.stringify(newMsg));
-      setInput("");
-      setSending(false);
-    } else {
-      // BroadcastChannel + localStorage fallback
       try {
-        bcRef.current?.postMessage(newMsg);
+        socketRef.current.send(JSON.stringify(newMsg));
+        setInput("");
+        // On success, rely on the server echoing the message back; no local append here.
+        return;
       } catch {
-        // BroadcastChannel fallback — channel may be unsupported or already closed
+        // If send fails (socket closed between readyState check and send), fall through
+        // to the BroadcastChannel + localStorage fallback below.
       }
-      setMessages((prev) => capMessages([...prev, newMsg]));
-      setInput("");
-      setSending(false);
     }
+
+    // BroadcastChannel + localStorage fallback
+    try {
+      bcRef.current?.postMessage(newMsg);
+    } catch {
+      // BroadcastChannel fallback — channel may be unsupported or already closed
+    }
+    setMessages((prev) => capMessages([...prev, newMsg]));
+    setInput("");
+    setSending(false);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
