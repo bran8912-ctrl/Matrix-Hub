@@ -17,6 +17,14 @@ interface LiveChatProps {
   allowedTopics: string[];
 }
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const MIN_TOPIC_CHECK_LENGTH = 20;
+const MAX_USERNAME_LENGTH = 24;
+// Random suffix: chars at positions 2–6 of a base-36 string (4 chars)
+const RANDOM_SUFFIX_START = 2;
+const RANDOM_SUFFIX_END = 6;
+
 // ─── Moderation ───────────────────────────────────────────────────────────────
 
 const PROFANITY_LIST = [
@@ -111,7 +119,7 @@ function moderateMessage(
   }
 
   // Topic check — skip for very short acks ("ok", "lol", "👍" etc.)
-  if (norm.length > 20) {
+  if (norm.length > MIN_TOPIC_CHECK_LENGTH) {
     const hasTopicKeyword = allowedTopics.some((kw) =>
       norm.includes(kw.toLowerCase())
     );
@@ -134,7 +142,7 @@ function getOrCreateUsername(): string {
   try {
     const stored = localStorage.getItem(LS_KEY);
     if (stored) return stored;
-    const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+    const rand = Math.random().toString(36).slice(RANDOM_SUFFIX_START, RANDOM_SUFFIX_END).toUpperCase();
     const name = `Anon-${rand}`;
     localStorage.setItem(LS_KEY, name);
     return name;
@@ -251,8 +259,9 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
   }
 
   function saveName() {
-    const trimmed = nameInput.trim().slice(0, 24);
+    const trimmed = nameInput.trim().slice(0, MAX_USERNAME_LENGTH);
     if (!trimmed) return;
+    // Allow only alphanumeric characters, underscores, hyphens, periods, and spaces
     const safeName = trimmed.replace(/[^a-zA-Z0-9_\-. ]/g, "");
     if (!safeName) return;
     setUsername(safeName);
@@ -292,7 +301,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
                 value={nameInput}
                 onChange={(e) => setNameInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && saveName()}
-                maxLength={24}
+                maxLength={MAX_USERNAME_LENGTH}
                 autoFocus
               />
               <button style={styles.nameBtn} onClick={saveName}>✓</button>

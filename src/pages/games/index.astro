@@ -1,6 +1,7 @@
 ---
 import Layout from "../../components/Layout.astro";
 import GameCard from "../../components/GameCard.astro";
+import LiveChat from "../../components/LiveChat.tsx";
 import { games } from "../../data/games";
 
 export const prerender = true;
@@ -17,6 +18,22 @@ export const navCategory = "games";
       All games sourced from the open-source community.
     </p>
     <p class="hero-count">{games.length} titles available</p>
+  </div>
+
+  <!-- Controls: filters + search -->
+  <div class="live-chat-section">
+    <LiveChat
+      client:only="react"
+      roomId="games"
+      roomLabel="🎮 Arcade Live Chat"
+      allowedTopics={[
+        "game", "games", "arcade", "play", "score", "level", "highscore",
+        "high score", "snake", "breakout", "tetris", "puzzle", "platformer",
+        "retro", "browser game", "free game", "indie", "pixel", "speedrun",
+        "challenge", "multiplayer", "tips", "strategy", "cheats", "secrets",
+        "easter egg", "achievement", "leaderboard", "controls", "gameplay",
+      ]}
+    />
   </div>
 
   <!-- Controls: filters + search -->
@@ -61,6 +78,11 @@ export const navCategory = "games";
   .games-hero {
     text-align: center;
     margin-bottom: 2.5rem;
+  }
+
+  /* Live Chat */
+  .live-chat-section {
+    margin-bottom: 2rem;
   }
 
   .hero-title {

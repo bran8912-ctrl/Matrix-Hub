@@ -1,5 +1,6 @@
 ---
 import Layout from "../../components/Layout.astro";
+import LiveChat from "../../components/LiveChat.tsx";
 
 export const prerender = true;
 
@@ -153,6 +154,22 @@ const CATEGORIES = [
         Live market charts and financial analysis tools — usable right here on Matrix Hub.<br />
         Plus a curated directory of open-source swarm-intelligence frameworks to self-host.
       </p>
+    </div>
+
+    <!-- LIVE CHAT FEED -->
+    <div class="live-chat-section">
+      <LiveChat
+        client:only="react"
+        roomId="useful-tools"
+        roomLabel="📈 Trading & Tools Chat"
+        allowedTopics={[
+          "trading", "market", "portfolio", "stocks", "crypto", "defi",
+          "technical analysis", "indicators", "rsi", "macd", "moving average",
+          "quant", "risk", "swarm", "financial", "tools", "tips", "strategies",
+          "backtesting", "freqtrade", "quantlib", "options", "bonds",
+          "yields", "analysis",
+        ]}
+      />
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════════
@@ -487,6 +504,11 @@ const CATEGORIES = [
   /* ── Header ──────────────────────────────────────────────────────────── */
   .page-header {
     text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Live Chat ───────────────────────────────────────────────────────── */
+  .live-chat-section {
     margin-bottom: 2rem;
   }
 
