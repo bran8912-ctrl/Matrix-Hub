@@ -66,6 +66,7 @@ const EXCLUDED_PATHS = [
 interface PageMetadata {
   title: string;
   navCategory: string | null;
+  navExclude: boolean;
 }
 
 interface NavigationPage {
@@ -94,6 +95,7 @@ function extractPageMetadata(filePath: string): PageMetadata {
     // Look for patterns like: export const title = "..."
     let title: string | null = null;
     let navCategory: string | null = null;
+    let navExclude = false;
     
     // Try to extract from frontmatter block (between --- markers)
     const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
@@ -111,6 +113,9 @@ function extractPageMetadata(filePath: string): PageMetadata {
       if (categoryMatch) {
         navCategory = categoryMatch[1];
       }
+
+      // Match: export const navExclude = true
+      navExclude = /export\s+const\s+navExclude\s*=\s*true/.test(frontmatter);
     }
     
     // Fallback: generate title from filename if not found
@@ -130,14 +135,15 @@ function extractPageMetadata(filePath: string): PageMetadata {
       }
     }
     
-    return { title, navCategory };
+    return { title, navCategory, navExclude };
   } catch (error) {
     console.warn(`Warning: Could not extract metadata from ${filePath}:`, (error as Error).message);
     // Fallback to filename
     const fileName = path.basename(filePath, path.extname(filePath));
     return {
       title: fileName.charAt(0).toUpperCase() + fileName.slice(1),
-      navCategory: null
+      navCategory: null,
+      navExclude: false,
     };
   }
 }
@@ -210,8 +216,11 @@ export async function generateNavigation(): Promise<NavigationTab[]> {
   
   for (const file of files) {
     const fullPath = path.join(pagesDir, file);
-    const { title, navCategory } = extractPageMetadata(fullPath);
+    const { title, navCategory, navExclude } = extractPageMetadata(fullPath);
     const urlPath = filePathToUrlPath(file);
+
+    // Skip pages that have opted out of navigation
+    if (navExclude) continue;
     
     // Determine category
     let category: string;

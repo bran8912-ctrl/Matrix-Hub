@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+export const navExclude = true;
 ---
 
 <!doctype html>
@@ -260,6 +261,7 @@ export const prerender = true;
               title="9-to-5 Grind Reality — Part 1"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
+              loading="lazy"
             ></iframe>
           </div>
           <div class="video-wrap red-border shorts">
@@ -268,6 +270,7 @@ export const prerender = true;
               title="9-to-5 Grind Reality — Part 2"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
+              loading="lazy"
             ></iframe>
           </div>
         </div>
@@ -306,6 +309,7 @@ export const prerender = true;
             title="Matrix Hub — Site Introduction"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
+            loading="lazy"
             style="display:none"
           ></iframe>
         </div>
@@ -397,19 +401,37 @@ export const prerender = true;
         resize();
         window.addEventListener('resize', resize);
 
-        function draw() {
-          ctx.fillStyle = 'rgba(0,0,0,0.06)';
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reducedMotion) {
+          // Keep the canvas visible but static — just draw one dim frame and stop
+          ctx.fillStyle = 'rgba(0,0,0,0.92)';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.font = `${fs}px monospace`;
-          ctx.fillStyle = '#00cc33';
-          for (let i = 0; i < drops.length; i++) {
-            ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fs, drops[i] * fs);
-            if (drops[i] * fs > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i] += 1;
-          }
-          requestAnimationFrame(draw);
+          return;
         }
-        requestAnimationFrame(draw);
+
+        let rafId: number;
+        let paused = false;
+
+        function draw() {
+          if (!paused) {
+            ctx.fillStyle = 'rgba(0,0,0,0.06)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = `${fs}px monospace`;
+            ctx.fillStyle = '#00cc33';
+            for (let i = 0; i < drops.length; i++) {
+              ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fs, drops[i] * fs);
+              if (drops[i] * fs > canvas.height && Math.random() > 0.975) drops[i] = 0;
+              drops[i] += 1;
+            }
+          }
+          rafId = requestAnimationFrame(draw);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+          paused = document.visibilityState !== 'visible';
+        });
+
+        rafId = requestAnimationFrame(draw);
       })();
 
       // Typewriter effect
