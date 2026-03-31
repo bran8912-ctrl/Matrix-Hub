@@ -8,9 +8,10 @@
  *   node chat-server.mjs          # listens on port 4000 (default)
  *   PORT=5000 node chat-server.mjs
  *
- * The Astro site connects to ws[s]://SAME_HOSTNAME:4000/chat automatically
- * (no configuration needed). Reverse-proxy /chat to this server if you want
- * everything on a single port (see docs/CHAT_SERVER.md).
+ * The Astro site’s LiveChat client connects to a same-origin WebSocket
+ * endpoint at /chat (e.g. ws[s]://your-site/chat/<roomId>). In production,
+ * configure your reverse proxy so that /chat is forwarded to this server’s
+ * port (4000 by default).
  */
 
 import { createServer } from "node:http";
