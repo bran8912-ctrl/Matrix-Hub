@@ -30,6 +30,9 @@ const MAX_MESSAGE_LENGTH = 500;
 const MAX_USERNAME_LENGTH = 64;
 const MAX_ID_LENGTH = 128;
 
+const MAX_ROOMS = 500;
+const MAX_ROOM_ID_LENGTH = 128;
+
 /** @type {Map<string, Array<object>>} */
 const roomMessages = new Map();
 
@@ -46,6 +49,15 @@ function getRoomClients(roomId) {
   return roomClients.get(roomId);
 }
 
+/** Delete room state when no clients remain. */
+function cleanupRoom(roomId) {
+  const clients = roomClients.get(roomId);
+  if (clients && clients.size === 0) {
+    roomClients.delete(roomId);
+    roomMessages.delete(roomId);
+  }
+}
+
 // ─── HTTP + WebSocket server ──────────────────────────────────────────────────
 
 const server = createServer((req, res) => {
@@ -58,7 +70,8 @@ const server = createServer((req, res) => {
   });
 });
 
-const wss = new WebSocketServer({ noServer: true });
+// 4 MB payload limit — truncation happens in the message handler
+const wss = new WebSocketServer({ noServer: true, maxPayload: 4 * 1024 * 1024 });
 
 // Upgrade WebSocket connections on /chat/* — everything else is rejected
 server.on("upgrade", (req, socket, head) => {
@@ -72,7 +85,16 @@ server.on("upgrade", (req, socket, head) => {
 });
 
 wss.on("connection", (ws, req) => {
-  const roomId = (req.url ?? "").replace(/^\/chat\//, "").split("?")[0] || "default";
+  const rawRoom = decodeURIComponent(
+    (req.url ?? "").replace(/^\/chat\//, "").split("?")[0]
+  ).slice(0, MAX_ROOM_ID_LENGTH) || "default";
+  const roomId = rawRoom;
+
+  // Reject connection if already at max room count and this is a new room
+  if (!roomClients.has(roomId) && roomClients.size >= MAX_ROOMS) {
+    ws.close(1013, "Too many rooms");
+    return;
+  }
 
   getRoomClients(roomId).add(ws);
 
@@ -80,28 +102,31 @@ wss.on("connection", (ws, req) => {
   ws.send(JSON.stringify({ type: "history", messages: getRoomMessages(roomId) }));
 
   ws.on("message", (raw) => {
-    let msg;
+    let parsed;
     try {
-      msg = JSON.parse(raw.toString());
+      parsed = JSON.parse(raw.toString());
     } catch {
       return;
     }
 
     // Validate required fields
     if (
-      typeof msg.id !== "string" || msg.id.trim() === "" ||
-      typeof msg.username !== "string" || msg.username.trim() === "" ||
-      typeof msg.message !== "string" || msg.message.trim() === "" ||
-      typeof msg.room_id !== "string" ||
-      typeof msg.created_at !== "string"
+      typeof parsed.id !== "string" || parsed.id.trim() === "" ||
+      typeof parsed.username !== "string" || parsed.username.trim() === "" ||
+      typeof parsed.message !== "string" || parsed.message.trim() === "" ||
+      typeof parsed.created_at !== "string"
     ) return;
 
-    // Sanitize lengths
-    msg.id         = msg.id.slice(0, MAX_ID_LENGTH);
-    msg.username   = msg.username.slice(0, MAX_USERNAME_LENGTH);
-    msg.message    = msg.message.slice(0, MAX_MESSAGE_LENGTH);
-    msg.room_id    = msg.room_id.slice(0, MAX_ID_LENGTH);
-    msg.created_at = msg.created_at.slice(0, 64);
+    // Construct a sanitized object — discard any extra client-supplied fields.
+    // room_id is always taken from the URL path, not from the client payload.
+    /** @type {{ id: string; room_id: string; username: string; message: string; created_at: string; }} */
+    const msg = {
+      id:         parsed.id.slice(0, MAX_ID_LENGTH),
+      room_id:    roomId,
+      username:   parsed.username.slice(0, MAX_USERNAME_LENGTH),
+      message:    parsed.message.slice(0, MAX_MESSAGE_LENGTH),
+      created_at: parsed.created_at.slice(0, 64),
+    };
 
     // Deduplicate
     const messages = getRoomMessages(roomId);
@@ -122,6 +147,8 @@ wss.on("connection", (ws, req) => {
 
   ws.on("close", () => {
     getRoomClients(roomId).delete(ws);
+    // Free memory once the room is empty
+    cleanupRoom(roomId);
   });
 });
 
