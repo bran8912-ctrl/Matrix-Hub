@@ -1,4 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import PartySocket from "partysocket";
+
+// ─── PartyKit host (injected at build time by Vite; empty → localStorage fallback) ─
+
+const PARTYKIT_HOST = import.meta.env.PUBLIC_PARTYKIT_HOST as string | undefined;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -207,6 +212,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const bcRef = useRef<BroadcastChannel | null>(null);
+  const socketRef = useRef<PartySocket | null>(null);
   // Track whether initial localStorage load has occurred so we don't
   // overwrite stored messages with an empty array before load completes.
   const loadedRef = useRef(false);
@@ -218,9 +224,54 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     setNameInput(name);
   }, []);
 
-  // Load history from localStorage + subscribe to BroadcastChannel
+  // Connect: PartySocket (cross-user) when PUBLIC_PARTYKIT_HOST is set,
+  // otherwise BroadcastChannel + localStorage (same-browser only)
   useEffect(() => {
-    // Read existing messages from localStorage
+    if (PARTYKIT_HOST) {
+      // ── PartyKit path ───────────────────────────────────────────────────────
+      setStatus("connecting");
+      loadedRef.current = false;
+
+      const socket = new PartySocket({ host: PARTYKIT_HOST, room: roomId });
+      socketRef.current = socket;
+
+      socket.addEventListener("open", () => {
+        setStatus("live");
+        loadedRef.current = true;
+      });
+
+      socket.addEventListener("error", () => setStatus("error"));
+
+      socket.addEventListener("message", (event: MessageEvent<string>) => {
+        try {
+          const data = JSON.parse(event.data) as
+            | { type: "history"; messages: ChatMessage[] }
+            | { type: "message"; message: ChatMessage };
+
+          if (data.type === "history") {
+            setMessages(data.messages);
+          } else if (data.type === "message") {
+            setMessages((prev) => {
+              if (prev.some((m) => m.id === data.message.id)) return prev;
+              return capMessages([...prev, data.message]);
+            });
+          }
+        } catch (err) {
+          // Log malformed frames during development to aid debugging
+          if (typeof process !== "undefined" && process.env?.NODE_ENV !== "production") {
+            console.warn("[LiveChat] Failed to parse server message:", err);
+          }
+        }
+      });
+
+      return () => {
+        loadedRef.current = false;
+        socket.close();
+        socketRef.current = null;
+      };
+    }
+
+    // ── localStorage + BroadcastChannel fallback ──────────────────────────────
     loadedRef.current = false;
     setMessages(loadMessages(roomId));
     loadedRef.current = true;
@@ -285,17 +336,22 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
       created_at: new Date().toISOString(),
     };
 
-    // Broadcast to other tabs via the shared persistent channel
-    try {
-      bcRef.current?.postMessage(newMsg);
-    } catch {
-      // BroadcastChannel not supported — no cross-tab sync
+    if (socketRef.current) {
+      // PartyKit path — server broadcasts the message back to all clients
+      socketRef.current.send(JSON.stringify(newMsg));
+      setInput("");
+      setSending(false);
+    } else {
+      // BroadcastChannel + localStorage fallback
+      try {
+        bcRef.current?.postMessage(newMsg);
+      } catch {
+        // BroadcastChannel fallback — channel may be unsupported or already closed
+      }
+      setMessages((prev) => capMessages([...prev, newMsg]));
+      setInput("");
+      setSending(false);
     }
-
-    // Update local state (persistence handled by the messages useEffect)
-    setMessages((prev) => capMessages([...prev, newMsg]));
-    setInput("");
-    setSending(false);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -375,7 +431,9 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
           <p style={styles.statusMsg}>
             No messages yet. Be the first to chat!<br />
             <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>
-              💬 Messages are stored locally in your browser
+              {PARTYKIT_HOST
+                ? "⚡ Cross-user real-time chat powered by PartyKit"
+                : "💬 Messages are stored locally in your browser"}
             </span>
           </p>
         )}
