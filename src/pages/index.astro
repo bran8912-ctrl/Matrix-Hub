@@ -1,107 +1,466 @@
 ---
-import Layout from "../components/Layout.astro";
-import MTXEcosystem from "../components/MTXEcosystem.astro";
-import CasinoGamesPanel from "../components/CasinoGamesPanel.astro";
-import MTXOwnershipPanel from "../components/MTXOwnershipPanel.astro";
-import DonateBanner from "../components/DonateBanner.astro";
-import TelegramWidget from "../components/TelegramWidget.astro";
-import MTXStatsWidget from "../components/MTXStatsWidget.tsx";
-
 export const prerender = true;
-
-export const title = "Home";
-export const navCategory = "home";
+export const navExclude = true;
 ---
 
-<Layout title="The Matrix Hub - Blockchain Tools & Casino">
-  <div class="homepage-header">
-    <h1 class="matrix-title">THE MATRIX HUB</h1>
-    <p class="matrix-subtitle">
-      Your gateway to blockchain tools, MTX token ecosystem, and provably fair casino games.
-    </p>
-  </div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="The Matrix Hub - Wake up. Take the red pill and see how deep the rabbit hole goes." />
+    <title>The Matrix Hub — Wake Up</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --green: #00ff41;
+        --green-dim: #00cc33;
+        --green-glow: rgba(0,255,65,0.6);
+        --red: #ff0033;
+        --red-glow: rgba(255,0,51,0.6);
+        --blue: #0066ff;
+        --blue-glow: rgba(0,102,255,0.6);
+        --bg: #000000;
+        --text: #00ff41;
+        --text-muted: rgba(0,255,65,0.65);
+        --font: 'Courier New', 'Lucida Console', monospace;
+      }
+      html { scroll-behavior: smooth; }
+      body { background: var(--bg); color: var(--text); font-family: var(--font); overflow-x: hidden; }
+      #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 
-  <!-- MTX Stats Widget -->
-  <div class="stats-widget-container">
-    <MTXStatsWidget client:load />
-  </div>
+      /* ── Pill Choice ── */
+      #pill-choice {
+        position: relative; z-index: 1;
+        min-height: 100vh; display: flex;
+        align-items: center; justify-content: center; padding: 2rem 1rem;
+      }
+      .pill-inner {
+        text-align: center; max-width: 700px; width: 100%;
+        padding: 3rem 2rem;
+        background: rgba(0,0,0,0.78);
+        border: 1px solid rgba(0,255,65,0.25); border-radius: 4px;
+        box-shadow: 0 0 60px rgba(0,255,65,0.08); backdrop-filter: blur(4px);
+      }
+      .wake-up {
+        font-size: clamp(0.9rem,2vw,1.1rem); letter-spacing: 6px;
+        color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; min-height: 1.5em;
+      }
+      .matrix-title {
+        font-size: clamp(2rem,6vw,3.6rem); letter-spacing: 8px; color: var(--green);
+        text-shadow: 0 0 30px var(--green-glow), 0 0 60px rgba(0,255,65,0.3);
+        text-transform: uppercase; margin-bottom: 2.5rem;
+        animation: title-pulse 3s ease-in-out infinite alternate;
+      }
+      @keyframes title-pulse {
+        from { text-shadow: 0 0 20px var(--green-glow), 0 0 40px rgba(0,255,65,0.25); }
+        to   { text-shadow: 0 0 40px var(--green-glow), 0 0 80px rgba(0,255,65,0.4), 0 0 120px rgba(0,255,65,0.15); }
+      }
+      .morpheus-quote {
+        font-size: clamp(0.9rem,2.2vw,1.05rem); line-height: 1.85;
+        color: rgba(200,255,200,0.82); margin-bottom: 3rem;
+        max-width: 560px; margin-left: auto; margin-right: auto;
+      }
+      .blue-word { color: #4da6ff; }
+      .red-word  { color: #ff4466; }
+      .pills { display: flex; gap: 2rem; justify-content: center; align-items: stretch; flex-wrap: wrap; }
+      .pill {
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem;
+        padding: 1.2rem 2.4rem; border-radius: 50px; font-family: var(--font);
+        font-size: 1.15rem; font-weight: bold; letter-spacing: 3px; text-decoration: none;
+        text-transform: uppercase; cursor: pointer; transition: all 0.25s ease;
+        min-width: 180px; border: 2px solid transparent;
+      }
+      .pill-icon { font-size: 2rem; line-height: 1; }
+      .pill-sub  { font-size: 0.7rem; letter-spacing: 2px; font-weight: normal; opacity: 0.75; }
+      .pill-blue {
+        background: rgba(0,80,200,0.22); border-color: var(--blue); color: #80c0ff;
+        box-shadow: 0 0 20px rgba(0,102,255,0.3);
+      }
+      .pill-blue:hover {
+        background: rgba(0,102,255,0.35); box-shadow: 0 0 40px var(--blue-glow), 0 0 80px rgba(0,102,255,0.2);
+        color: #fff; transform: translateY(-3px) scale(1.04);
+      }
+      .pill-red {
+        background: rgba(180,0,30,0.22); border-color: var(--red); color: #ff8899;
+        box-shadow: 0 0 20px rgba(255,0,51,0.3);
+      }
+      .pill-red:hover {
+        background: rgba(255,0,51,0.35); box-shadow: 0 0 40px var(--red-glow), 0 0 80px rgba(255,0,51,0.2);
+        color: #fff; transform: translateY(-3px) scale(1.04);
+      }
+      .scroll-hint {
+        margin-top: 2.5rem; font-size: 0.75rem; letter-spacing: 3px;
+        color: var(--text-muted); opacity: 0.6;
+        animation: bounce-fade 2s ease-in-out infinite;
+      }
+      @keyframes bounce-fade {
+        0%, 100% { transform: translateY(0); opacity: 0.6; }
+        50%       { transform: translateY(6px); opacity: 1; }
+      }
 
-  <!-- MTX Ecosystem Section -->
-  <MTXEcosystem />
+      /* ── Red Pill Reality ── */
+      #red-pill-reality { position: relative; z-index: 1; padding: 0 1rem 6rem; }
+      .section-divider {
+        display: flex; align-items: center; gap: 1rem;
+        margin: 0 auto 4rem; max-width: 860px; padding-top: 5rem;
+      }
+      .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--green), transparent); }
+      .divider-text { font-size: 0.8rem; letter-spacing: 4px; color: var(--text-muted); text-transform: uppercase; white-space: nowrap; }
+      .section-block { max-width: 860px; margin: 0 auto 5rem; }
+      .section-header { text-align: center; margin-bottom: 2rem; }
+      .section-label {
+        display: inline-block; font-size: 0.7rem; letter-spacing: 5px;
+        text-transform: uppercase; padding: 0.3rem 1rem; border-radius: 2px; margin-bottom: 0.8rem;
+      }
+      .label-red   { background: rgba(255,0,51,0.12); border: 1px solid rgba(255,0,51,0.4); color: #ff8899; }
+      .label-green { background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.35); color: var(--green-dim); }
+      .section-title { font-size: clamp(1.4rem,4vw,2rem); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 0.6rem; }
+      .title-red   { color: #ff4466; text-shadow: 0 0 20px rgba(255,0,51,0.5); }
+      .title-green { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
+      .title-blue  { color: #4da6ff; text-shadow: 0 0 20px rgba(0,102,255,0.5); }
+      .section-subtitle { font-size: 0.95rem; color: rgba(200,255,200,0.6); letter-spacing: 1px; }
 
-  <!-- Casino Games Panel -->
-  <CasinoGamesPanel />
+      /* Video */
+      .video-wrap {
+        position: relative; width: 100%; padding-bottom: 56.25%;
+        background: rgba(0,0,0,0.7); border: 1px solid rgba(0,255,65,0.15);
+        border-radius: 4px; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.8);
+      }
+      .video-wrap.red-border   { border-color: rgba(255,0,51,0.35); box-shadow: 0 0 40px rgba(255,0,51,0.08); }
+      .video-wrap.green-border { border-color: rgba(0,255,65,0.35); box-shadow: 0 0 40px rgba(0,255,65,0.08); }
+      .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+      .video-placeholder {
+        position: absolute; inset: 0; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 1rem;
+        text-align: center; padding: 2rem; background: rgba(0,0,0,0.85);
+      }
+      .ph-icon { font-size: 3rem; }
+      .ph-title { font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; }
+      .ph-hint { font-size: 0.75rem; letter-spacing: 1px; opacity: 0.55; max-width: 340px; line-height: 1.6; }
 
-  <!-- MTX Ownership & Casino Economics -->
-  <MTXOwnershipPanel />
+      .video-caption {
+        margin-top: 1.2rem; font-size: 0.88rem; color: rgba(200,255,200,0.6);
+        line-height: 1.7; text-align: center; max-width: 680px;
+        margin-left: auto; margin-right: auto;
+      }
 
-  <!-- Donation Banner -->
-  <DonateBanner />
+      /* Shorts (portrait 9:16) two-up layout */
+      .shorts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+      .video-wrap.shorts { padding-bottom: 177.78%; }
+      @media (max-width: 600px) { .shorts-grid { grid-template-columns: 1fr; } }
 
-  <!-- Telegram Widget -->
-  <TelegramWidget />
-</Layout>
+      /* Games */
+      .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+      .game-card {
+        display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+        padding: 1.5rem 1rem; background: rgba(0,0,0,0.6);
+        border: 1px solid rgba(0,255,65,0.18); border-radius: 4px;
+        text-decoration: none; color: var(--green); transition: all 0.2s ease; text-align: center;
+      }
+      .game-card:hover {
+        border-color: var(--green); background: rgba(0,255,65,0.06);
+        box-shadow: 0 0 24px rgba(0,255,65,0.2); transform: translateY(-4px); color: #fff;
+      }
+      .gc-icon { font-size: 2.4rem; }
+      .gc-name { font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; }
+      .gc-tag  { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 1px; }
+      .casino-card {
+        border-color: rgba(255,200,0,0.35); color: #ffd700;
+        background: rgba(30,20,0,0.6); grid-column: span 2;
+      }
+      .casino-card:hover {
+        border-color: #ffd700; background: rgba(255,200,0,0.08);
+        box-shadow: 0 0 30px rgba(255,200,0,0.25); color: #fff;
+      }
 
-<style>
-  .homepage-header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
+      /* CTA */
+      .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+      .cta-btn {
+        padding: 0.9rem 2.2rem; border-radius: 3px; font-family: var(--font);
+        font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; font-weight: bold;
+        text-decoration: none; transition: all 0.2s ease; border: 2px solid transparent;
+      }
+      .cta-primary {
+        background: rgba(0,255,65,0.14); border-color: var(--green); color: var(--green);
+        box-shadow: 0 0 16px rgba(0,255,65,0.2);
+      }
+      .cta-primary:hover { background: rgba(0,255,65,0.28); box-shadow: 0 0 36px rgba(0,255,65,0.45); color: #fff; }
+      .cta-secondary { background: rgba(0,100,255,0.12); border-color: #0066ff; color: #6699ff; }
+      .cta-secondary:hover { background: rgba(0,100,255,0.25); box-shadow: 0 0 24px rgba(0,102,255,0.35); color: #fff; }
+      .cta-gold { background: rgba(255,200,0,0.1); border-color: #ffd700; color: #ffd700; }
+      .cta-gold:hover { background: rgba(255,200,0,0.2); box-shadow: 0 0 24px rgba(255,200,0,0.3); color: #fff; }
 
-  .matrix-title {
-    font-size: 2.8rem;
-    color: var(--theme-primary);
-    text-shadow: 0 0 20px var(--theme-glow);
-    font-family: 'Courier New', monospace;
-    letter-spacing: 4px;
-    margin-bottom: 15px;
-    animation: glow-pulse 2s ease-in-out infinite alternate;
-  }
+      @media (max-width: 560px) {
+        .pill-inner { padding: 2rem 1.2rem; }
+        .pills { gap: 1rem; }
+        .pill { min-width: 150px; padding: 1rem 1.6rem; font-size: 1rem; }
+        .casino-card { grid-column: span 1; }
+        .cta-btn { padding: 0.75rem 1.4rem; font-size: 0.78rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="matrix-canvas"></canvas>
 
-  @keyframes glow-pulse {
-    from {
-      text-shadow: 0 0 10px var(--theme-glow), 0 0 20px var(--theme-glow);
-    }
-    to {
-      text-shadow: 0 0 20px var(--theme-glow), 0 0 40px var(--theme-glow), 0 0 60px var(--theme-glow);
-    }
-  }
+    <!-- ════ SECTION 1: THE PILL CHOICE ════ -->
+    <section id="pill-choice">
+      <div class="pill-inner">
+        <p class="wake-up" id="typewriter"></p>
+        <h1 class="matrix-title">The Matrix Hub</h1>
+        <p class="morpheus-quote">
+          You take the <span class="blue-word">blue&nbsp;pill</span> — the story ends,
+          you wake up in your bed and believe whatever you want to believe.<br /><br />
+          You take the <span class="red-word">red&nbsp;pill</span> — you stay in
+          Wonderland, and I show you how deep the rabbit hole goes.
+        </p>
+        <div class="pills">
+          <a href="/home" class="pill pill-blue">
+            <span class="pill-icon">💊</span>
+            <span>Blue Pill</span>
+            <span class="pill-sub">Take me home</span>
+          </a>
+          <a href="#red-pill-reality" class="pill pill-red">
+            <span class="pill-icon">💊</span>
+            <span>Red Pill</span>
+            <span class="pill-sub">Show me the truth</span>
+          </a>
+        </div>
+        <p class="scroll-hint">↓ &nbsp; scroll to wake up &nbsp; ↓</p>
+      </div>
+    </section>
 
-  .matrix-subtitle {
-    font-size: 1.2rem;
-    color: var(--theme-text);
-    text-shadow: 0 0 10px var(--theme-secondary);
-    font-family: 'Courier New', monospace;
-  }
+    <!-- ════ SECTION 2: RED PILL REALITY ════ -->
+    <section id="red-pill-reality">
+      <div class="section-divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">You chose the red pill</span>
+        <div class="divider-line"></div>
+      </div>
 
-  .stats-widget-container {
-    max-width: 400px;
-    margin: 0 auto 40px auto;
-  }
+      <!-- Video 1: 9-to-5 Trap -->
+      <div class="section-block">
+        <div class="section-header">
+          <span class="section-label label-red">The Hard Truth</span>
+          <h2 class="section-title title-red">⚠ The 9-to-5 Trap</h2>
+          <p class="section-subtitle">This is what they have planned for you — and you can't afford to ignore it.</p>
+        </div>
+        <div class="shorts-grid">
+          <div class="video-wrap red-border shorts">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/wELniFIwegg?rel=0&modestbranding=1"
+              title="9-to-5 Grind Reality — Part 1"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+          <div class="video-wrap red-border shorts">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/TRz_qhDGirE?rel=0&modestbranding=1"
+              title="9-to-5 Grind Reality — Part 2"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+        <p class="video-caption">
+          Trade your hours for a paycheck, dream of retirement, repeat. The billionaires
+          have the system mapped out — you're the gear in their machine. There is a different path.
+        </p>
+      </div>
 
-  @media (max-width: 768px) {
-    .stats-widget-container {
-      max-width: 100%;
-      padding: 0 1rem;
-    }
-    
-    .matrix-title {
-      font-size: 2rem;
-      letter-spacing: 2px;
-    }
+      <!-- Video 2: The Way Out -->
+      <div class="section-block">
+        <div class="section-header">
+          <span class="section-label label-green">The Escape</span>
+          <h2 class="section-title title-green">🚀 Your Way Out of the Matrix</h2>
+          <p class="section-subtitle">Blockchain tools, token economy, and a community building real alternatives.</p>
+        </div>
+        <div class="video-wrap green-border">
+          <!--
+            ╔══════════════════════════════════════════════════════════════╗
+            ║  CONFIGURE VIDEO 2                                           ║
+            ║  Replace YOUTUBE_VIDEO_ID_2 in the iframe src below with    ║
+            ║  the YouTube video ID for your Matrix Hub intro video.       ║
+            ╚══════════════════════════════════════════════════════════════╝
+          -->
+          <div class="video-placeholder" id="ph-video2">
+            <span class="ph-icon">🎬</span>
+            <span class="ph-title" style="color:var(--green);">Matrix Hub Site Intro Video</span>
+            <span class="ph-hint">
+              Replace <code>YOUTUBE_VIDEO_ID_2</code> in the iframe src
+              inside <code>src/pages/index.astro</code> with your YouTube video ID.
+            </span>
+          </div>
+          <iframe
+            id="video2-frame"
+            src="https://www.youtube-nocookie.com/embed/YOUTUBE_VIDEO_ID_2?rel=0&modestbranding=1&color=white"
+            title="Matrix Hub — Site Introduction"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+            style="display:none"
+          ></iframe>
+        </div>
+        <p class="video-caption">
+          Blockchain tools, MTX token economy, provably-fair casino games, free arcade games,
+          and a community of builders choosing a different way. This is the Matrix Hub.
+        </p>
+      </div>
 
-    .matrix-subtitle {
-      font-size: 1rem;
-    }
-  }
+      <!-- Free Games -->
+      <div class="section-block">
+        <div class="section-header">
+          <span class="section-label label-green">Free &amp; Open</span>
+          <h2 class="section-title title-blue">🎮 Play for Free — No Wallet Needed</h2>
+          <p class="section-subtitle">Browser games, instant play, 100% free.</p>
+        </div>
+        <div class="games-grid">
+          <a href="/games/matrix-rain/" class="game-card">
+            <span class="gc-icon">🌧️</span>
+            <span class="gc-name">Digital Rain</span>
+            <span class="gc-tag">interactive matrix</span>
+          </a>
+          <a href="/games/hacking-simulator/" class="game-card">
+            <span class="gc-icon">💻</span>
+            <span class="gc-name">Hacking Simulator</span>
+            <span class="gc-tag">hack the mainframe</span>
+          </a>
+          <a href="/games/bullet-dodge/" class="game-card">
+            <span class="gc-icon">🎯</span>
+            <span class="gc-name">Bullet Time</span>
+            <span class="gc-tag">dodge the bullets</span>
+          </a>
+          <a href="/games/memory-game/" class="game-card">
+            <span class="gc-icon">🧩</span>
+            <span class="gc-name">Memory Protocol</span>
+            <span class="gc-tag">test your mind</span>
+          </a>
+          <a href="/games/cyber-snake/" class="game-card">
+            <span class="gc-icon">🐍</span>
+            <span class="gc-name">Cyber Snake</span>
+            <span class="gc-tag">classic snake, cyber style</span>
+          </a>
+          <a href="/games/code-breaker/" class="game-card">
+            <span class="gc-icon">🔐</span>
+            <span class="gc-name">Code Breaker</span>
+            <span class="gc-tag">crack the code</span>
+          </a>
+          <a href="/games/neos-training/" class="game-card">
+            <span class="gc-icon">🥋</span>
+            <span class="gc-name">Neo's Training</span>
+            <span class="gc-tag">train like the one</span>
+          </a>
+          <a href="/games/casino" class="game-card casino-card">
+            <span class="gc-icon">🎰</span>
+            <span class="gc-name">MTX Casino Games</span>
+            <span class="gc-tag">slots · blackjack · roulette · dice · more</span>
+          </a>
+        </div>
+        <div class="cta-row">
+          <a href="/home" class="cta-btn cta-primary">⚡ Enter The Hub</a>
+          <a href="/games" class="cta-btn cta-secondary">All Games</a>
+          <a href="/games/casino" class="cta-btn cta-gold">Casino Games</a>
+        </div>
+      </div>
+    </section>
 
-  @media (max-width: 480px) {
-    .matrix-title {
-      font-size: 1.8rem;
-    }
+    <script>
+      // Matrix Rain
+      (function () {
+        const canvas = document.getElementById('matrix-canvas') as HTMLCanvasElement;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d')!;
+        const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+        const fs = 14;
+        let cols: number;
+        let drops: number[];
 
-    .matrix-subtitle {
-      font-size: 0.9rem;
-    }
-  }
-</style>
+        function resize() {
+          canvas.width  = window.innerWidth;
+          canvas.height = window.innerHeight;
+          cols = Math.floor(canvas.width / fs);
+          if (!drops || drops.length !== cols) {
+            drops = Array.from({ length: cols }, () => Math.random() * -50);
+          } else {
+            while (drops.length < cols) drops.push(0);
+            drops.length = cols;
+          }
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reducedMotion) {
+          // Keep the canvas visible but static — just draw one dim frame and stop
+          ctx.fillStyle = 'rgba(0,0,0,0.92)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          return;
+        }
+
+        let rafId: number;
+        let paused = false;
+
+        function draw() {
+          if (!paused) {
+            ctx.fillStyle = 'rgba(0,0,0,0.06)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = `${fs}px monospace`;
+            ctx.fillStyle = '#00cc33';
+            for (let i = 0; i < drops.length; i++) {
+              ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fs, drops[i] * fs);
+              if (drops[i] * fs > canvas.height && Math.random() > 0.975) drops[i] = 0;
+              drops[i] += 1;
+            }
+          }
+          rafId = requestAnimationFrame(draw);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+          paused = document.visibilityState !== 'visible';
+        });
+
+        rafId = requestAnimationFrame(draw);
+      })();
+
+      // Typewriter effect
+      (function () {
+        const el = document.getElementById('typewriter');
+        if (!el) return;
+        const phrases = ['Wake up, Neo...', 'The Matrix has you.', 'Follow the white rabbit.'];
+        let pi = 0, ci = 0, deleting = false, wait = 0;
+        function tick() {
+          const phrase = phrases[pi];
+          if (wait > 0) { wait--; setTimeout(tick, 80); return; }
+          if (!deleting) {
+            el.textContent = phrase.slice(0, ++ci);
+            if (ci === phrase.length) { deleting = true; wait = 28; }
+          } else {
+            el.textContent = phrase.slice(0, --ci);
+            if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; wait = 10; }
+          }
+          setTimeout(tick, deleting ? 45 : 90);
+        }
+        tick();
+      })();
+
+      // Show real iframe only when video ID has been configured
+      (function () {
+        const videos: [string, string, string][] = [
+          ['video2-frame', 'ph-video2', 'YOUTUBE_VIDEO_ID_2'],
+        ];
+        for (const [frameId, phId, placeholder] of videos) {
+          const frame = document.getElementById(frameId) as HTMLIFrameElement | null;
+          const ph    = document.getElementById(phId);
+          if (!frame || !ph) continue;
+          if (!frame.src.includes(placeholder)) {
+            frame.style.display = '';
+            ph.style.display = 'none';
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
