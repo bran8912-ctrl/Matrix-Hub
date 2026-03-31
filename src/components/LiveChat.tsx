@@ -261,7 +261,8 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     // Derive the WebSocket URL from the current page's origin — same host and
     // port as the site (server.mjs serves both static files and WebSocket chat).
     const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${proto}//${window.location.host}/chat/${roomId}`;
+    const encodedRoomId = encodeURIComponent(roomId);
+    const wsUrl = `${proto}//${window.location.host}/chat/${encodedRoomId}`;
 
     setStatus("connecting");
 
