@@ -415,7 +415,6 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "50%",
     background: PRIMARY,
     boxShadow: `0 0 6px ${GLOW}`,
-    animation: "pulse 1.5s ease-in-out infinite",
   },
   connectingDot: {
     display: "inline-block",
