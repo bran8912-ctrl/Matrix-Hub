@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { supabase as rawSupabase } from "../utils/supabaseClient.js";
-import type { SupabaseClient as SbClient } from "@supabase/supabase-js";
 
-// Narrow the type: supabase now exports null when not configured.
-type SupabaseClient = SbClient;
-const supabase = rawSupabase as SupabaseClient | null;
+// ─── Self-hosted chat server connection ───────────────────────────────────────
+// Connects to the standalone server.mjs WebSocket endpoint on the same origin.
+// No env vars or configuration needed — host and port are auto-detected from
+// the browser URL. Gracefully falls back to BroadcastChannel + localStorage
+// when the server is not reachable (e.g. static hosting without server.mjs).
+
+const WEBSOCKET_CONNECT_TIMEOUT_MS = 3000;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -29,6 +31,7 @@ const MAX_USERNAME_LENGTH = 24;
 // Random suffix: chars at positions 2–6 of a base-36 string (4 chars)
 const RANDOM_SUFFIX_START = 2;
 const RANDOM_SUFFIX_END = 6;
+const MAX_STORED_MESSAGES = 200;
 
 // ─── Moderation ───────────────────────────────────────────────────────────────
 
@@ -158,6 +161,49 @@ function getOrCreateUsername(): string {
 
 // ─── LiveChat component ───────────────────────────────────────────────────────
 
+// ─── localStorage helpers ─────────────────────────────────────────────────────
+
+function lsMessagesKey(roomId: string): string {
+  return `livechat_messages_${roomId}`;
+}
+
+function loadMessages(roomId: string): ChatMessage[] {
+  try {
+    const stored = localStorage.getItem(lsMessagesKey(roomId));
+    if (stored) {
+      const parsed: ChatMessage[] = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return [];
+}
+
+function saveMessages(roomId: string, msgs: ChatMessage[]): void {
+  try {
+    localStorage.setItem(lsMessagesKey(roomId), JSON.stringify(msgs));
+  } catch {
+    // localStorage unavailable — in-memory only
+  }
+}
+
+function capMessages(msgs: ChatMessage[]): ChatMessage[] {
+  return msgs.length > MAX_STORED_MESSAGES
+    ? msgs.slice(msgs.length - MAX_STORED_MESSAGES)
+    : msgs;
+}
+
+function generateId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  // Fallback: combine timestamp + multiple random segments for lower collision probability
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+}
+
+// ─── LiveChat component ───────────────────────────────────────────────────────
+
 export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -168,6 +214,11 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
   const [nameInput, setNameInput] = useState("");
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const bcRef = useRef<BroadcastChannel | null>(null);
+  const socketRef = useRef<WebSocket | null>(null);
+  // Track whether initial localStorage load has occurred so we don't
+  // overwrite stored messages with an empty array before load completes.
+  const loadedRef = useRef(false);
 
   // Initialise username from localStorage
   useEffect(() => {
@@ -176,79 +227,122 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     setNameInput(name);
   }, []);
 
-  // Load history + subscribe to realtime
+  // Connect: self-hosted WebSocket (cross-user) when reachable, otherwise
+  // fall back to BroadcastChannel + localStorage (same-browser only)
   useEffect(() => {
-    if (!supabase) {
-      setStatus("error");
-      return;
-    }
-    const client = supabase;
+    let ws: WebSocket | null = null;
+    let usedFallback = false;
 
-    let cancelled = false;
-    let channel: ReturnType<SupabaseClient["channel"]> | null = null;
+    function startFallback() {
+      if (usedFallback) return;
+      usedFallback = true;
 
-    async function init() {
-      // Fetch last 50 messages
-      const { data, error } = await client
-        .from("chat_messages")
-        .select("*")
-        .eq("room_id", roomId)
-        .order("created_at", { ascending: true })
-        .limit(50);
-
-      if (cancelled) return;
-
-      if (error) {
-        setStatus("error");
-        return;
-      }
-      setMessages((data as ChatMessage[]) ?? []);
+      loadedRef.current = false;
+      setMessages(capMessages(loadMessages(roomId)));
+      loadedRef.current = true;
       setStatus("live");
 
-      // Subscribe to new messages
-      channel = client
-        .channel(`chat:${roomId}`)
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "chat_messages",
-            filter: `room_id=eq.${roomId}`,
-          },
-          (payload) => {
-            if (cancelled) return;
-            setMessages((prev) => {
-              // Avoid duplicate if we inserted ourselves
-              if (prev.some((m) => m.id === (payload.new as ChatMessage).id)) return prev;
-              // Cap in-memory list at 100 to avoid unbounded memory growth
-              const next = [...prev, payload.new as ChatMessage];
-              return next.length > 100 ? next.slice(next.length - 100) : next;
-            });
-          }
-        )
-        .subscribe();
+      try {
+        const bc = new BroadcastChannel(`livechat-${roomId}`);
+        bc.onmessage = (event: MessageEvent<ChatMessage>) => {
+          const msg = event.data;
+          setMessages((prev) => {
+            if (prev.some((m) => m.id === msg.id)) return prev;
+            return capMessages([...prev, msg]);
+          });
+        };
+        bcRef.current = bc;
+      } catch {
+        // BroadcastChannel not supported — single-tab only
+        bcRef.current = null;
+      }
     }
 
-    init();
+    // Derive the WebSocket URL from the current page's origin — same host and
+    // port as the site (server.mjs serves both static files and WebSocket chat).
+    const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const encodedRoomId = encodeURIComponent(roomId);
+    const wsUrl = `${proto}//${window.location.host}/chat/${encodedRoomId}`;
+
+    setStatus("connecting");
+
+    // Attempt to connect to the self-hosted chat server.
+    // If the server is not running, the connection will fail and we fall back.
+    try {
+      ws = new WebSocket(wsUrl);
+      socketRef.current = ws;
+
+      // Time out quickly so the fallback kicks in without a long wait
+      const connectTimer = setTimeout(() => {
+        if (ws && ws.readyState !== WebSocket.OPEN) {
+          ws.close();
+          startFallback();
+        }
+      }, WEBSOCKET_CONNECT_TIMEOUT_MS);
+
+      ws.onopen = () => {
+        clearTimeout(connectTimer);
+        setStatus("live");
+        loadedRef.current = true;
+      };
+
+      ws.onerror = () => {
+        clearTimeout(connectTimer);
+        startFallback();
+      };
+
+      ws.onclose = () => {
+        if (!usedFallback) startFallback();
+      };
+
+      ws.onmessage = (event: MessageEvent<string>) => {
+        try {
+          const data = JSON.parse(event.data) as
+            | { type: "history"; messages: ChatMessage[] }
+            | { type: "message"; message: ChatMessage };
+
+          if (data.type === "history") {
+            setMessages(data.messages);
+          } else if (data.type === "message") {
+            setMessages((prev) => {
+              if (prev.some((m) => m.id === data.message.id)) return prev;
+              return capMessages([...prev, data.message]);
+            });
+          }
+        } catch (err) {
+          if (typeof process !== "undefined" && process.env?.NODE_ENV !== "production") {
+            console.warn("[LiveChat] Failed to parse server message:", err);
+          }
+        }
+      };
+    } catch {
+      // WebSocket constructor failed (e.g., SSR context)
+      startFallback();
+    }
 
     return () => {
-      cancelled = true;
-      if (channel) client.removeChannel(channel);
+      loadedRef.current = false;
+      ws?.close();
+      socketRef.current = null;
+      try {
+        bcRef.current?.close();
+      } catch {}
+      bcRef.current = null;
     };
   }, [roomId]);
+
+  // Persist messages to localStorage whenever they change (after initial load)
+  useEffect(() => {
+    if (!loadedRef.current) return;
+    saveMessages(roomId, messages);
+  }, [roomId, messages]);
 
   // Auto-scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  async function handleSend() {
-    if (!supabase) {
-      setFeedback("Chat is not available. Supabase is not configured.");
-      return;
-    }
-    const client = supabase;
+  function handleSend() {
     const trimmed = input.trim();
     if (!trimmed || sending) return;
 
@@ -260,18 +354,37 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     }
 
     setSending(true);
-    const { error } = await client.from("chat_messages").insert({
+
+    const newMsg: ChatMessage = {
+      id: generateId(),
       room_id: roomId,
       username,
       message: trimmed,
-    });
-    setSending(false);
+      created_at: new Date().toISOString(),
+    };
 
-    if (error) {
-      setFeedback("Failed to send message. Please try again.");
-    } else {
-      setInput("");
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      // Self-hosted WebSocket path — server broadcasts the message back to all clients
+      try {
+        socketRef.current.send(JSON.stringify(newMsg));
+        setInput("");
+        // On success, rely on the server echoing the message back; no local append here.
+        return;
+      } catch {
+        // If send fails (socket closed between readyState check and send), fall through
+        // to the BroadcastChannel + localStorage fallback below.
+      }
     }
+
+    // BroadcastChannel + localStorage fallback
+    try {
+      bcRef.current?.postMessage(newMsg);
+    } catch {
+      // BroadcastChannel fallback — channel may be unsupported or already closed
+    }
+    setMessages((prev) => capMessages([...prev, newMsg]));
+    setInput("");
+    setSending(false);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -347,16 +460,15 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
 
       {/* Message feed */}
       <div style={styles.feed}>
-        {status === "connecting" && (
-          <p style={styles.statusMsg}>Connecting to live chat…</p>
-        )}
-        {status === "error" && (
-          <p style={{ ...styles.statusMsg, color: "#ff4444" }}>
-            Unable to connect to chat. Check your Supabase configuration.
-          </p>
-        )}
         {status === "live" && messages.length === 0 && (
-          <p style={styles.statusMsg}>No messages yet. Be the first to chat!</p>
+          <p style={styles.statusMsg}>
+            No messages yet. Be the first to chat!<br />
+            <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>
+              {socketRef.current?.readyState === WebSocket.OPEN
+                ? "⚡ Cross-user real-time chat"
+                : "💬 Messages are stored locally in your browser"}
+            </span>
+          </p>
         )}
         {messages.map((msg) => (
           <div key={msg.id} style={styles.msgRow}>
