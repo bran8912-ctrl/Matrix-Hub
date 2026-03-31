@@ -173,6 +173,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
 
   // Load history + subscribe to realtime
   useEffect(() => {
+    let cancelled = false;
     let channel: ReturnType<typeof supabase.channel> | null = null;
 
     async function init() {
@@ -183,6 +184,8 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
         .eq("room_id", roomId)
         .order("created_at", { ascending: true })
         .limit(50);
+
+      if (cancelled) return;
 
       if (error) {
         setStatus("error");
@@ -203,10 +206,13 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
             filter: `room_id=eq.${roomId}`,
           },
           (payload) => {
+            if (cancelled) return;
             setMessages((prev) => {
               // Avoid duplicate if we inserted ourselves
               if (prev.some((m) => m.id === (payload.new as ChatMessage).id)) return prev;
-              return [...prev, payload.new as ChatMessage];
+              // Cap in-memory list at 100 to avoid unbounded memory growth
+              const next = [...prev, payload.new as ChatMessage];
+              return next.length > 100 ? next.slice(next.length - 100) : next;
             });
           }
         )
@@ -216,6 +222,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     init();
 
     return () => {
+      cancelled = true;
       if (channel) supabase.removeChannel(channel);
     };
   }, [roomId]);
@@ -284,6 +291,9 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
 
   return (
     <div style={styles.container}>
+      {/* Locally-scoped keyframe for the live indicator dot */}
+      <style>{PULSE_KEYFRAMES}</style>
+
       {/* Header */}
       <div style={styles.header}>
         <div style={styles.headerLeft}>
@@ -351,6 +361,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
           style={styles.input}
           type="text"
           placeholder="Type a message…"
+          aria-label="Chat message"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -361,6 +372,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
           style={sending ? { ...styles.sendBtn, opacity: 0.5 } : styles.sendBtn}
           onClick={handleSend}
           disabled={status !== "live" || sending}
+          aria-label="Send message"
         >
           {sending ? "…" : "SEND"}
         </button>
@@ -370,14 +382,23 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
 }
 
 // ─── Inline styles (Matrix/hacker theme) ─────────────────────────────────────
-// CSS variables aren't available in React inline styles, so we use literals
-// that match the site palette.
+// CSS custom properties are used with var() — they resolve correctly in inline
+// styles because browsers evaluate var() at paint time.
 
 const PRIMARY = "var(--theme-primary, #00ff99)";
 const GLOW = "var(--theme-glow, rgba(0,255,153,0.4))";
 const BORDER = "var(--theme-border, rgba(0,255,153,0.2))";
 const TEXT = "var(--theme-text, #c8ffd4)";
 const FONT = "'Courier New', monospace";
+
+// @keyframes pulse for the live indicator dot — defined locally so this
+// component doesn't depend on any external global stylesheet.
+const PULSE_KEYFRAMES = `
+@keyframes livechat-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--theme-glow, rgba(0,255,153,0.4)); }
+  50%       { opacity: 0.4; box-shadow: 0 0 2px var(--theme-glow, rgba(0,255,153,0.2)); }
+}
+`;
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
@@ -415,7 +436,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "50%",
     background: PRIMARY,
     boxShadow: `0 0 6px ${GLOW}`,
-    animation: "pulse 1.5s ease-in-out infinite",
+    animation: "livechat-pulse 1.5s ease-in-out infinite",
   },
   connectingDot: {
     display: "inline-block",
