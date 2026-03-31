@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { supabase } from "../utils/supabaseClient.js";
+import { supabase as rawSupabase } from "../utils/supabaseClient.js";
+import type { SupabaseClient as SbClient } from "@supabase/supabase-js";
 
 // Narrow the type: supabase now exports null when not configured.
-type SupabaseClient = NonNullable<typeof supabase>;
+type SupabaseClient = SbClient;
+const supabase = rawSupabase as SupabaseClient | null;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
