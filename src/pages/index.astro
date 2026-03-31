@@ -153,6 +153,11 @@ export const prerender = true;
         margin-left: auto; margin-right: auto;
       }
 
+      /* Shorts (portrait 9:16) two-up layout */
+      .shorts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+      .video-wrap.shorts { padding-bottom: 177.78%; }
+      @media (max-width: 600px) { .shorts-grid { grid-template-columns: 1fr; } }
+
       /* Games */
       .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
       .game-card {
@@ -248,31 +253,23 @@ export const prerender = true;
           <h2 class="section-title title-red">⚠ The 9-to-5 Trap</h2>
           <p class="section-subtitle">This is what they have planned for you — and you can't afford to ignore it.</p>
         </div>
-        <div class="video-wrap red-border">
-          <!--
-            ╔══════════════════════════════════════════════════════════════╗
-            ║  CONFIGURE VIDEO 1                                           ║
-            ║  Replace YOUTUBE_VIDEO_ID_1 in the iframe src below with    ║
-            ║  the YouTube video ID for your 9-to-5 grind reality video.  ║
-            ║  Example ID: dQw4w9WgXcQ  (from youtube.com/watch?v=...)    ║
-            ╚══════════════════════════════════════════════════════════════╝
-          -->
-          <div class="video-placeholder" id="ph-video1">
-            <span class="ph-icon">🎬</span>
-            <span class="ph-title" style="color:#ff4466;">9-to-5 Grind Reality Video</span>
-            <span class="ph-hint">
-              Replace <code>YOUTUBE_VIDEO_ID_1</code> in the iframe src
-              inside <code>src/pages/index.astro</code> with your YouTube video ID.
-            </span>
+        <div class="shorts-grid">
+          <div class="video-wrap red-border shorts">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/wELniFIwegg?rel=0&modestbranding=1"
+              title="9-to-5 Grind Reality — Part 1"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
           </div>
-          <iframe
-            id="video1-frame"
-            src="https://www.youtube-nocookie.com/embed/YOUTUBE_VIDEO_ID_1?rel=0&modestbranding=1&color=white"
-            title="The 9-to-5 Grind Reality"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            style="display:none"
-          ></iframe>
+          <div class="video-wrap red-border shorts">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/TRz_qhDGirE?rel=0&modestbranding=1"
+              title="9-to-5 Grind Reality — Part 2"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
         <p class="video-caption">
           Trade your hours for a paycheck, dream of retirement, repeat. The billionaires
@@ -436,10 +433,9 @@ export const prerender = true;
         tick();
       })();
 
-      // Show real iframes only when video IDs have been configured
+      // Show real iframe only when video ID has been configured
       (function () {
         const videos: [string, string, string][] = [
-          ['video1-frame', 'ph-video1', 'YOUTUBE_VIDEO_ID_1'],
           ['video2-frame', 'ph-video2', 'YOUTUBE_VIDEO_ID_2'],
         ];
         for (const [frameId, phId, placeholder] of videos) {
