@@ -238,7 +238,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
       usedFallback = true;
 
       loadedRef.current = false;
-      setMessages(loadMessages(roomId));
+      setMessages(capMessages(loadMessages(roomId)));
       loadedRef.current = true;
       setStatus("live");
 
