@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { supabase } from "../utils/supabaseClient.js";
+import { supabase as rawSupabase } from "../utils/supabaseClient.js";
+import type { SupabaseClient as SbClient } from "@supabase/supabase-js";
+
+// Narrow the type: supabase now exports null when not configured.
+type SupabaseClient = SbClient;
+const supabase = rawSupabase as SupabaseClient | null;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -173,12 +178,18 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
 
   // Load history + subscribe to realtime
   useEffect(() => {
+    if (!supabase) {
+      setStatus("error");
+      return;
+    }
+    const client = supabase;
+
     let cancelled = false;
-    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let channel: ReturnType<SupabaseClient["channel"]> | null = null;
 
     async function init() {
       // Fetch last 50 messages
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from("chat_messages")
         .select("*")
         .eq("room_id", roomId)
@@ -195,7 +206,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
       setStatus("live");
 
       // Subscribe to new messages
-      channel = supabase
+      channel = client
         .channel(`chat:${roomId}`)
         .on(
           "postgres_changes",
@@ -223,7 +234,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
 
     return () => {
       cancelled = true;
-      if (channel) supabase.removeChannel(channel);
+      if (channel) client.removeChannel(channel);
     };
   }, [roomId]);
 
@@ -233,6 +244,11 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
   }, [messages]);
 
   async function handleSend() {
+    if (!supabase) {
+      setFeedback("Chat is not available. Supabase is not configured.");
+      return;
+    }
+    const client = supabase;
     const trimmed = input.trim();
     if (!trimmed || sending) return;
 
@@ -244,7 +260,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     }
 
     setSending(true);
-    const { error } = await supabase.from("chat_messages").insert({
+    const { error } = await client.from("chat_messages").insert({
       room_id: roomId,
       username,
       message: trimmed,
