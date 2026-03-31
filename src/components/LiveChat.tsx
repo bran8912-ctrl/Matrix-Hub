@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import PartySocket from "partysocket";
 
-// ─── PartyKit host (injected at build time by Vite; empty → localStorage fallback) ─
+// ─── Self-hosted chat server connection ───────────────────────────────────────
+// Connects to the chat-server.mjs process on the same hostname, port 4000.
+// No env vars or configuration needed — the host is auto-detected from the
+// browser URL. Gracefully falls back to BroadcastChannel + localStorage when
+// the server is not reachable.
 
-const PARTYKIT_HOST = import.meta.env.PUBLIC_PARTYKIT_HOST as string | undefined;
+const CHAT_SERVER_PORT = 4000;
+const WEBSOCKET_CONNECT_TIMEOUT_MS = 3000;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -212,7 +216,7 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const bcRef = useRef<BroadcastChannel | null>(null);
-  const socketRef = useRef<PartySocket | null>(null);
+  const socketRef = useRef<WebSocket | null>(null);
   // Track whether initial localStorage load has occurred so we don't
   // overwrite stored messages with an empty array before load completes.
   const loadedRef = useRef(false);
@@ -224,25 +228,73 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     setNameInput(name);
   }, []);
 
-  // Connect: PartySocket (cross-user) when PUBLIC_PARTYKIT_HOST is set,
-  // otherwise BroadcastChannel + localStorage (same-browser only)
+  // Connect: self-hosted WebSocket (cross-user) when reachable, otherwise
+  // fall back to BroadcastChannel + localStorage (same-browser only)
   useEffect(() => {
-    if (PARTYKIT_HOST) {
-      // ── PartyKit path ───────────────────────────────────────────────────────
-      setStatus("connecting");
+    let ws: WebSocket | null = null;
+    let usedFallback = false;
+
+    function startFallback() {
+      if (usedFallback) return;
+      usedFallback = true;
+
       loadedRef.current = false;
+      setMessages(loadMessages(roomId));
+      loadedRef.current = true;
+      setStatus("live");
 
-      const socket = new PartySocket({ host: PARTYKIT_HOST, room: roomId });
-      socketRef.current = socket;
+      try {
+        const bc = new BroadcastChannel(`livechat-${roomId}`);
+        bc.onmessage = (event: MessageEvent<ChatMessage>) => {
+          const msg = event.data;
+          setMessages((prev) => {
+            if (prev.some((m) => m.id === msg.id)) return prev;
+            return capMessages([...prev, msg]);
+          });
+        };
+        bcRef.current = bc;
+      } catch {
+        // BroadcastChannel not supported — single-tab only
+        bcRef.current = null;
+      }
+    }
 
-      socket.addEventListener("open", () => {
+    // Derive the WebSocket URL from the current page's hostname — no config needed.
+    const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const wsUrl = `${proto}//${window.location.hostname}:${CHAT_SERVER_PORT}/chat/${roomId}`;
+
+    setStatus("connecting");
+
+    // Attempt to connect to the self-hosted chat server.
+    // If the server is not running, the connection will fail and we fall back.
+    try {
+      ws = new WebSocket(wsUrl);
+      socketRef.current = ws;
+
+      // Time out quickly so the fallback kicks in without a long wait
+      const connectTimer = setTimeout(() => {
+        if (ws && ws.readyState !== WebSocket.OPEN) {
+          ws.close();
+          startFallback();
+        }
+      }, WEBSOCKET_CONNECT_TIMEOUT_MS);
+
+      ws.onopen = () => {
+        clearTimeout(connectTimer);
         setStatus("live");
         loadedRef.current = true;
-      });
+      };
 
-      socket.addEventListener("error", () => setStatus("error"));
+      ws.onerror = () => {
+        clearTimeout(connectTimer);
+        startFallback();
+      };
 
-      socket.addEventListener("message", (event: MessageEvent<string>) => {
+      ws.onclose = () => {
+        if (!usedFallback) startFallback();
+      };
+
+      ws.onmessage = (event: MessageEvent<string>) => {
         try {
           const data = JSON.parse(event.data) as
             | { type: "history"; messages: ChatMessage[] }
@@ -257,46 +309,20 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
             });
           }
         } catch (err) {
-          // Log malformed frames during development to aid debugging
           if (typeof process !== "undefined" && process.env?.NODE_ENV !== "production") {
             console.warn("[LiveChat] Failed to parse server message:", err);
           }
         }
-      });
-
-      return () => {
-        loadedRef.current = false;
-        socket.close();
-        socketRef.current = null;
       };
-    }
-
-    // ── localStorage + BroadcastChannel fallback ──────────────────────────────
-    loadedRef.current = false;
-    setMessages(loadMessages(roomId));
-    loadedRef.current = true;
-
-    // Go live immediately — no external service to wait for
-    setStatus("live");
-
-    // Listen for messages from other tabs via a persistent BroadcastChannel
-    try {
-      const bc = new BroadcastChannel(`livechat-${roomId}`);
-      bc.onmessage = (event: MessageEvent<ChatMessage>) => {
-        const msg = event.data;
-        setMessages((prev) => {
-          if (prev.some((m) => m.id === msg.id)) return prev;
-          return capMessages([...prev, msg]);
-        });
-      };
-      bcRef.current = bc;
     } catch {
-      // BroadcastChannel not supported — gracefully degrade (single-tab only)
-      bcRef.current = null;
+      // WebSocket constructor failed (e.g., SSR context)
+      startFallback();
     }
 
     return () => {
       loadedRef.current = false;
+      ws?.close();
+      socketRef.current = null;
       try {
         bcRef.current?.close();
       } catch {}
@@ -336,8 +362,8 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
       created_at: new Date().toISOString(),
     };
 
-    if (socketRef.current) {
-      // PartyKit path — server broadcasts the message back to all clients
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      // Self-hosted WebSocket path — server broadcasts the message back to all clients
       socketRef.current.send(JSON.stringify(newMsg));
       setInput("");
       setSending(false);
@@ -431,8 +457,8 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
           <p style={styles.statusMsg}>
             No messages yet. Be the first to chat!<br />
             <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>
-              {PARTYKIT_HOST
-                ? "⚡ Cross-user real-time chat powered by PartyKit"
+              {socketRef.current?.readyState === WebSocket.OPEN
+                ? "⚡ Cross-user real-time chat"
                 : "💬 Messages are stored locally in your browser"}
             </span>
           </p>
