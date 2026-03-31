@@ -1,6 +1,7 @@
 ---
 import Layout from "../components/Layout.astro";
 import Wallet from "../components/Wallet.jsx";
+import LiveChat from "../components/LiveChat.tsx";
 
 export const prerender = true;
 
@@ -11,7 +12,22 @@ export const navCategory = "casino";
 <Layout title="Matrix-Hub Casino">
   <div class="casino-page">
     <h1 class="page-title">Matrix-Hub Casino</h1>
-    
+
+    <!-- LIVE CHAT FEED -->
+    <div class="live-chat-section">
+      <LiveChat
+        client:only="react"
+        roomId="casino"
+        roomLabel="🎰 Casino Live Chat"
+        allowedTopics={[
+          "mtx", "casino", "betting", "jackpot", "slots", "dice",
+          "rewards", "wagering", "winnings", "crypto", "bankroll",
+          "payout", "odds", "strategy", "poker", "blackjack",
+          "roulette", "matrix hub", "house edge", "gambling",
+        ]}
+      />
+    </div>
+
     <div class="wallet-section">
       <Wallet client:only="react" />
     </div>
@@ -47,6 +63,10 @@ export const navCategory = "casino";
     text-shadow: 0 0 20px var(--theme-glow);
     font-family: 'Courier New', monospace;
     letter-spacing: 2px;
+  }
+
+  .live-chat-section {
+    margin: 0 0 2rem;
   }
 
   .wallet-section {
