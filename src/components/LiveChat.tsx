@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
 // ─── Self-hosted chat server connection ───────────────────────────────────────
-// Connects to the chat-server.mjs process on the same hostname, port 4000.
-// No env vars or configuration needed — the host is auto-detected from the
-// browser URL. Gracefully falls back to BroadcastChannel + localStorage when
-// the server is not reachable.
+// Connects to the standalone server.mjs WebSocket endpoint on the same origin.
+// No env vars or configuration needed — host and port are auto-detected from
+// the browser URL. Gracefully falls back to BroadcastChannel + localStorage
+// when the server is not reachable (e.g. static hosting without server.mjs).
 
-const CHAT_SERVER_PORT = 4000;
 const WEBSOCKET_CONNECT_TIMEOUT_MS = 3000;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -259,9 +258,10 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
       }
     }
 
-    // Derive the WebSocket URL from the current page's hostname — no config needed.
+    // Derive the WebSocket URL from the current page's origin — same host and
+    // port as the site (server.mjs serves both static files and WebSocket chat).
     const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${proto}//${window.location.hostname}:${CHAT_SERVER_PORT}/chat/${roomId}`;
+    const wsUrl = `${proto}//${window.location.host}/chat/${roomId}`;
 
     setStatus("connecting");
 
