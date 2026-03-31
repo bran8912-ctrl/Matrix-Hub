@@ -1,11 +1,15 @@
 -- Chat messages table
 CREATE TABLE IF NOT EXISTS chat_messages (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  room_id TEXT NOT NULL,
-  username TEXT NOT NULL,
-  message TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  is_moderated BOOLEAN DEFAULT FALSE
+  room_id TEXT NOT NULL
+    CHECK (char_length(room_id) <= 64)
+    CHECK (room_id ~ '^[a-z0-9_-]+$'),
+  username TEXT NOT NULL
+    CHECK (char_length(username) <= 64),
+  message TEXT NOT NULL
+    CHECK (char_length(message) <= 2000),
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  is_moderated BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 -- Index for fast room queries
