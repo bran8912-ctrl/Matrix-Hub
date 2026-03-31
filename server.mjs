@@ -15,13 +15,13 @@
  */
 
 import { createServer } from "node:http";
-import { join } from "node:path";
+import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import handler from "serve-handler";
 import { WebSocket, WebSocketServer } from "ws";
 
 const PORT = Number(process.env.PORT) || 3000;
-const DIST_DIR = join(fileURLToPath(import.meta.url), "..", "dist");
+const DIST_DIR = join(dirname(fileURLToPath(import.meta.url)), "dist");
 
 // ─── Chat WebSocket ───────────────────────────────────────────────────────────
 
