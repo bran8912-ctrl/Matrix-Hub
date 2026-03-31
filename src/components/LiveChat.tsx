@@ -1,10 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { supabase as rawSupabase } from "../utils/supabaseClient.js";
-import type { SupabaseClient as SbClient } from "@supabase/supabase-js";
-
-// Narrow the type: supabase now exports null when not configured.
-type SupabaseClient = SbClient;
-const supabase = rawSupabase as SupabaseClient | null;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -29,6 +23,7 @@ const MAX_USERNAME_LENGTH = 24;
 // Random suffix: chars at positions 2–6 of a base-36 string (4 chars)
 const RANDOM_SUFFIX_START = 2;
 const RANDOM_SUFFIX_END = 6;
+const MAX_STORED_MESSAGES = 200;
 
 // ─── Moderation ───────────────────────────────────────────────────────────────
 
@@ -158,6 +153,49 @@ function getOrCreateUsername(): string {
 
 // ─── LiveChat component ───────────────────────────────────────────────────────
 
+// ─── localStorage helpers ─────────────────────────────────────────────────────
+
+function lsMessagesKey(roomId: string): string {
+  return `livechat_messages_${roomId}`;
+}
+
+function loadMessages(roomId: string): ChatMessage[] {
+  try {
+    const stored = localStorage.getItem(lsMessagesKey(roomId));
+    if (stored) {
+      const parsed: ChatMessage[] = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return [];
+}
+
+function saveMessages(roomId: string, msgs: ChatMessage[]): void {
+  try {
+    localStorage.setItem(lsMessagesKey(roomId), JSON.stringify(msgs));
+  } catch {
+    // localStorage unavailable — in-memory only
+  }
+}
+
+function capMessages(msgs: ChatMessage[]): ChatMessage[] {
+  return msgs.length > MAX_STORED_MESSAGES
+    ? msgs.slice(msgs.length - MAX_STORED_MESSAGES)
+    : msgs;
+}
+
+function generateId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  // Fallback: combine timestamp + multiple random segments for lower collision probability
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+}
+
+// ─── LiveChat component ───────────────────────────────────────────────────────
+
 export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -168,6 +206,10 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
   const [nameInput, setNameInput] = useState("");
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const bcRef = useRef<BroadcastChannel | null>(null);
+  // Track whether initial localStorage load has occurred so we don't
+  // overwrite stored messages with an empty array before load completes.
+  const loadedRef = useRef(false);
 
   // Initialise username from localStorage
   useEffect(() => {
@@ -176,79 +218,53 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     setNameInput(name);
   }, []);
 
-  // Load history + subscribe to realtime
+  // Load history from localStorage + subscribe to BroadcastChannel
   useEffect(() => {
-    if (!supabase) {
-      setStatus("error");
-      return;
+    // Read existing messages from localStorage
+    loadedRef.current = false;
+    setMessages(loadMessages(roomId));
+    loadedRef.current = true;
+
+    // Go live immediately — no external service to wait for
+    setStatus("live");
+
+    // Listen for messages from other tabs via a persistent BroadcastChannel
+    try {
+      const bc = new BroadcastChannel(`livechat-${roomId}`);
+      bc.onmessage = (event: MessageEvent<ChatMessage>) => {
+        const msg = event.data;
+        setMessages((prev) => {
+          if (prev.some((m) => m.id === msg.id)) return prev;
+          return capMessages([...prev, msg]);
+        });
+      };
+      bcRef.current = bc;
+    } catch {
+      // BroadcastChannel not supported — gracefully degrade (single-tab only)
+      bcRef.current = null;
     }
-    const client = supabase;
-
-    let cancelled = false;
-    let channel: ReturnType<SupabaseClient["channel"]> | null = null;
-
-    async function init() {
-      // Fetch last 50 messages
-      const { data, error } = await client
-        .from("chat_messages")
-        .select("*")
-        .eq("room_id", roomId)
-        .order("created_at", { ascending: true })
-        .limit(50);
-
-      if (cancelled) return;
-
-      if (error) {
-        setStatus("error");
-        return;
-      }
-      setMessages((data as ChatMessage[]) ?? []);
-      setStatus("live");
-
-      // Subscribe to new messages
-      channel = client
-        .channel(`chat:${roomId}`)
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "chat_messages",
-            filter: `room_id=eq.${roomId}`,
-          },
-          (payload) => {
-            if (cancelled) return;
-            setMessages((prev) => {
-              // Avoid duplicate if we inserted ourselves
-              if (prev.some((m) => m.id === (payload.new as ChatMessage).id)) return prev;
-              // Cap in-memory list at 100 to avoid unbounded memory growth
-              const next = [...prev, payload.new as ChatMessage];
-              return next.length > 100 ? next.slice(next.length - 100) : next;
-            });
-          }
-        )
-        .subscribe();
-    }
-
-    init();
 
     return () => {
-      cancelled = true;
-      if (channel) client.removeChannel(channel);
+      loadedRef.current = false;
+      try {
+        bcRef.current?.close();
+      } catch {}
+      bcRef.current = null;
     };
   }, [roomId]);
+
+  // Persist messages to localStorage whenever they change (after initial load)
+  useEffect(() => {
+    if (!loadedRef.current) return;
+    saveMessages(roomId, messages);
+  }, [roomId, messages]);
 
   // Auto-scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  async function handleSend() {
-    if (!supabase) {
-      setFeedback("Chat is not available. Supabase is not configured.");
-      return;
-    }
-    const client = supabase;
+  function handleSend() {
     const trimmed = input.trim();
     if (!trimmed || sending) return;
 
@@ -260,18 +276,26 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     }
 
     setSending(true);
-    const { error } = await client.from("chat_messages").insert({
+
+    const newMsg: ChatMessage = {
+      id: generateId(),
       room_id: roomId,
       username,
       message: trimmed,
-    });
-    setSending(false);
+      created_at: new Date().toISOString(),
+    };
 
-    if (error) {
-      setFeedback("Failed to send message. Please try again.");
-    } else {
-      setInput("");
+    // Broadcast to other tabs via the shared persistent channel
+    try {
+      bcRef.current?.postMessage(newMsg);
+    } catch {
+      // BroadcastChannel not supported — no cross-tab sync
     }
+
+    // Update local state (persistence handled by the messages useEffect)
+    setMessages((prev) => capMessages([...prev, newMsg]));
+    setInput("");
+    setSending(false);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -347,16 +371,13 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
 
       {/* Message feed */}
       <div style={styles.feed}>
-        {status === "connecting" && (
-          <p style={styles.statusMsg}>Connecting to live chat…</p>
-        )}
-        {status === "error" && (
-          <p style={{ ...styles.statusMsg, color: "#ff4444" }}>
-            Unable to connect to chat. Check your Supabase configuration.
-          </p>
-        )}
         {status === "live" && messages.length === 0 && (
-          <p style={styles.statusMsg}>No messages yet. Be the first to chat!</p>
+          <p style={styles.statusMsg}>
+            No messages yet. Be the first to chat!<br />
+            <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>
+              💬 Messages are stored locally in your browser
+            </span>
+          </p>
         )}
         {messages.map((msg) => (
           <div key={msg.id} style={styles.msgRow}>

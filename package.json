@@ -79,7 +79,6 @@
     "@ethersproject/sha2": "^5.8.0",
     "@reown/appkit": "^1.8.16",
     "@reown/appkit-adapter-ethers": "^1.8.16",
-    "@supabase/supabase-js": "^2.48.1",
     "@tailwindcss/vite": "^4.0.1",
     "@vitejs/plugin-react": "^5.1.2",
     "astro": "^5.15.9",
