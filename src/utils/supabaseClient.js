@@ -10,5 +10,4 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
   throw new Error('Supabase is not configured. Please try again later.');
 }
-
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
