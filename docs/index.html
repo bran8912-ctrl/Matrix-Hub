@@ -2144,10 +2144,11 @@ SOFTWARE.
   matrixAudio.addEventListener('ended', () => {
     if (isLoopOn) {
       matrixAudio.currentTime = 0;
-      matrixAudio.play();
-    } else {
+      matrixAudio.play().catch(e => console.log('Playback error:', e));
+    } else if (isAutoplayOn) {
       nextTrack();
     }
+    // If neither loop nor autoplay, just stop
   });
 
   // Get overlay element
@@ -4737,7 +4738,12 @@ SOFTWARE.
   };
 
   function syncMatrixPulseCssVars() {
-    document.documentElement.style.setProperty('--matrix-bass', String(matrixAudioState.bass));
+    const root = document.documentElement.style;
+    root.setProperty('--matrix-bass',   matrixAudioState.bass.toFixed(3));
+    // No separate mid band in this analyser; treble (~2-8 kHz) used as --matrix-mid
+    root.setProperty('--matrix-mid',    matrixAudioState.treble.toFixed(3));
+    root.setProperty('--matrix-beat',   matrixAudioState.beat.toFixed(3));
+    root.setProperty('--matrix-energy', matrixAudioState.energy.toFixed(3));
   }
 
   function clamp01(v) {
