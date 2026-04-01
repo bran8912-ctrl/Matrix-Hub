@@ -419,9 +419,9 @@ export default function PersistentMusicPlayer() {
     }
 
     localStorage.removeItem('matrixPlayerTime');
-    if (isPlaying) shouldAutoPlayRef.current = true;
+    if (isPlaying || isAutoplayOn) shouldAutoPlayRef.current = true;
     setCurrentTrackIndex(newIndex);
-  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks, activeGenre]);
+  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks, activeGenre, isAutoplayOn]);
 
   const handleNext = useCallback(() => {
     const pool = activeGenre === 'All'
@@ -446,13 +446,14 @@ export default function PersistentMusicPlayer() {
     }
 
     localStorage.removeItem('matrixPlayerTime');
-    if (isPlaying) shouldAutoPlayRef.current = true;
+    if (isPlaying || isAutoplayOn) shouldAutoPlayRef.current = true;
     setCurrentTrackIndex(newIndex);
-  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks, activeGenre]);
+  }, [currentTrackIndex, isShuffleOn, isPlaying, playedTracks, activeGenre, isAutoplayOn]);
 
   const handleEnded = useCallback(() => {
     if (isAutoplayOn && !isLoopOn) {
       // Autoplay is on and not looping: advance to the next track, keep isPlaying true
+      shouldAutoPlayRef.current = true;
       handleNext();
     } else if (!isLoopOn) {
       // Autoplay is off and not looping: playback has stopped, reflect that in state
