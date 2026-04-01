@@ -2144,7 +2144,7 @@ SOFTWARE.
   matrixAudio.addEventListener('ended', () => {
     if (isLoopOn) {
       matrixAudio.currentTime = 0;
-      matrixAudio.play();
+      matrixAudio.play().catch(e => console.log('Playback error:', e));
     } else if (isAutoplayOn) {
       nextTrack();
     }

@@ -8,7 +8,6 @@
 
 /* Panel borders pulse with the bass */
 .panel,
-[class*="panel"],
 .now-playing,
 #matrix-player,
 .section-card {
@@ -111,4 +110,53 @@ img[src*="favicon"] {
     0 0 calc(3px + var(--matrix-beat, 0) * 12px) var(--theme-glow, rgba(0, 255, 0, 0.5))
   );
   transition: filter 0.06s ease-out;
+}
+
+/* ===== ACCESSIBILITY: reduced motion ===== */
+/* Disable all music-reactive transitions/effects for users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .now-playing,
+  #matrix-player,
+  .section-card,
+  body::before,
+  h1, h2, h3,
+  .matrix-title,
+  .section-title,
+  .panel-title,
+  button,
+  .btn,
+  .tab-nav,
+  nav,
+  .genre-tabs-row,
+  .player-tabs,
+  .matrix-char-column,
+  a,
+  .persistent-music-player,
+  .site-logo,
+  .matrix-logo,
+  img[src*="favicon"] {
+    transition: none;
+  }
+
+  body::before {
+    background: none;
+  }
+
+  h1, h2, h3,
+  .matrix-title,
+  .section-title,
+  .panel-title {
+    text-shadow: none;
+  }
+
+  a {
+    text-shadow: none;
+  }
+
+  .site-logo,
+  .matrix-logo,
+  img[src*="favicon"] {
+    filter: none;
+  }
 }
