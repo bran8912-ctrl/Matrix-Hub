@@ -352,13 +352,14 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics, botTips, bo
   // Bot tip broadcaster — periodically injects a random tip as a bot message
   useEffect(() => {
     if (!botTips || botTips.length === 0) return;
+    const tips = botTips;
     const name = botName ?? "💡 TipBot";
     let intervalId: ReturnType<typeof setInterval> | null = null;
 
     function postTip() {
-      const tip = botTips![Math.floor(Math.random() * botTips!.length)];
+      const tip = tips[Math.floor(Math.random() * tips.length)];
       const msg: ChatMessage = {
-        id: generateId(),
+        id: `bot-${roomId}-${generateId()}`,
         room_id: roomId,
         username: name,
         message: tip,
