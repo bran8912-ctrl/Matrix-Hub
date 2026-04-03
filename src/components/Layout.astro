@@ -36,6 +36,42 @@ const { title } = Astro.props;
          as they are dynamically updated by their providers. Consider implementing CSP headers for additional security. -->
   </head>
   <body>
+    <!-- Global Ticker Tape — live prices fixed to top of every page -->
+    <div class="global-ticker-tape">
+      <div class="global-ticker-container">
+        <div id="global-ticker-inner"></div>
+      </div>
+    </div>
+    <script is:inline>
+    (function () {
+      var el = document.getElementById('global-ticker-inner');
+      if (!el) return;
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+      s.innerHTML = JSON.stringify({
+        symbols: [
+          { proName: 'BINANCE:BTCUSDT',  title: 'Bitcoin'   },
+          { proName: 'BINANCE:ETHUSDT',  title: 'Ethereum'  },
+          { proName: 'BINANCE:SOLUSDT',  title: 'Solana'    },
+          { proName: 'BINANCE:BNBUSDT',  title: 'BNB'       },
+          { proName: 'BINANCE:ADAUSDT',  title: 'Cardano'   },
+          { proName: 'BINANCE:XRPUSDT',  title: 'XRP'       },
+          { proName: 'BINANCE:DOGEUSDT', title: 'Dogecoin'  },
+          { proName: 'FOREXCOM:SPXUSD',  title: 'S&P 500'   },
+          { proName: 'NASDAQ:AAPL',      title: 'Apple'     },
+          { proName: 'NASDAQ:NVDA',      title: 'NVIDIA'    },
+        ],
+        showSymbolLogo: true,
+        colorTheme: 'dark',
+        isTransparent: true,
+        displayMode: 'adaptive',
+        locale: 'en',
+      });
+      el.appendChild(s);
+    })();
+    </script>
     <MatrixRain />
     <AppKitProvider client:only="react">
       <PersistentThemeCustomizer client:only="react" />

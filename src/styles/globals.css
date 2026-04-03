@@ -21,7 +21,11 @@
   /* Music player height – updated by ResizeObserver in PersistentMusicPlayer */
   --player-height: 0px;
 
+  /* Ticker tape bar height – used to offset sticky/fixed elements below it */
+  --ticker-tape-height: 46px;
+
   /* Z-Index Hierarchy - Centralized stacking context management */
+  --z-index-ticker: 1011;
   --z-index-music-player: 1002;
   --z-index-theme-customizer: 999;
   --z-index-navigation: 1000;
@@ -153,6 +157,31 @@
   height: 100%;
   z-index: -1;
   pointer-events: none;
+}
+
+/* Global Ticker Tape Bar */
+.global-ticker-tape {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--ticker-tape-height, 46px);
+  z-index: var(--z-index-ticker, 1011);
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.85);
+  border-bottom: 1px solid var(--theme-border, rgba(0, 255, 0, 0.3));
+}
+
+/* Inner wrapper aligns ticker content with the tab/page columns */
+.global-ticker-container {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 100%;
+}
+
+body {
+  padding-top: var(--ticker-tape-height, 46px);
 }
 
 /* Panel Component Base Styles */

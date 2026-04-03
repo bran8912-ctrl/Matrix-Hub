@@ -98,7 +98,7 @@ const currentPath = Astro.url.pathname;
     background: rgba(0, 0, 0, 0.8);
     border-bottom: 2px solid var(--theme-primary, #00ff99);
     position: sticky;
-    top: var(--player-height, 0px);
+    top: calc(var(--player-height, 0px) + var(--ticker-tape-height, 46px));
     z-index: var(--z-index-navigation-toggle);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
