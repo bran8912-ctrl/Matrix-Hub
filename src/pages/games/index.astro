@@ -5,11 +5,11 @@ import LiveChat from "../../components/LiveChat.tsx";
 import { games } from "../../data/games";
 
 export const prerender = true;
-export const title = "Games";
+export const title = "Free Games";
 export const navCategory = "games";
 ---
 
-<Layout title="Games | Matrix Hub">
+<Layout title="Free Games | Matrix Hub">
   <!-- Hero Section -->
   <div class="games-hero">
     <h1 class="hero-title">🎮 Matrix Games Arcade</h1>
@@ -32,6 +32,23 @@ export const navCategory = "games";
         "retro", "browser game", "free game", "indie", "pixel", "speedrun",
         "challenge", "multiplayer", "tips", "strategy", "cheats", "secrets",
         "easter egg", "achievement", "leaderboard", "controls", "gameplay",
+      ]}
+      botName="🕹️ ArcadeBot"
+      botTips={[
+        "🐍 Snake Tip: Coil your snake in a spiral pattern, keeping the inside of the spiral free — this prevents you from trapping yourself as you grow.",
+        "🐍 Snake Tip: Slow down near the edges! Corners are the most dangerous spots — give yourself room to turn.",
+        "🧱 Breakout Tip: Aim for the top rows first — bricks higher up are worth more points and clearing them lets the ball bounce wildly for chain breaks.",
+        "🧱 Breakout Tip: Once you punch a hole to the ceiling, let the ball bounce up there and take out rows on its own for huge point runs.",
+        "🎮 General Tip: Most arcade games here support keyboard controls — arrow keys to move, spacebar to shoot or jump. Check the in-game help screen first!",
+        "🎮 General Tip: Set a personal high score target before each session to make it more challenging and rewarding.",
+        "🕹️ Retro Tip: Patterns are everything in classic arcade games. Enemies and obstacles often follow predictable paths — observe before acting.",
+        "🕹️ Retro Tip: Save your power-ups! It's tempting to use abilities immediately, but saving them for tough sections pays off.",
+        "🏆 Speedrun Tip: To improve your time, focus on movement efficiency first — shaving wasted movement often beats memorising shortcuts.",
+        "🏆 Speedrun Tip: Record your runs and review them. Watching your own gameplay is the fastest way to spot inefficiencies.",
+        "💡 Puzzle Tip: If you're stuck, step back and look at the big picture. Sometimes the solution requires setting up multiple moves ahead.",
+        "💡 Platformer Tip: Learn the jump arc of your character — knowing the exact peak of your jump lets you make precise landings on tight platforms.",
+        "🎵 Instrument Tip: Browser instruments work best with a low-latency audio device. Headphones reduce echo and help you stay in rhythm.",
+        "🌱 Playground Tip: Playgrounds are great for experimenting — try combining features in unexpected ways to discover hidden interactions!",
       ]}
     />
   </div>

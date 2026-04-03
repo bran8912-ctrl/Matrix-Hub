@@ -4,7 +4,7 @@ import LiveChat from "../../components/LiveChat.tsx";
 
 export const prerender = true;
 
-export const title = "Useful Tools";
+export const title = "Free Financial Tools";
 export const navCategory = "useful-tools";
 
 // ── Financial & Swarm Intelligence Tools ─────────────────────────────────────
@@ -143,13 +143,13 @@ const CATEGORIES = [
 ];
 ---
 
-<Layout title="Useful Tools — Matrix Hub">
+<Layout title="Free Financial Tools — Matrix Hub">
   <div class="tools-page">
 
     <!-- ── Page Header ──────────────────────────────────────────────────── -->
     <div class="page-header">
       <div class="header-badge">FINANCIAL TOOLS</div>
-      <h1 class="page-title">USEFUL TOOLS</h1>
+      <h1 class="page-title">FREE FINANCIAL TOOLS</h1>
       <p class="page-subtitle">
         Live market charts and financial analysis tools — usable right here on Matrix Hub.<br />
         Plus a curated directory of open-source swarm-intelligence frameworks to self-host.
@@ -168,6 +168,23 @@ const CATEGORIES = [
           "quant", "risk", "swarm", "financial", "tools", "tips", "strategies",
           "backtesting", "freqtrade", "quantlib", "options", "bonds",
           "yields", "analysis",
+        ]}
+        botName="📊 FinBot"
+        botTips={[
+          "💡 Tip: Diversifying across asset classes (stocks, crypto, bonds) can help reduce overall portfolio risk. ⚠️ Not financial advice.",
+          "💡 Tip: Dollar-cost averaging (DCA) — investing a fixed amount at regular intervals — can reduce the impact of market volatility over time. ⚠️ Not financial advice.",
+          "💡 Tip: The RSI (Relative Strength Index) above 70 often signals an overbought asset, while below 30 may indicate overselling. Use alongside other indicators. ⚠️ Not financial advice.",
+          "💡 Tip: Always research a project's whitepaper, team, and tokenomics before investing in any crypto asset. DYOR (Do Your Own Research). ⚠️ Not financial advice.",
+          "💡 Tip: Setting a stop-loss order can automatically cap your downside on a trade. Decide your max loss before entering a position. ⚠️ Not financial advice.",
+          "💡 Tip: The MACD (Moving Average Convergence Divergence) crossover is a popular momentum signal — when the MACD line crosses above the signal line it may indicate bullish momentum. ⚠️ Not financial advice.",
+          "💡 Tip: Liquidity matters. High-liquidity markets mean tighter spreads and easier entry/exit for your positions. ⚠️ Not financial advice.",
+          "💡 Tip: Backtesting a strategy on historical data helps you understand how it would have performed — but past performance doesn't guarantee future results. ⚠️ Not financial advice.",
+          "💡 Tip: Keep an eye on macro indicators: interest rate decisions, CPI data, and employment reports often drive large market moves. ⚠️ Not financial advice.",
+          "💡 Tip: Position sizing — only risking a small percentage (e.g. 1–2%) of your total capital per trade — is a core risk management principle. ⚠️ Not financial advice.",
+          "💡 Tip: On-chain metrics like wallet activity, exchange inflows/outflows, and miner fees can give early signals on crypto market sentiment. ⚠️ Not financial advice.",
+          "💡 Tip: Freqtrade (in the tools below) lets you build and backtest algorithmic crypto trading strategies for free — a great way to test ideas before real capital. ⚠️ Not financial advice.",
+          "💡 Tip: Fear & Greed Index: extreme fear can signal a potential buying opportunity; extreme greed can signal caution. Use it as one data point, not a crystal ball. ⚠️ Not financial advice.",
+          "💡 Tip: Swarm intelligence tools like MiroFish (below) use thousands of simulated agents to forecast market behaviour — fascinating experimental tech worth exploring. ⚠️ Not financial advice.",
         ]}
       />
     </div>
