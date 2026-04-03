@@ -171,20 +171,34 @@ const CATEGORIES = [
         ]}
         botName="📊 FinBot"
         botTips={[
-          "💡 Tip: Diversifying across asset classes (stocks, crypto, bonds) can help reduce overall portfolio risk. ⚠️ Not financial advice.",
-          "💡 Tip: Dollar-cost averaging (DCA) — investing a fixed amount at regular intervals — can reduce the impact of market volatility over time. ⚠️ Not financial advice.",
-          "💡 Tip: The RSI (Relative Strength Index) above 70 often signals an overbought asset, while below 30 may indicate overselling. Use alongside other indicators. ⚠️ Not financial advice.",
-          "💡 Tip: Always research a project's whitepaper, team, and tokenomics before investing in any crypto asset. DYOR (Do Your Own Research). ⚠️ Not financial advice.",
-          "💡 Tip: Setting a stop-loss order can automatically cap your downside on a trade. Decide your max loss before entering a position. ⚠️ Not financial advice.",
-          "💡 Tip: The MACD (Moving Average Convergence Divergence) crossover is a popular momentum signal — when the MACD line crosses above the signal line it may indicate bullish momentum. ⚠️ Not financial advice.",
-          "💡 Tip: Liquidity matters. High-liquidity markets mean tighter spreads and easier entry/exit for your positions. ⚠️ Not financial advice.",
-          "💡 Tip: Backtesting a strategy on historical data helps you understand how it would have performed — but past performance doesn't guarantee future results. ⚠️ Not financial advice.",
-          "💡 Tip: Keep an eye on macro indicators: interest rate decisions, CPI data, and employment reports often drive large market moves. ⚠️ Not financial advice.",
-          "💡 Tip: Position sizing — only risking a small percentage (e.g. 1–2%) of your total capital per trade — is a core risk management principle. ⚠️ Not financial advice.",
-          "💡 Tip: On-chain metrics like wallet activity, exchange inflows/outflows, and miner fees can give early signals on crypto market sentiment. ⚠️ Not financial advice.",
-          "💡 Tip: Freqtrade (in the tools below) lets you build and backtest algorithmic crypto trading strategies for free — a great way to test ideas before real capital. ⚠️ Not financial advice.",
-          "💡 Tip: Fear & Greed Index: extreme fear can signal a potential buying opportunity; extreme greed can signal caution. Use it as one data point, not a crystal ball. ⚠️ Not financial advice.",
-          "💡 Tip: Swarm intelligence tools like MiroFish (below) use thousands of simulated agents to forecast market behaviour — fascinating experimental tech worth exploring. ⚠️ Not financial advice.",
+          // ── BTC buy/short signals ────────────────────────────────────────
+          "📊 [Chart Scanner] BTC/USDT — Watch the 1H chart: if RSI drops below 30 and price bounces off a key support level (e.g. a prior weekly low), that's a potential long setup. Confirm with a bullish engulfing candle. ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] BTC/USDT — Potential short signal: if BTC is rejected at a major resistance (previous ATH zone or 200-day MA) and RSI is overbought above 70 on the daily, consider watching for a reversal candle as a short entry. ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] BTC/USDT — Breakout watch: if BTC consolidates tightly for 3–5 candles below a resistance level on the 4H chart, a high-volume breakout above it can be a strong long signal. Volume confirmation is key. ⚠️ Not financial advice.",
+
+          // ── ETH buy/short signals ────────────────────────────────────────
+          "📊 [Chart Scanner] ETH/USDT — Look for the ETH/BTC pair in the screener below: when ETH outperforms BTC (ETH/BTC rising), ETH is often worth rotating into for a long. ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] ETH/USDT — Short setup: if ETH fails to break above a descending trendline on the 4H chart and the MACD histogram is crossing bearish, that convergence can signal downside momentum. ⚠️ Not financial advice.",
+
+          // ── Altcoin screener signals ─────────────────────────────────────
+          "🔍 [Screener Scan] Open the Crypto Market Screener below and sort by '% Change 24h' descending — assets with unusually high volume AND positive price change are often breaking out. Cross-check on the chart above before acting. ⚠️ Not financial advice.",
+          "🔍 [Screener Scan] In the Screener below, filter by RSI < 35 to find potentially oversold crypto assets. These aren't automatic buys — check the chart trend first. Oversold in a downtrend can keep going lower. ⚠️ Not financial advice.",
+          "🔍 [Screener Scan] Scan for coins where RSI is between 50–60 and price is above the 50-day MA — these are often in healthy uptrends with room to run. Use the Screener below to find candidates. ⚠️ Not financial advice.",
+          "🔍 [Screener Scan] Check SOL, BNB, and ADA in the Screener — compare their 24h volume vs 7-day average. A volume spike above 2× average alongside a price breakout is a historically strong continuation signal. ⚠️ Not financial advice.",
+
+          // ── Ticker tape signals ──────────────────────────────────────────
+          "📡 [Ticker Watch] Keep an eye on the live ticker above — if DOGE or XRP show sudden spikes in the daily % change, check the chart. Meme/news-driven pumps often have sharp reversals, making them potential short setups after the euphoria peak. ⚠️ Not financial advice.",
+          "📡 [Ticker Watch] Watch the S&P 500 (SPX) in the ticker — crypto often lags SPX moves by 24–48h. If SPX drops sharply, risk-off sentiment may hit BTC and altcoins next. Consider reducing leverage exposure early. ⚠️ Not financial advice.",
+
+          // ── NVDA / AAPL equity signals ───────────────────────────────────
+          "📈 [Chart Scanner] NVDA — Pull up NVDA on the chart above (Quick switch). NVDA often leads the broader tech rally. If it's building higher lows on the 4H and holds above the 50-day MA, the trend is bullish. Watch earnings dates closely — IV crush can trap options buyers. ⚠️ Not financial advice.",
+          "📈 [Chart Scanner] AAPL — A classic mean-reversion play: if AAPL dips 5–8% from a recent high on low-volume selling, it has historically attracted institutional buying. Look for a hammer candle on the daily chart as a potential entry signal. ⚠️ Not financial advice.",
+          "📈 [Chart Scanner] AAPL short setup: if AAPL gaps up into earnings above the upper Bollinger Band and RSI is above 75 on the daily, a short-term short (or protective put) to fade the gap can be worth watching. ⚠️ Not financial advice.",
+
+          // ── General TA signals relevant to the chart ─────────────────────
+          "💡 [TA Signal] On any asset in the chart above: when the 20-EMA crosses above the 50-EMA on the 1H chart ('golden cross' on intraday), it often marks the start of a short-term bullish run. Higher timeframe confirmation improves the signal quality. ⚠️ Not financial advice.",
+          "💡 [TA Signal] Potential short setup on any chart: when price makes a 'lower high' after a failed retest of a previous high and the RSI also makes a lower high — that RSI divergence is a bearish signal. ⚠️ Not financial advice.",
+          "💡 [TA Signal] Support/Resistance flip: a level that previously acted as resistance, once broken and retested from above, often becomes support (S/R flip). These retests can be high-probability long entry points on the chart above. ⚠️ Not financial advice.",
         ]}
       />
     </div>
