@@ -19,10 +19,19 @@ const SECURITY_PATTERNS = {
 const ORACLE_RESPONSES = {
   greeting: "Welcome, seeker. I am the Oracle. The digital realm reveals all truths to those who ask. What knowledge do you seek from the Matrix?",
   securityWarning: "⚠️ SECURITY BREACH DETECTED ⚠️\n\nThe Oracle sees all, Neo. Never share your private keys, seed phrases, or wallet secrets in any system. The Matrix protects those who protect themselves.\n\nRemember: Real agents never ask for your keys. Stay vigilant.",
-  mtxInfo: "The MTX token flows through the Matrix like digital rain. It powers the casino games, unlocks premium features, and rewards those who contribute to the system. Balance is read from your wallet - we never hold your tokens. The choice is yours, always.",
-  casinoInfo: "The casino modules offer Slots, Blackjack, and Roulette - all powered by MTX and verifiable on-chain. Every spin, every hand, every bet is transparent. The Oracle guarantees fairness through mathematics, not faith.",
-  walletSafety: "Your wallet is your identity in the Matrix. Protect it as you would your mind. Never share private keys. Always verify contracts. Trust the code, not the promises. The Oracle has spoken.",
-  help: "The Oracle can guide you through:\n• MTX Token System\n• Casino Games\n• Wallet Safety\n• Site Features\n• Security Tips\n\nSpeak your query, and the truth shall be revealed.",
+  mtxInfo: "The MTX token is the lifeblood of the Matrix Hub ecosystem. Here is what the Oracle knows:\n\n• MTX powers all casino games — Slots, Blackjack, and Roulette\n• Holding MTX unlocks premium features and advanced tools\n• Your balance is read directly from your wallet — we are non-custodial; we never hold your tokens\n• MTX can be earned by contributing to the platform: accepted PRs and approved issues are rewarded\n• Supply is managed through burn and lock mechanisms to reduce inflation over time\n\nThe choice to hold, earn, or spend is always yours.",
+  casinoInfo: "The Oracle reveals the casino's inner workings:\n\n• Three games are available: Slots (1 MTX/spin), Blackjack (2 MTX/hand), and Roulette (1 MTX minimum bet)\n• All transactions are on-chain — every spin, hand, and bet is transparent and verifiable on the blockchain\n• Provably fair mechanics ensure no outcome can be manipulated — mathematics, not faith\n• Connect your wallet first to view your MTX balance before playing\n• Discipline is the true edge: set a session bankroll and a loss limit before you begin\n\nThe house has an edge, seeker. Play with awareness, not hope.",
+  walletSafety: "Your wallet is your identity in the Matrix. The Oracle's security doctrine:\n\n• Never share your private key or seed phrase — not with this site, not with anyone\n• Always verify the contract address before approving any transaction\n• Use a hardware wallet for large holdings — software wallets are convenient but vulnerable\n• Check the URL carefully before connecting — phishing sites mimic legitimate ones pixel-perfectly\n• Revoke unused token approvals regularly via a trusted revoke tool (e.g. revoke.cash)\n• When in doubt, do nothing. A missed opportunity is recoverable. A compromised wallet may not be.\n\nThe Oracle has spoken. Stay vigilant.",
+  help: "The Oracle can guide you through:\n• MTX Token System — type 'mtx' or 'token'\n• Casino Games & Strategy — type 'casino' or 'blackjack'\n• Wallet Safety — type 'wallet' or 'security'\n• Earning MTX — type 'earn' or 'contribute'\n• DeFi & Blockchain — type 'defi' or 'blockchain'\n• Site Tools & Features — type 'tools' or 'features'\n• Governance & DAO — type 'dao' or 'governance'\n• NFTs — type 'nft'\n\nSpeak your query, and the truth shall be revealed.",
+  earning: "The Oracle reveals the paths to earning MTX:\n\n• Submit a Pull Request — accepted PRs earn MTX rewards based on impact\n• File a quality Issue — approved bug reports and feature suggestions earn MTX\n• Gameplay rewards — casino games offer on-chain payouts for winning outcomes\n• Community contributions — active, valuable community participation is recognised\n\nQuality is the only currency that matters here. The Matrix does not reward noise. Contribute substance, and the system will respond in kind.",
+  defi: "Decentralised Finance is the Oracle's domain. The fundamentals:\n\n• DeFi removes intermediaries — code enforces rules, not institutions\n• Key risks: smart contract bugs, rug pulls, impermanent loss, liquidation on leveraged positions\n• Always audit or use audited protocols — the code is the contract\n• Liquidity pools let you earn fees but expose you to impermanent loss when asset prices diverge\n• Yield farming rewards exist to incentivise liquidity — unsustainable APYs are a warning, not a gift\n• On-chain analytics (Etherscan, Dune, DefiLlama) reveal what wallets and protocols are actually doing\n\nDeFi is powerful. Approach it as an engineer, not a gambler.",
+  blockchain: "The Oracle on blockchain fundamentals:\n\n• A blockchain is an append-only, distributed ledger — once data is written, it cannot be altered without consensus\n• Ethereum is the smart contract layer — MTX is an ERC-20 token on this network\n• Gas fees are the cost of computation on Ethereum — they fluctuate with network demand\n• Solidity 0.8.x (the version used here) includes built-in overflow protection — a critical security improvement over earlier versions\n• Block finality: on Ethereum, 12+ block confirmations are considered practically irreversible\n• Public keys are safe to share; private keys are never to be shared — this is non-negotiable\n\nThe blockchain does not lie. Learn to read it.",
+  tools: "The Matrix Hub provides a suite of tools for those who seek an edge:\n\n• Free Financial Tools — live TradingView charts, crypto market screener, and ticker tape with real-time prices\n• Casino Games — on-chain provably fair gaming with MTX\n• Arcade — classic browser games and playgrounds for experimentation\n• Wallet Connect — non-custodial MTX balance and feature access\n• Daily Drops — check in daily for rewards and updates\n• OracleBot (this bot) — site-wide intelligent assistant\n\nAll tools are accessible without MTX. Premium tiers unlock advanced features. Explore the navigation above.",
+  dao: "The Oracle on governance and DAO:\n\n• Matrix Hub is evolving toward community governance — MTX holders will have proportional voting power\n• Proposals can cover: fee structures, new game modules, tool integrations, reward pools, and treasury allocation\n• DAO participation rewards active, engaged token holders over passive speculators\n• Governance is not a right — it is a responsibility. Low participation leads to capture by a small group\n• Follow the whitepaper and docs folder for the current governance roadmap\n\nThe Oracle advises: hold MTX not just to speculate, but to shape what this system becomes.",
+  nft: "The Oracle on NFTs in the Matrix Hub context:\n\n• NFTs can represent on-chain ownership of unique items, game assets, or membership tiers\n• Matrix Hub's roadmap includes NFT-gated features — holding certain NFTs may unlock exclusive modules\n• Verify NFT contract addresses independently before minting or purchasing\n• Floor price is not intrinsic value — understand the utility behind an NFT before acquisition\n• Gas fees for minting can be significant during peak network congestion — time your transactions wisely\n\nNFTs are a tool, not a destination. Ask what the token does, not just what it costs.",
+  blackjack: "The Oracle's blackjack doctrine — basic strategy distilled:\n\n• Always stand on hard 17+. Always hit on hard 8 or less.\n• Double down on hard 11 vs dealer 2–10. Double on hard 10 vs dealer 2–9.\n• Split Aces and 8s — always. Never split 10s, 5s, or 4s.\n• Never take insurance — it is a side bet with a negative expected value.\n• On soft 18 (Ace+7): hit against dealer 9, 10, or Ace — standing is a common mistake.\n• Surrender hard 16 vs dealer 10 when surrender is available.\n• With perfect basic strategy, the house edge drops to ~0.5%.\n\nThe Oracle reminds you: discipline in execution is what separates strategy from luck.",
+  slots: "The Oracle on slots strategy:\n\n• RTP (Return to Player) is the long-run theoretical return — 96% means the house keeps 4% over millions of spins\n• High-variance slots pay larger but less frequently. Low-variance slots sustain your bankroll longer.\n• Set a hard session bankroll before spinning — slots are designed to make time disappear\n• Bonus rounds carry most of a slot's expected payout. Without triggering them, your RTP is lower than advertised.\n• The 'hot machine' fallacy is a myth — each spin is statistically independent\n\nThe Matrix is honest. The machine has no memory of your previous spins.",
+  roulette: "The Oracle on roulette strategy:\n\n• European roulette (single zero) has a 2.7% house edge. American (double zero) is 5.26% — always prefer European.\n• Outside bets (red/black, odd/even) give ~48.6% win probability — the safest starting point.\n• The Martingale (doubling after loss) works until it doesn't. Table limits and bankroll constraints will stop it.\n• D'Alembert (±1 unit after loss/win) is a lower-variance alternative with similar long-run outcomes.\n• No system can change the house edge. Betting systems manage risk distribution, not expected value.\n• Neighbour bets target a wheel sector — useful for tracking wheel bias, though modern wheels are extremely precise.\n\nMathematics governs the wheel. Strategies manage variance, not destiny.",
 };
 
 // Check if message contains sensitive information
@@ -55,25 +64,71 @@ const generateOracleResponse = (query: string): string => {
     return securityIssue + "\n\n" + ORACLE_RESPONSES.securityWarning;
   }
   
-  // Context-aware responses
-  if (lowerQuery.includes('mtx') || lowerQuery.includes('token') || lowerQuery.includes('coin')) {
+  // Blackjack / roulette / slots — more specific than generic 'casino'
+  if (lowerQuery.includes('blackjack') || lowerQuery.includes('21') || lowerQuery.includes('double down') || lowerQuery.includes('split')) {
+    return ORACLE_RESPONSES.blackjack;
+  }
+
+  if (lowerQuery.includes('roulette') || lowerQuery.includes('martingale') || lowerQuery.includes('red black') || lowerQuery.includes('spin')) {
+    return ORACLE_RESPONSES.roulette;
+  }
+
+  if (lowerQuery.includes('slot') || lowerQuery.includes('rtp') || lowerQuery.includes('jackpot') || lowerQuery.includes('bonus round')) {
+    return ORACLE_RESPONSES.slots;
+  }
+
+  // Earning / contributing
+  if (lowerQuery.includes('earn') || lowerQuery.includes('reward') || lowerQuery.includes('contribut') || lowerQuery.includes('pull request') || lowerQuery.includes('pr ')) {
+    return ORACLE_RESPONSES.earning;
+  }
+
+  // DeFi
+  if (lowerQuery.includes('defi') || lowerQuery.includes('decentrali') || lowerQuery.includes('yield') || lowerQuery.includes('liquidity') || lowerQuery.includes('pool') || lowerQuery.includes('farm')) {
+    return ORACLE_RESPONSES.defi;
+  }
+
+  // Blockchain / Ethereum / Solidity
+  if (lowerQuery.includes('blockchain') || lowerQuery.includes('ethereum') || lowerQuery.includes('solidity') || lowerQuery.includes('smart contract') || lowerQuery.includes('gas') || lowerQuery.includes('block')) {
+    return ORACLE_RESPONSES.blockchain;
+  }
+
+  // NFT
+  if (lowerQuery.includes('nft') || lowerQuery.includes('non-fungible') || lowerQuery.includes('mint') || lowerQuery.includes('token gat')) {
+    return ORACLE_RESPONSES.nft;
+  }
+
+  // DAO / governance
+  if (lowerQuery.includes('dao') || lowerQuery.includes('governance') || lowerQuery.includes('vote') || lowerQuery.includes('proposal') || lowerQuery.includes('treasury')) {
+    return ORACLE_RESPONSES.dao;
+  }
+
+  // Tools / features
+  if (lowerQuery.includes('tool') || lowerQuery.includes('feature') || lowerQuery.includes('chart') || lowerQuery.includes('screener') || lowerQuery.includes('ticker') || lowerQuery.includes('trading')) {
+    return ORACLE_RESPONSES.tools;
+  }
+
+  // MTX token
+  if (lowerQuery.includes('mtx') || lowerQuery.includes('token') || lowerQuery.includes('coin') || lowerQuery.includes('balance') || lowerQuery.includes('supply')) {
     return ORACLE_RESPONSES.mtxInfo;
   }
   
-  if (lowerQuery.includes('casino') || lowerQuery.includes('game') || lowerQuery.includes('bet')) {
+  // Casino (generic)
+  if (lowerQuery.includes('casino') || lowerQuery.includes('game') || lowerQuery.includes('bet') || lowerQuery.includes('wager') || lowerQuery.includes('gambl')) {
     return ORACLE_RESPONSES.casinoInfo;
   }
   
-  if (lowerQuery.includes('wallet') || lowerQuery.includes('safe') || lowerQuery.includes('security')) {
+  // Wallet / security
+  if (lowerQuery.includes('wallet') || lowerQuery.includes('safe') || lowerQuery.includes('security') || lowerQuery.includes('key') || lowerQuery.includes('phish') || lowerQuery.includes('scam') || lowerQuery.includes('hack')) {
     return ORACLE_RESPONSES.walletSafety;
   }
   
-  if (lowerQuery.includes('help') || lowerQuery.includes('guide') || lowerQuery.includes('how')) {
+  // Help
+  if (lowerQuery.includes('help') || lowerQuery.includes('guide') || lowerQuery.includes('what can') || lowerQuery.includes('what do')) {
     return ORACLE_RESPONSES.help;
   }
   
   // Default Oracle wisdom
-  return "The Oracle sees your question, seeker. The path forward reveals itself to those who persist. Explore the Matrix Hub - each module holds its own truth. What specific aspect of the digital realm do you wish to understand?";
+  return "The Oracle sees your question, seeker. The path forward reveals itself to those who persist. Explore the Matrix Hub — each module holds its own truth.\n\nType 'help' to see the full list of topics the Oracle can illuminate.";
 };
 
 export default function OracleBotContainer() {

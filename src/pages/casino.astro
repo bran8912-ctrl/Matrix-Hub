@@ -27,20 +27,50 @@ export const navCategory = "casino";
         ]}
         botName="🎰 CasinoBot"
         botTips={[
-          "🃏 Blackjack Tip: Always stand on a hard 17 or higher — the dealer must hit on 16, giving them a high bust chance.",
-          "🃏 Blackjack Tip: If you have an 11, doubling down is often a strong play — you're one card away from 21.",
-          "🃏 Blackjack Tip: Never take insurance — statistically it increases the house edge against you.",
-          "🃏 Blackjack Tip: Split Aces and 8s always. Never split 10s or 5s.",
-          "🎰 Slots Tip: Check the paytable before spinning — it shows the highest-paying symbols and bonus triggers.",
-          "🎰 Slots Tip: Bet the minimum until you understand the volatility of a slot — high-variance slots pay bigger but less frequently.",
-          "🎰 Slots Tip: Set a session bankroll before you start and stick to it. It's easy to lose track of time spinning!",
-          "🎡 Roulette Tip: Betting on red/black or odd/even gives you nearly 50/50 odds — the safest bets for beginners.",
-          "🎡 Roulette Tip: The Martingale strategy (doubling after each loss) can work short-term but requires a large bankroll and hits table limits quickly.",
-          "🎡 Roulette Tip: European roulette (single zero) has a lower house edge than American roulette (double zero) — prefer it when available.",
-          "🎲 General Tip: Set a win goal and a loss limit before each session. Walk away when you hit either — discipline is key.",
-          "🎲 General Tip: Never chase losses. Taking a break after a losing streak helps you make better decisions.",
-          "🎲 General Tip: All games here use MTX tokens. Treat your bankroll as entertainment budget, not investment capital.",
-          "💡 House Edge Tip: Blackjack has one of the lowest house edges (~0.5% with basic strategy). Slots vary widely — check the RTP (Return to Player) percentage.",
+          // ── Blackjack basic strategy ────────────────────────────────────
+          "🃏 Blackjack Strategy: Always stand on a hard 17 or higher — the dealer must hit on 16, giving them a high bust chance.",
+          "🃏 Blackjack Strategy: If you have an 11, doubling down is often a strong play — you're one card away from 21.",
+          "🃏 Blackjack Strategy: Never take insurance — statistically it increases the house edge against you.",
+          "🃏 Blackjack Strategy: Split Aces and 8s always. Never split 10s or 5s.",
+          "🃏 Blackjack Strategy: On a soft 18 (Ace + 7), don't automatically stand — if the dealer shows 9, 10, or Ace, hitting is mathematically better than standing.",
+          "🃏 Blackjack Strategy: Double down on a hard 10 when the dealer shows 2–9. The probability of drawing a 10-value card (the most common card in the deck) makes this a high-expected-value play.",
+          "🃏 Blackjack Expert: Basic strategy reduces the house edge to ~0.5%. Memorise the hard totals chart first (hit/stand/double) — that alone covers ~80% of hands you'll encounter.",
+          "🃏 Blackjack Expert: Surrender when available and you hold a hard 16 vs dealer's 10 — statistically, surrendering saves more than fighting the hand on average.",
+          "🃏 Blackjack Expert: Never split 4s — two weak hands are worse than one. The only exception is if you can double after split and the dealer shows 5 or 6.",
+
+          // ── Slots strategy ──────────────────────────────────────────────
+          "🎰 Slots Strategy: Check the paytable before spinning — it shows the highest-paying symbols and bonus triggers.",
+          "🎰 Slots Strategy: Bet the minimum until you understand the volatility of a slot — high-variance slots pay bigger but less frequently.",
+          "🎰 Slots Strategy: Set a session bankroll before you start and stick to it. It's easy to lose track of time spinning!",
+          "🎰 Slots Expert: RTP (Return to Player) is the long-run average — a 96% RTP means the house keeps 4% over millions of spins. Individual sessions can deviate wildly in either direction.",
+          "🎰 Slots Expert: High-volatility slots are for bankrolls that can sustain long dry spells. Low-volatility slots keep you in the game longer with smaller, more frequent wins — pick based on your session goal.",
+          "🎰 Slots Expert: Bonus rounds and free spins are where most of a high-variance slot's theoretical payout lives. If you're playing for big wins, factor in how often and how generously the bonus triggers.",
+
+          // ── Roulette strategy ───────────────────────────────────────────
+          "🎡 Roulette Strategy: Betting on red/black or odd/even gives you nearly 50/50 odds — the safest bets for beginners.",
+          "🎡 Roulette Strategy: The Martingale strategy (doubling after each loss) can work short-term but requires a large bankroll and hits table limits quickly.",
+          "🎡 Roulette Strategy: European roulette (single zero) has a lower house edge than American roulette (double zero) — prefer it when available.",
+          "🎡 Roulette Expert: The D'Alembert system is a safer alternative to Martingale — increase by 1 unit after a loss, decrease by 1 after a win. The swings are smaller and it's harder to hit a table limit.",
+          "🎡 Roulette Expert: Column and dozen bets (12 numbers each) pay 2:1 and cover a third of the wheel. Combining two dozens covers 24 numbers at once — just enough exposure to make rapid decisions meaningful.",
+          "🎡 Roulette Expert: Neighbour bets cover a number and the two on each side of the wheel. Useful if you've noticed a sector hitting repeatedly — though remember, wheels have no true memory.",
+
+          // ── Bankroll management ─────────────────────────────────────────
+          "🎲 Bankroll Strategy: Set a win goal and a loss limit before each session. Walk away when you hit either — discipline is key.",
+          "🎲 Bankroll Strategy: Never chase losses. Taking a break after a losing streak helps you make better decisions.",
+          "🎲 Bankroll Strategy: All games here use MTX tokens. Treat your bankroll as entertainment budget, not investment capital.",
+          "🎲 Bankroll Expert: The Kelly Criterion suggests betting a fraction of your bankroll proportional to your edge. For casino games where the house has the edge, Kelly recommends zero — but for fun sessions, limiting each bet to 1–2% of session funds extends play time dramatically.",
+          "🎲 Bankroll Expert: Separate your 'gambling wallet' from your investment MTX holdings. Never play with tokens you aren't fully prepared to lose in that session.",
+          "🎲 Bankroll Expert: Session length matters. The longer you play, the more the house edge grinds you toward expected value. Short, decisive sessions preserve variance in your favour.",
+
+          // ── Psychology / tilt management ────────────────────────────────
+          "🧠 Psychology Tip: Tilt is the #1 bankroll killer. If you feel frustrated or are making decisions faster than usual, that's tilt. Step away for 10 minutes — it resets your decision-making state.",
+          "🧠 Psychology Tip: Wins and losses are not streaks in any mathematically meaningful way — each hand/spin is independent. Believing in 'hot streaks' leads to overbetting after wins.",
+          "🧠 Psychology Expert: Anchor your session goal before starting, not during. Adjusting your win goal upward mid-session ('just a bit more') is a well-documented cognitive bias called goal escalation — and it almost always ends in a giveback.",
+
+          // ── House edge & MTX-specific ───────────────────────────────────
+          "💡 House Edge: Blackjack has one of the lowest house edges (~0.5% with basic strategy). Slots vary widely — check the RTP (Return to Player) percentage.",
+          "💡 MTX Tip: Your on-chain MTX balance is real-time. Use the wallet panel to verify your balance before and after each session — transparency is one of the advantages of a crypto casino.",
+          "💡 MTX Tip: All casino transactions here are recorded on-chain, making the game history provably fair and auditable at any time. If you ever want to verify a result, the block explorer has the record.",
         ]}
       />
     </div>
