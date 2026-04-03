@@ -35,6 +35,7 @@ const MIN_TOPIC_CHECK_LENGTH = 20;
 const BOT_TIP_INITIAL_DELAY_MS = 12_000;
 const BOT_TIP_INTERVAL_MS = 35_000;
 const MAX_USERNAME_LENGTH = 24;
+const DEFAULT_BOT_NAME = "💡 TipBot";
 // Random suffix: chars at positions 2–6 of a base-36 string (4 chars)
 const RANDOM_SUFFIX_START = 2;
 const RANDOM_SUFFIX_END = 6;
@@ -353,13 +354,13 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics, botTips, bo
   useEffect(() => {
     if (!botTips || botTips.length === 0) return;
     const tips = botTips;
-    const name = botName ?? "💡 TipBot";
+    const name = botName ?? DEFAULT_BOT_NAME;
     let intervalId: ReturnType<typeof setInterval> | null = null;
 
     function postTip() {
       const tip = tips[Math.floor(Math.random() * tips.length)];
       const msg: ChatMessage = {
-        id: `bot-${roomId}-${generateId()}`,
+        id: `bot-tip-${roomId}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         room_id: roomId,
         username: name,
         message: tip,
