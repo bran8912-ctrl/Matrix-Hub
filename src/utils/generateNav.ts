@@ -272,7 +272,9 @@ export async function generateNavigation(): Promise<NavigationTab[]> {
       } else if (category === 'dao') {
         label = 'DAO';
       } else if (category === 'useful-tools') {
-        label = 'Useful Tools';
+        label = 'Free Financial Tools';
+      } else if (category === 'games') {
+        label = 'Free Games';
       } else {
         // Fallback: convert kebab-case to Title Case
         label = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');

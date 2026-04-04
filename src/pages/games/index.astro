@@ -5,11 +5,11 @@ import LiveChat from "../../components/LiveChat.tsx";
 import { games } from "../../data/games";
 
 export const prerender = true;
-export const title = "Games";
+export const title = "Free Games";
 export const navCategory = "games";
 ---
 
-<Layout title="Games | Matrix Hub">
+<Layout title="Free Games | Matrix Hub">
   <!-- Hero Section -->
   <div class="games-hero">
     <h1 class="hero-title">🎮 Matrix Games Arcade</h1>
@@ -32,6 +32,61 @@ export const navCategory = "games";
         "retro", "browser game", "free game", "indie", "pixel", "speedrun",
         "challenge", "multiplayer", "tips", "strategy", "cheats", "secrets",
         "easter egg", "achievement", "leaderboard", "controls", "gameplay",
+      ]}
+      botName="🕹️ ArcadeBot"
+      botTips={[
+        // ── Snake strategies ─────────────────────────────────────────────
+        "🐍 Snake Strategy: Coil your snake in a spiral pattern, keeping the inside of the spiral free — this prevents you from trapping yourself as you grow.",
+        "🐍 Snake Strategy: Slow down near the edges! Corners are the most dangerous spots — give yourself room to turn.",
+        "🐍 Snake Strategy: Follow the walls early in the game. Hugging the perimeter keeps the center open as an emergency escape route when the snake gets long.",
+        "🐍 Snake Strategy: Never turn directly back on yourself — plan your next two moves ahead, not just one. Reactive play kills long snakes.",
+        "🐍 Snake Strategy: The food is a trap as much as a reward. Before going for it, check whether the path home is clear after eating.",
+        "🐍 Snake Expert: Advanced players use the 'Hamiltonian cycle' method — mentally plan a path that visits every cell exactly once. This theoretically guarantees you can never trap yourself.",
+
+        // ── Breakout strategies ──────────────────────────────────────────
+        "🧱 Breakout Strategy: Aim for the top rows first — bricks higher up are worth more points and clearing them lets the ball bounce wildly for chain breaks.",
+        "🧱 Breakout Strategy: Once you punch a hole to the ceiling, let the ball bounce up there and take out rows on its own for huge point runs.",
+        "🧱 Breakout Strategy: Control your paddle angle deliberately. Hitting the ball with the edge sends it at a sharp angle — useful for targeting the side columns.",
+        "🧱 Breakout Strategy: Don't always rush to return the ball immediately. Letting it drift to the bottom of the screen gives you a moment to reposition your paddle precisely.",
+        "🧱 Breakout Expert: The last few bricks are the hardest. Use a gentle touch to angle the ball exactly where you need it — speed is your enemy at that point.",
+
+        // ── General arcade tips ──────────────────────────────────────────
+        "🎮 General Tip: Most arcade games here support keyboard controls — arrow keys to move, spacebar to shoot or jump. Check the in-game help screen first!",
+        "🎮 General Tip: Set a personal high score target before each session to make it more challenging and rewarding.",
+        "🎮 General Tip: Warm up with 2–3 short runs before going for a high-score attempt. Muscle memory needs to activate before peak performance kicks in.",
+        "🎮 General Tip: Take short breaks between sessions. Fatigue degrades reaction time more than most people realise — 5 minutes off the screen resets your focus.",
+        "🎮 General Tip: Play in full-screen mode when available. Eliminating peripheral distractions measurably improves reaction time in fast-paced arcade games.",
+
+        // ── Retro / pattern recognition ──────────────────────────────────
+        "🕹️ Retro Strategy: Patterns are everything in classic arcade games. Enemies and obstacles often follow predictable paths — observe before acting.",
+        "🕹️ Retro Strategy: Save your power-ups! It's tempting to use abilities immediately, but saving them for tough sections pays off.",
+        "🕹️ Retro Expert: Most classic arcade games have a 'kill screen' or max score limit. Study the pattern of early levels first — the same rhythm repeats at higher difficulties.",
+        "🕹️ Retro Expert: In shooting games, 'safe spots' almost always exist — positions where enemies can't hit you but you can hit them. Test every corner of the screen early on.",
+
+        // ── Speedrunning ─────────────────────────────────────────────────
+        "🏆 Speedrun Strategy: To improve your time, focus on movement efficiency first — shaving wasted movement often beats memorising shortcuts.",
+        "🏆 Speedrun Strategy: Record your runs and review them. Watching your own gameplay is the fastest way to spot inefficiencies.",
+        "🏆 Speedrun Expert: Set a 'reset threshold' — if you fall more than X seconds behind your pace by a certain checkpoint, reset immediately rather than grinding out a suboptimal run.",
+        "🏆 Speedrun Expert: Route optimisation beats mechanical skill improvement at the start. Knowing a slightly shorter path is more reliable than executing a risky trick perfectly.",
+
+        // ── Puzzle tips ──────────────────────────────────────────────────
+        "💡 Puzzle Strategy: If you're stuck, step back and look at the big picture. Sometimes the solution requires setting up multiple moves ahead.",
+        "💡 Puzzle Expert: Most browser puzzles have a finite set of mechanics. List every mechanic available to you and systematically test combinations — lateral thinking beats brute force.",
+        "💡 Code Breaker Tip: Start by placing unique symbols in each position to maximise information from the first guess. The more you can eliminate at once, the faster you converge on the answer.",
+
+        // ── Platformer tips ──────────────────────────────────────────────
+        "💡 Platformer Strategy: Learn the jump arc of your character — knowing the exact peak of your jump lets you make precise landings on tight platforms.",
+        "💡 Platformer Expert: Many platformers have 'coyote time' — a brief window after walking off a ledge where you can still jump. Test it in each game; it can save you from frustrating falls.",
+        "💡 Platformer Expert: Wall-jump techniques often chain into faster movement. Even if a game doesn't explicitly teach it, test whether holding toward a wall while jumping produces extra height or speed.",
+
+        // ── Instruments / music tools ─────────────────────────────────────
+        "🎵 Instrument Strategy: Browser instruments work best with a low-latency audio device. Headphones reduce echo and help you stay in rhythm.",
+        "🎵 Instrument Expert: Use the keyboard's home row keys as your 'anchor' — this is how professional virtual keyboard players build speed. ASDF and JKL; map naturally to musical scales in most browser instruments.",
+        "🎵 Instrument Expert: Record short loops and listen back immediately. Your brain corrects timing errors in real-time playback that you can't hear while playing.",
+
+        // ── Playground / experimental ─────────────────────────────────────
+        "🌱 Playground Tip: Playgrounds are great for experimenting — try combining features in unexpected ways to discover hidden interactions!",
+        "🌱 Playground Expert: Treat every playground session as a research sprint. Set a single hypothesis ('what happens if I do X?') and test it — this structured exploration produces far more discoveries than open-ended clicking.",
       ]}
     />
   </div>

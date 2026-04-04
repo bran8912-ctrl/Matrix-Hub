@@ -16,18 +16,26 @@ interface ChatMessage {
   username: string;
   message: string;
   created_at: string;
+  _isBot?: boolean;
 }
 
 interface LiveChatProps {
   roomId: string;
   roomLabel: string;
   allowedTopics: string[];
+  /** Optional array of tips the bot will broadcast periodically in the feed. */
+  botTips?: string[];
+  /** Display name for the bot. Defaults to "💡 TipBot". */
+  botName?: string;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const MIN_TOPIC_CHECK_LENGTH = 20;
+const BOT_TIP_INITIAL_DELAY_MS = 12_000;
+const BOT_TIP_INTERVAL_MS = 35_000;
 const MAX_USERNAME_LENGTH = 24;
+const DEFAULT_BOT_NAME = "💡 TipBot";
 // Random suffix: chars at positions 2–6 of a base-36 string (4 chars)
 const RANDOM_SUFFIX_START = 2;
 const RANDOM_SUFFIX_END = 6;
@@ -204,7 +212,7 @@ function generateId(): string {
 
 // ─── LiveChat component ───────────────────────────────────────────────────────
 
-export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatProps) {
+export default function LiveChat({ roomId, roomLabel, allowedTopics, botTips, botName }: LiveChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<"connecting" | "live" | "error">("connecting");
@@ -342,6 +350,37 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Bot tip broadcaster — periodically injects a random tip as a bot message
+  useEffect(() => {
+    if (!botTips || botTips.length === 0) return;
+    const tips = botTips;
+    const name = botName ?? DEFAULT_BOT_NAME;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+
+    function postTip() {
+      const tip = tips[Math.floor(Math.random() * tips.length)];
+      const msg: ChatMessage = {
+        id: `bot-tip-${roomId}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        room_id: roomId,
+        username: name,
+        message: tip,
+        created_at: new Date().toISOString(),
+        _isBot: true,
+      };
+      setMessages((prev) => capMessages([...prev, msg]));
+    }
+
+    const timeoutId = setTimeout(() => {
+      postTip();
+      intervalId = setInterval(postTip, BOT_TIP_INTERVAL_MS);
+    }, BOT_TIP_INITIAL_DELAY_MS);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (intervalId !== null) clearInterval(intervalId);
+    };
+  }, [roomId, botTips, botName]);
+
   function handleSend() {
     const trimmed = input.trim();
     if (!trimmed || sending) return;
@@ -471,10 +510,10 @@ export default function LiveChat({ roomId, roomLabel, allowedTopics }: LiveChatP
           </p>
         )}
         {messages.map((msg) => (
-          <div key={msg.id} style={styles.msgRow}>
+          <div key={msg.id} style={msg._isBot ? styles.botMsgRow : styles.msgRow}>
             <span style={styles.msgTime}>{formatTime(msg.created_at)}</span>
-            <span style={styles.msgUser}>{msg.username}</span>
-            <span style={styles.msgText}>{msg.message}</span>
+            <span style={msg._isBot ? styles.botMsgUser : styles.msgUser}>{msg.username}</span>
+            <span style={msg._isBot ? styles.botMsgText : styles.msgText}>{msg.message}</span>
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -677,6 +716,27 @@ const styles: Record<string, React.CSSProperties> = {
   },
   msgText: {
     color: TEXT,
+  },
+  botMsgRow: {
+    display: "flex",
+    alignItems: "baseline",
+    gap: "0.5rem",
+    lineHeight: 1.5,
+    flexWrap: "wrap" as const,
+    wordBreak: "break-word" as const,
+    background: "rgba(0, 210, 255, 0.05)",
+    borderLeft: "2px solid rgba(0, 210, 255, 0.35)",
+    paddingLeft: "0.5rem",
+    borderRadius: "0 3px 3px 0",
+  },
+  botMsgUser: {
+    color: "#00d2ff",
+    fontWeight: "bold",
+    flexShrink: 0,
+    textShadow: "0 0 6px rgba(0,210,255,0.5)",
+  },
+  botMsgText: {
+    color: "#b0e8f0",
   },
   feedback: {
     padding: "0.4rem 1rem",

@@ -4,7 +4,7 @@ import LiveChat from "../../components/LiveChat.tsx";
 
 export const prerender = true;
 
-export const title = "Useful Tools";
+export const title = "Free Financial Tools";
 export const navCategory = "useful-tools";
 
 // ── Financial & Swarm Intelligence Tools ─────────────────────────────────────
@@ -143,13 +143,13 @@ const CATEGORIES = [
 ];
 ---
 
-<Layout title="Useful Tools — Matrix Hub">
+<Layout title="Free Financial Tools — Matrix Hub">
   <div class="tools-page">
 
     <!-- ── Page Header ──────────────────────────────────────────────────── -->
     <div class="page-header">
       <div class="header-badge">FINANCIAL TOOLS</div>
-      <h1 class="page-title">USEFUL TOOLS</h1>
+      <h1 class="page-title">FREE FINANCIAL TOOLS</h1>
       <p class="page-subtitle">
         Live market charts and financial analysis tools — usable right here on Matrix Hub.<br />
         Plus a curated directory of open-source swarm-intelligence frameworks to self-host.
@@ -168,6 +168,61 @@ const CATEGORIES = [
           "quant", "risk", "swarm", "financial", "tools", "tips", "strategies",
           "backtesting", "freqtrade", "quantlib", "options", "bonds",
           "yields", "analysis",
+        ]}
+        botName="📊 FinBot"
+        botTips={[
+          // ── BTC buy/short signals ────────────────────────────────────────
+          "📊 [Chart Scanner] BTC/USDT — Watch the 1H chart: if RSI drops below 30 and price bounces off a key support level (e.g. a prior weekly low), that's a potential long setup. Confirm with a bullish engulfing candle. ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] BTC/USDT — Potential short signal: if BTC is rejected at a major resistance (previous ATH zone or 200-day MA) and RSI is overbought above 70 on the daily, consider watching for a reversal candle as a short entry. ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] BTC/USDT — Breakout watch: if BTC consolidates tightly for 3–5 candles below a resistance level on the 4H chart, a high-volume breakout above it can be a strong long signal. Volume confirmation is key. ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] BTC/USDT — MACD signal: when the MACD line crosses above the signal line on the daily chart after an extended downtrend, it can signal a momentum shift. Most reliable when the crossover happens below the zero line (i.e. from deeply negative territory). ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] BTC/USDT — Fibonacci retracement: after a significant BTC rally, pull a Fib from the swing low to swing high. The 0.618 level (~61.8% retracement) is statistically the strongest support zone and often acts as a high-probability long entry. ⚠️ Not financial advice.",
+
+          // ── ETH buy/short signals ────────────────────────────────────────
+          "📊 [Chart Scanner] ETH/USDT — Look for the ETH/BTC pair in the screener below: when ETH outperforms BTC (ETH/BTC rising), ETH is often worth rotating into for a long. ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] ETH/USDT — Short setup: if ETH fails to break above a descending trendline on the 4H chart and the MACD histogram is crossing bearish, that convergence can signal downside momentum. ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] ETH/USDT — Gas fee watch: extremely high ETH gas fees often coincide with market tops (high on-chain activity = euphoria). Check gas trackers when ETH is making new highs — sustained gas spikes can precede corrections. ⚠️ Not financial advice.",
+          "📊 [Chart Scanner] ETH/USDT — Stochastic RSI signal: when Stoch RSI is below 20 and both lines curl upward on the 4H chart, this is one of the earliest momentum reversal signals available — often fires before regular RSI crosses. ⚠️ Not financial advice.",
+
+          // ── Altcoin screener signals ─────────────────────────────────────
+          "🔍 [Screener Scan] Open the Crypto Market Screener below and sort by '% Change 24h' descending — assets with unusually high volume AND positive price change are often breaking out. Cross-check on the chart above before acting. ⚠️ Not financial advice.",
+          "🔍 [Screener Scan] In the Screener below, filter by RSI < 35 to find potentially oversold crypto assets. These aren't automatic buys — check the chart trend first. Oversold in a downtrend can keep going lower. ⚠️ Not financial advice.",
+          "🔍 [Screener Scan] Scan for coins where RSI is between 50–60 and price is above the 50-day MA — these are often in healthy uptrends with room to run. Use the Screener below to find candidates. ⚠️ Not financial advice.",
+          "🔍 [Screener Scan] Check SOL, BNB, and ADA in the Screener — compare their 24h volume vs 7-day average. A volume spike above 2× average alongside a price breakout is a historically strong continuation signal. ⚠️ Not financial advice.",
+          "🔍 [Screener Scan] Use the Screener to identify altcoins with rising Relative Strength vs BTC (RS line trending up). When an altcoin holds value or rises while BTC corrects, it signals institutional accumulation or a structural shift — strong candidates for the next leg up. ⚠️ Not financial advice.",
+          "🔍 [Screener Scan] Look for altcoins that have compressed into a tight range (low ATR / low Bollinger Band width) in the Screener. Low-volatility compression often precedes explosive breakouts — these are breakout setups in formation. ⚠️ Not financial advice.",
+
+          // ── Ticker tape signals ──────────────────────────────────────────
+          "📡 [Ticker Watch] Keep an eye on the live ticker above — if DOGE or XRP show sudden spikes in the daily % change, check the chart. Meme/news-driven pumps often have sharp reversals, making them potential short setups after the euphoria peak. ⚠️ Not financial advice.",
+          "📡 [Ticker Watch] Watch the S&P 500 (SPX) in the ticker — crypto often lags SPX moves by 24–48h. If SPX drops sharply, risk-off sentiment may hit BTC and altcoins next. Consider reducing leverage exposure early. ⚠️ Not financial advice.",
+          "📡 [Ticker Watch] Monitor NVDA in the ticker alongside BTC. Tech and crypto sentiment are increasingly correlated — a sharp NVDA selloff often acts as an early warning of broader risk-off across all speculative assets. ⚠️ Not financial advice.",
+
+          // ── NVDA / AAPL equity signals ───────────────────────────────────
+          "📈 [Chart Scanner] NVDA — Pull up NVDA on the chart above (Quick switch). If it's building higher lows on the 4H and holds above the 50-day MA, the trend is bullish and momentum favors longs. ⚠️ Not financial advice.",
+          "📈 [Chart Scanner] NVDA earnings watch: IV (implied volatility) on NVDA options spikes before earnings — buying options pre-earnings often leads to 'IV crush' after the report regardless of direction. Sell-the-news setups are worth watching. ⚠️ Not financial advice.",
+          "📈 [Chart Scanner] AAPL — A classic mean-reversion play: if AAPL dips 5–8% from a recent high on low-volume selling, it has historically attracted institutional buying. Look for a hammer candle on the daily chart as a potential entry signal. ⚠️ Not financial advice.",
+          "📈 [Chart Scanner] AAPL short setup: if AAPL gaps up into earnings above the upper Bollinger Band and RSI is above 75 on the daily, a short-term short (or protective put) to fade the gap can be worth watching. ⚠️ Not financial advice.",
+
+          // ── MACD & momentum indicators ───────────────────────────────────
+          "💡 [TA Signal — MACD] A bullish MACD divergence (price making lower lows, MACD making higher lows) on the daily chart is one of the highest-conviction reversal signals in crypto. Add it to your indicator panel on the chart above and watch for it at key support zones. ⚠️ Not financial advice.",
+          "💡 [TA Signal — MACD] MACD histogram shrinking toward zero during an uptrend is a warning that momentum is fading — not a reversal signal yet, but worth tightening stop-losses on active longs. ⚠️ Not financial advice.",
+
+          // ── Volume analysis ──────────────────────────────────────────────
+          "💡 [TA Signal — Volume] Volume is the fuel of price moves. A breakout on below-average volume is a 'fakeout' candidate — high probability of reverting. Always confirm directional moves with at least 1.5× average volume on the breakout candle. ⚠️ Not financial advice.",
+          "💡 [TA Signal — Volume] On-Balance Volume (OBV) divergence: if price is making new highs but OBV is declining, smart money is quietly distributing — potential topping signal. Add OBV to the chart above to test it on any asset. ⚠️ Not financial advice.",
+
+          // ── Market structure ─────────────────────────────────────────────
+          "💡 [TA Signal] On any asset in the chart above: when the 20-EMA crosses above the 50-EMA on the 1H chart ('golden cross' on intraday), it often marks the start of a short-term bullish run. Higher timeframe confirmation improves the signal quality. ⚠️ Not financial advice.",
+          "💡 [TA Signal] Potential short setup on any chart: when price makes a 'lower high' after a failed retest of a previous high and the RSI also makes a lower high — that RSI divergence is a bearish signal. ⚠️ Not financial advice.",
+          "💡 [TA Signal] Support/Resistance flip: a level that previously acted as resistance, once broken and retested from above, often becomes support (S/R flip). These retests can be high-probability long entry points on the chart above. ⚠️ Not financial advice.",
+          "💡 [TA Signal — Market Structure] Higher highs and higher lows = bullish structure. Lower highs and lower lows = bearish structure. Any deviation from the prevailing structure is the first signal that a trend change may be underway. Mark these swing points on the chart above. ⚠️ Not financial advice.",
+          "💡 [TA Signal — Wyckoff] Watch for 'spring' patterns at support: a brief dip below a key support level followed by an immediate reclaim (spring + sign of strength) is a Wyckoff accumulation signal. Particularly reliable on BTC and ETH daily charts. ⚠️ Not financial advice.",
+
+          // ── Risk management ──────────────────────────────────────────────
+          "🛡️ [Risk Management] Never risk more than 1–2% of your total portfolio on a single trade. This lets you sustain 50 consecutive losses before losing half your capital — giving strategies time to play out without catastrophic drawdown. ⚠️ Not financial advice.",
+          "🛡️ [Risk Management] Always define your stop-loss before entering a trade, not after. Pre-defining your exit removes emotion from the decision. A stop at the invalidation point (the level that disproves your thesis) is the most logical placement. ⚠️ Not financial advice.",
+          "🛡️ [Risk Management] Risk/Reward ratio: only take trades where your target profit is at least 2× your maximum loss (R:R ≥ 2:1). At this ratio, you need less than a 34% win rate to break even — giving your strategy a wide margin for error. ⚠️ Not financial advice.",
+          "🛡️ [Risk Management] Correlation risk: if you hold BTC, ETH, SOL, and AAPL, you effectively have one trade — they're all risk-on assets. True diversification means assets that move independently. Use the chart above to check price correlation between your holdings. ⚠️ Not financial advice.",
         ]}
       />
     </div>
@@ -234,22 +289,6 @@ const CATEGORIES = [
         </div>
       </div>
 
-      <!-- ── Tool 3: TradingView Ticker Tape ───────────────────────────── -->
-      <div class="live-tool-card" style="margin-top:1.5rem;">
-        <div class="live-tool-header">
-          <span class="live-emoji">📡</span>
-          <div>
-            <h3 class="live-tool-title">Market Ticker Tape</h3>
-            <p class="live-tool-desc">
-              Live scrolling ticker showing real-time prices and daily change for top crypto assets.
-            </p>
-          </div>
-          <span class="live-badge">LIVE</span>
-        </div>
-        <div class="tv-ticker-wrap">
-          <div id="tv-ticker"></div>
-        </div>
-      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════════════
@@ -441,32 +480,7 @@ const CATEGORIES = [
     screenerEl.appendChild(s);
   })();
 
-  /* ── Ticker Tape (self-loading embed — no tv.js dependency) ─────────── */
-  (function () {
-    var tickerEl = document.getElementById('tv-ticker');
-    if (!tickerEl) return;
-    var s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.async = true;
-    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
-    s.innerHTML = JSON.stringify({
-      symbols: [
-        { proName: 'BINANCE:BTCUSDT',  title: 'Bitcoin' },
-        { proName: 'BINANCE:ETHUSDT',  title: 'Ethereum' },
-        { proName: 'BINANCE:SOLUSDT',  title: 'Solana' },
-        { proName: 'BINANCE:BNBUSDT',  title: 'BNB' },
-        { proName: 'BINANCE:ADAUSDT',  title: 'Cardano' },
-        { proName: 'BINANCE:XRPUSDT',  title: 'XRP' },
-        { proName: 'BINANCE:DOGEUSDT', title: 'Dogecoin' },
-        { proName: 'FOREXCOM:SPXUSD',  title: 'S&P 500' },
-        { proName: 'NASDAQ:AAPL',      title: 'Apple' },
-        { proName: 'NASDAQ:NVDA',      title: 'NVIDIA' },
-      ],
-      showSymbolLogo: true, colorTheme: 'dark',
-      isTransparent: true, displayMode: 'adaptive', locale: 'en',
-    });
-    tickerEl.appendChild(s);
-  })();
+
 
   /* ── GitHub tools category filter (no tv.js dependency) ────────────── */
   (function () {
@@ -690,13 +704,6 @@ const CATEGORIES = [
   }
 
   .tv-chart-wrap--screener { min-height: 490px; }
-
-  .tv-ticker-wrap {
-    border-radius: 6px;
-    overflow: hidden;
-    background: transparent;
-    min-height: 56px;
-  }
 
   /* ── GitHub section ───────────────────────────────────────────────────── */
   .github-section { margin-bottom: 2rem; }

@@ -249,7 +249,7 @@ export default function PersistentThemeCustomizer() {
       <style>{`
         .persistent-theme-customizer {
           position: sticky;
-          top: 0;
+          top: var(--ticker-tape-height, 46px);
           z-index: var(--z-index-theme-customizer);
           background: var(--theme-bg-panel, rgba(0, 20, 0, 0.95));
           border-bottom: 2px solid var(--theme-primary, #00ff00);
