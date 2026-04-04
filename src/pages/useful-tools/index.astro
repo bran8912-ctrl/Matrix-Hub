@@ -289,22 +289,6 @@ const CATEGORIES = [
         </div>
       </div>
 
-      <!-- ── Tool 3: TradingView Ticker Tape ───────────────────────────── -->
-      <div class="live-tool-card" style="margin-top:1.5rem;">
-        <div class="live-tool-header">
-          <span class="live-emoji">📡</span>
-          <div>
-            <h3 class="live-tool-title">Market Ticker Tape</h3>
-            <p class="live-tool-desc">
-              Live scrolling ticker showing real-time prices and daily change for top crypto assets.
-            </p>
-          </div>
-          <span class="live-badge">LIVE</span>
-        </div>
-        <div class="tv-ticker-wrap">
-          <div id="tv-ticker"></div>
-        </div>
-      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════════════
@@ -496,32 +480,7 @@ const CATEGORIES = [
     screenerEl.appendChild(s);
   })();
 
-  /* ── Ticker Tape (self-loading embed — no tv.js dependency) ─────────── */
-  (function () {
-    var tickerEl = document.getElementById('tv-ticker');
-    if (!tickerEl) return;
-    var s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.async = true;
-    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
-    s.innerHTML = JSON.stringify({
-      symbols: [
-        { proName: 'BINANCE:BTCUSDT',  title: 'Bitcoin' },
-        { proName: 'BINANCE:ETHUSDT',  title: 'Ethereum' },
-        { proName: 'BINANCE:SOLUSDT',  title: 'Solana' },
-        { proName: 'BINANCE:BNBUSDT',  title: 'BNB' },
-        { proName: 'BINANCE:ADAUSDT',  title: 'Cardano' },
-        { proName: 'BINANCE:XRPUSDT',  title: 'XRP' },
-        { proName: 'BINANCE:DOGEUSDT', title: 'Dogecoin' },
-        { proName: 'FOREXCOM:SPXUSD',  title: 'S&P 500' },
-        { proName: 'NASDAQ:AAPL',      title: 'Apple' },
-        { proName: 'NASDAQ:NVDA',      title: 'NVIDIA' },
-      ],
-      showSymbolLogo: true, colorTheme: 'dark',
-      isTransparent: true, displayMode: 'adaptive', locale: 'en',
-    });
-    tickerEl.appendChild(s);
-  })();
+
 
   /* ── GitHub tools category filter (no tv.js dependency) ────────────── */
   (function () {
@@ -745,13 +704,6 @@ const CATEGORIES = [
   }
 
   .tv-chart-wrap--screener { min-height: 490px; }
-
-  .tv-ticker-wrap {
-    border-radius: 6px;
-    overflow: hidden;
-    background: transparent;
-    min-height: 56px;
-  }
 
   /* ── GitHub section ───────────────────────────────────────────────────── */
   .github-section { margin-bottom: 2rem; }

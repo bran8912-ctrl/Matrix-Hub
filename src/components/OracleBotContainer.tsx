@@ -69,7 +69,7 @@ const generateOracleResponse = (query: string): string => {
     return ORACLE_RESPONSES.blackjack;
   }
 
-  if (lowerQuery.includes('roulette') || lowerQuery.includes('martingale') || lowerQuery.includes('red black') || lowerQuery.includes('spin')) {
+  if (lowerQuery.includes('roulette') || lowerQuery.includes('martingale') || lowerQuery.includes('red black') || lowerQuery.includes('roulette spin') || lowerQuery.includes('wheel spin')) {
     return ORACLE_RESPONSES.roulette;
   }
 
