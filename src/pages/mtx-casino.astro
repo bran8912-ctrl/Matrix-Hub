@@ -1,0 +1,107 @@
+---
+import Layout from "../components/Layout.astro";
+import MTXEcosystem from "../components/MTXEcosystem.astro";
+import CasinoGamesPanel from "../components/CasinoGamesPanel.astro";
+import MTXOwnershipPanel from "../components/MTXOwnershipPanel.astro";
+import DonateBanner from "../components/DonateBanner.astro";
+import TelegramWidget from "../components/TelegramWidget.astro";
+import MTXStatsWidget from "../components/MTXStatsWidget.tsx";
+
+export const prerender = true;
+
+export const title = "MTX Casino";
+export const navCategory = "casino";
+---
+
+<Layout title="MTX Casino - Matrix Hub">
+  <div class="casino-header">
+    <h1 class="matrix-title">MTX CASINO</h1>
+    <p class="matrix-subtitle">
+      Provably fair blockchain casino with MTX token gaming and premium MTX ecosystem features.
+    </p>
+  </div>
+
+  <!-- MTX Stats Widget -->
+  <div class="stats-widget-container">
+    <MTXStatsWidget client:load />
+  </div>
+
+  <!-- MTX Ecosystem Section -->
+  <MTXEcosystem />
+
+  <!-- Casino Games Panel -->
+  <CasinoGamesPanel />
+
+  <!-- MTX Ownership & Casino Economics -->
+  <MTXOwnershipPanel />
+
+  <!-- Donation Banner -->
+  <DonateBanner />
+
+  <!-- Telegram Widget -->
+  <TelegramWidget />
+</Layout>
+
+<style>
+  .casino-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .matrix-title {
+    font-size: 2.8rem;
+    color: var(--theme-primary);
+    text-shadow: 0 0 20px var(--theme-glow);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow-pulse {
+    from {
+      text-shadow: 0 0 10px var(--theme-glow), 0 0 20px var(--theme-glow);
+    }
+    to {
+      text-shadow: 0 0 20px var(--theme-glow), 0 0 40px var(--theme-glow), 0 0 60px var(--theme-glow);
+    }
+  }
+
+  .matrix-subtitle {
+    font-size: 1.2rem;
+    color: var(--theme-text);
+    text-shadow: 0 0 10px var(--theme-secondary);
+    font-family: 'Courier New', monospace;
+  }
+
+  .stats-widget-container {
+    max-width: 400px;
+    margin: 0 auto 40px auto;
+  }
+
+  @media (max-width: 768px) {
+    .stats-widget-container {
+      max-width: 100%;
+      padding: 0 1rem;
+    }
+    
+    .matrix-title {
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+
+    .matrix-subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .matrix-title {
+      font-size: 1.8rem;
+    }
+
+    .matrix-subtitle {
+      font-size: 0.9rem;
+    }
+  }
+</style>
