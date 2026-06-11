@@ -1,0 +1,362 @@
+---
+import Layout from "../components/Layout.astro";
+
+export const prerender = true;
+
+export const title = "Free Financial Tools";
+export const navCategory = "tools";
+
+// ── Free Financial Tools Data ──────────────────────────────────────────────
+const TOOLS = [
+  {
+    category: "CRYPTO & SECURITY",
+    emoji: "🔐",
+    title: "Ledger Hardware Wallet",
+    description: "Protect your crypto assets with military-grade offline security. The most trusted hardware wallet in the world.",
+    url: "https://shop.ledger.com/?r=5b26c17b2e98",
+    badge: "RECOMMENDED",
+    features: ["Offline Security", "Multi-chain", "Industry Standard"]
+  },
+  {
+    category: "CRYPTO EXCHANGE",
+    emoji: "📈",
+    title: "Binance US — Trade Crypto",
+    description: "Trade 100+ cryptocurrencies with low fees. Advanced charts and trusted global platform.",
+    url: "https://www.binance.us/universal_JHHGDSKDJ/auth/registration?ref=614205735",
+    badge: "LOW FEES",
+    features: ["100+ Coins", "Advanced Trading", "Sign-up Bonus"]
+  },
+  {
+    category: "MICRO-INVESTING",
+    emoji: "🌱",
+    title: "Acorns — Start Investing",
+    description: "Automatically invest your spare change. Get $5 FREE just for signing up.",
+    url: "https://acorns.com/share/?shareable_code=CQ1T7GA&first_name=Brandon&friend_reward=5",
+    badge: "FREE $5",
+    features: ["Auto-Invest", "Spare Change", "Beginner Friendly"]
+  },
+  {
+    category: "STOCK TRADING",
+    emoji: "📊",
+    title: "Robinhood — Free Stock",
+    description: "Commission-free trading. Get a free stock worth up to $225 on signup.",
+    url: "https://join.robinhood.com/brandol-06d7e3",
+    badge: "FREE STOCK",
+    features: ["Commission-Free", "Free Stock", "Mobile & Web"]
+  },
+  {
+    category: "AI VIDEO EDITOR",
+    emoji: "🎬",
+    title: "VEED — AI Video Editor",
+    description: "Professional video editing powered by AI. Create stunning videos from scripts.",
+    url: "https://veed.sjv.io/7aj7Pr",
+    badge: "AI POWERED",
+    features: ["AI Editing", "Script to Video", "Auto Captions"]
+  },
+  {
+    category: "FOOD DELIVERY",
+    emoji: "🍕",
+    title: "DoorDash — Food Delivery",
+    description: "Get food delivered with sign-up bonuses and exclusive discounts.",
+    url: "https://drd.sh/W94sSoxe4jsGyFoO",
+    badge: "SIGN-UP BONUS",
+    features: ["Fast Delivery", "Many Restaurants", "Exclusive Deals"]
+  },
+];
+
+// Group tools by category
+const groupedTools = TOOLS.reduce((acc, tool) => {
+  if (!acc[tool.category]) {
+    acc[tool.category] = [];
+  }
+  acc[tool.category].push(tool);
+  return acc;
+}, {} as Record<string, typeof TOOLS>);
+---
+
+<Layout title="Free Financial Tools - Matrix Hub">
+  <div class="tools-page">
+    <div class="tools-header">
+      <h1 class="page-title">FREE FINANCIAL TOOLS</h1>
+      <p class="page-subtitle">
+        Curated collection of free and low-cost financial tools to help you invest, save, and earn.
+      </p>
+    </div>
+
+    <div class="tools-intro">
+      <div class="intro-card">
+        <h2>💡 Why These Tools?</h2>
+        <p>Each tool has been selected for:</p>
+        <ul>
+          <li><strong>Real Value:</strong> Legitimate platforms with millions of users</li>
+          <li><strong>Sign-up Bonuses:</strong> Get free money or credits just for joining</li>
+          <li><strong>No Hidden Fees:</strong> Transparent pricing</li>
+          <li><strong>Security First:</strong> Established and secure</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tools by Category -->
+    {Object.entries(groupedTools).map(([category, tools]) => (
+      <section class="tools-section">
+        <h2 class="section-title">{category}</h2>
+        <div class="tools-grid">
+          {tools.map((tool) => (
+            <div class="tool-card">
+              <div class="tool-header">
+                <span class="tool-emoji">{tool.emoji}</span>
+                <span class="tool-badge">{tool.badge}</span>
+              </div>
+              <h3 class="tool-title">{tool.title}</h3>
+              <p class="tool-description">{tool.description}</p>
+              <div class="tool-features">
+                {tool.features.map((feature) => (
+                  <span class="feature-tag">{feature}</span>
+                ))}
+              </div>
+              <a href={tool.url} target="_blank" rel="noopener noreferrer" class="tool-cta">
+                Get Started →
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <div class="tools-footer">
+      <div class="footer-card">
+        <h2>🔒 Safety & Transparency</h2>
+        <p>
+          All referral links on this page are transparent. When you sign up through these links, 
+          we may receive a referral bonus at no extra cost to you.
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tools-page {
+    width: 100%;
+    padding: 2rem 0;
+  }
+
+  .tools-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-title {
+    font-size: 2.8rem;
+    color: var(--theme-primary);
+    text-shadow: 0 0 20px var(--theme-glow);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 4px;
+    margin-bottom: 1rem;
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+  }
+
+  .page-subtitle {
+    font-size: 1.1rem;
+    color: var(--theme-text);
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0.9;
+  }
+
+  @keyframes glow-pulse {
+    from {
+      text-shadow: 0 0 10px var(--theme-glow), 0 0 20px var(--theme-glow);
+    }
+    to {
+      text-shadow: 0 0 20px var(--theme-glow), 0 0 40px var(--theme-glow), 0 0 60px var(--theme-glow);
+    }
+  }
+
+  .tools-intro {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+  }
+
+  .intro-card {
+    background: rgba(0, 255, 153, 0.08);
+    border: 1px solid rgba(0, 255, 153, 0.3);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .intro-card h2 {
+    color: var(--theme-primary);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .intro-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .intro-card li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--theme-text);
+  }
+
+  .intro-card li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--theme-primary);
+    font-weight: bold;
+  }
+
+  .tools-section {
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+    color: var(--theme-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(0, 255, 153, 0.3);
+    font-family: 'Courier New', monospace;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .tool-card {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 153, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .tool-card:hover {
+    background: rgba(0, 255, 153, 0.08);
+    border-color: rgba(0, 255, 153, 0.5);
+    box-shadow: 0 0 20px rgba(0, 255, 153, 0.2);
+    transform: translateY(-4px);
+  }
+
+  .tool-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .tool-emoji {
+    font-size: 2.5rem;
+  }
+
+  .tool-badge {
+    background: rgba(0, 255, 153, 0.2);
+    color: var(--theme-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .tool-title {
+    font-size: 1.25rem;
+    color: var(--theme-primary);
+    margin-bottom: 0.5rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  .tool-description {
+    color: var(--theme-text);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+    flex-grow: 1;
+  }
+
+  .tool-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-tag {
+    background: rgba(0, 255, 153, 0.1);
+    color: var(--theme-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .tool-cta {
+    background: linear-gradient(135deg, rgba(0, 255, 153, 0.3), rgba(0, 255, 153, 0.1));
+    border: 1px solid rgba(0, 255, 153, 0.4);
+    color: var(--theme-primary);
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .tool-cta:hover {
+    background: rgba(0, 255, 153, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 153, 0.3);
+    text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+  }
+
+  .tools-footer {
+    max-width: 800px;
+    margin: 3rem auto;
+  }
+
+  .footer-card {
+    background: rgba(0, 255, 153, 0.08);
+    border: 1px solid rgba(0, 255, 153, 0.3);
+    border-radius: 8px;
+    padding: 2rem;
+  }
+
+  .footer-card h2 {
+    color: var(--theme-primary);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+
+  .footer-card p {
+    color: var(--theme-text);
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+
+    .tools-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .intro-card {
+      padding: 1.5rem;
+    }
+  }
+</style>
