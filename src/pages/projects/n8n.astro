@@ -1,0 +1,70 @@
+---
+/*
+  Project page for n8n (bran8912-ctrl/n8n).
+  Place this file at src/pages/projects/n8n.astro
+  Adjust layout import if your site uses a shared Layout component.
+*/
+const repoUrl = "https://github.com/bran8912-ctrl/n8n";
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>n8n — Project — Matrix Hub</title>
+  </head>
+  <body class="bg-white text-slate-900">
+    <main class="max-w-4xl mx-auto p-6">
+      <header class="mb-6">
+        <h1 class="text-3xl font-bold">n8n</h1>
+        <p class="text-slate-600 mt-2">
+          The Platform for AI Agents and Workflow Automation — visual canvas + code.
+        </p>
+        <p class="mt-3">
+          <a href={repoUrl} class="text-sky-600 hover:underline">View repository on GitHub</a>
+        </p>
+      </header>
+
+      <section class="mb-6 prose">
+        <h2>Overview</h2>
+        <p>
+          n8n is a fair-code platform to build and deploy AI agents and workflows.
+          Combine a visual canvas with custom code, run it self-hosted or in the cloud,
+          and connect to many integrations.
+        </p>
+
+        <h3>Key Capabilities</h3>
+        <ul>
+          <li>AI-native automation and multi-step agents</li>
+          <li>Model flexibility — connect to OpenAI, Anthropic, Google, or open-source models</li>
+          <li>Visual canvas plus custom JavaScript/TypeScript code</li>
+          <li>Self-hostable with audit trails and role-based access</li>
+        </ul>
+
+        <h3>Quick start (local)</h3>
+        <pre><code>npx n8n
+# or (docker)
+docker volume create n8n_data
+docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+# Open http://localhost:5678</code></pre>
+
+        <h3>Docs & Resources</h3>
+        <ul>
+          <li><a href="https://docs.n8n.io">Official documentation</a></li>
+          <li><a href={repoUrl}>Repository (bran8912-ctrl/n8n)</a></li>
+        </ul>
+      </section>
+
+      <section class="mb-6 prose">
+        <h2>Integrating into Matrix Hub</h2>
+        <p>
+          This page is lightweight and links to the upstream repo. If you want the README embedded,
+          I can provide a snapshot script that copies README.md into src/content and renders it.
+        </p>
+      </section>
+
+      <footer class="text-sm text-slate-500">
+        <p>Last updated: <!-- add timestamp at build if desired --></p>
+      </footer>
+    </main>
+  </body>
+</html>
