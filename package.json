@@ -45,10 +45,10 @@
     "deploy:testnet:distribute": "hardhat run scripts/distribute_mtx.js --network amoy",
     "deploy:testnet:full": "npm run deploy:testnet:mtx && npm run deploy:testnet:casino && npm run deploy:testnet:distribute",
     "dev": "astro dev",
-    "start": "node server.mjs",
-    "serve": "npm run build && node server.mjs",
+    "start": "node dist/server/entry.mjs",
+    "serve": "npm run build && node dist/server/entry.mjs",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "node dist/server/entry.mjs",
     "astro": "astro",
     "deploy": "./scripts/deploy.sh",
     "compile": "node scripts/compile-wrapper.js",
@@ -78,9 +78,11 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^4.4.2",
+    "@base-org/account": "2.4.0",
     "@ethersproject/sha2": "^5.8.0",
     "@reown/appkit": "^1.8.16",
     "@reown/appkit-adapter-ethers": "^1.8.16",
+    "@supabase/supabase-js": "^2.48.0",
     "@tailwindcss/vite": "^4.0.1",
     "@vitejs/plugin-react": "^5.1.2",
     "astro": "^5.15.9",
@@ -94,7 +96,6 @@
     "sharp": "^0.34.5",
     "typescript": "^5.6.3",
     "vite": "^7.3.0",
-    "@supabase/supabase-js": "^2.48.0",
     "ws": "^8.20.0"
   },
   "devDependencies": {

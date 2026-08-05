@@ -1,0 +1,347 @@
+---
+import Layout from "../../components/Layout.astro";
+
+export const prerender = true;
+export const title = "n8n Automation";
+export const navCategory = "resources";
+
+const repoUrl = "https://github.com/bran8912-ctrl/n8n";
+const docsUrl = "https://docs.n8n.io";
+const localUiUrl = "http://localhost:5678";
+const webhookUrl = process.env.N8N_WEBHOOK_URL || import.meta.env.PUBLIC_N8N_WEBHOOK_URL || "";
+const webhookConfigured = Boolean(webhookUrl);
+const endpointPath = '/api/n8n-webhook';
+---
+
+<Layout title="Automation Services — Matrix Hub">
+  <div class="project-page">
+    <div class="page-header">
+      <div class="header-badge">AI AUTOMATION</div>
+      <h1 class="page-title">Sell automation services from your site</h1>
+      <p class="page-subtitle">
+        Capture new business leads, route them into a real n8n workflow, and turn your website into a service desk for setup, hosting, and ongoing support.
+      </p>
+    </div>
+
+    <section class="content-card">
+      <h2>What you can sell</h2>
+      <p>
+        This page is designed for local businesses and service providers who want a complete automation stack. The idea is simple:
+        a customer fills out a lead-inquiry form, receives an email confirmation, the business is notified, their details are logged in a spreadsheet,
+        and your follow-up or reminder workflows can keep running automatically.
+      </p>
+
+      <ul>
+        <li>New customer intake form → customer email + business alert + spreadsheet row</li>
+        <li>Missed phone call → automatic text response to the lead</li>
+        <li>New lead → AI drafts a personalized follow-up</li>
+        <li>Overdue invoice → automation sequence starts to chase payment</li>
+      </ul>
+
+      <div class="action-row">
+        <a class="action-button primary" href={repoUrl} target="_blank" rel="noreferrer">Open n8n repo</a>
+        <a class="action-button" href={docsUrl} target="_blank" rel="noreferrer">Read n8n docs</a>
+        <a class="action-button" href={localUiUrl} target="_blank" rel="noreferrer">Open local UI</a>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>Offer structure</h2>
+      <ul>
+        <li>Custom automation design for each business workflow</li>
+        <li>Setup and deployment to a hosted n8n or self-hosted runtime</li>
+        <li>Recurring monitoring, updates, and support from your website workflow</li>
+        <li>Built-in lead capture that can be sold as a monthly managed service</li>
+      </ul>
+    </section>
+
+    <section class="content-card">
+      <h2>Server-side webhook setup</h2>
+      <p>
+        The public page posts to your site’s own API proxy route, and that route forwards a normalized payload into the n8n webhook configured on the server.
+        That lets the page stay usable for real business automation without exposing the upstream endpoint directly in the browser.
+      </p>
+
+      <pre><code>N8N_WEBHOOK_URL=https://your-n8n.example.com/webhook/your-workflow-id</code></pre>
+
+      <div id="n8n-webhook-state" data-webhook-url={endpointPath} class="status-line">
+        Webhook status: <strong>{webhookConfigured ? 'Server endpoint ready. Set N8N_WEBHOOK_URL on the host to activate delivery.' : 'Not configured yet — add N8N_WEBHOOK_URL to the server environment to enable delivery.'}</strong>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>Business automation intake</h2>
+      <div class="trigger-box">
+        <form id="n8n-cta-form" class="cta-form" data-endpoint={endpointPath}>
+          <label>
+            <span>Business name</span>
+            <input type="text" name="businessName" placeholder="Acme Heating & Cooling" required />
+          </label>
+          <label>
+            <span>Contact name</span>
+            <input type="text" name="contactName" placeholder="Jordan Smith" required />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" placeholder="you@example.com" required />
+          </label>
+          <label>
+            <span>Phone</span>
+            <input type="tel" name="phone" placeholder="(555) 123-4567" required />
+          </label>
+
+          <fieldset class="service-list">
+            <legend>Automation services needed</legend>
+            <label><input type="checkbox" name="automationNeeds" value="New customer intake" /> New customer intake</label>
+            <label><input type="checkbox" name="automationNeeds" value="Missed call text-back" /> Missed call text-back</label>
+            <label><input type="checkbox" name="automationNeeds" value="AI follow-up" /> AI follow-up</label>
+            <label><input type="checkbox" name="automationNeeds" value="Overdue invoice reminders" /> Overdue invoice reminders</label>
+          </fieldset>
+
+          <label>
+            <span>Timeline</span>
+            <input type="text" name="timeline" placeholder="Need this deployed this week" />
+          </label>
+
+          <label>
+            <span>Monthly budget</span>
+            <input type="text" name="budget" placeholder="$299/mo or similar" />
+          </label>
+
+          <label>
+            <span>Workflow goal</span>
+            <textarea name="workflowGoal" rows="5" placeholder="Describe the exact automation you want built, hosted, and maintained." required></textarea>
+          </label>
+
+          <button class="action-button primary" type="submit">Request automation setup</button>
+        </form>
+        <p id="n8n-demo-result" class="status-line">No automation request has been sent yet.</p>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>Recommended service packages</h2>
+      <ul>
+        <li>Lead capture + email + spreadsheet logging</li>
+        <li>Missed-call follow-up with SMS automation</li>
+        <li>AI-written outreach and appointment reminders</li>
+        <li>Invoice reminders and recurring account follow-up sequences</li>
+      </ul>
+    </section>
+
+    <section class="content-card">
+      <h2>Resources</h2>
+      <ul>
+        <li><a href={docsUrl} target="_blank" rel="noreferrer">Official n8n docs</a></li>
+        <li><a href={repoUrl} target="_blank" rel="noreferrer">GitHub repository</a></li>
+        <li><a href="https://www.n8n.io/" target="_blank" rel="noreferrer">n8n website</a></li>
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('n8n-cta-form');
+  const resultNode = document.getElementById('n8n-demo-result');
+  const webhookState = document.getElementById('n8n-webhook-state');
+  const endpointPath = form?.getAttribute('data-endpoint') || '/api/n8n-webhook';
+  const webhookUrl = webhookState?.dataset.webhookUrl || '';
+
+  if (form && resultNode) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!webhookUrl) {
+        resultNode.textContent = 'Set N8N_WEBHOOK_URL on the server before sending a workflow request.';
+        return;
+      }
+
+      const formData = new FormData(form);
+      const automationNeeds = Array.from(form.querySelectorAll('input[name="automationNeeds"]:checked'))
+        .map((checkbox) => checkbox.value);
+
+      const payload = {
+        event: 'matrix-hub-automation-lead',
+        leadSource: 'website-automation-page',
+        businessName: formData.get('businessName'),
+        contactName: formData.get('contactName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        timeline: formData.get('timeline'),
+        budget: formData.get('budget'),
+        automationNeeds,
+        workflowGoal: formData.get('workflowGoal'),
+      };
+
+      resultNode.textContent = 'Sending your automation request to the Matrix Hub proxy...';
+
+      try {
+        const response = await fetch(endpointPath, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const json = await response.json().catch(() => null);
+        resultNode.textContent = response.ok
+          ? `Automation request delivered successfully: ${json?.message || 'Proxy accepted the request.'}`
+          : `Automation request failed: ${json?.message || 'Unknown error'}`;
+      } catch (error) {
+        resultNode.textContent = `Automation request failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
+      }
+    });
+  }
+</script>
+
+<style>
+  .project-page {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .page-header {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--theme-primary, #00ff99);
+    color: var(--theme-primary, #00ff99);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 999px;
+  }
+
+  .page-title {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--theme-text, #ffffff);
+  }
+
+  .page-subtitle {
+    margin: 0;
+    color: var(--theme-muted, #b8c1cc);
+    max-width: 60rem;
+  }
+
+  .content-card {
+    background: rgba(12, 18, 26, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 1.2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  }
+
+  .content-card h2 {
+    margin-top: 0;
+    color: var(--theme-text, #ffffff);
+  }
+
+  .content-card p,
+  .content-card li,
+  .status-line {
+    color: var(--theme-muted, #b8c1cc);
+    line-height: 1.7;
+  }
+
+  .action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+    color: var(--theme-text, #ffffff);
+    background: rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+  }
+
+  .action-button.primary {
+    border-color: var(--theme-primary, #00ff99);
+    color: var(--theme-primary, #00ff99);
+  }
+
+  .trigger-box {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .cta-form {
+    display: grid;
+    gap: 0.9rem;
+    max-width: 42rem;
+  }
+
+  .cta-form label {
+    display: grid;
+    gap: 0.35rem;
+    color: var(--theme-text, #ffffff);
+  }
+
+  .cta-form input,
+  .cta-form textarea {
+    width: 100%;
+    padding: 0.8rem 0.9rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(0, 0, 0, 0.45);
+    color: var(--theme-text, #ffffff);
+    font: inherit;
+  }
+
+  .service-list {
+    display: grid;
+    gap: 0.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0.9rem;
+    margin: 0;
+  }
+
+  .service-list legend {
+    color: var(--theme-text, #ffffff);
+    padding: 0 0.35rem;
+  }
+
+  .service-list label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--theme-muted, #b8c1cc);
+  }
+
+  .service-list input {
+    width: auto;
+  }
+
+  pre {
+    overflow-x: auto;
+    padding: 1rem;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  code {
+    font-family: "Courier New", monospace;
+    color: #d8f9e6;
+  }
+</style>

@@ -21,6 +21,18 @@ export const navCategory = "home";
     </p>
   </div>
 
+  <section class="n8n-cta">
+    <div class="n8n-cta-card">
+      <div class="n8n-cta-badge">AI Automation</div>
+      <h2>Bring n8n into your Matrix Hub workflow</h2>
+      <p>
+        Launch workflows, route requests, and connect your site into a real automation layer using the
+        self-hostable n8n runtime.
+      </p>
+      <a class="n8n-cta-link" href="/projects/n8n">Explore n8n</a>
+    </div>
+  </section>
+
   <!-- MTX Stats Widget -->
   <div class="stats-widget-container">
     <MTXStatsWidget client:load />
@@ -74,6 +86,59 @@ export const navCategory = "home";
     font-family: 'Courier New', monospace;
   }
 
+  .n8n-cta {
+    max-width: 760px;
+    margin: 0 auto 36px auto;
+  }
+
+  .n8n-cta-card {
+    display: grid;
+    gap: 0.9rem;
+    padding: 1.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    background: rgba(12, 18, 26, 0.72);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  }
+
+  .n8n-cta-badge {
+    display: inline-flex;
+    width: fit-content;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--theme-primary, #00ff99);
+    color: var(--theme-primary, #00ff99);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .n8n-cta-card h2 {
+    margin: 0;
+    color: var(--theme-text, #ffffff);
+    font-size: 1.45rem;
+  }
+
+  .n8n-cta-card p {
+    margin: 0;
+    color: var(--theme-muted, #b8c1cc);
+    line-height: 1.7;
+  }
+
+  .n8n-cta-link {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    border-radius: 10px;
+    border: 1px solid var(--theme-primary, #00ff99);
+    color: var(--theme-primary, #00ff99);
+    font-weight: 700;
+  }
+
   .stats-widget-container {
     max-width: 400px;
     margin: 0 auto 40px auto;
@@ -102,6 +167,10 @@ export const navCategory = "home";
 
     .matrix-subtitle {
       font-size: 0.9rem;
+    }
+
+    .n8n-cta-card {
+      padding: 1rem;
     }
   }
 </style>
