@@ -1,4 +1,6 @@
 # Workflow for building and deploying an Astro site to GitHub Pages
+FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 name: Deploy Astro site to GitHub Pages
 
 on:
