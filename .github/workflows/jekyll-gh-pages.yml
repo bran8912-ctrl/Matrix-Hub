@@ -1,4 +1,5 @@
 # Workflow for building and deploying an Astro site to GitHub Pages
+
 name: Deploy Astro site to GitHub Pages
 
 on:
