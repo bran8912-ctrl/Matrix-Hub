@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BrowserProvider, formatUnits, Contract } from 'ethers';
 import type { Eip1193Provider } from 'ethers';
 import { useAppKitProvider, useAppKitAccount, useAppKit } from '@reown/appkit/react'
 import { MTX } from '../config/mtx';
@@ -32,7 +31,8 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
   const [error, setError] = useState<string>('');
 
   const fetchBalance = useCallback(async () => {
-    if (!isConnected || !address || !walletProvider) {
+    // Only run client-side and when wallet is connected
+    if (typeof window === 'undefined' || !isConnected || !address || !walletProvider) {
       setBalance(0)
       return
     }
@@ -44,7 +44,10 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
     }
 
     try {
-      const provider = new BrowserProvider(walletProvider as Eip1193Provider)
+      // Dynamically import ethers so the server/build step won't try to bundle it
+      const { BrowserProvider, Contract, formatUnits } = await import('ethers');
+
+      const provider = new BrowserProvider(walletProvider as unknown as Eip1193Provider)
       const token = new Contract(MTX_TOKEN_ADDRESS, MTX_TOKEN_ABI, provider)
       const rawBalance = await token.balanceOf(address)
       const decimals = await token.decimals()
@@ -57,7 +60,7 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
     }
   }, [isConnected, address, walletProvider]);
 
-  // Fetch MTX balance when wallet is connected
+  // Fetch MTX balance when wallet is connected (runs client-side)
   useEffect(() => {
     fetchBalance()
   }, [fetchBalance])
@@ -66,7 +69,7 @@ export default function CasinoGameWrapper({ children }: CasinoGameWrapperProps) 
     if (!walletProvider) {
       throw new Error('Wallet not connected.');
     }
-    const result = await placeCasinoBet(walletProvider as Eip1193Provider, amount, gameData);
+    const result = await placeCasinoBet(walletProvider as unknown as Eip1193Provider, amount, gameData);
     // Refresh balance after bet
     await fetchBalance();
     return result;
