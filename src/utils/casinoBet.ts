@@ -14,6 +14,14 @@ export interface BetResult {
   payout?: number;
 }
 
+export function generateClientHash(): string {
+  const randomBytes = new Uint8Array(32);
+  crypto.getRandomValues(randomBytes);
+  return Array.from(randomBytes)
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+}
+
 export async function placeCasinoBet(walletProvider: Eip1193Provider, betAmount: number, gameData?: string): Promise<BetResult> {
   if (!walletProvider) throw new Error('Wallet not connected. Please connect your wallet to play.');
   if (betAmount <= 0) throw new Error('Bet amount must be greater than zero.');
