@@ -1,8 +1,7 @@
 import type { Eip1193Provider } from 'ethers';
 import { MTX } from '../config/mtx';
-import { Casino } from '../config/casino';
 import mtxAbi from '../abi/mtx.json';
-import casinoCoreAbi from '../abi/CasinoCore.json';
+import { Casino } from '../config/casino';
 
 // Polygon Mainnet chain ID as bigint for robust comparison
 const POLYGON_CHAIN_ID = 137n;
